@@ -7,7 +7,6 @@ export const Container = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  padding: 0rem 2.5rem;
 `;
 
 export const HeadingModalities = styled(Heading).attrs({

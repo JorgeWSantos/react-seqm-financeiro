@@ -1,5 +1,5 @@
 import { Text } from '@abqm-ds/react';
-import { colors, space } from '@abqm-ds/tokens';
+import { breakpointsPx, colors, space } from '@abqm-ds/tokens';
 import styled, { css } from 'styled-components';
 
 export type VariantsRoundedButtonModalitie = 'default' | 'secondary';
@@ -48,6 +48,10 @@ export const DivModalitie = styled.div<DivModalitieProps>`
         }
       `}
   }
+
+  @media (max-width: ${breakpointsPx.lg}) {
+    max-width: 6.125rem;
+  }
 `;
 
 interface RoundedButtonProps {
@@ -58,7 +62,7 @@ export const RoundedButton = styled.button<RoundedButtonProps>`
   display: flex;
   width: 6rem;
   height: 6rem;
-  max-width: 96px;
+  max-width: 6rem;
   justify-content: center;
   align-items: center;
 
@@ -76,6 +80,12 @@ export const RoundedButton = styled.button<RoundedButtonProps>`
 
   cursor: pointer;
   transition: box-shadow 0.3s ease, width 0.3s, height 0.3s;
+
+  @media (max-width: ${breakpointsPx.lg}) {
+    width: 5.625rem;
+    height: 5.625rem;
+    max-width: 5.625rem;
+  }
 `;
 
 interface ImageModalitieProps {

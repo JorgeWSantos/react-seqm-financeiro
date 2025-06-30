@@ -5,7 +5,7 @@ import { useDeviceType } from '@abqm-ds/react';
 import NotPointedEvents from '@src/components/Results/NotPointedEvents/index.tsx';
 import MoreSearchedModalities from '@src/components/Results/MoreSearchedModalities/index.tsx';
 import OtherSearchModalities from '@src/components/Results/OtherSearchModalities/index.tsx';
-import { ContainerDesktopMain, ContainerMain } from './styles';
+import { ContainerDesktopMain, ContainerMain, ContainerMobileMain } from './styles';
 
 function Main() {
   const { isTabletOrMobile } = useDeviceType();
@@ -34,12 +34,11 @@ function Main() {
           </>
         </ContentDektop>
       ) : (
-        <ContentMobile>
-          <>
-            <NotPointedEvents />
+        <ContentMobile style={{ minHeight: '90vh' }}>
+          <ContainerMobileMain className="container-mobile-main">
             <MoreSearchedModalities />
             <OtherSearchModalities />
-          </>
+          </ContainerMobileMain>
         </ContentMobile>
       )}
     </ContainerMain>

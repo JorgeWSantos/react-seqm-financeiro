@@ -1,5 +1,5 @@
 import { Heading } from '@abqm-ds/react';
-import { colors } from '@abqm-ds/tokens';
+import { breakpointsPx, colors } from '@abqm-ds/tokens';
 import styled from 'styled-components';
 
 export const Container = styled.div`
@@ -7,7 +7,6 @@ export const Container = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  padding: 0rem 2.5rem;
 `;
 
 export const HeadingModalities = styled(Heading).attrs({
@@ -33,4 +32,9 @@ export const ContentModalities = styled.div`
   border-radius: 0.625rem;
 
   border: 1px solid ${colors.green500};
+
+  @media (max-width: ${breakpointsPx.lg}) {
+    padding: 0.5rem;
+    gap: 1rem 0.75rem;
+  }
 `;
