@@ -1,6 +1,6 @@
 import RoundedButtonModalitie from '../RoundedButtonModalitie';
 import { Container, ContentModalities, HeadingModalities } from './styles';
-import ranchingSortingSVG from '@assets/svgs/ranching-sorting.svg';
+import ranchSortingSVG from '@assets/svgs/ranch-sorting.svg';
 import tresTamboresSVG from '@assets/svgs/tres-tambores.svg';
 import teamPenningSVG from '@assets/svgs/team-penning.svg';
 import vaquejadaSVG from '@assets/svgs/vaquejada.svg';
@@ -11,7 +11,7 @@ import lacoComprido from '@assets/svgs/laco-comprido.svg';
 const OtherSearchModalities = () => {
   const icons = [
     '',
-    ranchingSortingSVG,
+    ranchSortingSVG,
     tresTamboresSVG,
     teamPenningSVG,
     vaquejadaSVG,

@@ -68,6 +68,14 @@ export const RoundedButton = styled.button<RoundedButtonProps>`
 
   box-shadow: 0 0 0 4px ${colors.white25};
 
+  background-color: ${colors.green500};
+
+  ${({ $variant }) =>
+    $variant === 'secondary' &&
+    css`
+      background-color: ${colors.black50};
+    `}
+
   ${({ $variant }) =>
     $variant === 'secondary' &&
     css`
@@ -95,14 +103,6 @@ interface ImageModalitieProps {
 export const ImageModalitie = styled.img<ImageModalitieProps>`
   width: 100%;
   height: 100%;
-
-  background-color: ${colors.green500};
-
-  ${({ $variant }) =>
-    $variant === 'secondary' &&
-    css`
-      background-color: ${colors.black50};
-    `}
 
   padding: 0.5rem;
 
