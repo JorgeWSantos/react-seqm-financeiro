@@ -1,0 +1,12 @@
+---
+name: $(Build.buildid)
+variables:
+  - group: credenciais
+resources:
+  repositories:
+    - repository: templates-pipelines
+      type: git
+      name: ABQM/templates-pipelines
+      ref: refs/heads/main
+stages:
+  - template:  templates/react.yml@templates-pipelines

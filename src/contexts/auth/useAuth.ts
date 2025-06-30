@@ -1,0 +1,26 @@
+// src/auth/useAuth.ts
+import { useContext } from 'react';
+import { AuthContext } from './authContext';
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+
+  const loginWithToken = (token: string) => {
+    if (!context) return;
+
+    const { handleSetTokenContext } = context;
+
+    if (handleSetTokenContext) {
+      handleSetTokenContext(token);
+    }
+  };
+
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+
+  return {
+    ...context,
+    loginWithToken,
+  };
+};
