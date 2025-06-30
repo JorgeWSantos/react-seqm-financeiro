@@ -36,6 +36,7 @@ const MoreSearchedModalities = () => {
       <ContentModalities>
         {data.map((item) => (
           <RoundedButtonModalitie
+            key={item.id_prova}
             icon={icons[item.id_prova]}
             text={item.nome_modalidade}
           />

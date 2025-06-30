@@ -36,6 +36,7 @@ const OtherSearchModalities = () => {
       <ContentModalities>
         {data.map((item) => (
           <RoundedButtonModalitie
+            key={item.id_prova}
             variant="secondary"
             icon={icons[item.id_prova]}
             text={item.nome_modalidade}
