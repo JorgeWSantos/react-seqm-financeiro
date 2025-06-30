@@ -22,6 +22,7 @@ import type { MenuResponseObj } from './types.ts';
 import { useResultadosApi } from '@src/services/useResultadosApi.ts';
 import NotPointedEvents from '@src/components/Results/NotPointedEvents/index.tsx';
 import MoreSearchedModalities from '@src/components/Results/MoreSearchedModalities/index.tsx';
+import OtherSearchModalities from '@src/components/Results/OtherSearchModalities/index.tsx';
 
 function Main() {
   const { user, logout, token } = useAuth();
@@ -38,6 +39,7 @@ function Main() {
       const menu: MenuResponseObj = await getMenu();
 
       console.log('Menu loaded:', menu);
+      console.log('TODO definir em que API vai ficar o menu:');
 
       setMenu(menu.list_menu);
       setLoading(false);
@@ -70,6 +72,7 @@ function Main() {
               <>
                 <NotPointedEvents />
                 <MoreSearchedModalities />
+                <OtherSearchModalities />
               </>
             )}
           </ContentDektop>

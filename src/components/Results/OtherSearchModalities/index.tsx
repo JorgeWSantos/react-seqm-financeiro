@@ -8,7 +8,7 @@ import seisBalizasSVG from '@assets/svgs/seis-balizas.svg';
 import redeasSVG from '@assets/svgs/redeas.svg';
 import lacoComprido from '@assets/svgs/laco-comprido.svg';
 
-const MoreSearchedModalities = () => {
+const OtherSearchModalities = () => {
   const icons = [
     '',
     ranchingSortingSVG,
@@ -32,10 +32,11 @@ const MoreSearchedModalities = () => {
 
   return (
     <Container>
-      <HeadingModalities>MODALIDADES MAIS BUSCADAS</HeadingModalities>
+      <HeadingModalities>DEMAIS MODALIDADES</HeadingModalities>
       <ContentModalities>
         {data.map((item) => (
           <RoundedButtonModalitie
+            variant="secondary"
             icon={icons[item.id_prova]}
             text={item.nome_modalidade}
           />
@@ -45,4 +46,4 @@ const MoreSearchedModalities = () => {
   );
 };
 
-export default MoreSearchedModalities;
+export default OtherSearchModalities;

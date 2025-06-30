@@ -22,6 +22,8 @@ export const ButtonNotPointed = styled.button`
 
   max-width: 171px;
 
+  cursor: pointer;
+
   transition: 0.3s;
 
   &:hover {
