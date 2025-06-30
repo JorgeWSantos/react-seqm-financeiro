@@ -56,9 +56,9 @@ interface RoundedButtonProps {
 
 export const RoundedButton = styled.button<RoundedButtonProps>`
   display: flex;
-  width: 6.25rem;
-  height: 6.25rem;
-  max-width: 104px;
+  width: 6rem;
+  height: 6rem;
+  max-width: 96px;
   justify-content: center;
   align-items: center;
 

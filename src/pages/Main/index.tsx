@@ -5,6 +5,7 @@ import { useDeviceType } from '@abqm-ds/react';
 import NotPointedEvents from '@src/components/Results/NotPointedEvents/index.tsx';
 import MoreSearchedModalities from '@src/components/Results/MoreSearchedModalities/index.tsx';
 import OtherSearchModalities from '@src/components/Results/OtherSearchModalities/index.tsx';
+import { ContainerDesktopMain, ContainerMain } from './styles';
 
 function Main() {
   const { isTabletOrMobile } = useDeviceType();
@@ -14,7 +15,7 @@ function Main() {
   const pageTitle = 'Resultados';
 
   return (
-    <>
+    <ContainerMain>
       {!isTabletOrMobile ? (
         <ContentDektop
           header={<Header text={pageTitle} />}
@@ -26,16 +27,22 @@ function Main() {
 
           <>
             <NotPointedEvents />
-            <MoreSearchedModalities />
-            <OtherSearchModalities />
+            <ContainerDesktopMain>
+              <MoreSearchedModalities />
+              <OtherSearchModalities />
+            </ContainerDesktopMain>
           </>
         </ContentDektop>
       ) : (
         <ContentMobile>
-          <></>
+          <>
+            <NotPointedEvents />
+            <MoreSearchedModalities />
+            <OtherSearchModalities />
+          </>
         </ContentMobile>
       )}
-    </>
+    </ContainerMain>
   );
 }
 
