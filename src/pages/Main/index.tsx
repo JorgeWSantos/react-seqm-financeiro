@@ -28,16 +28,16 @@ function Main() {
           <>
             <NotPointedEvents />
             <ContainerDesktopMain>
-              <MoreSearchedModalities />
-              <OtherSearchModalities />
+              <MoreSearchedModalities title="MODALIDADES MAIS BUSCADAS" />
+              <OtherSearchModalities title="DEMAIS MODALIDADES" />
             </ContainerDesktopMain>
           </>
         </ContentDektop>
       ) : (
         <ContentMobile style={{ minHeight: '90vh' }}>
           <ContainerMobileMain className="container-mobile-main">
-            <MoreSearchedModalities />
-            <OtherSearchModalities />
+            <MoreSearchedModalities title="MAIS BUSCADAS" />
+            <OtherSearchModalities title="DEMAIS MODALIDADES" />
           </ContainerMobileMain>
         </ContentMobile>
       )}

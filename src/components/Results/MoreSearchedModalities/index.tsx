@@ -1,4 +1,4 @@
-import RoundedButtonModalitie from '../RoundedButtonModalitie';
+import RoundedButtonModalitie from '../DivButtonModality';
 import { Container, ContentModalities, HeadingModalities } from './styles';
 import ranchSortingSVG from '@assets/svgs/ranch-sorting.svg';
 import tresTamboresSVG from '@assets/svgs/tres-tambores.svg';
@@ -8,7 +8,11 @@ import seisBalizasSVG from '@assets/svgs/seis-balizas.svg';
 import redeasSVG from '@assets/svgs/redeas.svg';
 import lacoComprido from '@assets/svgs/laco-comprido.svg';
 
-const MoreSearchedModalities = () => {
+interface MoreSearchedModalitiesProps {
+  title: string;
+}
+
+const MoreSearchedModalities = ({ title }: MoreSearchedModalitiesProps) => {
   const icons = [
     '',
     ranchSortingSVG,
@@ -32,7 +36,7 @@ const MoreSearchedModalities = () => {
 
   return (
     <Container>
-      <HeadingModalities>MODALIDADES MAIS BUSCADAS</HeadingModalities>
+      <HeadingModalities>{title}</HeadingModalities>
       <ContentModalities>
         {data.map((item) => (
           <RoundedButtonModalitie
