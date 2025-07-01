@@ -12,20 +12,20 @@ import {
   type MenuType,
 } from '@abqm-ds/react';
 import { useAuth } from './contexts/auth/useAuth.ts';
-import type { MenuResponseObj } from './pages/Main/types.ts';
+import type { MenuResponseObj } from './types.ts';
 import { useEffect, useState } from 'react';
-import { useResultadosApi } from './services/useResultadosApi.ts';
+import { useMenuService } from './services/useMenuService.ts';
 
 function MainApp() {
   const { isTabletOrMobile } = useDeviceType();
   const { user, logout, token } = useAuth();
-  const { getMenu } = useResultadosApi();
+  const { getMenu } = useMenuService();
 
   const [menu, setMenu] = useState<MenuType>([]);
   const pageTitle = 'chumbado';
 
   useEffect(() => {
-    console.log('TODO definir em que API vai ficar o menu:');
+    console.warn('TODO definir em que API vai ficar o menu:');
 
     const loadMenu = async () => {
       const menu: MenuResponseObj = await getMenu();

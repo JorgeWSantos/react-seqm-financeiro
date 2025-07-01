@@ -30,8 +30,8 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-const apiCalendario = axios.create({
+const apiResultados = axios.create({
   baseURL: import.meta.env.VITE_API_RESULTADOS, // Agora só precisa do prefixo /api
 });
 
-export { api, apiCalendario };
+export { api, apiResultados };
