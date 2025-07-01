@@ -1,5 +1,5 @@
 import { Text } from '@abqm-ds/react';
-import { breakpointsPx, colors, space } from '@abqm-ds/tokens';
+import { breakpointsPx, colors, fontWeights, lineHeights, space } from '@abqm-ds/tokens';
 import styled from 'styled-components';
 
 export const DivModality = styled.div`
@@ -40,4 +40,9 @@ export const StyledText = styled(Text).attrs({
   lineHeight: 'tight',
 })`
   color: ${colors.emeraldGreen75};
+
+  @media (max-width: ${breakpointsPx.lg}) {
+    font-weight: ${fontWeights.semiBold};
+    line-height: ${lineHeights.short};
+  }
 `;
