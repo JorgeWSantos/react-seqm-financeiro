@@ -1,5 +1,5 @@
 import { Heading } from '@abqm-ds/react';
-import { colors } from '@abqm-ds/tokens';
+import { breakpointsPx, colors, fontSizes, space } from '@abqm-ds/tokens';
 import styled from 'styled-components';
 
 export const Container = styled.div`
@@ -7,6 +7,7 @@ export const Container = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
+  gap: ${space[1]};
 `;
 
 export const HeadingModalities = styled(Heading).attrs({
@@ -18,6 +19,10 @@ export const HeadingModalities = styled(Heading).attrs({
   color: ${colors.emeraldGreen75};
   display: flex;
   flex-direction: column;
+
+  @media (max-width: ${breakpointsPx.lg}) {
+    font-size: ${fontSizes.xl};
+  }
 `;
 
 export const ContentModalities = styled.div`
