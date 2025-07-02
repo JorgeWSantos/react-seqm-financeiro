@@ -4,7 +4,7 @@ import vaquejadaSVG from '@assets/svgs/vaquejada.svg';
 import redeasSVG from '@assets/svgs/redeas.svg';
 import westernPleasureSVG from '@assets/svgs/western-pleasure.svg';
 import workingCowHorseSVG from '@assets/svgs/working-cow-horse.svg';
-import lacoIndividualSVG from '@assets/svgs/laco-individual.svg';
+// import lacoIndividualSVG from '@assets/svgs/laco-individual.svg';
 import lacoEmDuplaSVG from '@assets/svgs/laco-em-dupla.svg';
 import lacoPeSVG from '@assets/svgs/laco-pe.svg';
 import lacoCabecaSVG from '@assets/svgs/laco-cabeca.svg';
@@ -29,7 +29,7 @@ const mapSvgByModality: { [key: number]: string } = {
   2: redeasSVG,
   3: westernPleasureSVG,
   4: workingCowHorseSVG,
-  7: lacoIndividualSVG,
+  // 7: lacoIndividualSVG,
   8: lacoEmDuplaSVG,
   9: lacoPeSVG,
   10: lacoCabecaSVG,
