@@ -35,10 +35,6 @@ function MainApp() {
     loadMenu();
   }, [getMenu]);
 
-  useEffect(() => {
-    console.log('user', user);
-  }, [user]);
-
   const redirectToLogin = () => {
     console.log('import.meta.env.VITE_URL_LOGIN', import.meta.env.VITE_URL_LOGIN);
 

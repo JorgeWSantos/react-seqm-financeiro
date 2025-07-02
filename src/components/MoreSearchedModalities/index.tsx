@@ -11,8 +11,6 @@ interface MoreSearchedModalitiesProps {
 const MoreSearchedModalities = ({ title, data }: MoreSearchedModalitiesProps) => {
   console.warn('TODO: validar ícone da corrida');
 
-  console.log('MoreSearchedModalities data:', data);
-
   return (
     <Container>
       <HeadingModalities>{title}</HeadingModalities>
