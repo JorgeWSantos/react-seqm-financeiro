@@ -39,6 +39,16 @@ function MainApp() {
     console.log('user', user);
   }, [user]);
 
+  const redirectToLogin = () => {
+    console.log('import.meta.env.VITE_URL_LOGIN', import.meta.env.VITE_URL_LOGIN);
+
+    const url = import.meta.env.VITE_URL_LOGIN + '?path=/resultados';
+
+    console.log('url', url);
+
+    window.location.href = url;
+  };
+
   return (
     <BrowserRouter>
       <GlobalContainer>
@@ -48,10 +58,7 @@ function MainApp() {
               user={user || null}
               menu={menu}
               onLogout={logout}
-              onLogin={() =>
-                (window.location.href =
-                  import.meta.env.VITE_URL_LOGIN + '?path=/resultados')
-              }
+              onLogin={redirectToLogin}
               token={token || ''}
             />
 
@@ -67,10 +74,7 @@ function MainApp() {
               userDropdown={{
                 userName: user?.nome_pessoa || '',
                 srcImage: user?.foto || '',
-                onLogin: () => {
-                  window.location.href =
-                    import.meta.env.VITE_URL_LOGIN + '?path=/resultados';
-                },
+                onLogin: redirectToLogin,
                 onLogout: () => {
                   logout();
                 },
