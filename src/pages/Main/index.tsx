@@ -57,7 +57,7 @@ function Main() {
           </>
         </ContentDektop>
       ) : (
-        <ContentMobile style={{ minHeight: '90vh' }}>
+        <ContentMobile>
           <ContainerMobileMain className="container-mobile-main">
             <MoreSearchedModalities title="MAIS BUSCADAS" data={allModalities.top10} />
             <OtherSearchModalities
