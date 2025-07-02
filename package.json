@@ -8,7 +8,7 @@
     "dev:host": "vite --host",
     "dev:qas": "vite --mode qas",
     "dev:prod": "vite --mode production",
-    "build": "tsc -b && vite build",
+    "build:dev": "tsc -b && vite build --mode dev",
     "build:qas": "tsc -b && vite build --mode qas",
     "build:prod": "tsc -b && vite build --mode production",
     "lint": "eslint .",
