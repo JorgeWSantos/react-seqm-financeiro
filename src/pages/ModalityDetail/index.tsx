@@ -9,7 +9,7 @@ import { useResultsService } from '@src/services/useResultsService';
 import type { ModalitiesResponseData } from './types';
 import { usePage } from '@src/contexts/page/usePage';
 
-function Main() {
+function ModalityDetail() {
   const { isTabletOrMobile } = useDeviceType();
   const { getResultados } = useResultsService();
   const { setPage } = usePage();
@@ -29,7 +29,7 @@ function Main() {
   }, [fetchModalities]);
 
   useEffect(() => {
-    setPage({ page_title: 'Resultados' });
+    setPage({ page_title: 'ModalityDetail' });
   }, [setPage]);
 
   console.warn('Implementar Loading');
@@ -63,4 +63,4 @@ function Main() {
   );
 }
 
-export default Main;
+export default ModalityDetail;

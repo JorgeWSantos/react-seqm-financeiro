@@ -39,4 +39,9 @@ export const ContentModalities = styled.div`
   min-height: 173px;
 
   border: 1px solid ${colors.green500};
+
+  @media (max-width: ${breakpointsPx.lg}) {
+    padding: 0.5rem;
+    gap: 1rem 0.75rem;
+  }
 `;

@@ -1,0 +1,142 @@
+import type { Modality } from './types';
+
+export const modalidades: Modality[] = [
+  {
+    nid_prova: 11,
+    cds_tipo_prova: 'Três Tambores',
+    qtde_provas: 1,
+    qtde_participantes: 0,
+  },
+  {
+    nid_prova: 18,
+    cds_tipo_prova: 'Vaquejada',
+    qtde_provas: 1,
+    qtde_participantes: 0,
+  },
+  {
+    nid_prova: 1,
+    cds_tipo_prova: 'Apartação',
+    qtde_provas: 0,
+    qtde_participantes: 0,
+  },
+  {
+    nid_prova: 2,
+    cds_tipo_prova: 'Rédeas',
+    qtde_provas: 0,
+    qtde_participantes: 0,
+  },
+  {
+    nid_prova: 3,
+    cds_tipo_prova: 'Western Pleasure',
+    qtde_provas: 0,
+    qtde_participantes: 0,
+  },
+  {
+    nid_prova: 4,
+    cds_tipo_prova: 'Working Cow Horse',
+    qtde_provas: 0,
+    qtde_participantes: 0,
+  },
+  {
+    nid_prova: 7,
+    cds_tipo_prova: 'Laço Individual',
+    qtde_provas: 0,
+    qtde_participantes: 0,
+  },
+  {
+    nid_prova: 8,
+    cds_tipo_prova: 'Laço em Dupla',
+    qtde_provas: 0,
+    qtde_participantes: 0,
+  },
+  {
+    nid_prova: 9,
+    cds_tipo_prova: 'Laço Pé',
+    qtde_provas: 0,
+    qtde_participantes: 0,
+  },
+  {
+    nid_prova: 10,
+    cds_tipo_prova: 'Laço Cabeça',
+    qtde_provas: 0,
+    qtde_participantes: 0,
+  },
+  {
+    nid_prova: 12,
+    cds_tipo_prova: 'Cinco Tambores',
+    qtde_provas: 0,
+    qtde_participantes: 0,
+  },
+  {
+    nid_prova: 13,
+    cds_tipo_prova: 'Seis Balizas',
+    qtde_provas: 0,
+    qtde_participantes: 0,
+  },
+  {
+    nid_prova: 14,
+    cds_tipo_prova: 'Maneabilidade e Velocidade',
+    qtde_provas: 0,
+    qtde_participantes: 0,
+  },
+  {
+    nid_prova: 15,
+    cds_tipo_prova: 'Bulldog',
+    qtde_provas: 0,
+    qtde_participantes: 0,
+  },
+  {
+    nid_prova: 16,
+    cds_tipo_prova: 'Team Penning',
+    qtde_provas: 0,
+    qtde_participantes: 0,
+  },
+  {
+    nid_prova: 17,
+    cds_tipo_prova: 'Laço Comprido Técnico',
+    qtde_provas: 0,
+    qtde_participantes: 0,
+  },
+  {
+    nid_prova: 20,
+    cds_tipo_prova: 'Conformação',
+    qtde_provas: 0,
+    qtde_participantes: 0,
+  },
+  {
+    nid_prova: 22,
+    cds_tipo_prova: 'Laço Individual Técnico',
+    qtde_provas: 0,
+    qtde_participantes: 0,
+  },
+  {
+    nid_prova: 23,
+    cds_tipo_prova: 'Ranch Sorting',
+    qtde_provas: 0,
+    qtde_participantes: 0,
+  },
+  {
+    nid_prova: 24,
+    cds_tipo_prova: 'Performance Halter',
+    qtde_provas: 0,
+    qtde_participantes: 0,
+  },
+  {
+    nid_prova: 25,
+    cds_tipo_prova: 'Breakaway Roping',
+    qtde_provas: 0,
+    qtde_participantes: 0,
+  },
+  {
+    nid_prova: 30,
+    cds_tipo_prova: 'Laço Comprido',
+    qtde_provas: 0,
+    qtde_participantes: 0,
+  },
+  {
+    nid_prova: 48,
+    cds_tipo_prova: 'Corrida',
+    qtde_provas: 0,
+    qtde_participantes: 0,
+  },
+];
