@@ -7,7 +7,7 @@ export const Container = styled.div`
   flex-direction: column;
   align-items: flex-end;
   justify-content: center;
-  padding: 0rem 2.5rem;
+  padding: 0rem;
 `;
 
 export const ButtonNotPointed = styled.button`

@@ -29,7 +29,7 @@ function Main() {
     fetchModalities();
   }, [fetchModalities]);
 
-  const pageTitle = 'Resultados';
+  const pageTitle = 'Ranch Sorting';
 
   console.warn('Implementar Loading');
 
@@ -38,7 +38,7 @@ function Main() {
       {!isTabletOrMobile ? (
         <ContentDektop
           header={<Header text={pageTitle} />}
-          contentBoxStyles={{ padding: '1rem 0', gap: '0' }}
+          contentBoxStyles={{ padding: '1rem 2.5rem', gap: '0' }}
         >
           <>
             <NotPointedEvents />
