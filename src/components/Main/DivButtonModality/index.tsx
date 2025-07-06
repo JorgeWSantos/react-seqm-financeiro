@@ -1,4 +1,3 @@
-// import RoundedModalityButton from '../RoundedModalityButton';
 import {
   RoundedModalityButton,
   type VariantsRoundedModalityButton,

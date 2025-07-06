@@ -2,9 +2,9 @@ import { ContentDektop, ContentMobile, Header } from '@abqm-ds/react';
 
 import { useDeviceType } from '@abqm-ds/react';
 
-import NotPointedEvents from '@src/components/NotPointedEvents';
-import MoreSearchedModalities from '@src/components/MoreSearchedModalities';
-import OtherSearchModalities from '@src/components/OtherSearchModalities';
+import NotPointedEvents from '@src/components/Main/NotPointedEvents';
+import MoreSearchedModalities from '@src/components/Main/MoreSearchedModalities';
+import OtherSearchModalities from '@src/components/Main/OtherSearchModalities';
 import { ContainerDesktopMain, ContainerMain, ContainerMobileMain } from './styles';
 import { useCallback, useEffect, useState } from 'react';
 import { useResultsService } from '@src/services/useResultsService';
@@ -31,6 +31,8 @@ function Main() {
 
   const pageTitle = 'Resultados';
 
+  console.warn('Implementar Loading');
+
   return (
     <ContainerMain>
       {!isTabletOrMobile ? (
@@ -38,10 +40,6 @@ function Main() {
           header={<Header text={pageTitle} />}
           contentBoxStyles={{ padding: '1rem 0', gap: '0' }}
         >
-          {/* {loading ? (
-            <ActivityIndicator width={30} height={30} />
-          ) */}
-
           <>
             <NotPointedEvents />
             <ContainerDesktopMain>
@@ -51,6 +49,7 @@ function Main() {
               />
               <OtherSearchModalities
                 title="DEMAIS MODALIDADES"
+                // data={[]}
                 data={allModalities.modalidades}
               />
             </ContainerDesktopMain>

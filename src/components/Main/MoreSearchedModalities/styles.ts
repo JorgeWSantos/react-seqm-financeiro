@@ -36,6 +36,8 @@ export const ContentModalities = styled.div`
   flex-wrap: wrap;
   border-radius: 0.625rem;
 
+  min-height: 173px;
+
   border: 1px solid ${colors.green500};
 
   @media (max-width: ${breakpointsPx.lg}) {

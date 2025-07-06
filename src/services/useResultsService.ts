@@ -19,7 +19,7 @@ export function useResultsService() {
       // );
 
       return {
-        top10: modalidades.slice(0, 10),
+        top10: modalidades.slice(0, 6),
         modalidades: modalidades.slice(10, modalidades.length),
       };
     } catch (error) {
