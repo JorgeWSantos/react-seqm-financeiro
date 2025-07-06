@@ -1,4 +1,5 @@
-import RoundedModalityButton from '../RoundedModalityButton';
+// import RoundedModalityButton from '../RoundedModalityButton';
+import { RoundedModalityButton } from '@abqm-ds/react';
 import type { VariantsRoundedModalityButton } from '../RoundedModalityButton/styles';
 import { DivModality, StyledText } from './styles';
 
