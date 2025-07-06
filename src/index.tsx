@@ -5,10 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 import {
   ContainerDesktop,
   ContainerMobile,
-  ContentDektop,
-  ContentMobile,
   GlobalContainer,
-  Header,
   HeaderMobile,
   SideBarDesktop,
   useDeviceType,
@@ -18,15 +15,14 @@ import { useAuth } from './contexts/auth/useAuth.ts';
 import type { MenuResponseObj } from './types.ts';
 import { useEffect, useState } from 'react';
 import { useMenuService } from './services/useMenuService.ts';
-import { usePage } from './contexts/page/usePage.ts';
 
 function MainApp() {
   const { isTabletOrMobile } = useDeviceType();
   const { user, logout, token } = useAuth();
   const { getMenu } = useMenuService();
-  const { currentPage } = usePage();
 
   const [menu, setMenu] = useState<MenuType>([]);
+  const pageTitle = 'chumbado';
 
   useEffect(() => {
     console.warn('TODO definir em que API vai ficar o menu:');
@@ -66,18 +62,13 @@ function MainApp() {
               token={token || ''}
             />
 
-            <ContentDektop
-              header={<Header text={currentPage.page_title} />}
-              contentBoxStyles={{ padding: '1rem 0', gap: '0' }}
-            >
-              <AppRoutes />
-            </ContentDektop>
+            <AppRoutes />
           </ContainerDesktop>
         ) : (
           <ContainerMobile>
             <HeaderMobile
               title="SEQM"
-              page={currentPage.page_title}
+              page={pageTitle}
               data={menu}
               token={token || ''}
               userDropdown={{
@@ -90,9 +81,7 @@ function MainApp() {
               }}
             />
 
-            <ContentMobile>
-              <AppRoutes />
-            </ContentMobile>
+            <AppRoutes />
           </ContainerMobile>
         )}
       </GlobalContainer>
