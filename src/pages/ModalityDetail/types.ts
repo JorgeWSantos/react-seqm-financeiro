@@ -10,7 +10,7 @@ export type Modality = {
 };
 
 export interface ModalitiesResponseData {
-  top10: Modality[];
+  top_10_modalidades: Modality[];
   modalidades: Modality[];
 }
 

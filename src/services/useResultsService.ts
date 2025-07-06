@@ -1,36 +1,47 @@
 import { Toast } from '@abqm-ds/react';
-import { modalidades } from '@src/pages/Main/mock-modalidades.ts';
-import type { ModalitiesResponseData } from '@src/pages/Main/types.ts';
+// import { modalidades } from '@src/pages/Main/mock-modalidades.ts';
 import { useCallback } from 'react';
+import { apiResultados } from './api';
+import type {
+  ResultModalitiesResponse,
+  ResultModalitiesResponseData,
+} from '@src/pages/Main/types.api';
 
 export function useResultsService() {
-  const getResultados = useCallback(async (): Promise<ModalitiesResponseData> => {
+  const getResultados = useCallback(async (): Promise<ResultModalitiesResponseData> => {
     try {
-      console.warn('TODO: implementar lógica de carregamento de modalidades');
+      const response = await apiResultados.get<ResultModalitiesResponse>(
+        '/v1/ResultadosQtdePorModalidade'
+      );
 
-      // const response = await apiCalendario.get<CalendarResponse>(
-      //   '/v1/PortalCalendarioAgrupamento',
-      //   {
-      //     params: {
-      //       ...(!!nid_prova && { nid_prova: Number(nid_prova) }),
-      //       ...(!!uf && { uf }),
-      //     },
-      //   }
-      // );
+      const { data, message, success } = response.data;
+
+      if (!success) {
+        Toast.show({
+          message: message || 'Ops, ocorreu um erro ao carregar as modalidades!',
+          type: 'error',
+          timeout: 3000,
+        });
+        return {
+          top_10_modalidades: [],
+          modalidades: [],
+        };
+      }
 
       return {
-        top10: modalidades.slice(0, 6),
-        modalidades: modalidades.slice(10, modalidades.length),
+        top_10_modalidades:
+          data.list_resultados_qtde_por_modalidade[0].top_10_modalidades || [],
+        modalidades: data.list_resultados_qtde_por_modalidade[0].modalidades || [],
       };
     } catch (error) {
       Toast.show({
-        message: 'Ops, ocorreu um erro ao carregar as modalidades!',
+        message: 'Ops, ocorreu um errs!',
         type: 'error',
-        timeout: 3000,
+        timeout: 30000,
       });
       console.warn(error);
       return {
-        top10: [],
+        top_10_modalidades: [],
         modalidades: [],
       };
     }

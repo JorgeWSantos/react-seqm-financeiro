@@ -20,7 +20,7 @@ function ModalityDetail() {
   const { getResultados } = useResultsService();
 
   const [allModalities, setAllModalities] = useState<ModalitiesResponseData>({
-    top10: [],
+    top_10_modalidades: [],
     modalidades: [],
   });
 
@@ -51,7 +51,7 @@ function ModalityDetail() {
             <ContainerDesktopMain>
               <MoreSearchedModalities
                 title="MODALIDADES MAIS BUSCADAS"
-                data={allModalities.top10}
+                data={allModalities.top_10_modalidades}
               />
               <OtherSearchModalities
                 title="DEMAIS MODALIDADES"
@@ -63,7 +63,10 @@ function ModalityDetail() {
       ) : (
         <ContentMobile>
           <ContainerMobileMain className="container-mobile-main">
-            <MoreSearchedModalities title="MAIS BUSCADAS" data={allModalities.top10} />
+            <MoreSearchedModalities
+              title="MAIS BUSCADAS"
+              data={allModalities.top_10_modalidades}
+            />
             <OtherSearchModalities
               title="DEMAIS MODALIDADES"
               data={allModalities.modalidades}

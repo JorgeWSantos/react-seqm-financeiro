@@ -17,7 +17,7 @@ const RoundedButtonModalitie = ({
   variant = 'default',
 }: RoundedButtonModalityProps) => {
   return (
-    <DivModality>
+    <DivModality onClick={() => console.warn('TODO: Implementar click')}>
       <RoundedModalityButton icon={icon} text={text} variant={variant} />
 
       <StyledText>{text}</StyledText>

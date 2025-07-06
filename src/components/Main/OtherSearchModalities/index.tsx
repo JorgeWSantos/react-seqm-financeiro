@@ -1,11 +1,11 @@
+import type { ResultModalities } from '@src/pages/Main/types.api';
 import RoundedButtonModalitie from '../DivButtonModality';
 import { Container, ContentModalities, HeadingModalities } from './styles';
-import type { Modality } from '@src/pages/Main/types';
 import { getModalityIcon } from '@src/utils/getModalityIcon';
 
 interface OtherSearchModalitiesProps {
   title: string;
-  data: Modality[];
+  data: ResultModalities[];
 }
 
 const OtherSearchModalities = ({ title, data }: OtherSearchModalitiesProps) => {

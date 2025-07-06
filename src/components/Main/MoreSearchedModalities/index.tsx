@@ -1,17 +1,15 @@
 // import mapSvgByModality from '@src/utils/mapSvgToModality2';
+import type { ResultModalities } from '@src/pages/Main/types.api';
 import RoundedButtonModalitie from '../DivButtonModality';
 import { Container, ContentModalities, HeadingModalities } from './styles';
-import type { Modality } from '@src/pages/Main/types';
 import { getModalityIcon } from '@src/utils/getModalityIcon';
 
 interface MoreSearchedModalitiesProps {
   title: string;
-  data: Modality[];
+  data: ResultModalities[];
 }
 
 const MoreSearchedModalities = ({ title, data }: MoreSearchedModalitiesProps) => {
-  console.warn('TODO: validar ícone da corrida');
-
   return (
     <Container>
       <HeadingModalities>{title}</HeadingModalities>

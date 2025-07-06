@@ -8,18 +8,17 @@ import OtherSearchModalities from '@src/components/Main/OtherSearchModalities';
 import { ContainerDesktopMain, ContainerMain, ContainerMobileMain } from './styles';
 import { useCallback, useEffect, useState } from 'react';
 import { useResultsService } from '@src/services/useResultsService';
-import type { ModalitiesResponseData } from './types';
+import type { ResultModalitiesResponseData } from './types.api';
 
 function Main() {
   const { isTabletOrMobile } = useDeviceType();
   const { getResultados } = useResultsService();
 
-  const [allModalities, setAllModalities] = useState<ModalitiesResponseData>({
-    top10: [],
+  const [allModalities, setAllModalities] = useState<ResultModalitiesResponseData>({
+    top_10_modalidades: [],
     modalidades: [],
   });
 
-  // const loading = false; // Replace with actual loading state if needed
   const fetchModalities = useCallback(async () => {
     const data = await getResultados();
     setAllModalities(data);
@@ -45,7 +44,7 @@ function Main() {
             <ContainerDesktopMain>
               <MoreSearchedModalities
                 title="MODALIDADES MAIS BUSCADAS"
-                data={allModalities.top10}
+                data={allModalities.top_10_modalidades}
               />
               <OtherSearchModalities
                 title="DEMAIS MODALIDADES"
@@ -57,7 +56,10 @@ function Main() {
       ) : (
         <ContentMobile>
           <ContainerMobileMain className="container-mobile-main">
-            <MoreSearchedModalities title="MAIS BUSCADAS" data={allModalities.top10} />
+            <MoreSearchedModalities
+              title="MAIS BUSCADAS"
+              data={allModalities.top_10_modalidades}
+            />
             <OtherSearchModalities
               title="DEMAIS MODALIDADES"
               data={allModalities.modalidades}
