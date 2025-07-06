@@ -1,7 +1,8 @@
-import mapSvgByModality from '@src/utils/mapSvgToModality';
+// import mapSvgByModality from '@src/utils/mapSvgToModality2';
 import RoundedButtonModalitie from '../DivButtonModality';
 import { Container, ContentModalities, HeadingModalities } from './styles';
 import type { Modality } from '@src/pages/Main/types';
+import { getModalityIcon } from '@src/utils/getModalityIcon';
 
 interface MoreSearchedModalitiesProps {
   title: string;
@@ -17,13 +18,16 @@ const MoreSearchedModalities = ({ title, data }: MoreSearchedModalitiesProps) =>
     <Container>
       <HeadingModalities>{title}</HeadingModalities>
       <ContentModalities>
-        {data.map((item) => (
-          <RoundedButtonModalitie
-            key={item.nid_prova}
-            icon={mapSvgByModality[item.nid_prova]}
-            text={item.cds_tipo_prova}
-          />
-        ))}
+        {data.map((item) => {
+          const Icon = getModalityIcon(item.nid_prova);
+          return (
+            <RoundedButtonModalitie
+              key={item.nid_prova}
+              icon={Icon ? <Icon /> : <span />}
+              text={item.cds_tipo_prova}
+            />
+          );
+        })}
       </ContentModalities>
     </Container>
   );

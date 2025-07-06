@@ -40,6 +40,7 @@ export const StyledText = styled(Text).attrs({
   lineHeight: 'tight',
 })`
   color: ${colors.emeraldGreen75};
+  width: 104px;
 
   @media (max-width: ${breakpointsPx.lg}) {
     font-weight: ${fontWeights.semiBold};
