@@ -7,9 +7,14 @@ import { getModalityIcon } from '@src/utils/getModalityIcon';
 interface MoreSearchedModalitiesProps {
   title: string;
   data: ResultModalities[];
+  onClick: ({ id_prova }: { id_prova: number }) => void;
 }
 
-const MoreSearchedModalities = ({ title, data }: MoreSearchedModalitiesProps) => {
+const MoreSearchedModalities = ({
+  title,
+  data,
+  onClick,
+}: MoreSearchedModalitiesProps) => {
   return (
     <Container>
       <HeadingModalities>{title}</HeadingModalities>
@@ -21,6 +26,7 @@ const MoreSearchedModalities = ({ title, data }: MoreSearchedModalitiesProps) =>
               key={item.nid_prova}
               icon={Icon ? <Icon /> : <span />}
               text={item.cds_tipo_prova}
+              onClick={() => onClick({ id_prova: item.nid_prova })}
             />
           );
         })}

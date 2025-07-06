@@ -6,9 +6,10 @@ import { getModalityIcon } from '@src/utils/getModalityIcon';
 interface OtherSearchModalitiesProps {
   title: string;
   data: ResultModalities[];
+  onClick: ({ id_prova }: { id_prova: number }) => void;
 }
 
-const OtherSearchModalities = ({ title, data }: OtherSearchModalitiesProps) => {
+const OtherSearchModalities = ({ title, data, onClick }: OtherSearchModalitiesProps) => {
   return (
     <Container>
       <HeadingModalities>{title}</HeadingModalities>
@@ -22,6 +23,7 @@ const OtherSearchModalities = ({ title, data }: OtherSearchModalitiesProps) => {
               variant="secondary"
               icon={Icon ? <Icon /> : <span />}
               text={item.cds_tipo_prova}
+              onClick={() => onClick({ id_prova: item.nid_prova })}
             />
           );
         })}

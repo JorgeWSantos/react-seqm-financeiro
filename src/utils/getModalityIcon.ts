@@ -25,6 +25,8 @@ import {
 } from '@abqm-ds/icons';
 
 export function getModalityIcon(nid_prova: number) {
+  console.warn('falta o ícone CorridaIconSEQM, descomente se existir');
+
   switch (nid_prova) {
     case 11:
       return TresTamboresIconSEQM;
@@ -71,7 +73,7 @@ export function getModalityIcon(nid_prova: number) {
     case 30:
       return LacoCompridoIconSEQM;
     case 48:
-      return TresTamboresIconSEQM; // CorridaIconSEQM se existir
+      return undefined; // CorridaIconSEQM se existir
     default:
       return undefined;
   }

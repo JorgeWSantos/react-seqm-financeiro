@@ -9,15 +9,17 @@ interface RoundedButtonModalityProps {
   icon: ReactElement;
   text: string;
   variant?: VariantsRoundedModalityButton;
+  onClick: () => void;
 }
 
 const RoundedButtonModalitie = ({
   icon,
   text,
   variant = 'default',
+  onClick,
 }: RoundedButtonModalityProps) => {
   return (
-    <DivModality onClick={() => console.warn('TODO: Implementar click')}>
+    <DivModality onClick={onClick}>
       <RoundedModalityButton icon={icon} text={text} variant={variant} />
 
       <StyledText>{text}</StyledText>

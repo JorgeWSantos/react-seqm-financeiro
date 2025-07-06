@@ -9,10 +9,16 @@ import { ContainerDesktopMain, ContainerMain, ContainerMobileMain } from './styl
 import { useCallback, useEffect, useState } from 'react';
 import { useResultsService } from '@src/services/useResultsService';
 import type { ResultModalitiesResponseData } from './types.api';
+import { usePage } from '@src/contexts/page/usePage';
+import { useNavigate } from 'react-router-dom';
 
 function Main() {
+  const pageTitle = 'Ranch Sorting';
+
+  const navigate = useNavigate();
+  const { setPage } = usePage();
   const { isTabletOrMobile } = useDeviceType();
-  const { getResultados } = useResultsService();
+  const { getResultados, saveMoreSearched } = useResultsService();
 
   const [allModalities, setAllModalities] = useState<ResultModalitiesResponseData>({
     top_10_modalidades: [],
@@ -24,13 +30,21 @@ function Main() {
     setAllModalities(data);
   }, [getResultados]);
 
+  const onClickModality = useCallback(
+    async ({ id_prova }: { id_prova: number }) => {
+      await saveMoreSearched({ id_prova });
+      navigate(`/modalidade/${id_prova}`);
+    },
+    [saveMoreSearched, navigate]
+  );
+
   useEffect(() => {
     fetchModalities();
   }, [fetchModalities]);
 
-  const pageTitle = 'Ranch Sorting';
-
-  console.warn('Implementar Loading');
+  useEffect(() => {
+    setPage({ page_title: pageTitle });
+  }, [setPage]);
 
   return (
     <ContainerMain>
@@ -45,10 +59,12 @@ function Main() {
               <MoreSearchedModalities
                 title="MODALIDADES MAIS BUSCADAS"
                 data={allModalities.top_10_modalidades}
+                onClick={onClickModality}
               />
               <OtherSearchModalities
                 title="DEMAIS MODALIDADES"
                 data={allModalities.modalidades}
+                onClick={onClickModality}
               />
             </ContainerDesktopMain>
           </>
@@ -57,10 +73,12 @@ function Main() {
         <ContentMobile>
           <ContainerMobileMain className="container-mobile-main">
             <MoreSearchedModalities
+              onClick={onClickModality}
               title="MAIS BUSCADAS"
               data={allModalities.top_10_modalidades}
             />
             <OtherSearchModalities
+              onClick={onClickModality}
               title="DEMAIS MODALIDADES"
               data={allModalities.modalidades}
             />

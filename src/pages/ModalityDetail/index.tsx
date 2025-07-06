@@ -7,36 +7,39 @@ import {
 
 import { useDeviceType } from '@abqm-ds/react';
 
-import NotPointedEvents from '@src/components/Main/NotPointedEvents';
-import MoreSearchedModalities from '@src/components/Main/MoreSearchedModalities';
-import OtherSearchModalities from '@src/components/Main/OtherSearchModalities';
-import { ContainerDesktopMain, ContainerMain, ContainerMobileMain } from './styles';
-import { useCallback, useEffect, useState } from 'react';
-import { useResultsService } from '@src/services/useResultsService';
-import type { ModalitiesResponseData } from './types';
+import { ContainerMain } from './styles';
+import { useEffect } from 'react';
+// import { useResultsService } from '@src/services/useResultsService';
+import { useNavigate } from 'react-router-dom';
+import { usePage } from '@src/contexts/page/usePage';
 
 function ModalityDetail() {
+  const pageTitle = 'Modalidade Detalhe';
+
+  const navigate = useNavigate();
+
+  console.log('navigate', navigate);
+  const { setPage } = usePage();
   const { isTabletOrMobile } = useDeviceType();
-  const { getResultados } = useResultsService();
+  // const { getResultados, saveMoreSearched } = useResultsService();
 
-  const [allModalities, setAllModalities] = useState<ModalitiesResponseData>({
-    top_10_modalidades: [],
-    modalidades: [],
-  });
+  // const [allModalities, setAllModalities] = useState<ResultModalitiesResponseData>({
+  //   top_10_modalidades: [],
+  //   modalidades: [],
+  // });
 
-  // const loading = false; // Replace with actual loading state if needed
-  const fetchModalities = useCallback(async () => {
-    const data = await getResultados();
-    setAllModalities(data);
-  }, [getResultados]);
+  // const fetchModalities = useCallback(async () => {
+  //   const data = await getResultados();
+  //   setAllModalities(data);
+  // }, [getResultados]);
+
+  // useEffect(() => {
+  //   fetchModalities();
+  // }, [fetchModalities]);
 
   useEffect(() => {
-    fetchModalities();
-  }, [fetchModalities]);
-
-  const pageTitle = 'Modalidade';
-
-  console.warn('Implementar Loading');
+    setPage({ page_title: pageTitle });
+  }, [setPage]);
 
   return (
     <ContainerMain>
@@ -46,32 +49,11 @@ function ModalityDetail() {
           headerNavigator={<HeaderNavigatorDesktop title={pageTitle} hasBackButton />}
           contentBoxStyles={{ padding: '1rem 2.5rem', gap: '0' }}
         >
-          <>
-            <NotPointedEvents />
-            <ContainerDesktopMain>
-              <MoreSearchedModalities
-                title="MODALIDADES MAIS BUSCADAS"
-                data={allModalities.top_10_modalidades}
-              />
-              <OtherSearchModalities
-                title="DEMAIS MODALIDADES"
-                data={allModalities.modalidades}
-              />
-            </ContainerDesktopMain>
-          </>
+          <></>
         </ContentDektop>
       ) : (
         <ContentMobile>
-          <ContainerMobileMain className="container-mobile-main">
-            <MoreSearchedModalities
-              title="MAIS BUSCADAS"
-              data={allModalities.top_10_modalidades}
-            />
-            <OtherSearchModalities
-              title="DEMAIS MODALIDADES"
-              data={allModalities.modalidades}
-            />
-          </ContainerMobileMain>
+          <></>
         </ContentMobile>
       )}
     </ContainerMain>

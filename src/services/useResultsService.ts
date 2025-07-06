@@ -1,5 +1,4 @@
 import { Toast } from '@abqm-ds/react';
-// import { modalidades } from '@src/pages/Main/mock-modalidades.ts';
 import { useCallback } from 'react';
 import { apiResultados } from './api';
 import type {
@@ -47,7 +46,21 @@ export function useResultsService() {
     }
   }, []);
 
+  const saveMoreSearched = useCallback(async ({ id_prova }: { id_prova: number }) => {
+    try {
+      await apiResultados.put(`/v1/AcessoModalidade/${id_prova}`);
+    } catch (error) {
+      Toast.show({
+        message: 'Ops, ocorreu um erro!',
+        type: 'error',
+        timeout: 30000,
+      });
+      console.warn(error);
+    }
+  }, []);
+
   return {
     getResultados,
+    saveMoreSearched,
   };
 }
