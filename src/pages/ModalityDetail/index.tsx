@@ -13,7 +13,7 @@ import { useCallback, useEffect } from 'react';
 // import { useResultsService } from '@src/services/useResultsService';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePage } from '@src/contexts/page/usePage';
-import { FilterIcon, PrinterIcon, SearchIcon } from '@abqm-ds/icons';
+import { FilterIcon, SearchIcon } from '@abqm-ds/icons';
 import { colors } from '@abqm-ds/tokens';
 
 function ModalityDetail() {
