@@ -13,10 +13,10 @@ import { usePage } from '@src/contexts/page/usePage';
 import { useNavigate } from 'react-router-dom';
 
 function Main() {
-  const pageTitle = 'Ranch Sorting';
+  const pageTitle = 'Resultados';
 
   const navigate = useNavigate();
-  const { setPage } = usePage();
+  const { setPage, currentPage } = usePage();
   const { isTabletOrMobile } = useDeviceType();
   const { getResultados, saveMoreSearched } = useResultsService();
 
@@ -31,11 +31,21 @@ function Main() {
   }, [getResultados]);
 
   const onClickModality = useCallback(
-    async ({ id_prova }: { id_prova: number }) => {
+    async ({
+      id_prova,
+      cds_tipo_prova,
+    }: {
+      id_prova: number;
+      cds_tipo_prova: string;
+    }) => {
       await saveMoreSearched({ id_prova });
-      navigate(`/modalidade/${id_prova}`);
+
+      const navigateTo = `/modalidade/${id_prova}`;
+      navigate(navigateTo, {
+        state: { _previousPage: currentPage, modality: { id_prova, cds_tipo_prova } },
+      });
     },
-    [saveMoreSearched, navigate]
+    [saveMoreSearched, navigate, currentPage]
   );
 
   useEffect(() => {
@@ -43,7 +53,7 @@ function Main() {
   }, [fetchModalities]);
 
   useEffect(() => {
-    setPage({ page_title: pageTitle });
+    setPage({ page_title: pageTitle, path: location.pathname });
   }, [setPage]);
 
   return (

@@ -4,7 +4,6 @@ import type { PageContextObject } from './types';
 export interface PageContextType {
   goBack: () => void;
   currentPage: PageContextObject;
-  previousPage: PageContextObject;
   setPage: (page: PageContextObject) => void;
 }
 

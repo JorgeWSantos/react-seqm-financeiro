@@ -3,19 +3,15 @@ import { PageContext } from './pageContext';
 import type { PageContextObject } from './types';
 
 export const PageProvider = ({ children }: { children: React.ReactNode }) => {
-  const [currentPage, setCurrentPage] = useState<PageContextObject>({ page_title: '' });
-  const [previousPage, setPreviousPage] = useState<PageContextObject>({ page_title: '' });
+  const [currentPage, setCurrentPage] = useState<PageContextObject>({
+    page_title: '',
+    path: '',
+  });
 
-  const goBack = useCallback(() => {
-    const _previousPage = previousPage;
-    setPreviousPage(currentPage);
-    setCurrentPage(_previousPage);
-  }, [previousPage, currentPage]);
+  const goBack = useCallback(() => {}, []);
 
   const setPage = useCallback((page: PageContextObject) => {
-    // setPreviousPage(currentPage);
-    setCurrentPage((current) => {
-      setPreviousPage(current);
+    setCurrentPage(() => {
       return page;
     });
   }, []);
@@ -26,7 +22,6 @@ export const PageProvider = ({ children }: { children: React.ReactNode }) => {
         goBack,
         currentPage,
         setPage,
-        previousPage,
       }}
     >
       {children}

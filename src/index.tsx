@@ -1,6 +1,6 @@
 // import { StrictMode } from 'react';
-import { AppRoutes } from './routes/index.tsx';
-import { BrowserRouter } from 'react-router-dom';
+// import { AppRoutes } from './routes/index.tsx';
+// import { BrowserRouter } from 'react-router-dom';
 
 import {
   ContainerDesktop,
@@ -15,6 +15,7 @@ import { useAuth } from './contexts/auth/useAuth.ts';
 import type { MenuResponseObj } from './types.ts';
 import { useEffect, useState } from 'react';
 import { useMenuService } from './services/useMenuService.ts';
+import { Outlet } from 'react-router-dom';
 
 function MainApp() {
   const { isTabletOrMobile } = useDeviceType();
@@ -46,42 +47,39 @@ function MainApp() {
   };
 
   return (
-    <BrowserRouter>
-      <GlobalContainer>
-        {!isTabletOrMobile ? (
-          <ContainerDesktop>
-            <SideBarDesktop
-              user={user || null}
-              menu={menu}
-              onLogout={logout}
-              onLogin={redirectToLogin}
-              token={token || ''}
-            />
-
-            <AppRoutes />
-          </ContainerDesktop>
-        ) : (
-          <ContainerMobile>
-            <HeaderMobile
-              title="SEQM"
-              page={pageTitle}
-              data={menu}
-              token={token || ''}
-              userDropdown={{
-                userName: user?.nome_pessoa || '',
-                srcImage: user?.foto || '',
-                onLogin: redirectToLogin,
-                onLogout: () => {
-                  logout();
-                },
-              }}
-            />
-
-            <AppRoutes />
-          </ContainerMobile>
-        )}
-      </GlobalContainer>
-    </BrowserRouter>
+    <GlobalContainer>
+      {!isTabletOrMobile ? (
+        <ContainerDesktop>
+          <SideBarDesktop
+            user={user || null}
+            menu={menu}
+            onLogout={logout}
+            onLogin={redirectToLogin}
+            token={token || ''}
+          />
+          <Outlet />
+        </ContainerDesktop>
+      ) : (
+        <ContainerMobile>
+          <HeaderMobile
+            title="SEQM"
+            page={pageTitle}
+            data={menu}
+            token={token || ''}
+            userDropdown={{
+              userName: user?.nome_pessoa || '',
+              srcImage: user?.foto || '',
+              onLogin: redirectToLogin,
+              onLogout: () => {
+                logout();
+              },
+            }}
+          />
+          <Outlet />
+        </ContainerMobile>
+      )}
+    </GlobalContainer>
+    // </BrowserRouter>
   );
 }
 

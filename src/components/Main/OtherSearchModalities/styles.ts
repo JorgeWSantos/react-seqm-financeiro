@@ -11,9 +11,6 @@ export const Container = styled.div`
 `;
 
 export const HeadingModalities = styled(Heading).attrs({
-  // fontSize: 'ssm',
-  // lineHeight: 'tight',
-  // fontWeight: 'regular',
   fontSize: 'ssm',
 })`
   color: ${colors.emeraldGreen75};
@@ -36,7 +33,7 @@ export const ContentModalities = styled.div`
   flex-wrap: wrap;
   border-radius: 0.625rem;
 
-  min-height: 173px;
+  min-height: 336px;
 
   border: 1px solid ${colors.green500};
 
