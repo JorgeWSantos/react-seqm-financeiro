@@ -2,9 +2,19 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/logo-seqm-mobile.svg" />
+    <link id="favicon" rel="icon" type="image/svg+xml" href="/logo-seqm-mobile.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SEQM</title>
+    <script>
+      // Troca o favicon conforme o tema do sistema
+      function setFavicon() {
+        const darkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const favicon = document.getElementById('favicon');
+        favicon.href = darkMode ? '/logo-seqm-mobile.svg' : '/logo-seqm-mobile-black.svg';
+      }
+      setFavicon();
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', setFavicon);
+    </script>
   </head>
   <body>
     <div id="root"></div>
