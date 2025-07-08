@@ -6,11 +6,11 @@ import NotPointedEvents from '@src/components/Main/NotPointedEvents';
 import MoreSearchedModalities from '@src/components/Main/MoreSearchedModalities';
 import OtherSearchModalities from '@src/components/Main/OtherSearchModalities';
 import { ContainerDesktopMain, ContainerMain, ContainerMobileMain } from './styles';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useResultsService } from '@src/services/useResultsService';
-import type { ResultModalitiesResponseData } from './types.api';
 import { usePage } from '@src/contexts/page/usePage';
 import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 
 function Main() {
   const pageTitle = 'Resultados';
@@ -19,16 +19,6 @@ function Main() {
   const { setPage, currentPage } = usePage();
   const { isTabletOrMobile } = useDeviceType();
   const { getResultados, saveMoreSearched } = useResultsService();
-
-  const [allModalities, setAllModalities] = useState<ResultModalitiesResponseData>({
-    top_10_modalidades: [],
-    modalidades: [],
-  });
-
-  const fetchModalities = useCallback(async () => {
-    const data = await getResultados();
-    setAllModalities(data);
-  }, [getResultados]);
 
   const onClickModality = useCallback(
     async ({
@@ -48,9 +38,12 @@ function Main() {
     [saveMoreSearched, navigate, currentPage]
   );
 
-  useEffect(() => {
-    fetchModalities();
-  }, [fetchModalities]);
+  const { data: allModalities = { top_10_modalidades: [], modalidades: [] } } = useQuery({
+    queryKey: ['modalities'],
+    queryFn: getResultados,
+    staleTime: 1000 * 60 * 3, // 3 minutos
+    gcTime: 1000 * 60 * 3,
+  });
 
   useEffect(() => {
     setPage({ page_title: pageTitle, path: location.pathname });
