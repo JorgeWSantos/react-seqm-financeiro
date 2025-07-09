@@ -15,6 +15,8 @@ export function useResultsService() {
 
       const { data, message, success } = response.data;
 
+      console.log('getResultados', data, message, success);
+
       if (!success) {
         Toast.show({
           message: message || 'Ops, ocorreu um erro ao carregar as modalidades!',
@@ -22,14 +24,14 @@ export function useResultsService() {
           timeout: 3000,
         });
         return {
-          top_10_modalidades: [],
+          top_modalidades: [],
           modalidades: [],
         };
       }
 
       return {
-        top_10_modalidades:
-          data.list_resultados_qtde_por_modalidade[0].top_10_modalidades || [],
+        top_modalidades:
+          data.list_resultados_qtde_por_modalidade[0].top_modalidades || [],
         modalidades: data.list_resultados_qtde_por_modalidade[0].modalidades || [],
       };
     } catch (error) {
@@ -40,7 +42,7 @@ export function useResultsService() {
       });
       console.warn(error);
       return {
-        top_10_modalidades: [],
+        top_modalidades: [],
         modalidades: [],
       };
     }

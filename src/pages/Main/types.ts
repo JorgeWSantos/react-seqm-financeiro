@@ -10,7 +10,7 @@
 // };
 
 // export interface ModalitiesResponseData {
-//   top_10_modalidades: Modality[];
+//   top_modalidades: Modality[];
 //   modalidades: Modality[];
 // }
 

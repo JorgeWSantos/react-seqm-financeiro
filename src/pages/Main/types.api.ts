@@ -9,7 +9,7 @@ export interface ResultModalities {
 
 export interface ResultModalitiesResponseData {
   modalidades: ResultModalities[];
-  top_10_modalidades: ResultModalities[];
+  top_modalidades: ResultModalities[];
 }
 
 interface ResultModalitiesResponseDataData {

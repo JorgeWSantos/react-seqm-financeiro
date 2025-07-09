@@ -38,7 +38,7 @@ function Main() {
     [saveMoreSearched, navigate, currentPage]
   );
 
-  const { data: allModalities = { top_10_modalidades: [], modalidades: [] } } = useQuery({
+  const { data: allModalities = { top_modalidades: [], modalidades: [] } } = useQuery({
     queryKey: ['modalities'],
     queryFn: getResultados,
     staleTime: 1000 * 60 * 3, // 3 minutos
@@ -61,7 +61,7 @@ function Main() {
             <ContainerDesktopMain>
               <MoreSearchedModalities
                 title="MODALIDADES MAIS BUSCADAS"
-                data={allModalities.top_10_modalidades}
+                data={allModalities.top_modalidades}
                 onClick={onClickModality}
               />
               <OtherSearchModalities
@@ -78,7 +78,7 @@ function Main() {
             <MoreSearchedModalities
               onClick={onClickModality}
               title="MAIS BUSCADAS"
-              data={allModalities.top_10_modalidades}
+              data={allModalities.top_modalidades}
             />
             <OtherSearchModalities
               onClick={onClickModality}
