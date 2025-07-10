@@ -23,6 +23,8 @@ import { useModalityDetails } from '@src/services/useModalityDetails';
 import type { ModalityDetailsResponseData, ResultModality } from './types.api';
 import type { ModalitiesEvents } from './types';
 import { useParams } from 'react-router';
+import { getNameProveById } from '@src/utils/getNameProveById';
+import { ModalFilter } from './ModalFilter';
 
 function ModalityDetail() {
   const pageTitle = 'Resultados';
@@ -32,31 +34,24 @@ function ModalityDetail() {
   const params = useParams();
   const id_prova = params.id_prova;
 
-  // console.log('location', location);
-
   const { setPage } = usePage();
   const { isTabletOrMobile } = useDeviceType();
   const { getModalityDetails } = useModalityDetails();
 
-  // const [allResults, setAllResults] = useState<ModalityDetailsResponseData>({
-  //   resultado_por_modalidade: [],
-  //   eventos_nao_pontuados: [],
-  //   eventos_por_mes_sem_resultado: [],
-  //   eventos_por_mes: [],
-  // });
+  const [modal, setModal] = useState<any>({
+    isOpen: true,
+    open: () => setModal({ ...modal, isOpen: true }),
+    close: () => setModal({ ...modal, isOpen: false }),
+  });
 
+  const [allList, setAllList] = useState<ResultModality[]>([]);
   const [listToShow, setListToShow] = useState<ResultModality[]>([]);
   const [year, setYear] = useState<string>(new Date().getFullYear().toString());
   const [month, setMonth] = useState<string>('');
 
-  const fetchModalities = useCallback(async () => {
-    const data = await getModalityDetails({
-      prove_id: id_prova ? Number(id_prova) : null,
-      year,
-      month,
-    });
-    // setAllResults(data);
+  const [searchValue, setSearchValue] = useState<string>('');
 
+  const setResultsToShow = useCallback((data: ModalityDetailsResponseData) => {
     const eventsToShow = [];
 
     if (data.resultado_por_modalidade.length > 0) {
@@ -68,7 +63,18 @@ function ModalityDetail() {
     }
 
     setListToShow(eventsToShow);
-  }, [getModalityDetails, id_prova, year, month]);
+    setAllList(eventsToShow);
+  }, []);
+
+  const fetchModalities = useCallback(async () => {
+    const data = await getModalityDetails({
+      prove_id: id_prova ? Number(id_prova) : null,
+      year,
+      month,
+    });
+
+    setResultsToShow(data);
+  }, [getModalityDetails, id_prova, year, month, setResultsToShow]);
 
   const headerComponent = useCallback(() => {
     return (
@@ -90,22 +96,18 @@ function ModalityDetail() {
   const headerNavigator = useCallback(() => {
     return (
       <HeaderNavigatorDesktop
-        title={location.state.modality.cds_tipo_prova}
+        title={getNameProveById(Number(id_prova) || 1000)}
         hasBackButton
-        onGoBack={() => navigate(location.state._previousPage.path)}
+        onGoBack={() => navigate('/')}
       >
         <TextInput
           placeholder="Buscar"
-          onChange={(v) => console.log(v.target.value)}
+          onChange={(v) => setSearchValue(v.target.value)}
           icon={<SearchIcon fill={colors.white75} />}
         />
       </HeaderNavigatorDesktop>
     );
-  }, [
-    location.state._previousPage.path,
-    location.state.modality.cds_tipo_prova,
-    navigate,
-  ]);
+  }, [navigate, id_prova]);
 
   useEffect(() => {
     fetchModalities();
@@ -120,6 +122,25 @@ function ModalityDetail() {
     // console.log('location', location);
     // console.log('location.state.modality.id_prova', location.state.modality.id_prova);
   }, [setPage, location]);
+
+  // Effect to filter the list based on searchValue
+  useEffect(() => {
+    if (searchValue.trim() === '') {
+      setListToShow(allList);
+      return;
+    }
+
+    const filteredList = allList.filter(
+      (item) =>
+        item.cds_evento.toLowerCase().includes(searchValue.toLowerCase()) ||
+        item.cds_empresa.toLowerCase().includes(searchValue.toLowerCase()) ||
+        item.cds_local_evento.toLowerCase().includes(searchValue.toLowerCase()) ||
+        item.ddt_inicio_evento.includes(searchValue) ||
+        item.dt_fim_evento.includes(searchValue)
+    );
+
+    setListToShow(filteredList);
+  }, [searchValue, allList]);
 
   const columns: Array<TableColumnSEQM<ModalitiesEvents>> = [
     {
@@ -183,6 +204,8 @@ function ModalityDetail() {
           <></>
         </ContentMobile>
       )}
+
+      <ModalFilter handleCloseModal={modal.close} item={{}} isModalOpen={modal.isOpen} />
     </ContainerMain>
   );
 }

@@ -31,6 +31,10 @@ function Main() {
       await saveMoreSearched({ id_prova });
 
       const navigateTo = `/modalidade/${id_prova}`;
+
+      // localStorage.setItem('previousPath', currentPage.path);
+      // localStorage.setItem('currentModality', currentPage.path);
+
       navigate(navigateTo, {
         state: { _previousPage: currentPage, modality: { id_prova, cds_tipo_prova } },
       });
