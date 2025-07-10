@@ -1,6 +1,7 @@
 import {
   ContentDektop,
   ContentMobile,
+  getNameProveById,
   Header,
   HeaderNavigatorDesktop,
   TableSEQM,
@@ -14,7 +15,6 @@ import { useDeviceType } from '@abqm-ds/react';
 
 import { ContainerMain } from './styles';
 import { useCallback, useEffect, useState } from 'react';
-// import { useResultsService } from '@src/services/useResultsService';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePage } from '@src/contexts/page/usePage';
 import { FilterIcon, SearchIcon } from '@abqm-ds/icons';
@@ -23,7 +23,6 @@ import { useModalityDetails } from '@src/services/useModalityDetails';
 import type { ModalityDetailsResponseData, ResultModality } from './types.api';
 import type { ModalitiesEvents } from './types';
 import { useParams } from 'react-router';
-import { getNameProveById } from '@src/utils/getNameProveById';
 import { ModalFilter } from './ModalFilter';
 
 function ModalityDetail() {
@@ -46,8 +45,8 @@ function ModalityDetail() {
 
   const [allList, setAllList] = useState<ResultModality[]>([]);
   const [listToShow, setListToShow] = useState<ResultModality[]>([]);
-  const [year, setYear] = useState<string>(new Date().getFullYear().toString());
-  const [month, setMonth] = useState<string>('');
+  const [year] = useState<string>(new Date().getFullYear().toString());
+  const [month] = useState<string>('');
 
   const [searchValue, setSearchValue] = useState<string>('');
 
