@@ -39,15 +39,6 @@ export const DivInfos = styled.div`
   justify-content: center;
 `;
 
-export const TextDivInfosTop = styled(Text).attrs({
-  fontSize: 'lgg',
-  fontWeight: 'semiBold',
-  color: colors.black75,
-})`
-  text-align: center;
-  line-height: 1.625rem;
-`;
-
 export const TextInfosDatesTop = styled(Text).attrs({
   fontSize: 'smm',
   fontWeight: 'regular',

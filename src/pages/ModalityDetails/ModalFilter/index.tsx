@@ -1,15 +1,15 @@
-import { Modal, Text, useDeviceType } from '@abqm-ds/react';
+import { Modal, useDeviceType } from '@abqm-ds/react';
 import {
   ButtonFolder,
   DivInfos,
   ModalContent,
   TextInfosDates,
-  TextDivInfosTop,
   TextInfosDatesTop,
 } from './styles';
 import { convertToBrazilDate } from '@src/utils/formatDate';
-import { colors } from '@abqm-ds/tokens';
 import { FileTextIcon } from '@abqm-ds/icons';
+import { useState } from 'react';
+import { RadioGroup } from '../RadioGroup';
 
 interface ModalFilterProps {
   isModalOpen: boolean;
@@ -23,6 +23,7 @@ export const ModalFilter = ({
   item,
 }: ModalFilterProps) => {
   const { isTabletOrMobile } = useDeviceType();
+  const [selectedOption, setSelectedOption] = useState<string>('todos');
 
   return (
     <Modal
@@ -37,18 +38,11 @@ export const ModalFilter = ({
       maxHeight={isTabletOrMobile ? '80vh' : '66vh'}
     >
       <ModalContent>
-        <DivInfos>
-          <TextDivInfosTop>{item?.cds_local_evento}</TextDivInfosTop>
-
-          <Text
-            fontSize="lgg"
-            fontWeight="regular"
-            color={colors.black75}
-            style={{ textAlign: 'center', lineHeight: '1.625rem' }}
-          >
-            {item?.cnm_cidade}, {item?.cnm_estado}
-          </Text>
-        </DivInfos>
+        {/* Substituir bloco antigo pelo novo componente */}
+        <RadioGroup
+          selectedOption={selectedOption}
+          setSelectedOption={setSelectedOption}
+        />
 
         <DivInfos>
           <TextInfosDatesTop>Data do Evento</TextInfosDatesTop>
