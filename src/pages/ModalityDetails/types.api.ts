@@ -8,8 +8,8 @@ export type ResultModality = {
   cds_empresa: string;
   cds_evento: string;
   cds_local_evento: string;
-  ddt_inicio_evento: string; // ISO date string
-  dt_fim_evento: string; // ISO date string
+  data_inicio_evento: string; // ISO date string
+  data_fim_evento: string; // ISO date string
   cds_tipo_prova: string;
   nid_empresa: number;
   cnm_cidade: string;
@@ -25,7 +25,7 @@ export interface ModalityDetailsResponseData {
   eventos_nao_pontuados: Array<ResultModality> | [];
   eventos_por_mes_sem_resultado: Array<ResultModality> | [];
   eventos_por_mes: Array<ResultModality> | [];
-  resultado_por_modalidade: Array<ResultModality> | [];
+  eventos: Array<ResultModality> | [];
 }
 
 export type ModalityDetailsResponse = ApiResponse<{

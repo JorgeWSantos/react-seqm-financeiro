@@ -42,7 +42,7 @@ export function useModalityDetails() {
           });
 
           return {
-            resultado_por_modalidade: [],
+            eventos: [],
             eventos_nao_pontuados: [],
             eventos_por_mes_sem_resultado: [],
             eventos_por_mes: [],
@@ -59,7 +59,7 @@ export function useModalityDetails() {
         console.warn(error);
 
         return {
-          resultado_por_modalidade: [],
+          eventos: [],
           eventos_nao_pontuados: [],
           eventos_por_mes_sem_resultado: [],
           eventos_por_mes: [],

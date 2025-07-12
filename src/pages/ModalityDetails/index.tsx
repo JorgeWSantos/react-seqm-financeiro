@@ -14,14 +14,14 @@ import {
 import { useDeviceType } from '@abqm-ds/react';
 
 import { ContainerMain } from './styles';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePage } from '@src/contexts/page/usePage';
 import { FilterIcon, SearchIcon } from '@abqm-ds/icons';
 import { colors } from '@abqm-ds/tokens';
 import { useModalityDetails } from '@src/services/useModalityDetails';
 import type { ModalityDetailsResponseData, ResultModality } from './types.api';
-import type { ModalitiesEvents } from './types';
+import type { ModalDetailsFilter, ModalitiesEvents } from './types';
 import { useParams } from 'react-router';
 import { ModalFilter } from './ModalFilter';
 
@@ -37,43 +37,110 @@ function ModalityDetail() {
   const { isTabletOrMobile } = useDeviceType();
   const { getModalityDetails } = useModalityDetails();
 
+  const optionsOficial = useMemo(
+    () => [
+      { label: 'Todos', value: '', id: '0' },
+      { label: 'Oficiais', value: 'true', id: '1' },
+      { label: 'Oficializados', value: 'false', id: '2' },
+    ],
+    []
+  );
+
+  const years = useMemo(() => {
+    const currentYear = new Date().getFullYear();
+    const yearsArray = [];
+    for (let i = currentYear; i >= 1990; i--) {
+      yearsArray.push({ value: String(i), label: String(i), id: String(i) });
+    }
+    return yearsArray;
+  }, []);
+
+  const months = useMemo(
+    () => [
+      { value: '0', label: 'Todos', id: '0' },
+      { value: '1', label: 'Janeiro', id: '1' },
+      { value: '2', label: 'Fevereiro', id: '2' },
+      { value: '3', label: 'Março', id: '3' },
+      { value: '4', label: 'Abril', id: '4' },
+      { value: '5', label: 'Maio', id: '5' },
+      { value: '6', label: 'Junho', id: '6' },
+      { value: '7', label: 'Julho', id: '7' },
+      { value: '8', label: 'Agosto', id: '8' },
+      { value: '9', label: 'Setembro', id: '9' },
+      { value: '10', label: 'Outubro', id: '10' },
+      { value: '11', label: 'Novembro', id: '11' },
+      { value: '12', label: 'Dezembro', id: '12' },
+    ],
+    []
+  );
+
+  const initialFilter: ModalDetailsFilter = useMemo(
+    () => ({
+      year: years[0],
+      month: months[0],
+      oficial: optionsOficial[0],
+    }),
+    [years, months, optionsOficial]
+  );
+
+  const [filter, setFilter] = useState<ModalDetailsFilter>(initialFilter);
+
+  const [allList, setAllList] = useState<ResultModality[]>([]);
+  const [listToShow, setListToShow] = useState<ResultModality[]>([]);
+  const [searchValue, setSearchValue] = useState<string>('');
+
   const [modal, setModal] = useState<any>({
     isOpen: true,
     open: () => setModal({ ...modal, isOpen: true }),
     close: () => setModal({ ...modal, isOpen: false }),
   });
 
-  const [allList, setAllList] = useState<ResultModality[]>([]);
-  const [listToShow, setListToShow] = useState<ResultModality[]>([]);
-  const [year] = useState<string>(new Date().getFullYear().toString());
-  const [month] = useState<string>('');
+  const setResultsToShow = useCallback(
+    ({ data, isOficial }: { data: ModalityDetailsResponseData; isOficial: string }) => {
+      const eventsToShow = [];
 
-  const [searchValue, setSearchValue] = useState<string>('');
+      if (data.eventos.length > 0) {
+        eventsToShow.push(...data.eventos);
+      }
 
-  const setResultsToShow = useCallback((data: ModalityDetailsResponseData) => {
-    const eventsToShow = [];
+      if (data.eventos_nao_pontuados.length > 0) {
+        eventsToShow.push(...data.eventos_nao_pontuados);
+      }
 
-    if (data.resultado_por_modalidade.length > 0) {
-      eventsToShow.push(...data.resultado_por_modalidade);
-    }
+      setListToShow(
+        isOficial !== ''
+          ? eventsToShow.filter((item) => String(item.bid_oficial) === isOficial)
+          : eventsToShow
+      );
+      setAllList(
+        isOficial !== ''
+          ? eventsToShow.filter((item) => String(item.bid_oficial) === isOficial)
+          : eventsToShow
+      );
+    },
+    []
+  );
 
-    if (data.eventos_nao_pontuados.length > 0) {
-      eventsToShow.push(...data.eventos_nao_pontuados);
-    }
-
-    setListToShow(eventsToShow);
-    setAllList(eventsToShow);
-  }, []);
-
-  const fetchModalities = useCallback(async () => {
-    const data = await getModalityDetails({
-      prove_id: id_prova ? Number(id_prova) : null,
+  const fetchModalities = useCallback(
+    async ({
       year,
       month,
-    });
+      isOficial,
+    }: {
+      year: string;
+      month: string;
+      isOficial: string;
+    }) => {
+      const data = await getModalityDetails({
+        prove_id: id_prova ? Number(id_prova) : null,
+        year,
+        month,
+      });
 
-    setResultsToShow(data);
-  }, [getModalityDetails, id_prova, year, month, setResultsToShow]);
+      setResultsToShow({ data, isOficial });
+    },
+    [getModalityDetails, id_prova, setResultsToShow]
+  );
 
   const headerComponent = useCallback(() => {
     return (
@@ -83,14 +150,14 @@ function ModalityDetail() {
           {
             icon: <FilterIcon fill={colors.emeraldGreen50} />,
             label: 'filtro',
-            onClick: () => console.log('clicou no filtro'),
+            onClick: modal.open,
             // isFiltered: true,
             // onClick: () => console.log('clicou em animais'), //exibe o console no devtools do chrome
           },
         ]}
       />
     );
-  }, []);
+  }, [modal]);
 
   const headerNavigator = useCallback(() => {
     return (
@@ -109,8 +176,14 @@ function ModalityDetail() {
   }, [navigate, id_prova]);
 
   useEffect(() => {
-    fetchModalities();
-  }, [fetchModalities]);
+    if (filter === initialFilter) {
+      fetchModalities({
+        year: filter.year.value,
+        month: filter.month.value,
+        isOficial: filter.oficial.value,
+      });
+    }
+  }, [fetchModalities, filter, initialFilter]);
 
   useEffect(() => {
     setPage({
@@ -140,6 +213,16 @@ function ModalityDetail() {
 
     setListToShow(filteredList);
   }, [searchValue, allList]);
+
+  const handleApplyFilter = useCallback(() => {
+    fetchModalities({
+      year: filter.year.value,
+      month: filter.month.value,
+      isOficial: filter.oficial.value,
+    });
+
+    modal.close();
+  }, [filter, fetchModalities, modal]);
 
   const columns: Array<TableColumnSEQM<ModalitiesEvents>> = [
     {
@@ -183,8 +266,8 @@ function ModalityDetail() {
     event: item.cds_evento.toUpperCase(),
     organizator: item.cds_empresa.toUpperCase(),
     local: item.cds_local_evento.toUpperCase(),
-    init: item.ddt_inicio_evento.slice(0, 10),
-    end: item.dt_fim_evento.slice(0, 10),
+    init: item.data_inicio_evento,
+    end: item.data_fim_evento,
     isOficial: item.bid_oficial,
   }));
 
@@ -204,7 +287,17 @@ function ModalityDetail() {
         </ContentMobile>
       )}
 
-      <ModalFilter handleCloseModal={modal.close} item={{}} isModalOpen={modal.isOpen} />
+      <ModalFilter
+        handleCloseModal={modal.close}
+        item={{}}
+        isModalOpen={modal.isOpen}
+        filter={filter}
+        setFilter={setFilter}
+        years={years}
+        months={months}
+        optionsOficial={optionsOficial}
+        handleApplyFilter={handleApplyFilter}
+      />
     </ContainerMain>
   );
 }

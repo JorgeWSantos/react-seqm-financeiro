@@ -3,30 +3,40 @@ import {
   Dropdown,
   Modal,
   RadioGroup,
+  type DataDropdown,
   type RadioGroupOption,
 } from '@abqm-ds/react';
 import { DivButton, DivGroup, ModalContent, TextGroup } from './styles';
-import { useState } from 'react';
+import type { ModalDetailsFilter } from '../types';
+import type { Dispatch, SetStateAction } from 'react';
 
 interface ModalFilterProps {
   isModalOpen: boolean;
   handleCloseModal: () => void;
+  handleApplyFilter: () => void;
   item: any | null;
+  filter: {
+    year: DataDropdown;
+    month: DataDropdown;
+    oficial: RadioGroupOption;
+  };
+  setFilter: Dispatch<SetStateAction<ModalDetailsFilter>>;
+  years: DataDropdown[];
+  months: DataDropdown[];
+  optionsOficial: RadioGroupOption[];
 }
 
 export const ModalFilter = ({
   handleCloseModal,
+  handleApplyFilter,
   isModalOpen,
   item,
+  filter,
+  setFilter,
+  years,
+  months,
+  optionsOficial,
 }: ModalFilterProps) => {
-  const options = [
-    { label: 'Todos', value: 'todos', id: 'todos' },
-    { label: 'Oficiais', value: 'oficiais', id: 'oficiais' },
-    { label: 'Oficializados', value: 'oficializados', id: 'oficializados' },
-  ];
-
-  const [selectedOption, setSelectedOption] = useState<RadioGroupOption>(options[0]);
-
   return (
     <Modal
       title="Filtro"
@@ -39,15 +49,20 @@ export const ModalFilter = ({
       role="dialog"
       aria-modal="true"
       aria-label={`Detalhes do evento ${item?.cds_agrupa_evento || ''}`}
-      maxHeight={'48vh'}
+      maxHeight={'28rem'}
     >
       <ModalContent>
         <DivGroup>
           <TextGroup>Eventos</TextGroup>
           <RadioGroup
-            options={options}
-            selectedOption={selectedOption}
-            setSelectedOption={setSelectedOption}
+            options={optionsOficial}
+            selectedOption={filter.oficial}
+            setSelectedOption={(options) => {
+              setFilter((prev) => ({
+                ...prev,
+                oficial: options,
+              }));
+            }}
           />
         </DivGroup>
 
@@ -58,35 +73,29 @@ export const ModalFilter = ({
             maxHeight="96px"
             variant="tertiary"
             label="Ano"
-            data={[
-              { value: '1', label: 'Opção 1', id: '1' },
-              { value: '2', label: 'Opção 2', id: '2' },
-              { value: '2', label: 'Opção 2', id: '2' },
-              { value: '2', label: 'Opção 2', id: '2' },
-              { value: '2', label: 'Opção 2', id: '2' },
-              { value: '2', label: 'Opção 2', id: '2' },
-              { value: '2', label: 'Opção 2', id: '2' },
-            ]}
+            data={years}
+            setValue={(item) => {
+              setFilter((prev) => {
+                return { ...prev, year: item };
+              });
+            }}
           />
 
           <Dropdown
             maxHeight="96px"
             variant="tertiary"
             label="Meses"
-            data={[
-              { value: '1', label: 'Opção 1', id: '1' },
-              { value: '2', label: 'Opção 2', id: '2' },
-              { value: '2', label: 'Opção 2', id: '2' },
-              { value: '2', label: 'Opção 2', id: '2' },
-              { value: '2', label: 'Opção 2', id: '2' },
-              { value: '2', label: 'Opção 2', id: '2' },
-              { value: '2', label: 'Opção 2', id: '2' },
-            ]}
+            data={months}
+            setValue={(item) => {
+              setFilter((prev) => {
+                return { ...prev, month: item };
+              });
+            }}
           />
         </DivGroup>
 
         <DivButton>
-          <Button size="md" text="Aplicar" variant="dark" />
+          <Button size="md" text="Aplicar" variant="dark" onClick={handleApplyFilter} />
         </DivButton>
       </ModalContent>
     </Modal>
