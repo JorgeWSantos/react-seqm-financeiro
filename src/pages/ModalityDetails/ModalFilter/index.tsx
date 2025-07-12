@@ -14,6 +14,7 @@ interface ModalFilterProps {
   isModalOpen: boolean;
   handleCloseModal: () => void;
   handleApplyFilter: () => void;
+  handleClearFilter: () => void;
   item: any | null;
   filter: {
     year: DataDropdown;
@@ -29,6 +30,7 @@ interface ModalFilterProps {
 export const ModalFilter = ({
   handleCloseModal,
   handleApplyFilter,
+  handleClearFilter,
   isModalOpen,
   item,
   filter,
@@ -42,7 +44,7 @@ export const ModalFilter = ({
       title="Filtro"
       isFiltered={true}
       isOpen={isModalOpen}
-      onClickCleanFilter={() => console.log('Limpar filtro')}
+      onClickCleanFilter={handleClearFilter}
       onClose={handleCloseModal}
       positionHorizontal="center"
       positionVertical="center"
@@ -74,6 +76,7 @@ export const ModalFilter = ({
             variant="tertiary"
             label="Ano"
             data={years}
+            value={filter.year}
             setValue={(item) => {
               setFilter((prev) => {
                 return { ...prev, year: item };
@@ -86,6 +89,7 @@ export const ModalFilter = ({
             variant="tertiary"
             label="Meses"
             data={months}
+            value={filter.month}
             setValue={(item) => {
               setFilter((prev) => {
                 return { ...prev, month: item };

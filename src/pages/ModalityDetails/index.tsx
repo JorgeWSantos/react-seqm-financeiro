@@ -151,13 +151,13 @@ function ModalityDetail() {
             icon: <FilterIcon fill={colors.emeraldGreen50} />,
             label: 'filtro',
             onClick: modal.open,
-            // isFiltered: true,
+            isFiltered: filter !== initialFilter,
             // onClick: () => console.log('clicou em animais'), //exibe o console no devtools do chrome
           },
         ]}
       />
     );
-  }, [modal]);
+  }, [modal, filter, initialFilter, pageTitle]);
 
   const headerNavigator = useCallback(() => {
     return (
@@ -223,6 +223,16 @@ function ModalityDetail() {
 
     modal.close();
   }, [filter, fetchModalities, modal]);
+
+  const handleClearFilter = useCallback(() => {
+    setFilter(initialFilter);
+    fetchModalities({
+      year: initialFilter.year.value,
+      month: initialFilter.month.value,
+      isOficial: initialFilter.oficial.value,
+    });
+    modal.close();
+  }, [initialFilter, fetchModalities, modal]);
 
   const columns: Array<TableColumnSEQM<ModalitiesEvents>> = [
     {
@@ -310,6 +320,7 @@ function ModalityDetail() {
         months={months}
         optionsOficial={optionsOficial}
         handleApplyFilter={handleApplyFilter}
+        handleClearFilter={handleClearFilter}
       />
     </ContainerMain>
   );
