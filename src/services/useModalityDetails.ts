@@ -31,8 +31,6 @@ export function useModalityDetails() {
 
         const { data, message, success } = response.data;
 
-        console.log('getModalityDetails', data.resultado);
-
         if (!success) {
           Toast.show({
             message:

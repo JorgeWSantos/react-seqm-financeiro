@@ -142,39 +142,6 @@ function ModalityDetail() {
     [getModalityDetails, id_prova, setResultsToShow]
   );
 
-  const headerComponent = useCallback(() => {
-    return (
-      <Header
-        text={pageTitle}
-        buttons={[
-          {
-            icon: <FilterIcon fill={colors.emeraldGreen50} />,
-            label: 'filtro',
-            onClick: modal.open,
-            isFiltered: filter !== initialFilter,
-            // onClick: () => console.log('clicou em animais'), //exibe o console no devtools do chrome
-          },
-        ]}
-      />
-    );
-  }, [modal, filter, initialFilter, pageTitle]);
-
-  const headerNavigator = useCallback(() => {
-    return (
-      <HeaderNavigatorDesktop
-        title={getNameProveById(Number(id_prova) || 1000)}
-        hasBackButton
-        onGoBack={() => navigate('/')}
-      >
-        <TextInput
-          placeholder="Buscar"
-          onChange={(v) => setSearchValue(v.target.value)}
-          icon={<SearchIcon fill={colors.white75} />}
-        />
-      </HeaderNavigatorDesktop>
-    );
-  }, [navigate, id_prova]);
-
   useEffect(() => {
     if (filter === initialFilter) {
       fetchModalities({
@@ -207,8 +174,8 @@ function ModalityDetail() {
         item.cds_evento.toLowerCase().includes(searchValue.toLowerCase()) ||
         item.cds_empresa.toLowerCase().includes(searchValue.toLowerCase()) ||
         item.cds_local_evento.toLowerCase().includes(searchValue.toLowerCase()) ||
-        item.ddt_inicio_evento.includes(searchValue) ||
-        item.dt_fim_evento.includes(searchValue)
+        item.data_inicio_evento.includes(searchValue) ||
+        item.data_fim_evento.includes(searchValue)
     );
 
     setListToShow(filteredList);
@@ -226,6 +193,7 @@ function ModalityDetail() {
 
   const handleClearFilter = useCallback(() => {
     setFilter(initialFilter);
+
     fetchModalities({
       year: initialFilter.year.value,
       month: initialFilter.month.value,
@@ -280,6 +248,39 @@ function ModalityDetail() {
     end: item.data_fim_evento,
     isOficial: item.bid_oficial,
   }));
+
+  const headerComponent = useCallback(() => {
+    return (
+      <Header
+        text={pageTitle}
+        buttons={[
+          {
+            icon: <FilterIcon fill={colors.emeraldGreen50} />,
+            label: 'filtro',
+            onClick: modal.open,
+            isFiltered: filter != initialFilter,
+            // onClick: () => console.log('clicou em animais'), //exibe o console no devtools do chrome
+          },
+        ]}
+      />
+    );
+  }, [modal, filter, initialFilter, pageTitle]);
+
+  const headerNavigator = useCallback(() => {
+    return (
+      <HeaderNavigatorDesktop
+        title={getNameProveById(Number(id_prova) || 1000)}
+        hasBackButton
+        onGoBack={() => navigate('/')}
+      >
+        <TextInput
+          placeholder="Buscar"
+          onChange={(v) => setSearchValue(v.target.value)}
+          icon={<SearchIcon fill={colors.white75} />}
+        />
+      </HeaderNavigatorDesktop>
+    );
+  }, [navigate, id_prova]);
 
   return (
     <ContainerMain>
