@@ -7,3 +7,8 @@ export const Scrollable = styled.div`
   height: 100%;
   overflow-y: auto;
 `;
+
+export const NotFoundContainer = styled.div`
+  width: 100%;
+  padding: 1rem 0;
+`;

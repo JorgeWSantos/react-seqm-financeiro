@@ -13,7 +13,7 @@ import {
 
 import { useDeviceType } from '@abqm-ds/react';
 
-import { ContainerMain, Scrollable } from './styles';
+import { ContainerMain, NotFoundContainer, Scrollable } from './styles';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePage } from '@src/contexts/page/usePage';
@@ -283,7 +283,15 @@ function ModalityDetail() {
           }}
         >
           <Scrollable>
-            <TableSEQM data={data} columns={columns} />
+            {data.length > 0 ? (
+              <TableSEQM data={data} columns={columns} />
+            ) : (
+              <NotFoundContainer>
+                <Text fontSize="smm" fontWeight="semiBold" color={colors.emeraldGreen75}>
+                  Nenhum resultado encontrado
+                </Text>
+              </NotFoundContainer>
+            )}
           </Scrollable>
         </ContentDektop>
       ) : (
