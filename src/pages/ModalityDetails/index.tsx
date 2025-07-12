@@ -13,7 +13,7 @@ import {
 
 import { useDeviceType } from '@abqm-ds/react';
 
-import { ContainerMain } from './styles';
+import { ContainerMain, Scrollable } from './styles';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePage } from '@src/contexts/page/usePage';
@@ -277,9 +277,14 @@ function ModalityDetail() {
         <ContentDektop
           header={headerComponent()}
           headerNavigator={headerNavigator()}
-          contentBoxStyles={{ padding: '1rem 2.5rem', gap: '0.25rem' }}
+          contentBoxStyles={{
+            padding: '1rem 2.5rem',
+            gap: '0.25rem',
+          }}
         >
-          <TableSEQM data={data} columns={columns} />
+          <Scrollable>
+            <TableSEQM data={data} columns={columns} />
+          </Scrollable>
         </ContentDektop>
       ) : (
         <ContentMobile>
