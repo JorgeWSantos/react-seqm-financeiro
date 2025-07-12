@@ -1,15 +1,12 @@
-import { Modal, useDeviceType } from '@abqm-ds/react';
 import {
-  ButtonFolder,
-  DivInfos,
-  ModalContent,
-  TextInfosDates,
-  TextInfosDatesTop,
-} from './styles';
-import { convertToBrazilDate } from '@src/utils/formatDate';
-import { FileTextIcon } from '@abqm-ds/icons';
+  Button,
+  Dropdown,
+  Modal,
+  RadioGroup,
+  type RadioGroupOption,
+} from '@abqm-ds/react';
+import { DivButton, DivGroup, ModalContent, TextGroup } from './styles';
 import { useState } from 'react';
-import { RadioGroup } from '../RadioGroup';
 
 interface ModalFilterProps {
   isModalOpen: boolean;
@@ -22,54 +19,75 @@ export const ModalFilter = ({
   isModalOpen,
   item,
 }: ModalFilterProps) => {
-  const { isTabletOrMobile } = useDeviceType();
-  const [selectedOption, setSelectedOption] = useState<string>('todos');
+  const options = [
+    { label: 'Todos', value: 'todos', id: 'todos' },
+    { label: 'Oficiais', value: 'oficiais', id: 'oficiais' },
+    { label: 'Oficializados', value: 'oficializados', id: 'oficializados' },
+  ];
+
+  const [selectedOption, setSelectedOption] = useState<RadioGroupOption>(options[0]);
 
   return (
     <Modal
       title="Filtro"
+      isFiltered={true}
       isOpen={isModalOpen}
+      onClickCleanFilter={() => console.log('Limpar filtro')}
       onClose={handleCloseModal}
       positionHorizontal="center"
       positionVertical="center"
       role="dialog"
       aria-modal="true"
       aria-label={`Detalhes do evento ${item?.cds_agrupa_evento || ''}`}
-      maxHeight={isTabletOrMobile ? '80vh' : '66vh'}
+      maxHeight={'48vh'}
     >
       <ModalContent>
-        {/* Substituir bloco antigo pelo novo componente */}
-        <RadioGroup
-          selectedOption={selectedOption}
-          setSelectedOption={setSelectedOption}
-        />
+        <DivGroup>
+          <TextGroup>Eventos</TextGroup>
+          <RadioGroup
+            options={options}
+            selectedOption={selectedOption}
+            setSelectedOption={setSelectedOption}
+          />
+        </DivGroup>
 
-        <DivInfos>
-          <TextInfosDatesTop>Data do Evento</TextInfosDatesTop>
+        <DivGroup>
+          <TextGroup>Data</TextGroup>
 
-          <TextInfosDates>
-            de {item?.ddt_inicio_evento && convertToBrazilDate(item.ddt_inicio_evento)} a{' '}
-            {item?.ddt_fim_evento && convertToBrazilDate(item.ddt_fim_evento)}
-          </TextInfosDates>
-        </DivInfos>
+          <Dropdown
+            maxHeight="96px"
+            variant="tertiary"
+            label="Ano"
+            data={[
+              { value: '1', label: 'Opção 1', id: '1' },
+              { value: '2', label: 'Opção 2', id: '2' },
+              { value: '2', label: 'Opção 2', id: '2' },
+              { value: '2', label: 'Opção 2', id: '2' },
+              { value: '2', label: 'Opção 2', id: '2' },
+              { value: '2', label: 'Opção 2', id: '2' },
+              { value: '2', label: 'Opção 2', id: '2' },
+            ]}
+          />
 
-        <DivInfos>
-          <TextInfosDatesTop>Período de Inscrições</TextInfosDatesTop>
+          <Dropdown
+            maxHeight="96px"
+            variant="tertiary"
+            label="Meses"
+            data={[
+              { value: '1', label: 'Opção 1', id: '1' },
+              { value: '2', label: 'Opção 2', id: '2' },
+              { value: '2', label: 'Opção 2', id: '2' },
+              { value: '2', label: 'Opção 2', id: '2' },
+              { value: '2', label: 'Opção 2', id: '2' },
+              { value: '2', label: 'Opção 2', id: '2' },
+              { value: '2', label: 'Opção 2', id: '2' },
+            ]}
+          />
+        </DivGroup>
 
-          <TextInfosDates>
-            de{' '}
-            {item?.ddt_inicio_inscr_evento &&
-              convertToBrazilDate(item.ddt_inicio_inscr_evento)}{' '}
-            a{' '}
-            {item?.ddt_fim_inscr_evento && convertToBrazilDate(item.ddt_fim_inscr_evento)}
-          </TextInfosDates>
-        </DivInfos>
-
-        <ButtonFolder
-          size="sm"
-          iconLeft={<FileTextIcon width={16} height={16} />}
-          text="Folder"
-        />
+        <DivButton>
+          <Button size="md" text="Aplicar" variant="dark" />
+        </DivButton>
       </ModalContent>
     </Modal>
   );
