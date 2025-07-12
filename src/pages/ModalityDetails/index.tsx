@@ -152,14 +152,12 @@ function ModalityDetail() {
     }
   }, [fetchModalities, filter, initialFilter]);
 
+  // Effect to set the page title and path
   useEffect(() => {
     setPage({
       page_title: pageTitle,
       path: location.pathname,
     });
-
-    // console.log('location', location);
-    // console.log('location.state.modality.id_prova', location.state.modality.id_prova);
   }, [setPage, location]);
 
   // Effect to filter the list based on searchValue
@@ -249,45 +247,37 @@ function ModalityDetail() {
     isOficial: item.bid_oficial,
   }));
 
-  const headerComponent = useCallback(() => {
-    return (
-      <Header
-        text={pageTitle}
-        buttons={[
-          {
-            icon: <FilterIcon fill={colors.emeraldGreen50} />,
-            label: 'filtro',
-            onClick: modal.open,
-            isFiltered: filter != initialFilter,
-            // onClick: () => console.log('clicou em animais'), //exibe o console no devtools do chrome
-          },
-        ]}
-      />
-    );
-  }, [modal, filter, initialFilter, pageTitle]);
-
-  const headerNavigator = useCallback(() => {
-    return (
-      <HeaderNavigatorDesktop
-        title={getNameProveById(Number(id_prova) || 1000)}
-        hasBackButton
-        onGoBack={() => navigate('/')}
-      >
-        <TextInput
-          placeholder="Buscar"
-          onChange={(v) => setSearchValue(v.target.value)}
-          icon={<SearchIcon fill={colors.white75} />}
-        />
-      </HeaderNavigatorDesktop>
-    );
-  }, [navigate, id_prova]);
-
   return (
     <ContainerMain>
       {!isTabletOrMobile ? (
         <ContentDektop
-          header={headerComponent()}
-          headerNavigator={headerNavigator()}
+          header={
+            <Header
+              text={pageTitle}
+              buttons={[
+                {
+                  icon: <FilterIcon fill={colors.emeraldGreen50} />,
+                  label: 'filtro',
+                  onClick: modal.open,
+                  isFiltered: filter != initialFilter,
+                  // onClick: () => console.log('clicou em animais'), //exibe o console no devtools do chrome
+                },
+              ]}
+            />
+          }
+          headerNavigator={
+            <HeaderNavigatorDesktop
+              title={getNameProveById(Number(id_prova) || 1000)}
+              hasBackButton
+              onGoBack={() => navigate('/')}
+            >
+              <TextInput
+                placeholder="Buscar"
+                onChange={(v) => setSearchValue(v.target.value)}
+                icon={<SearchIcon fill={colors.white75} />}
+              />
+            </HeaderNavigatorDesktop>
+          }
           contentBoxStyles={{
             padding: '1rem 2.5rem',
             gap: '0.25rem',
