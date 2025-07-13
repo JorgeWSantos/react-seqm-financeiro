@@ -25,15 +25,14 @@ function Main() {
       id_prova,
       cds_tipo_prova,
     }: {
-      id_prova: number;
+      id_prova: string | number;
       cds_tipo_prova: string;
     }) => {
-      await saveMoreSearched({ id_prova });
+      if (id_prova !== 'nao-pontuados') {
+        await saveMoreSearched({ id_prova: Number(id_prova) });
+      }
 
       const navigateTo = `/modalidade/${id_prova}`;
-
-      // localStorage.setItem('previousPath', currentPage.path);
-      // localStorage.setItem('currentModality', currentPage.path);
 
       navigate(navigateTo, {
         state: { _previousPage: currentPage, modality: { id_prova, cds_tipo_prova } },
@@ -61,7 +60,7 @@ function Main() {
           contentBoxStyles={{ padding: '1rem 2.5rem', gap: '0' }}
         >
           <>
-            <NotPointedEvents />
+            <NotPointedEvents onClick={onClickModality} />
             <ContainerDesktopMain>
               <MoreSearchedModalities
                 title="MODALIDADES MAIS BUSCADAS"

@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   ContentDektop,
   ContentMobile,
   getNameProveById,
@@ -13,7 +14,7 @@ import {
 
 import { useDeviceType } from '@abqm-ds/react';
 
-import { ContainerMain, NotFoundContainer, Scrollable } from './styles';
+import { ContainerMain, LoadingContainer, NotFoundContainer, Scrollable } from './styles';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePage } from '@src/contexts/page/usePage';
@@ -36,6 +37,7 @@ function ModalityDetail() {
   const { setPage } = usePage();
   const { isTabletOrMobile } = useDeviceType();
   const { getModalityDetails } = useModalityDetails();
+  const [isLoading, setIsLoading] = useState(true);
 
   const optionsOficial = useMemo(
     () => [
@@ -89,11 +91,10 @@ function ModalityDetail() {
   const [listToShow, setListToShow] = useState<ResultModality[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
 
-  const [modal, setModal] = useState<any>({
-    isOpen: true,
-    open: () => setModal({ ...modal, isOpen: true }),
-    close: () => setModal({ ...modal, isOpen: false }),
-  });
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const openModal = useCallback(() => setModalOpen(true), []);
+  const closeModal = useCallback(() => setModalOpen(false), []);
 
   const setResultsToShow = useCallback(
     ({ data, isOficial }: { data: ModalityDetailsResponseData; isOficial: string }) => {
@@ -131,13 +132,17 @@ function ModalityDetail() {
       month: string;
       isOficial: string;
     }) => {
+      setIsLoading(true);
+
       const data = await getModalityDetails({
-        prove_id: id_prova ? Number(id_prova) : null,
+        prove_id: id_prova === 'nao-pontuados' ? 0 : Number(id_prova),
         year,
         month,
       });
 
       setResultsToShow({ data, isOficial });
+
+      setIsLoading(false);
     },
     [getModalityDetails, id_prova, setResultsToShow]
   );
@@ -186,8 +191,8 @@ function ModalityDetail() {
       isOficial: filter.oficial.value,
     });
 
-    modal.close();
-  }, [filter, fetchModalities, modal]);
+    closeModal();
+  }, [filter, fetchModalities, closeModal]);
 
   const handleClearFilter = useCallback(() => {
     setFilter(initialFilter);
@@ -197,8 +202,8 @@ function ModalityDetail() {
       month: initialFilter.month.value,
       isOficial: initialFilter.oficial.value,
     });
-    modal.close();
-  }, [initialFilter, fetchModalities, modal]);
+    closeModal();
+  }, [initialFilter, fetchModalities, closeModal]);
 
   const columns: Array<TableColumnSEQM<ModalitiesEvents>> = [
     {
@@ -258,16 +263,19 @@ function ModalityDetail() {
                 {
                   icon: <FilterIcon fill={colors.emeraldGreen50} />,
                   label: 'filtro',
-                  onClick: modal.open,
-                  isFiltered: filter != initialFilter,
-                  // onClick: () => console.log('clicou em animais'), //exibe o console no devtools do chrome
+                  onClick: openModal,
+                  isFiltered: filter !== initialFilter,
                 },
               ]}
             />
           }
           headerNavigator={
             <HeaderNavigatorDesktop
-              title={getNameProveById(Number(id_prova) || 1000)}
+              title={
+                id_prova === 'nao-pontuados'
+                  ? 'Eventos Não Pontuados'
+                  : getNameProveById(Number(id_prova))
+              }
               hasBackButton
               onGoBack={() => navigate('/')}
             >
@@ -282,29 +290,65 @@ function ModalityDetail() {
             padding: '1rem 2.5rem',
             gap: '0.25rem',
           }}
+          count={data.length}
         >
           <Scrollable>
             {data.length > 0 ? (
               <TableSEQM data={data} columns={columns} />
             ) : (
-              <NotFoundContainer>
-                <Text fontSize="smm" fontWeight="semiBold" color={colors.emeraldGreen75}>
-                  Nenhum resultado encontrado
-                </Text>
-              </NotFoundContainer>
+              <>
+                {isLoading ? (
+                  <LoadingContainer>
+                    <ActivityIndicator width={20} height={20} />
+                  </LoadingContainer>
+                ) : (
+                  <NotFoundContainer>
+                    <Text
+                      fontSize="smm"
+                      fontWeight="semiBold"
+                      color={colors.emeraldGreen75}
+                    >
+                      Nenhum resultado encontrado
+                    </Text>
+                  </NotFoundContainer>
+                )}
+              </>
             )}
           </Scrollable>
         </ContentDektop>
       ) : (
         <ContentMobile>
           <></>
+          {/* <Scrollable>
+            {data.length > 0 ? (
+              <TableSEQM data={data} columns={columns} />
+            ) : (
+              <>
+                {isLoading ? (
+                  <LoadingContainer>
+                    <ActivityIndicator width={20} height={20} />
+                  </LoadingContainer>
+                ) : (
+                  <NotFoundContainer>
+                    <Text
+                      fontSize="smm"
+                      fontWeight="semiBold"
+                      color={colors.emeraldGreen75}
+                    >
+                      Nenhum resultado encontrado
+                    </Text>
+                  </NotFoundContainer>
+                )}
+              </>
+            )}
+          </Scrollable> */}
         </ContentMobile>
       )}
 
       <ModalFilter
-        handleCloseModal={modal.close}
+        handleCloseModal={closeModal}
         item={{}}
-        isModalOpen={modal.isOpen}
+        isModalOpen={modalOpen}
         filter={filter}
         setFilter={setFilter}
         years={years}
