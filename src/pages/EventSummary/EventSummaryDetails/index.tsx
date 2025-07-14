@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { Text } from '@abqm-ds/react';
 import {
   BottomEventSummary,
@@ -28,7 +29,60 @@ const CardSummary = () => {
   );
 };
 
+// Componente Switch simples
+const Switch = ({
+  checked,
+  onChange,
+  leftLabel,
+  rightLabel,
+}: {
+  checked: boolean;
+  onChange: () => void;
+  leftLabel?: string;
+  rightLabel?: string;
+}) => (
+  <div style={{ display: 'flex', alignItems: 'center' }}>
+    <button
+      onClick={onChange}
+      style={{
+        width: '2rem',
+        height: 16,
+        borderRadius: 12,
+        background: colors.white25,
+        border: 'none',
+        position: 'relative',
+        cursor: 'pointer',
+        transition: 'background 0.3s',
+        padding: 0,
+      }}
+      aria-checked={checked}
+      role="switch"
+    >
+      <span
+        style={{
+          display: 'block',
+          width: '1.25rem',
+          height: '1.25rem',
+          borderRadius: '50%',
+          background: colors.white,
+          position: 'absolute',
+          top: -2,
+          left: checked ? 14 : 0,
+          transition: 'left 0.3s',
+        }}
+      />
+    </button>
+    {rightLabel && (
+      <Text fontSize="xxs" color={colors.white75}>
+        {rightLabel}
+      </Text>
+    )}
+  </div>
+);
+
 const EventSummaryDetails = () => {
+  const [switchChecked, setSwitchChecked] = useState(false);
+
   return (
     <EventSummaryContainer>
       <TopEventSummary>
@@ -39,9 +93,10 @@ const EventSummaryDetails = () => {
           </Text>
         </TopLeftEventSummary>
         <TopRightEventSummary>
-          <Text fontSize="ssm" lineHeight="tight" color={colors.white75}>
-            2023
-          </Text>
+          <Switch
+            checked={switchChecked}
+            onChange={() => setSwitchChecked((prev) => !prev)}
+          />
         </TopRightEventSummary>
       </TopEventSummary>
 
