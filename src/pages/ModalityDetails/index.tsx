@@ -7,6 +7,8 @@ import {
   Header,
   HeaderMobileNavigator,
   HeaderNavigatorDesktop,
+  InfoCard,
+  RoundedButton,
   StyledTableSEQMTextTd,
   TableSEQM,
   TableSEQMColumnOficial,
@@ -17,7 +19,14 @@ import {
 
 import { useDeviceType } from '@abqm-ds/react';
 
-import { ContainerMain, LoadingContainer, NotFoundContainer, Scrollable } from './styles';
+import {
+  ContainerMain,
+  DivInfoCard,
+  DivTopMobile,
+  LoadingContainer,
+  NotFoundContainer,
+  Scrollable,
+} from './styles';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePage } from '@src/contexts/page/usePage';
@@ -331,9 +340,34 @@ function ModalityDetail() {
             />
           }
         >
+          <DivTopMobile>
+            <DivInfoCard>
+              <InfoCard
+                title={allList
+                  .filter((item) => item.bid_oficial === true)
+                  .length.toString()}
+                subTitle="Oficiais"
+              />
+              <InfoCard
+                title={allList
+                  .filter((item) => item.bid_oficial === false)
+                  .length.toString()}
+                subTitle="Oficializadas"
+              />
+            </DivInfoCard>
+
+            <RoundedButton
+              width={'2rem'}
+              height={'2rem'}
+              isActive={!deepEqual(filter, initialFilter)}
+            >
+              <FilterIcon width={'1rem'} height={'1rem'} onClick={openModal} />
+            </RoundedButton>
+          </DivTopMobile>
+
           <Scrollable>
             {data.length > 0 ? (
-              <TableSEQM data={data} columns={columns} width={'1600px'} />
+              <TableSEQM data={data} columns={columns} width={'100rem'} />
             ) : (
               <>
                 {isLoading ? (

@@ -1,3 +1,4 @@
+import { colors } from '@abqm-ds/tokens';
 import styled from 'styled-components';
 
 export const ContainerMain = styled.div`
@@ -19,4 +20,19 @@ export const LoadingContainer = styled.div`
 export const NotFoundContainer = styled.div`
   width: 100%;
   padding: 1rem 0;
+`;
+
+export const DivTopMobile = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid ${colors.white25};
+  padding-bottom: 0.375rem;
+`;
+
+export const DivInfoCard = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.125rem;
 `;
