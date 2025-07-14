@@ -30,17 +30,7 @@ const CardSummary = () => {
 };
 
 // Componente Switch simples
-const Switch = ({
-  checked,
-  onChange,
-  leftLabel,
-  rightLabel,
-}: {
-  checked: boolean;
-  onChange: () => void;
-  leftLabel?: string;
-  rightLabel?: string;
-}) => (
+const Switch = ({ checked, onChange }: { checked: boolean; onChange: () => void }) => (
   <div style={{ display: 'flex', alignItems: 'center' }}>
     <button
       onClick={onChange}
@@ -72,11 +62,6 @@ const Switch = ({
         }}
       />
     </button>
-    {rightLabel && (
-      <Text fontSize="xxs" color={colors.white75}>
-        {rightLabel}
-      </Text>
-    )}
   </div>
 );
 
