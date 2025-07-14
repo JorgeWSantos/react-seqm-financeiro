@@ -2,9 +2,11 @@ import {
   ActivityIndicator,
   ContentDektop,
   ContentMobile,
+  deepEqual,
   getNameProveById,
   Header,
   HeaderNavigatorDesktop,
+  StyledTableSEQMTd,
   TableSEQM,
   TableSEQMColumnOficial,
   Text,
@@ -212,15 +214,12 @@ function ModalityDetail() {
       width: '30%',
       render: (row: ModalitiesEvents) => {
         if (row.isOficial) {
-          return <TableSEQMColumnOficial value={row.event} />;
+          return <TableSEQMColumnOficial textBold={true} value={row.event} />;
         }
 
-        return (
-          <Text fontSize="xxs" fontWeight="semiBold" lineHeight="tight">
-            {row.event}
-          </Text>
-        );
+        return <StyledTableSEQMTd $bold>{row.event}</StyledTableSEQMTd>;
       },
+      textBold: true,
     },
     { key: 'organizator', label: 'ORGANIZADOR', width: '30%' },
     {
@@ -264,7 +263,7 @@ function ModalityDetail() {
                   icon: <FilterIcon fill={colors.emeraldGreen50} />,
                   label: 'filtro',
                   onClick: openModal,
-                  isFiltered: filter !== initialFilter,
+                  isFiltered: !deepEqual(filter, initialFilter),
                 },
               ]}
             />
@@ -317,11 +316,14 @@ function ModalityDetail() {
           </Scrollable>
         </ContentDektop>
       ) : (
-        <ContentMobile>
-          <></>
-          {/* <Scrollable>
+        <ContentMobile
+          style={{
+            maxWidth: '100vw',
+          }}
+        >
+          <Scrollable>
             {data.length > 0 ? (
-              <TableSEQM data={data} columns={columns} />
+              <TableSEQM data={data} columns={columns} width={'1000px'} />
             ) : (
               <>
                 {isLoading ? (
@@ -341,7 +343,7 @@ function ModalityDetail() {
                 )}
               </>
             )}
-          </Scrollable> */}
+          </Scrollable>
         </ContentMobile>
       )}
 

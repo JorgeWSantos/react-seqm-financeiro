@@ -8,6 +8,7 @@ export const Scrollable = styled.div`
   width: 100%;
   height: 100%;
   overflow-y: auto;
+  overflow-x: auto;
 `;
 
 export const LoadingContainer = styled.div`
