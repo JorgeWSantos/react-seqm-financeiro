@@ -23,17 +23,17 @@ function MainApp() {
   const { getMenu } = useMenuService();
 
   const [menu, setMenu] = useState<MenuType>([]);
-  const pageTitle = 'chumbado';
+  const pageTitle = 'Resultados';
 
   useEffect(() => {
     console.warn('TODO definir em que API vai ficar o menu:');
 
-    const loadMenu = async () => {
-      const menu: MenuResponseObj = await getMenu();
+    // const loadMenu = async () => {
+    //   const menu: MenuResponseObj = await getMenu();
 
-      setMenu(menu.list_menu);
-    };
-    loadMenu();
+    //   setMenu(menu.list_menu);
+    // };
+    // loadMenu();
   }, [getMenu]);
 
   const redirectToLogin = () => {
