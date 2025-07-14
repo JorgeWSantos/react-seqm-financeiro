@@ -323,7 +323,7 @@ function ModalityDetail() {
         >
           <Scrollable>
             {data.length > 0 ? (
-              <TableSEQM data={data} columns={columns} width={'1000px'} />
+              <TableSEQM data={data} columns={columns} width={'1200px'} />
             ) : (
               <>
                 {isLoading ? (
