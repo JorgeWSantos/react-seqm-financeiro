@@ -5,6 +5,7 @@ import {
   deepEqual,
   getNameProveById,
   Header,
+  HeaderMobileNavigator,
   HeaderNavigatorDesktop,
   StyledTableSEQMTd,
   TableSEQM,
@@ -320,6 +321,15 @@ function ModalityDetail() {
           style={{
             maxWidth: '100vw',
           }}
+          headerMobileNavigator={
+            <HeaderMobileNavigator
+              hasBackButton
+              onGoBack={() => navigate('/')}
+              headingText="Ranch Sorting"
+              hasSearch
+              onChangeSearch={(v) => setSearchValue(v.target.value)}
+            />
+          }
         >
           <Scrollable>
             {data.length > 0 ? (
