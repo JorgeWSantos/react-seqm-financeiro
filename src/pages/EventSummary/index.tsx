@@ -2,18 +2,15 @@ import {
   ActivityIndicator,
   ContentDektop,
   ContentMobile,
-  deepEqual,
   getNameProveById,
   Header,
   HeaderMobileNavigator,
   HeaderNavigatorDesktop,
   InfoCard,
-  RoundedButton,
   StyledTableSEQMTextTd,
   TableSEQM,
   TableSEQMColumnOficial,
   Text,
-  TextInput,
   type TableColumnSEQM,
 } from '@abqm-ds/react';
 
@@ -22,24 +19,27 @@ import { useDeviceType } from '@abqm-ds/react';
 import {
   ContainerMain,
   DivInfoCard,
+  DivLeft,
+  DivRight,
   DivTopMobile,
   LoadingContainer,
   NotFoundContainer,
   Scrollable,
 } from './styles';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePage } from '@src/contexts/page/usePage';
-import { FilterIcon, SearchIcon } from '@abqm-ds/icons';
+import { PrinterIcon, StarIcon } from '@abqm-ds/icons';
 import { colors } from '@abqm-ds/tokens';
 import { useModalityDetails } from '@src/services/useModalityDetails';
 import type { ModalityDetailsResponseData, ResultModality } from './types.api';
-import type { ModalDetailsFilter, ModalitiesEvents } from './types';
+import type { ModalitiesEvents } from './types';
 import { useParams } from 'react-router';
-import { ModalFilter } from './ModalFilter';
+import InfoEventDetails from './InfoEventDetails';
+import EventSummaryDetails from './EventSummaryDetails';
 
-function ModalityDetail() {
-  const pageTitle = 'Resultados';
+function EventSummary() {
+  const pageTitle = 'Resultados »';
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -51,62 +51,9 @@ function ModalityDetail() {
   const { getModalityDetails } = useModalityDetails();
   const [isLoading, setIsLoading] = useState(true);
 
-  const optionsOficial = useMemo(
-    () => [
-      { label: 'Todos', value: '', id: '0' },
-      { label: 'Oficiais', value: 'true', id: '1' },
-      { label: 'Oficializados', value: 'false', id: '2' },
-    ],
-    []
-  );
-
-  const years = useMemo(() => {
-    const currentYear = new Date().getFullYear();
-    const yearsArray = [];
-    for (let i = currentYear; i >= 1990; i--) {
-      yearsArray.push({ value: String(i), label: String(i), id: String(i) });
-    }
-    return yearsArray;
-  }, []);
-
-  const months = useMemo(
-    () => [
-      { value: '0', label: 'Todos', id: '0' },
-      { value: '1', label: 'Janeiro', id: '1' },
-      { value: '2', label: 'Fevereiro', id: '2' },
-      { value: '3', label: 'Março', id: '3' },
-      { value: '4', label: 'Abril', id: '4' },
-      { value: '5', label: 'Maio', id: '5' },
-      { value: '6', label: 'Junho', id: '6' },
-      { value: '7', label: 'Julho', id: '7' },
-      { value: '8', label: 'Agosto', id: '8' },
-      { value: '9', label: 'Setembro', id: '9' },
-      { value: '10', label: 'Outubro', id: '10' },
-      { value: '11', label: 'Novembro', id: '11' },
-      { value: '12', label: 'Dezembro', id: '12' },
-    ],
-    []
-  );
-
-  const initialFilter: ModalDetailsFilter = useMemo(
-    () => ({
-      year: years[0],
-      month: months[0],
-      oficial: optionsOficial[0],
-    }),
-    [years, months, optionsOficial]
-  );
-
-  const [filter, setFilter] = useState<ModalDetailsFilter>(initialFilter);
-
   const [allList, setAllList] = useState<ResultModality[]>([]);
   const [listToShow, setListToShow] = useState<ResultModality[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
-
-  const [modalOpen, setModalOpen] = useState(false);
-
-  const openModal = useCallback(() => setModalOpen(true), []);
-  const closeModal = useCallback(() => setModalOpen(false), []);
 
   const setResultsToShow = useCallback(
     ({ data, isOficial }: { data: ModalityDetailsResponseData; isOficial: string }) => {
@@ -159,16 +106,6 @@ function ModalityDetail() {
     [getModalityDetails, id_prova, setResultsToShow]
   );
 
-  useEffect(() => {
-    if (filter === initialFilter) {
-      fetchModalities({
-        year: filter.year.value,
-        month: filter.month.value,
-        isOficial: filter.oficial.value,
-      });
-    }
-  }, [fetchModalities, filter, initialFilter]);
-
   // Effect to set the page title and path
   useEffect(() => {
     setPage({
@@ -195,27 +132,6 @@ function ModalityDetail() {
 
     setListToShow(filteredList);
   }, [searchValue, allList]);
-
-  const handleApplyFilter = useCallback(() => {
-    fetchModalities({
-      year: filter.year.value,
-      month: filter.month.value,
-      isOficial: filter.oficial.value,
-    });
-
-    closeModal();
-  }, [filter, fetchModalities, closeModal]);
-
-  const handleClearFilter = useCallback(() => {
-    setFilter(initialFilter);
-
-    fetchModalities({
-      year: initialFilter.year.value,
-      month: initialFilter.month.value,
-      isOficial: initialFilter.oficial.value,
-    });
-    closeModal();
-  }, [initialFilter, fetchModalities, closeModal]);
 
   const columns: Array<TableColumnSEQM<ModalitiesEvents>> = [
     {
@@ -268,32 +184,32 @@ function ModalityDetail() {
           header={
             <Header
               text={pageTitle}
+              subTitle={getNameProveById(Number(id_prova))}
               buttons={[
                 {
-                  icon: <FilterIcon fill={colors.emeraldGreen50} />,
-                  label: 'filtro',
-                  onClick: openModal,
-                  isFiltered: !deepEqual(filter, initialFilter),
+                  icon: <StarIcon fill={colors.emeraldGreen50} />,
+                  label: 'participações',
+                  onClick: () => {},
+                },
+                {
+                  icon: <PrinterIcon fill={colors.emeraldGreen50} />,
+                  label: 'imprimir',
+                  onClick: () => {},
+                },
+                {
+                  icon: <PrinterIcon fill={colors.emeraldGreen50} />,
+                  label: 'compartilhar',
+                  onClick: () => {},
                 },
               ]}
             />
           }
           headerNavigator={
             <HeaderNavigatorDesktop
-              title={
-                id_prova === 'nao-pontuados'
-                  ? 'Eventos Não Pontuados'
-                  : getNameProveById(Number(id_prova))
-              }
+              title={'34º Congresso Brasileiro da Raça Quarto de Milha'}
               hasBackButton
-              onGoBack={() => navigate('/')}
-            >
-              <TextInput
-                placeholder="Buscar"
-                onChange={(v) => setSearchValue(v.target.value)}
-                icon={<SearchIcon fill={colors.white75} />}
-              />
-            </HeaderNavigatorDesktop>
+              onGoBack={() => navigate('/modalidade/' + id_prova)}
+            />
           }
           contentBoxStyles={{
             padding: '1.5rem',
@@ -302,7 +218,13 @@ function ModalityDetail() {
           count={data.length}
         >
           <Scrollable>
-            {data.length > 0 ? (
+            <DivLeft>
+              <InfoEventDetails />
+              <EventSummaryDetails />
+              <EventSummaryDetails />
+            </DivLeft>
+            <DivRight></DivRight>
+            {/* {data.length > 0 ? (
               <TableSEQM data={data} columns={columns} />
             ) : (
               <>
@@ -322,7 +244,7 @@ function ModalityDetail() {
                   </NotFoundContainer>
                 )}
               </>
-            )}
+            )} */}
           </Scrollable>
         </ContentDektop>
       ) : (
@@ -355,14 +277,6 @@ function ModalityDetail() {
                 subTitle="Oficializadas"
               />
             </DivInfoCard>
-
-            <RoundedButton
-              width={'2rem'}
-              height={'2rem'}
-              isActive={!deepEqual(filter, initialFilter)}
-            >
-              <FilterIcon width={'1rem'} height={'1rem'} onClick={openModal} />
-            </RoundedButton>
           </DivTopMobile>
 
           <Scrollable>
@@ -390,21 +304,8 @@ function ModalityDetail() {
           </Scrollable>
         </ContentMobile>
       )}
-
-      <ModalFilter
-        handleCloseModal={closeModal}
-        item={{}}
-        isModalOpen={modalOpen}
-        filter={filter}
-        setFilter={setFilter}
-        years={years}
-        months={months}
-        optionsOficial={optionsOficial}
-        handleApplyFilter={handleApplyFilter}
-        handleClearFilter={handleClearFilter}
-      />
     </ContainerMain>
   );
 }
 
-export default ModalityDetail;
+export default EventSummary;
