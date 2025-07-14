@@ -7,7 +7,7 @@ import {
   Header,
   HeaderMobileNavigator,
   HeaderNavigatorDesktop,
-  StyledTableSEQMTd,
+  StyledTableSEQMTextTd,
   TableSEQM,
   TableSEQMColumnOficial,
   Text,
@@ -212,21 +212,21 @@ function ModalityDetail() {
     {
       key: 'event',
       label: 'EVENTO',
-      width: '30%',
+      width: '35%',
       render: (row: ModalitiesEvents) => {
         if (row.isOficial) {
           return <TableSEQMColumnOficial textBold={true} value={row.event} />;
         }
 
-        return <StyledTableSEQMTd $bold>{row.event}</StyledTableSEQMTd>;
+        return <StyledTableSEQMTextTd $bold>{row.event}</StyledTableSEQMTextTd>;
       },
       textBold: true,
     },
-    { key: 'organizator', label: 'ORGANIZADOR', width: '30%' },
+    { key: 'organizator', label: 'ORGANIZADOR', width: '35%' },
     {
       key: 'local',
       label: 'LOCAL',
-      width: '30%',
+      width: '20%',
       align: 'left',
     },
     {
@@ -333,7 +333,7 @@ function ModalityDetail() {
         >
           <Scrollable>
             {data.length > 0 ? (
-              <TableSEQM data={data} columns={columns} width={'1200px'} />
+              <TableSEQM data={data} columns={columns} width={'1600px'} />
             ) : (
               <>
                 {isLoading ? (
