@@ -10,8 +10,14 @@ import {
 } from './styles';
 import { colors } from '@abqm-ds/tokens';
 import { FileEarmarkCheckIcon } from '@abqm-ds/icons';
+import Switch from './Switch';
 
-const CardSummary = () => {
+interface CardSummaryProps {
+  title?: string;
+  subTitle?: string;
+}
+
+const CardSummary = ({ title, subTitle }: CardSummaryProps) => {
   return (
     <StyledCard>
       <Text
@@ -20,50 +26,14 @@ const CardSummary = () => {
         lineHeight="tight"
         color={colors.white85}
       >
-        259
+        {title}
       </Text>
       <Text fontSize="xxs" lineHeight="shorter" color={colors.white75}>
-        inscrições
+        {subTitle}
       </Text>
     </StyledCard>
   );
 };
-
-// Componente Switch simples
-const Switch = ({ checked, onChange }: { checked: boolean; onChange: () => void }) => (
-  <div style={{ display: 'flex', alignItems: 'center' }}>
-    <button
-      onClick={onChange}
-      style={{
-        width: '2rem',
-        height: 16,
-        borderRadius: 12,
-        background: colors.white25,
-        border: 'none',
-        position: 'relative',
-        cursor: 'pointer',
-        transition: 'background 0.3s',
-        padding: 0,
-      }}
-      aria-checked={checked}
-      role="switch"
-    >
-      <span
-        style={{
-          display: 'block',
-          width: '1.25rem',
-          height: '1.25rem',
-          borderRadius: '50%',
-          background: colors.white,
-          position: 'absolute',
-          top: -2,
-          left: checked ? 14 : 0,
-          transition: 'left 0.3s',
-        }}
-      />
-    </button>
-  </div>
-);
 
 const EventSummaryDetails = () => {
   const [switchChecked, setSwitchChecked] = useState(false);
@@ -73,7 +43,7 @@ const EventSummaryDetails = () => {
       <TopEventSummary>
         <TopLeftEventSummary>
           <FileEarmarkCheckIcon fill={colors.white75} />
-          <Text fontSize="ssm" lineHeight="tight" color={colors.white75}>
+          <Text fontSize="ssm" lineHeight="tight" color={colors.white85}>
             Números da modalidade neste evento
           </Text>
         </TopLeftEventSummary>
@@ -82,14 +52,17 @@ const EventSummaryDetails = () => {
             checked={switchChecked}
             onChange={() => setSwitchChecked((prev) => !prev)}
           />
+          <Text fontSize="xs" lineHeight="short" color={colors.white75}>
+            Resumo geral
+          </Text>
         </TopRightEventSummary>
       </TopEventSummary>
 
       <BottomEventSummary>
-        <CardSummary />
-        <CardSummary />
-        <CardSummary />
-        <CardSummary />
+        <CardSummary title={'2025'} subTitle={'inscrições'} />
+        <CardSummary title={'86'} subTitle={'competidores'} />
+        <CardSummary title={'117'} subTitle={'animais'} />
+        <CardSummary title={'R$ 33.793,00'} subTitle={'em premiação'} />
       </BottomEventSummary>
     </EventSummaryContainer>
   );
