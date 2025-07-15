@@ -37,6 +37,7 @@ import type { ModalitiesEvents } from './types';
 import { useParams } from 'react-router';
 import InfoEventDetails from './InfoEventDetails';
 import EventSummaryDetails from './EventSummaryDetails';
+import GraphSummaryDetails from './GraphSummaryDetails';
 
 function EventSummary() {
   const pageTitle = 'Resultados »';
@@ -221,7 +222,7 @@ function EventSummary() {
             <DivLeft>
               <InfoEventDetails />
               <EventSummaryDetails />
-              <EventSummaryDetails />
+              <GraphSummaryDetails />
             </DivLeft>
             <DivRight></DivRight>
             {/* {data.length > 0 ? (
