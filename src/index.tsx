@@ -48,38 +48,34 @@ function MainApp() {
 
   return (
     <GlobalContainer>
-      {!isTabletOrMobile ? (
-        <ContainerDesktop>
-          <SideBarDesktop
-            user={user || null}
-            menu={menu}
-            onLogout={logout}
-            onLogin={redirectToLogin}
-            token={token || ''}
-          />
-          <Outlet />
-        </ContainerDesktop>
-      ) : (
-        <ContainerMobile>
-          <HeaderMobile
-            title="SEQM"
-            page={pageTitle}
-            data={menu}
-            token={token || ''}
-            userDropdown={{
-              userName: user?.nome_pessoa || '',
-              srcImage: user?.foto || '',
-              onLogin: redirectToLogin,
-              onLogout: () => {
-                logout();
-              },
-            }}
-          />
-          <Outlet />
-        </ContainerMobile>
-      )}
+      {/* Desktop */}
+      <ContainerDesktop style={{ display: isTabletOrMobile ? 'none' : 'grid' }}>
+        <SideBarDesktop
+          user={user || null}
+          menu={menu}
+          onLogout={logout}
+          onLogin={redirectToLogin}
+          token={token || ''}
+        />
+        <Outlet />
+      </ContainerDesktop>
+      {/* Mobile */}
+      <ContainerMobile style={{ display: isTabletOrMobile ? 'flex' : 'none' }}>
+        <HeaderMobile
+          title="SEQM"
+          page={pageTitle}
+          data={menu}
+          token={token || ''}
+          userDropdown={{
+            userName: user?.nome_pessoa || '',
+            srcImage: user?.foto || '',
+            onLogin: redirectToLogin,
+            onLogout: logout,
+          }}
+        />
+        <Outlet />
+      </ContainerMobile>
     </GlobalContainer>
-    // </BrowserRouter>
   );
 }
 
