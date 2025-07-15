@@ -1,7 +1,8 @@
 import { EventSummaryDefaultIcon } from '@abqm-ds/icons';
 import { InfoEvent, InfoEventDetailed, Information } from './styles';
+import type { InfoEventSummaryData } from '../types.api';
 
-const InfoEventDetails = () => {
+const InfoEventDetails = ({ data }: { data: InfoEventSummaryData | null }) => {
   return (
     <InfoEvent>
       <EventSummaryDefaultIcon width={70} style={{ minWidth: 70 }} />
@@ -10,21 +11,21 @@ const InfoEventDetails = () => {
         <Information>
           <p className="title">organizador</p>
           <p className="subtitle" style={{ marginLeft: '0.1rem' }}>
-            ABQM
+            {data?.organizador || '--'}
           </p>
         </Information>
 
         <Information>
           <p className="title">local</p>
           <p className="subtitle" style={{ marginLeft: '2.5rem' }}>
-            Recinto de Exposições Clibas de Almeida Prado, SP
+            {data?.local || '--'}
           </p>
         </Information>
 
         <Information>
           <p className="title">data</p>
           <p className="subtitle" style={{ marginLeft: '2.5rem' }}>
-            11/04/2025 - 27/04/2025
+            {data?.data_inicio || '--'} - {data?.data_fim || '--'}
           </p>
         </Information>
       </InfoEventDetailed>

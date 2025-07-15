@@ -7,9 +7,7 @@ import {
   HeaderMobileNavigator,
   HeaderNavigatorDesktop,
   InfoCard,
-  StyledTableSEQMTextTd,
   TableSEQM,
-  TableSEQMColumnOficial,
   Text,
   type TableColumnSEQM,
 } from '@abqm-ds/react';
@@ -26,18 +24,22 @@ import {
   NotFoundContainer,
   Scrollable,
 } from './styles';
-import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePage } from '@src/contexts/page/usePage';
 import { PrinterIcon, StarIcon } from '@abqm-ds/icons';
 import { colors } from '@abqm-ds/tokens';
-import { useModalityDetails } from '@src/services/useModalityDetails';
-import type { ModalityDetailsResponseData, ResultModality } from './types.api';
-import type { ModalitiesEvents } from './types';
+import type { TableEventSummaryData } from './types';
 import { useParams } from 'react-router';
 import InfoEventDetails from './InfoEventDetails';
 import EventSummaryDetails from './EventSummaryDetails';
 import GraphSummaryDetails from './GraphSummaryDetails';
+import { useEventSummary } from '@src/services/useEventSummary';
+import type {
+  EventSummaryResponseData,
+  InfoEventSummaryData,
+  ResultModalityByProve,
+} from './types.api';
+import { useCallback, useEffect, useState } from 'react';
 
 function EventSummary() {
   const pageTitle = 'Resultados »';
@@ -45,67 +47,48 @@ function EventSummary() {
   const navigate = useNavigate();
   const location = useLocation();
   const params = useParams();
-  const id_prova = params.id_prova;
+  const prove_id = params.prove_id;
+  const event_id = params.event_id;
 
   const { setPage } = usePage();
   const { isTabletOrMobile } = useDeviceType();
-  const { getModalityDetails } = useModalityDetails();
-  const [isLoading, setIsLoading] = useState(true);
+  const { getEventSummary, getInfoEvent } = useEventSummary();
 
-  const [allList, setAllList] = useState<ResultModality[]>([]);
-  const [listToShow, setListToShow] = useState<ResultModality[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [eventSummaryData, setEventSummaryData] = useState<EventSummaryResponseData>(
+    {} as EventSummaryResponseData
+  );
+  const [eventInfoData, setEventInfoData] = useState<InfoEventSummaryData | null>(
+    {} as InfoEventSummaryData
+  );
+  const [listToShow, setListToShow] = useState<ResultModalityByProve[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
 
-  const setResultsToShow = useCallback(
-    ({ data, isOficial }: { data: ModalityDetailsResponseData; isOficial: string }) => {
-      const eventsToShow = [];
-
-      if (data.eventos.length > 0) {
-        eventsToShow.push(...data.eventos);
-      }
-
-      if (data.eventos_nao_pontuados.length > 0) {
-        eventsToShow.push(...data.eventos_nao_pontuados);
-      }
-
-      setListToShow(
-        isOficial !== ''
-          ? eventsToShow.filter((item) => String(item.bid_oficial) === isOficial)
-          : eventsToShow
-      );
-      setAllList(
-        isOficial !== ''
-          ? eventsToShow.filter((item) => String(item.bid_oficial) === isOficial)
-          : eventsToShow
-      );
-    },
-    []
-  );
-
-  const fetchModalities = useCallback(
-    async ({
-      year,
-      month,
-      isOficial,
-    }: {
-      year: string;
-      month: string;
-      isOficial: string;
-    }) => {
-      setIsLoading(true);
-
-      const data = await getModalityDetails({
-        prove_id: id_prova === 'nao-pontuados' ? 0 : Number(id_prova),
-        year,
-        month,
-      });
-
-      setResultsToShow({ data, isOficial });
-
+  const handleGetSummary = useCallback(async () => {
+    if (!prove_id || !event_id) {
       setIsLoading(false);
-    },
-    [getModalityDetails, id_prova, setResultsToShow]
-  );
+      return;
+    }
+
+    const data = await getEventSummary({
+      prove_id: prove_id === 'nao-pontuados' ? 0 : Number(prove_id),
+      event_id: Number(event_id),
+    });
+
+    setEventSummaryData(data);
+  }, [getEventSummary, prove_id, event_id]);
+
+  const handleGetEventInfo = useCallback(async () => {
+    if (!event_id) {
+      return;
+    }
+
+    const data = await getInfoEvent({
+      event_id: Number(event_id),
+    });
+
+    setEventInfoData(data);
+  }, [getInfoEvent, event_id]);
 
   // Effect to set the page title and path
   useEffect(() => {
@@ -118,64 +101,67 @@ function EventSummary() {
   // Effect to filter the list based on searchValue
   useEffect(() => {
     if (searchValue.trim() === '') {
-      setListToShow(allList);
+      setListToShow(eventSummaryData.resultado_modalidade_prova);
       return;
     }
 
-    const filteredList = allList.filter(
-      (item) =>
-        item.cds_evento.toLowerCase().includes(searchValue.toLowerCase()) ||
-        item.cds_empresa.toLowerCase().includes(searchValue.toLowerCase()) ||
-        item.cds_local_evento.toLowerCase().includes(searchValue.toLowerCase()) ||
-        item.data_inicio_evento.includes(searchValue) ||
-        item.data_fim_evento.includes(searchValue)
+    const filteredList = eventSummaryData.resultado_modalidade_prova.filter(
+      (item) => item.cds_evento.toLowerCase().includes(searchValue.toLowerCase()) // ||
+      // item.cds_empresa.toLowerCase().includes(searchValue.toLowerCase()) ||
+      // item.cds_local_evento.toLowerCase().includes(searchValue.toLowerCase()) ||
+      // item.data_inicio_evento.includes(searchValue) ||
+      // item.data_fim_evento.includes(searchValue)
     );
 
     setListToShow(filteredList);
-  }, [searchValue, allList]);
+  }, [searchValue, eventSummaryData]);
 
-  const columns: Array<TableColumnSEQM<ModalitiesEvents>> = [
+  useEffect(() => {
+    const loadData = async () => {
+      setIsLoading(true);
+
+      await handleGetSummary();
+      await handleGetEventInfo();
+
+      setIsLoading(false);
+    };
+
+    loadData();
+  }, [prove_id, handleGetSummary, handleGetEventInfo]);
+
+  const columns: Array<TableColumnSEQM<TableEventSummaryData>> = [
     {
-      key: 'event',
-      label: 'EVENTO',
+      key: 'category',
+      label: 'Categoria',
       width: '35%',
-      render: (row: ModalitiesEvents) => {
-        if (row.isOficial) {
-          return <TableSEQMColumnOficial textBold={true} value={row.event} />;
-        }
-
-        return <StyledTableSEQMTextTd $bold>{row.event}</StyledTableSEQMTextTd>;
-      },
-      textBold: true,
     },
     { key: 'organizator', label: 'ORGANIZADOR', width: '35%' },
     {
-      key: 'local',
-      label: 'LOCAL',
+      key: 'judge',
+      label: 'Juíz',
       width: '20%',
       align: 'left',
     },
     {
-      key: 'init',
-      label: 'INÍCIO',
+      key: 'ABQM',
+      label: 'ABQM',
       align: 'center',
       minWidth: '76px',
     },
     {
-      key: 'end',
-      label: 'FIM',
+      key: 'inscriptions',
+      label: 'Inscrições',
       minWidth: '76px',
       align: 'center',
     },
   ];
 
-  const data: Array<ModalitiesEvents> = listToShow.map((item) => ({
-    event: item.cds_evento.toUpperCase(),
-    organizator: item.cds_empresa.toUpperCase(),
-    local: item.cds_local_evento.toUpperCase(),
-    init: item.data_inicio_evento,
-    end: item.data_fim_evento,
-    isOficial: item.bid_oficial,
+  const data: Array<TableEventSummaryData> = listToShow?.map((item) => ({
+    category: item.cds_evento.toUpperCase(),
+    organizator: item.cds_status_organizador ? 'Sim' : 'Não',
+    judge: item.cds_status_juiz ? 'Sim' : 'Não',
+    ABQM: item.cds_status_abqm ? 'Sim' : 'Não',
+    inscriptions: item.participantes.toString(),
   }));
 
   return (
@@ -185,7 +171,7 @@ function EventSummary() {
           header={
             <Header
               text={pageTitle}
-              subTitle={getNameProveById(Number(id_prova))}
+              subTitle={getNameProveById(Number(prove_id))}
               buttons={[
                 {
                   icon: <StarIcon fill={colors.emeraldGreen50} />,
@@ -209,20 +195,26 @@ function EventSummary() {
             <HeaderNavigatorDesktop
               title={'34º Congresso Brasileiro da Raça Quarto de Milha'}
               hasBackButton
-              onGoBack={() => navigate('/modalidade/' + id_prova)}
+              onGoBack={() => navigate('/modalidade/' + prove_id)}
             />
           }
           contentBoxStyles={{
             padding: '1.5rem',
             gap: '0.25rem',
           }}
-          count={data.length}
+          // count={data.length}
         >
           <Scrollable>
             <DivLeft>
-              <InfoEventDetails />
-              <EventSummaryDetails />
-              <GraphSummaryDetails />
+              <InfoEventDetails data={eventInfoData} />
+              <EventSummaryDetails
+                data={
+                  eventSummaryData.numeros_evento?.length > 0
+                    ? eventSummaryData.numeros_evento[0]
+                    : null
+                }
+              />
+              <GraphSummaryDetails data={eventSummaryData.tipo_estatistica_prova} />
             </DivLeft>
             <DivRight></DivRight>
             {/* {data.length > 0 ? (
@@ -263,16 +255,17 @@ function EventSummary() {
             />
           }
         >
-          <DivTopMobile>
+          <></>
+          {/* <DivTopMobile>
             <DivInfoCard>
               <InfoCard
-                title={allList
+                title={eventSummaryData
                   .filter((item) => item.bid_oficial === true)
                   .length.toString()}
                 subTitle="Oficiais"
               />
               <InfoCard
-                title={allList
+                title={eventSummaryData
                   .filter((item) => item.bid_oficial === false)
                   .length.toString()}
                 subTitle="Oficializadas"
@@ -302,7 +295,7 @@ function EventSummary() {
                 )}
               </>
             )}
-          </Scrollable>
+          </Scrollable> */}
         </ContentMobile>
       )}
     </ContainerMain>

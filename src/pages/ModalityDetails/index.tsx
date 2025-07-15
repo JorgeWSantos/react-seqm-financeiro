@@ -44,7 +44,7 @@ function ModalityDetail() {
   const navigate = useNavigate();
   const location = useLocation();
   const params = useParams();
-  const id_prova = params.id_prova;
+  const prove_id = params.prove_id;
 
   const { setPage } = usePage();
   const { isTabletOrMobile } = useDeviceType();
@@ -147,7 +147,7 @@ function ModalityDetail() {
       setIsLoading(true);
 
       const data = await getModalityDetails({
-        prove_id: id_prova === 'nao-pontuados' ? 0 : Number(id_prova),
+        prove_id: prove_id === 'nao-pontuados' ? 0 : Number(prove_id),
         year,
         month,
       });
@@ -156,7 +156,7 @@ function ModalityDetail() {
 
       setIsLoading(false);
     },
-    [getModalityDetails, id_prova, setResultsToShow]
+    [getModalityDetails, prove_id, setResultsToShow]
   );
 
   useEffect(() => {
@@ -281,9 +281,9 @@ function ModalityDetail() {
           headerNavigator={
             <HeaderNavigatorDesktop
               title={
-                id_prova === 'nao-pontuados'
+                prove_id === 'nao-pontuados'
                   ? 'Eventos Não Pontuados'
-                  : getNameProveById(Number(id_prova))
+                  : getNameProveById(Number(prove_id))
               }
               hasBackButton
               onGoBack={() => navigate('/')}

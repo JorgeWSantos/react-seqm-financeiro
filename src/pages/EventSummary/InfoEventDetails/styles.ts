@@ -7,7 +7,7 @@ export const InfoEvent = styled.div`
   display: flex;
   gap: 1.125rem;
 
-  @media (max-width: 1200px) {
+  @media (max-width: 1400px) {
     padding: 0.25rem;
   }
 `;
@@ -38,7 +38,7 @@ export const Information = styled.div`
     line-height: ${lineHeights.shorter};
   }
 
-  @media (max-width: 1200px) {
+  @media (max-width: 1400px) {
     flex-direction: column;
     .subtitle {
       margin: 0 !important;

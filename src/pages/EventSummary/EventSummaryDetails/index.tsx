@@ -11,6 +11,7 @@ import {
 import { colors } from '@abqm-ds/tokens';
 import { FileEarmarkCheckIcon } from '@abqm-ds/icons';
 import Switch from './Switch';
+import type { NumberEvents } from '../types.api';
 
 interface CardSummaryProps {
   title?: string;
@@ -35,7 +36,7 @@ const CardSummary = ({ title, subTitle }: CardSummaryProps) => {
   );
 };
 
-const EventSummaryDetails = () => {
+const EventSummaryDetails = ({ data }: { data: NumberEvents | null }) => {
   const [switchChecked, setSwitchChecked] = useState(false);
 
   return (
@@ -59,10 +60,13 @@ const EventSummaryDetails = () => {
       </TopEventSummary>
 
       <BottomEventSummary>
-        <CardSummary title={'2025'} subTitle={'inscrições'} />
-        <CardSummary title={'86'} subTitle={'competidores'} />
-        <CardSummary title={'117'} subTitle={'animais'} />
-        <CardSummary title={'R$ 33.793,00'} subTitle={'em premiação'} />
+        <CardSummary title={data?.inscricoes || ''} subTitle={'inscrições'} />
+        <CardSummary title={data?.competidores || ''} subTitle={'competidores'} />
+        <CardSummary title={data?.animais || ''} subTitle={'animais'} />
+        <CardSummary
+          title={data?.premiacao ? data.premiacao : 'sem premiação'}
+          subTitle={data?.premiacao ? 'em premiação' : ''}
+        />
       </BottomEventSummary>
     </EventSummaryContainer>
   );

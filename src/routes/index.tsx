@@ -14,11 +14,11 @@ export const router = createBrowserRouter([
         element: <Main />,
       },
       {
-        path: 'modalidade/:id_prova',
+        path: 'modalidade/:prove_id',
         element: <ModalityDetail />,
       },
       {
-        path: 'modalidade/:id_prova/evento/:id_evento',
+        path: 'modalidade/:prove_id/evento/:event_id',
         element: <EventSummary />,
       },
     ],

@@ -8,8 +8,10 @@ import {
 } from './styles';
 import { colors } from '@abqm-ds/tokens';
 import { BarChartLineIcon } from '@abqm-ds/icons';
+import type { GraphStatistics } from '../types.api';
 
-const GraphSummaryDetails = () => {
+const GraphSummaryDetails = ({ data }: { data: GraphStatistics[] }) => {
+  console.log('GraphSummaryDetails data:', data);
   return (
     <GraphSummaryContainer>
       <TopEventSummary>
