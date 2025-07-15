@@ -25,7 +25,7 @@ export const DivLeft = styled.div`
 export const DivRight = styled.div`
   width: 100%;
   height: 100%;
-  background-color: blue;
+  background-color: ${colors.greenTransparent30};
 `;
 
 export const LoadingContainer = styled.div`

@@ -37,7 +37,9 @@ export const TopRightEventSummary = styled.div`
 
 export const BottomEventSummary = styled.div`
   display: flex;
-  padding: 1.5rem;
+  /* padding: 0.5rem; */
+  align-items: center;
+  justify-content: center;
 
   width: 100%;
   height: 280px;
