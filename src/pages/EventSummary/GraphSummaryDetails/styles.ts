@@ -1,5 +1,5 @@
-import { colors, space } from '@abqm-ds/tokens';
-import styled from 'styled-components';
+import { colors, radii, space } from '@abqm-ds/tokens';
+import styled, { css } from 'styled-components';
 
 export const GraphSummaryContainer = styled.div`
   display: flex;
@@ -18,7 +18,7 @@ export const TopEventSummary = styled.div`
   width: 100%;
   min-height: 2rem;
   gap: ${space[2]};
-  padding: 0.375rem ${space[4]};
+  padding: 0 ${space[4]};
 `;
 
 export const TopLeftEventSummary = styled.div`
@@ -31,10 +31,54 @@ export const TopLeftEventSummary = styled.div`
 export const TopRightEventSummary = styled.div`
   display: flex;
   align-items: center;
+  height: 100%;
 
   gap: ${space[2]};
 `;
 
+export const TopRightOptions = styled.div<{
+  $isSelected?: boolean;
+}>`
+  display: flex;
+  align-items: center;
+  height: 100%;
+
+  position: relative;
+  cursor: pointer;
+
+  ${({ $isSelected }) =>
+    $isSelected &&
+    css`
+      border-bottom: ${radii.px} solid ${colors.white85};
+      border-top: ${radii.px} solid transparent;
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        top: 0px;
+        width: 0;
+        height: 0;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 4px solid transparent;
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 0px;
+        width: 0;
+        height: 0;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-bottom: 4px solid ${colors.white85};
+      }
+    `}
+`;
 export const BottomEventSummary = styled.div`
   display: flex;
   /* padding: 0.5rem; */
@@ -47,4 +91,13 @@ export const BottomEventSummary = styled.div`
   box-sizing: border-box;
 
   background-color: ${colors.black30};
+`;
+
+export const CustomTooltipContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  background: ${colors.emeraldGreen40};
+  padding: 8px;
+  border-radius: 4px;
+  gap: 4px;
 `;

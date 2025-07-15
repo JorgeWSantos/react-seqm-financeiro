@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 export const InfoEvent = styled.div`
   width: 100%;
-  min-height: 3.75rem;
+  /* min-height: 3.75rem; */
   display: flex;
   gap: 1.125rem;
 

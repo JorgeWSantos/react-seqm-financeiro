@@ -19,7 +19,9 @@ export const DivLeft = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 2rem;
+  padding-top: 0.5rem;
 `;
 
 export const DivRight = styled.div`

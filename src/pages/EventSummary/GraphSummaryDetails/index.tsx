@@ -1,10 +1,12 @@
 import { Text } from '@abqm-ds/react';
 import {
   BottomEventSummary,
+  CustomTooltipContainer,
   GraphSummaryContainer,
   TopEventSummary,
   TopLeftEventSummary,
   TopRightEventSummary,
+  TopRightOptions,
 } from './styles';
 import { colors, fontSizes } from '@abqm-ds/tokens';
 import { BarChartLineIcon } from '@abqm-ds/icons';
@@ -19,54 +21,57 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+import { useEffect, useState } from 'react';
+// Tooltip customizado para exibir o valor de pv
+const CustomTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    return (
+      <CustomTooltipContainer>
+        <Text fontSize="xs" color={colors.white85}>
+          <strong>Ano:</strong> {label}
+        </Text>
+        <Text fontSize="xs" color={colors.white85}>
+          <strong>Inscrições:</strong> {payload[0].value}
+        </Text>
+      </CustomTooltipContainer>
+    );
+  }
+  return null;
+};
 
 const GraphSummaryDetails = ({ data }: { data: GraphStatistics[] }) => {
-  console.log('GraphSummaryDetails data:', data);
+  const [chartData, setChartData] = useState<any[]>([]);
+  const [isOficial, setIsOficial] = useState<'local' | 'nacional'>('local'); // Assuming 'local' is the default value for isOficial
+  const maxInscricoesRaw = data?.reduce((max, item) => Math.max(max, item.inscricoes), 0);
 
-  const chart = [
-    {
-      name: '2019',
-      uv: 4000,
-      pv: 2400,
-      amt: 2400,
-    },
-    {
-      name: '2020',
-      uv: 3000,
-      pv: 1398,
-      amt: 2210,
-    },
-    {
-      name: '2021',
-      uv: 2000,
-      pv: 9800,
-      amt: 2290,
-    },
-    {
-      name: '2022',
-      uv: 2780,
-      pv: 3908,
-      amt: 2000,
-    },
-    {
-      name: '2023',
-      uv: 1890,
-      pv: 4800,
-      amt: 2181,
-    },
-    {
-      name: '2024',
-      uv: 2390,
-      pv: 3800,
-      amt: 2500,
-    },
-    {
-      name: '2025',
-      uv: 3490,
-      pv: 4300,
-      amt: 2100,
-    },
-  ];
+  // Função para arredondar para cima para o múltiplo de 1000 mais próximo
+  function roundUpToThousand(num: number) {
+    return Math.ceil(num / 1000) * 1000;
+  }
+
+  const maxInscricoes = roundUpToThousand(maxInscricoesRaw || 0);
+
+  // Gera os ticks de 1000 em 1000 até maxInscricoes
+  const ticks = [];
+  for (let i = 1000; i <= maxInscricoes; i += 1000) {
+    ticks.push(i);
+  }
+
+  useEffect(() => {
+    const dataToShow: any[] = [];
+
+    data?.filter((item) => {
+      if (item.ccd_tipo === isOficial) {
+        dataToShow.push({
+          name: item.ano,
+          pv: item.inscricoes,
+        });
+      }
+    });
+
+    console.log('GraphSummaryDetails dataToShow:', dataToShow);
+    setChartData(dataToShow);
+  }, [data, isOficial]);
 
   return (
     <GraphSummaryContainer>
@@ -77,22 +82,41 @@ const GraphSummaryDetails = ({ data }: { data: GraphStatistics[] }) => {
             Estatísticas de inscrições da modalidade
           </Text>
         </TopLeftEventSummary>
+
         <TopRightEventSummary>
-          <Text fontSize="xs" lineHeight="short" color={colors.white75}>
-            Oficiais
-          </Text>
-          <Text fontSize="xs" lineHeight="short" color={colors.white75}>
-            Oficializadas
-          </Text>
+          <TopRightOptions
+            $isSelected={isOficial === 'local'}
+            onClick={() => setIsOficial('local')}
+          >
+            <Text
+              fontSize="xs"
+              lineHeight="short"
+              color={isOficial === 'local' ? colors.white85 : colors.white50}
+            >
+              Oficiais
+            </Text>
+          </TopRightOptions>
+          <TopRightOptions
+            $isSelected={isOficial === 'nacional'}
+            onClick={() => setIsOficial('nacional')}
+          >
+            <Text
+              fontSize="xs"
+              lineHeight="short"
+              color={isOficial === 'nacional' ? colors.white85 : colors.white50}
+            >
+              Oficializadas
+            </Text>
+          </TopRightOptions>
         </TopRightEventSummary>
       </TopEventSummary>
 
       <BottomEventSummary>
-        <ResponsiveContainer width="100%" height={200}>
+        <ResponsiveContainer width="100%" height={240}>
           <AreaChart
-            width={400}
-            height={300}
-            data={chart}
+            width={500}
+            height={240}
+            data={chartData}
             syncId="anyId"
             margin={{
               top: 10,
@@ -109,11 +133,14 @@ const GraphSummaryDetails = ({ data }: { data: GraphStatistics[] }) => {
               tickLine={{ stroke: colors.emeraldGreen30 }}
             />
             <YAxis
+              domain={[500, maxInscricoes]}
+              ticks={[...ticks]}
+              interval={0}
               tick={{ fill: colors.white85, fontSize: fontSizes.x }}
               axisLine={{ stroke: colors.emeraldGreen30 }}
               tickLine={{ stroke: colors.emeraldGreen30 }}
             />
-            <Tooltip />
+            <Tooltip content={<CustomTooltip />} />
             <Area
               type="monotone"
               dataKey="pv"

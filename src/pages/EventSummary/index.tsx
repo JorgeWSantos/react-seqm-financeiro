@@ -206,14 +206,16 @@ function EventSummary() {
         >
           <Scrollable>
             <DivLeft>
-              {/* <InfoEventDetails data={eventInfoData} />
+              <InfoEventDetails data={eventInfoData} />
+
               <EventSummaryDetails
                 data={
                   eventSummaryData.numeros_evento?.length > 0
                     ? eventSummaryData.numeros_evento[0]
                     : null
                 }
-              /> */}
+              />
+
               <GraphSummaryDetails data={eventSummaryData.tipo_estatistica_prova} />
             </DivLeft>
             <DivRight></DivRight>
