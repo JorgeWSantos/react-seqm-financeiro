@@ -2,11 +2,12 @@ import {
   ActivityIndicator,
   ContentDektop,
   ContentMobile,
+  Dropdown,
   getNameProveById,
   Header,
   HeaderMobileNavigator,
   HeaderNavigatorDesktop,
-  InfoCard,
+  RoundedModalityButton,
   TableSEQM,
   Text,
   type TableColumnSEQM,
@@ -15,18 +16,19 @@ import {
 import { useDeviceType } from '@abqm-ds/react';
 
 import {
+  ButtonTop10,
   ContainerMain,
-  DivInfoCard,
+  DivDropDownSearch,
   DivLeft,
   DivRight,
-  DivTopMobile,
+  DivTopRight,
   LoadingContainer,
   NotFoundContainer,
   Scrollable,
 } from './styles';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePage } from '@src/contexts/page/usePage';
-import { PrinterIcon, StarIcon } from '@abqm-ds/icons';
+import { PrinterIcon, StarIcon, TrophyIcon } from '@abqm-ds/icons';
 import { colors } from '@abqm-ds/tokens';
 import type { TableEventSummaryData } from './types';
 import { useParams } from 'react-router';
@@ -40,6 +42,7 @@ import type {
   ResultModalityByProve,
 } from './types.api';
 import { useCallback, useEffect, useState } from 'react';
+import { getModalityIcon } from '@src/utils/getModalityIcon';
 
 function EventSummary() {
   const pageTitle = 'Resultados »';
@@ -120,8 +123,8 @@ function EventSummary() {
     const loadData = async () => {
       setIsLoading(true);
 
-      await handleGetSummary();
-      await handleGetEventInfo();
+      // await handleGetSummary();
+      // await handleGetEventInfo();
 
       setIsLoading(false);
     };
@@ -132,26 +135,26 @@ function EventSummary() {
   const columns: Array<TableColumnSEQM<TableEventSummaryData>> = [
     {
       key: 'category',
-      label: 'Categoria',
-      width: '35%',
+      label: 'CATEGORIA',
+      width: '60%',
     },
-    { key: 'organizator', label: 'ORGANIZADOR', width: '35%' },
+    { key: 'organizator', label: 'ORGANIZADOR', width: '7%', align: 'center' },
     {
       key: 'judge',
-      label: 'Juíz',
-      width: '20%',
-      align: 'left',
+      label: 'JUÍZ',
+      width: '7%',
+      align: 'center',
     },
     {
       key: 'ABQM',
       label: 'ABQM',
       align: 'center',
-      minWidth: '76px',
+      width: '7%',
     },
     {
       key: 'inscriptions',
-      label: 'Inscrições',
-      minWidth: '76px',
+      label: 'INSCRIÇÕES',
+      width: '7%',
       align: 'center',
     },
   ];
@@ -218,28 +221,70 @@ function EventSummary() {
 
               <GraphSummaryDetails data={eventSummaryData.tipo_estatistica_prova} />
             </DivLeft>
-            <DivRight></DivRight>
-            {/* {data.length > 0 ? (
-              <TableSEQM data={data} columns={columns} />
-            ) : (
-              <>
-                {isLoading ? (
-                  <LoadingContainer>
-                    <ActivityIndicator width={20} height={20} />
-                  </LoadingContainer>
-                ) : (
-                  <NotFoundContainer>
-                    <Text
-                      fontSize="smm"
-                      fontWeight="semiBold"
-                      color={colors.emeraldGreen75}
-                    >
-                      Nenhum resultado encontrado
-                    </Text>
-                  </NotFoundContainer>
-                )}
-              </>
-            )} */}
+            <DivRight>
+              <DivTopRight>
+                <DivDropDownSearch>
+                  <RoundedModalityButton
+                    style={{ width: 44, height: 44 }}
+                    icon={
+                      getModalityIcon(Number(prove_id)) ? (
+                        getModalityIcon(Number(prove_id))!({})
+                      ) : (
+                        <></>
+                      )
+                    }
+                    svgFullWidth
+                    text={getNameProveById(Number(prove_id))}
+                    variant="secondary"
+                  />
+                  <Dropdown
+                    data={[
+                      {
+                        id: 'all',
+                        label: 'Todas as categorias',
+                        value: 'all',
+                      },
+                    ]}
+                    onChange={(value) => {}}
+                  />
+                </DivDropDownSearch>
+                
+                <ButtonTop10>
+                  <TrophyIcon fill={colors.white75} />
+                  <Text
+                    fontSize="ssm"
+                    fontWeight="semiBold"
+                    lineHeight="tight"
+                    color={colors.white75}
+                    style={{ marginTop: '2px' }}
+                  >
+                    TOP 10
+                  </Text>
+                </ButtonTop10>
+              </DivTopRight>
+
+              {data?.length > 0 ? (
+                <TableSEQM data={data} columns={columns} />
+              ) : (
+                <>
+                  {isLoading ? (
+                    <LoadingContainer>
+                      <ActivityIndicator width={20} height={20} />
+                    </LoadingContainer>
+                  ) : (
+                    <NotFoundContainer>
+                      <Text
+                        fontSize="smm"
+                        fontWeight="semiBold"
+                        color={colors.emeraldGreen75}
+                      >
+                        Nenhum resultado encontrado
+                      </Text>
+                    </NotFoundContainer>
+                  )}
+                </>
+              )}
+            </DivRight>
           </Scrollable>
         </ContentDektop>
       ) : (

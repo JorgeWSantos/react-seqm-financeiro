@@ -1,4 +1,4 @@
-import { colors } from '@abqm-ds/tokens';
+import { colors, radii, space } from '@abqm-ds/tokens';
 import styled from 'styled-components';
 
 export const ContainerMain = styled.div`
@@ -27,7 +27,50 @@ export const DivLeft = styled.div`
 export const DivRight = styled.div`
   width: 100%;
   height: 100%;
-  background-color: ${colors.greenTransparent30};
+  padding-top: 0.5rem;
+`;
+
+export const DivTopRight = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: ${space[1]} ${space[1]};
+  margin: 0 auto;
+
+  border-bottom: ${radii.px} solid ${colors.white25};
+  border-radius: 8px;
+  position: relative;
+`;
+
+export const DivDropDownSearch = styled.div`
+  display: flex;
+  align-items: center;
+  width: 20rem;
+
+  gap: ${space[2]};
+`;
+
+export const ButtonTop10 = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  justify-self: flex-end;
+
+  width: 6.75rem;
+  height: 2rem;
+  padding: ${space[2]} ${space[4]};
+
+  border: ${radii.pxx} solid #a9bd9f;
+  border-radius: 1.875rem;
+  background-color: ${colors.black50};
+  cursor: pointer;
+  transition: filter 0.3s ease;
+
+  &:hover {
+    filter: brightness(1.1);
+    transition: filter 0.3s ease;
+  }
 `;
 
 export const LoadingContainer = styled.div`
