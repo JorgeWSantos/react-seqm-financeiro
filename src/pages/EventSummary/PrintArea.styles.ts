@@ -4,10 +4,11 @@ export const PrintAreaWrapper = styled.div`
   position: absolute;
   left: 200px;
   padding: 20pt;
+  /* left: -9999px; */
   text-align: center;
   width: 210mm;
   height: 297mm;
-  background-color: #f5f5f5;
+  background-color: white;
 `;
 
 export const PrintAreaContainer = styled.div`
@@ -15,8 +16,10 @@ export const PrintAreaContainer = styled.div`
   width: 100%;
   background-color: white;
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  padding: 2pt;
+
+  border-bottom: 1px solid #ccc;
 `;
 
 export const LogoWrapper = styled.div`
@@ -26,12 +29,21 @@ export const LogoWrapper = styled.div`
 
 export const DetailsWrapper = styled.div`
   display: flex;
+  flex: 1;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: flex-start;
-  flex: 1;
+  justify-content: space-between;
+
+  width: 100%;
+
   padding-left: 8px;
-  min-height: 60pt;
+  padding-bottom: 4pt;
+  min-height: 60pt !important;
+  /* background-color: red; */
+
+  p {
+    margin-top: -7pt;
+  }
 `;
 
 export const EventName = styled.p`
