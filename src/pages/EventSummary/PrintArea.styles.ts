@@ -37,7 +37,7 @@ export const DetailsWrapper = styled.div`
   width: 100%;
 
   padding-left: 8px;
-  padding-bottom: 4pt;
+  padding-bottom: 5pt;
   min-height: 60pt !important;
   /* background-color: red; */
 
@@ -49,4 +49,27 @@ export const DetailsWrapper = styled.div`
 export const EventName = styled.p`
   font-size: 13pt;
   font-weight: bold;
+`;
+
+export const DetailsInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  flex: 1;
+  font-size: 9pt;
+  gap: 4pt;
+`;
+
+export const IconWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+  font-size: 9pt;
+  padding-bottom: 5pt;
+
+  svg {
+    margin-bottom: -8pt;
+  }
 `;
