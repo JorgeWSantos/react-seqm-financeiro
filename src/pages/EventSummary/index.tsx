@@ -43,6 +43,8 @@ import type {
 } from './types.api';
 import { useCallback, useEffect, useState } from 'react';
 import { getModalityIcon } from '@src/utils/getModalityIcon';
+import PrintArea from './PrintArea';
+import { handlePrintPDF } from './PrintAreaUtils';
 
 function EventSummary() {
   const pageTitle = 'Resultados »';
@@ -184,7 +186,7 @@ function EventSummary() {
                 {
                   icon: <PrinterIcon fill={colors.emeraldGreen50} />,
                   label: 'imprimir',
-                  onClick: () => {},
+                  onClick: handlePrintPDF,
                 },
                 {
                   icon: <PrinterIcon fill={colors.emeraldGreen50} />,
@@ -205,7 +207,6 @@ function EventSummary() {
             padding: '1.5rem',
             gap: '0.25rem',
           }}
-          // count={data.length}
         >
           <Scrollable>
             <DivLeft>
@@ -248,7 +249,7 @@ function EventSummary() {
                     onChange={(value) => {}}
                   />
                 </DivDropDownSearch>
-                
+
                 <ButtonTop10>
                   <TrophyIcon fill={colors.white75} />
                   <Text
@@ -286,6 +287,8 @@ function EventSummary() {
               )}
             </DivRight>
           </Scrollable>
+
+          <PrintArea />
         </ContentDektop>
       ) : (
         <ContentMobile
