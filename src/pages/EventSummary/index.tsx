@@ -44,7 +44,7 @@ import type {
 import { useCallback, useEffect, useState } from 'react';
 import { getModalityIcon } from '@src/utils/getModalityIcon';
 import PrintArea from './PrintArea';
-import { handlePrintPDF } from './PrintAreaUtils';
+import { handlePrintPDF } from './PrintArea/utils';
 
 function EventSummary() {
   const pageTitle = 'Resultados »';
@@ -70,15 +70,21 @@ function EventSummary() {
   const [searchValue, setSearchValue] = useState<string>('');
 
   const handleGetSummary = useCallback(async () => {
+    console.log('handleGetSummary0:');
+
     if (!prove_id || !event_id) {
       setIsLoading(false);
       return;
     }
 
+    console.log('handleGetSummary:');
+
     const data = await getEventSummary({
       prove_id: prove_id === 'nao-pontuados' ? 0 : Number(prove_id),
       event_id: Number(event_id),
     });
+
+    console.log('handleGetSummary:', data);
 
     setEventSummaryData(data);
   }, [getEventSummary, prove_id, event_id]);
@@ -125,8 +131,8 @@ function EventSummary() {
     const loadData = async () => {
       setIsLoading(true);
 
-      // await handleGetSummary();
-      // await handleGetEventInfo();
+      await handleGetSummary();
+      await handleGetEventInfo();
 
       setIsLoading(false);
     };
@@ -288,7 +294,7 @@ function EventSummary() {
             </DivRight>
           </Scrollable>
 
-          <PrintArea />
+          {/* {data?.length > 0 && <PrintArea columns={columns} data={data} />} */}
         </ContentDektop>
       ) : (
         <ContentMobile

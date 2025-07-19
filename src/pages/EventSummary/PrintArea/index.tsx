@@ -12,8 +12,10 @@ import {
   DivTitle,
   DivCardsRow,
   DivCard,
-} from './PrintArea.styles';
+} from './styles';
 import { RanchSortingIconSEQM } from '@abqm-ds/icons';
+import { TablePrintResultsSEQM } from './TablePrintResultsSEQM';
+// import { TablePrintResultsSEQM } from './TablePrintResultsSEQM';
 
 const PrintHeader: React.FC = () => {
   return (
@@ -40,7 +42,10 @@ const PrintHeader: React.FC = () => {
   );
 };
 
-const PrintArea: React.FC = () => {
+const PrintArea = ({ columns, data }: { columns: any[]; data: any[] }) => {
+  console.log('PrintArea columns:', columns);
+  console.log('PrintArea data:', data);
+
   return (
     <PrintAreaWrapper id="print-area">
       <PrintHeader />
@@ -68,6 +73,8 @@ const PrintArea: React.FC = () => {
           </DivCard>
         </DivCardsRow>
       </DivWrapper>
+
+      <TablePrintResultsSEQM data={data} columns={columns} />
     </PrintAreaWrapper>
   );
 };
