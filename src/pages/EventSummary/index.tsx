@@ -232,7 +232,7 @@ function EventSummary() {
               <EventSummaryDetails
                 data={
                   eventSummaryData.numeros_evento?.length > 0
-                    ? eventSummaryData.numeros_evento[0]
+                    ? eventSummaryData.numeros_evento
                     : null
                 }
               />

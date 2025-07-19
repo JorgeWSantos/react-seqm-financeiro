@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Text } from '@abqm-ds/react';
+import { Switch, Text } from '@abqm-ds/react';
 import {
   BottomEventSummary,
   EventSummaryContainer,
@@ -10,7 +10,6 @@ import {
 } from './styles';
 import { colors } from '@abqm-ds/tokens';
 import { FileEarmarkCheckIcon } from '@abqm-ds/icons';
-import Switch from './Switch';
 import type { NumberEvents } from '../types.api';
 
 interface CardSummaryProps {
@@ -36,8 +35,22 @@ const CardSummary = ({ title, subTitle }: CardSummaryProps) => {
   );
 };
 
-const EventSummaryDetails = ({ data }: { data: NumberEvents | null }) => {
+const EventSummaryDetails = ({ data }: { data: Array<NumberEvents> | null }) => {
   const [switchChecked, setSwitchChecked] = useState(false);
+
+  const resumeData = data?.[0] || {
+    inscricoes: '0',
+    competidores: '0',
+    animais: '0',
+    premiacao: 'sem premiação',
+  };
+
+  const generalResume = data?.[1] || {
+    inscricoes: '0',
+    competidores: '0',
+    animais: '0',
+    premiacao: 'sem premiação',
+  };
 
   return (
     <EventSummaryContainer>
@@ -60,12 +73,28 @@ const EventSummaryDetails = ({ data }: { data: NumberEvents | null }) => {
       </TopEventSummary>
 
       <BottomEventSummary>
-        <CardSummary title={data?.inscricoes || '0'} subTitle={'inscrições'} />
-        <CardSummary title={data?.competidores || '0'} subTitle={'competidores'} />
-        <CardSummary title={data?.animais || '0'} subTitle={'animais'} />
         <CardSummary
-          title={data?.premiacao ? data.premiacao : 'sem premiação'}
-          subTitle={data?.premiacao ? 'em premiação' : ''}
+          title={switchChecked ? generalResume.inscricoes : resumeData.inscricoes}
+          subTitle={'inscrições'}
+        />
+        <CardSummary
+          title={switchChecked ? generalResume.competidores : resumeData.competidores}
+          subTitle={'competidores'}
+        />
+        <CardSummary
+          title={switchChecked ? generalResume.animais : resumeData.animais}
+          subTitle={'animais'}
+        />
+        <CardSummary
+          title={
+            (switchChecked ? generalResume.premiacao : resumeData.premiacao) ??
+            'sem premiação'
+          }
+          subTitle={
+            (switchChecked ? generalResume.premiacao : resumeData.premiacao)
+              ? 'em premiação'
+              : ''
+          }
         />
       </BottomEventSummary>
     </EventSummaryContainer>
