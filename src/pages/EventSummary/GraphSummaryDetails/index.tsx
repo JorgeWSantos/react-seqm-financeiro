@@ -43,18 +43,30 @@ const GraphSummaryDetails = ({ data }: { data: GraphStatistics[] }) => {
   const [chartData, setChartData] = useState<any[]>([]);
   const [isOficial, setIsOficial] = useState<'local' | 'nacional'>('local'); // Assuming 'local' is the default value for isOficial
   const maxInscricoesRaw = data?.reduce((max, item) => Math.max(max, item.inscricoes), 0);
+  const minInscricoesRaw = data?.reduce(
+    (min, item) => Math.min(min, item.inscricoes),
+    data?.length ? data[0].inscricoes : 0
+  );
 
   // Função para arredondar para cima para o múltiplo de 1000 mais próximo
   function roundUpToThousand(num: number) {
     return Math.ceil(num / 1000) * 1000;
   }
 
-  const maxInscricoes = roundUpToThousand(maxInscricoesRaw || 0);
+  // Função para arredondar para baixo para o múltiplo de 1000 mais próximo
+  function roundDownToThousand(num: number) {
+    return Math.floor(num / 1000) * 1000;
+  }
 
-  // Gera os ticks correspondentes a 10%, 20%, ..., 100% do valor máximo de inscrições
+  const maxInscricoes = roundUpToThousand(maxInscricoesRaw || 0);
+  const minInscricoes = roundDownToThousand(minInscricoesRaw || 0);
+
+  // Gera os ticks de minInscricoes até maxInscricoes em passos de 10%
   const ticks = [];
-  for (let percent = 10; percent <= 100; percent += 10) {
-    const tickValue = Math.round((maxInscricoes * percent) / 100);
+  for (let percent = 0; percent <= 100; percent += 10) {
+    const tickValue = Math.round(
+      minInscricoes + ((maxInscricoes - minInscricoes) * percent) / 100
+    );
     ticks.push(tickValue);
   }
 
@@ -134,7 +146,7 @@ const GraphSummaryDetails = ({ data }: { data: GraphStatistics[] }) => {
               tickLine={{ stroke: colors.emeraldGreen30 }}
             />
             <YAxis
-              domain={[500, maxInscricoes]}
+              domain={[0, maxInscricoes]}
               ticks={[...ticks]}
               interval={0}
               tick={{ fill: colors.white85, fontSize: fontSizes.x }}

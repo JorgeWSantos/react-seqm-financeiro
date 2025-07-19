@@ -42,6 +42,12 @@ export const DivTopRight = styled.div`
   position: relative;
 `;
 
+export const DivContainerTableRight = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
+`;
+
 export const DivDropDownSearch = styled.div`
   display: flex;
   align-items: center;

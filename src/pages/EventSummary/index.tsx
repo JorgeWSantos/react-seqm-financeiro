@@ -18,6 +18,7 @@ import { useDeviceType } from '@abqm-ds/react';
 import {
   ButtonTop10,
   ContainerMain,
+  DivContainerTableRight,
   DivDropDownSearch,
   DivLeft,
   DivRight,
@@ -270,27 +271,29 @@ function EventSummary() {
                 </ButtonTop10>
               </DivTopRight>
 
-              {data?.length > 0 ? (
-                <TableSEQM data={data} columns={columns} />
-              ) : (
-                <>
-                  {isLoading ? (
-                    <LoadingContainer>
-                      <ActivityIndicator width={20} height={20} />
-                    </LoadingContainer>
-                  ) : (
-                    <NotFoundContainer>
-                      <Text
-                        fontSize="smm"
-                        fontWeight="semiBold"
-                        color={colors.emeraldGreen75}
-                      >
-                        Nenhum resultado encontrado
-                      </Text>
-                    </NotFoundContainer>
-                  )}
-                </>
-              )}
+              <DivContainerTableRight>
+                {data?.length > 0 ? (
+                  <TableSEQM data={data} columns={columns} />
+                ) : (
+                  <>
+                    {isLoading ? (
+                      <LoadingContainer>
+                        <ActivityIndicator width={20} height={20} />
+                      </LoadingContainer>
+                    ) : (
+                      <NotFoundContainer>
+                        <Text
+                          fontSize="smm"
+                          fontWeight="semiBold"
+                          color={colors.emeraldGreen75}
+                        >
+                          Nenhum resultado encontrado
+                        </Text>
+                      </NotFoundContainer>
+                    )}
+                  </>
+                )}
+              </DivContainerTableRight>
             </DivRight>
           </Scrollable>
 

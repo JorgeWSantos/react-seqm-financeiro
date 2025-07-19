@@ -41,7 +41,7 @@ export const BottomEventSummary = styled.div`
   grid-template-columns: 21% 21% 21% 1fr;
 
   width: 100%;
-  height: 100%;
+  min-height: 2.763rem;
   gap: 1px;
   box-sizing: border-box;
 `;
