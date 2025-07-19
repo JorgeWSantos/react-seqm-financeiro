@@ -29,7 +29,7 @@ import {
 } from './styles';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePage } from '@src/contexts/page/usePage';
-import { PrinterIcon, StarIcon, TrophyIcon } from '@abqm-ds/icons';
+import { CheckIcon, PrinterIcon, StarIcon, TrophyIcon } from '@abqm-ds/icons';
 import { colors } from '@abqm-ds/tokens';
 import type { TableEventSummaryData } from './types';
 import { useParams } from 'react-router';
@@ -141,18 +141,34 @@ function EventSummary() {
       label: 'CATEGORIA',
       width: '60%',
     },
-    { key: 'organizator', label: 'ORGANIZADOR', width: '7%', align: 'center' },
+    {
+      key: 'organizator',
+      label: 'ORGANIZADOR',
+      width: '7%',
+      align: 'center',
+      render: (item) => <Text>{item.organizator === 'Sim' ? <CheckIcon /> : '-'}</Text>,
+    },
     {
       key: 'judge',
       label: 'JUÍZ',
       width: '7%',
       align: 'center',
+      render: (item) => (
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          {item.judge === 'Sim' ? <CheckIcon /> : '-'}
+        </div>
+      ),
     },
     {
       key: 'ABQM',
       label: 'ABQM',
       align: 'center',
       width: '7%',
+      render: (item) => (
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          {item.ABQM === 'Sim' ? <CheckIcon /> : '-'}
+        </div>
+      ),
     },
     {
       key: 'inscriptions',
@@ -241,6 +257,7 @@ function EventSummary() {
                     variant="secondary"
                   />
                   <Dropdown
+                    variant="tertiary"
                     data={[
                       {
                         id: 'all',
