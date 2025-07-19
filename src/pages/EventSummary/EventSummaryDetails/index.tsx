@@ -60,9 +60,9 @@ const EventSummaryDetails = ({ data }: { data: NumberEvents | null }) => {
       </TopEventSummary>
 
       <BottomEventSummary>
-        <CardSummary title={data?.inscricoes || ''} subTitle={'inscrições'} />
-        <CardSummary title={data?.competidores || ''} subTitle={'competidores'} />
-        <CardSummary title={data?.animais || ''} subTitle={'animais'} />
+        <CardSummary title={data?.inscricoes || '0'} subTitle={'inscrições'} />
+        <CardSummary title={data?.competidores || '0'} subTitle={'competidores'} />
+        <CardSummary title={data?.animais || '0'} subTitle={'animais'} />
         <CardSummary
           title={data?.premiacao ? data.premiacao : 'sem premiação'}
           subTitle={data?.premiacao ? 'em premiação' : ''}

@@ -26,11 +26,9 @@ function MainApp() {
   const pageTitle = 'Resultados';
 
   useEffect(() => {
-    console.warn('TODO definir em que API vai ficar o menu:');
-
+    // TODO definir em que API vai ficar o menu
     // const loadMenu = async () => {
     //   const menu: MenuResponseObj = await getMenu();
-
     //   setMenu(menu.list_menu);
     // };
     // loadMenu();

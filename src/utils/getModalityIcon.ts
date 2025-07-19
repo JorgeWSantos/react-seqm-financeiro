@@ -25,7 +25,7 @@ import {
 } from '@abqm-ds/icons';
 
 export function getModalityIcon(nid_prova: number) {
-  console.warn('falta o ícone CorridaIconSEQM, descomente se existir');
+  // TODO: falta o ícone CorridaIconSEQM, descomente se existir
 
   switch (nid_prova) {
     case 11:

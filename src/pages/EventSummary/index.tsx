@@ -71,21 +71,15 @@ function EventSummary() {
   const [searchValue, setSearchValue] = useState<string>('');
 
   const handleGetSummary = useCallback(async () => {
-    console.log('handleGetSummary0:');
-
     if (!prove_id || !event_id) {
       setIsLoading(false);
       return;
     }
 
-    console.log('handleGetSummary:');
-
     const data = await getEventSummary({
       prove_id: prove_id === 'nao-pontuados' ? 0 : Number(prove_id),
       event_id: Number(event_id),
     });
-
-    console.log('handleGetSummary:', data);
 
     setEventSummaryData(data);
   }, [getEventSummary, prove_id, event_id]);
@@ -229,6 +223,7 @@ function EventSummary() {
 
               <GraphSummaryDetails data={eventSummaryData.tipo_estatistica_prova} />
             </DivLeft>
+
             <DivRight>
               <DivTopRight>
                 <DivDropDownSearch>

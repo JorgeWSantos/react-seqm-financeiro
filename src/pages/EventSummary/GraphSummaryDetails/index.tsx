@@ -82,7 +82,6 @@ const GraphSummaryDetails = ({ data }: { data: GraphStatistics[] }) => {
       }
     });
 
-    console.log('GraphSummaryDetails dataToShow:', dataToShow);
     setChartData(dataToShow);
   }, [data, isOficial]);
 

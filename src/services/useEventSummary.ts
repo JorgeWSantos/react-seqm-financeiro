@@ -28,9 +28,7 @@ export function useEventSummary() {
           }
         );
 
-        console.warn(
-          'TODO: Corrigir o tipo de numeros_evento para um objeto único e não um array'
-        );
+        //'TODO: Corrigir o tipo de numeros_evento
 
         const { data, message, success } = response.data;
 

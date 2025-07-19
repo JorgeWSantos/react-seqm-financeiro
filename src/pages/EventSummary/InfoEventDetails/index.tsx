@@ -5,11 +5,21 @@ import type { InfoEventSummaryData } from '../types.api';
 const InfoEventDetails = ({ data }: { data: InfoEventSummaryData | null }) => {
   return (
     <InfoEvent>
-      <EventSummaryDefaultIcon
-        width={70}
-        height={60}
-        style={{ minHeight: 60, minWidth: 70 }}
-      />
+      {data?.logotipo ? (
+        <img
+          src={data.logotipo}
+          alt="Logotipo do evento"
+          width={80}
+          height={80}
+          style={{ minHeight: 80, minWidth: 80 }}
+        />
+      ) : (
+        <EventSummaryDefaultIcon
+          width={70}
+          height={60}
+          style={{ minHeight: 60, minWidth: 70 }}
+        />
+      )}
 
       <InfoEventDetailed>
         <Information>
