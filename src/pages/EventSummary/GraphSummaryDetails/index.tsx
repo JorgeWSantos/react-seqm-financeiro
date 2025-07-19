@@ -51,10 +51,11 @@ const GraphSummaryDetails = ({ data }: { data: GraphStatistics[] }) => {
 
   const maxInscricoes = roundUpToThousand(maxInscricoesRaw || 0);
 
-  // Gera os ticks de 1000 em 1000 até maxInscricoes
+  // Gera os ticks correspondentes a 10%, 20%, ..., 100% do valor máximo de inscrições
   const ticks = [];
-  for (let i = 1000; i <= maxInscricoes; i += 1000) {
-    ticks.push(i);
+  for (let percent = 10; percent <= 100; percent += 10) {
+    const tickValue = Math.round((maxInscricoes * percent) / 100);
+    ticks.push(tickValue);
   }
 
   useEffect(() => {
