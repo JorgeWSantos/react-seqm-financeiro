@@ -146,7 +146,7 @@ const GraphSummaryDetails = ({ data }: { data: GraphStatistics[] }) => {
               tickLine={{ stroke: colors.emeraldGreen30 }}
             />
             <YAxis
-              domain={[0, maxInscricoes]}
+              domain={[minInscricoes, maxInscricoes]}
               ticks={[...ticks]}
               interval={0}
               tick={{ fill: colors.white85, fontSize: fontSizes.x }}
