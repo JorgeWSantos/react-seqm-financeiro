@@ -58,7 +58,7 @@ function MainApp() {
         <Outlet />
       </ContainerDesktop>
       {/* Mobile */}
-      {/* <ContainerMobile style={{ display: isTabletOrMobile ? 'flex' : 'none' }}>
+      <ContainerMobile style={{ display: isTabletOrMobile ? 'flex' : 'none' }}>
         <HeaderMobile
           title="SEQM"
           page={pageTitle}
@@ -72,7 +72,7 @@ function MainApp() {
           }}
         />
         <Outlet />
-      </ContainerMobile> */}
+      </ContainerMobile>
     </GlobalContainer>
   );
 }

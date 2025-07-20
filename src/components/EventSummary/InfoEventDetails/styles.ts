@@ -1,4 +1,11 @@
-import { colors, fontSizes, fontWeights, lineHeights } from '@abqm-ds/tokens';
+import {
+  breakpointsPx,
+  colors,
+  fontSizes,
+  fontWeights,
+  lineHeights,
+  radii,
+} from '@abqm-ds/tokens';
 import styled from 'styled-components';
 
 export const InfoEvent = styled.div`
@@ -12,10 +19,34 @@ export const InfoEvent = styled.div`
   }
 `;
 
+export const ImageContainer = styled.div`
+  min-width: 70px;
+  max-width: 70px;
+  min-height: 70px;
+  max-height: 70px;
+
+  border-radius: ${radii.sm};
+  border: ${radii.px} solid ${colors.white25};
+  background-color: ${colors.white85};
+
+  @media (max-width: ${breakpointsPx.lg}) {
+    min-width: 65px;
+    max-width: 65px;
+    min-height: 65px;
+    max-height: 65px;
+    border: ${radii.px} solid ${colors.emeraldGreen25};
+    background-color: transparent;
+  }
+`;
+
 export const InfoEventDetailed = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+
+  @media (max-width: ${breakpointsPx.lg}) {
+    gap: 0.1rem;
+  }
 `;
 
 export const Information = styled.div`
@@ -42,6 +73,20 @@ export const Information = styled.div`
     flex-direction: column;
     .subtitle {
       margin: 0 !important;
+    }
+  }
+
+  @media (max-width: ${breakpointsPx.lg}) {
+    .title {
+      display: none;
+    }
+    .subtitle {
+      font-size: ${fontSizes.ssm};
+      line-height: ${lineHeights.shorter};
+
+      &.organizer {
+        line-height: ${lineHeights.short};
+      }
     }
   }
 `;

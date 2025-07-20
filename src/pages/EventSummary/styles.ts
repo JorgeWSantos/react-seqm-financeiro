@@ -1,4 +1,5 @@
-import { colors, radii, space } from '@abqm-ds/tokens';
+import { Heading } from '@abqm-ds/react';
+import { breakpointsPx, colors, radii, space } from '@abqm-ds/tokens';
 import styled from 'styled-components';
 
 export const ContainerMain = styled.div`
@@ -12,6 +13,11 @@ export const Scrollable = styled.div`
   overflow-x: auto;
   display: flex;
   gap: 1.5rem;
+
+  @media (max-width: ${breakpointsPx.lg}) {
+    flex-direction: column;
+    gap: 1rem;
+  }
 `;
 
 export const DivLeft = styled.div`
@@ -102,4 +108,13 @@ export const DivInfoCard = styled.div`
   justify-content: flex-start;
   align-items: center;
   gap: 0.125rem;
+`;
+
+// MOBILE
+export const StyledHeadingMobile = styled(Heading).attrs({
+  fontFamily: 'secondary',
+  fontWeight: 'regular',
+})`
+  color: ${colors.green900};
+  letter-spacing: -0.15rem;
 `;

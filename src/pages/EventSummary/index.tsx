@@ -1,8 +1,10 @@
 import {
   ContentDektop,
   ContentMobile,
+  Dropdown,
   getNameProveById,
   Header,
+  HeaderMobileNavigator,
   HeaderNavigatorDesktop,
   Text,
   type DataDropdown,
@@ -22,6 +24,7 @@ import {
   DivRight,
   DivTopRight,
   Scrollable,
+  StyledHeadingMobile,
 } from './styles';
 import EventTable from './EventTable';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -361,48 +364,70 @@ function EventSummary() {
       ) : (
         <ContentMobile
           style={{
-            maxWidth: '100vw',
+            maxWidth: '100dvw',
           }}
+          headerMobileNavigator={
+            <HeaderMobileNavigator
+              title={eventInfoData?.cds_evento || ''}
+              hasBackButton
+              onGoBack={() => navigate('/modalidade/' + prove_id)}
+            >
+              <Dropdown
+                variant="secondary"
+                data={provesDropdown}
+                setValue={(value) => {
+                  setProveSelected(value);
+                  handleGetSummary({ prove_id_selected: value.id });
+                }}
+                value={proveSelected}
+                maxHeight="26rem"
+              />
+            </HeaderMobileNavigator>
+          }
         >
-          <DivTopMobile>
-            <DivInfoCard>
-              <InfoCard
-                title={eventSummaryData
-                  .filter((item) => item.bid_oficial === true)
-                  .length.toString()}
-                subTitle="Oficiais"
-              />
-              <InfoCard
-                title={eventSummaryData
-                  .filter((item) => item.bid_oficial === false)
-                  .length.toString()}
-                subTitle="Oficializadas"
-              />
-            </DivInfoCard>
-          </DivTopMobile>
-
           <Scrollable>
-            {data.length > 0 ? (
-              <TableSEQM data={data} columns={columns} width={'100rem'} />
-            ) : (
-              <>
-                {isLoading ? (
-                  <LoadingContainer>
-                    <ActivityIndicator width={20} height={20} />
-                  </LoadingContainer>
-                ) : (
-                  <NotFoundContainer>
-                    <Text
-                      fontSize="smm"
-                      fontWeight="semiBold"
-                      color={colors.emeraldGreen75}
-                    >
-                      Nenhum resultado encontrado
-                    </Text>
-                  </NotFoundContainer>
-                )}
-              </>
-            )}
+            <StyledHeadingMobile>{eventInfoData?.cds_evento}</StyledHeadingMobile>
+
+            <DivLeft>
+              <InfoEventDetails data={eventInfoData} />
+
+              <EventSummaryDetails
+                data={eventSummaryNumbers}
+                switchChecked={switchResumeChecked}
+                setSwitchChecked={setSwitchResumeChecked}
+              />
+
+              <GraphSummaryDetails data={eventSummaryData.tipo_estatistica_prova} />
+            </DivLeft>
+
+            <DivRight>
+              <DivTopRight>
+                <DivDropDownSearch>
+                  <ModalityDropdown
+                    prove_id={prove_id}
+                    provesDropdown={provesDropdown}
+                    proveSelected={proveSelected}
+                    setProveSelected={setProveSelected}
+                    handleGetSummary={handleGetSummary}
+                  />
+                </DivDropDownSearch>
+
+                <ButtonTop10>
+                  <TrophyIcon fill={colors.white75} />
+                  <Text
+                    fontSize="ssm"
+                    fontWeight="semiBold"
+                    lineHeight="tight"
+                    color={colors.white75}
+                    style={{ marginTop: '2px' }}
+                  >
+                    TOP 10
+                  </Text>
+                </ButtonTop10>
+              </DivTopRight>
+
+              <EventTable data={data} columns={columns} isLoading={isLoading} />
+            </DivRight>
           </Scrollable>
         </ContentMobile>
       )}
