@@ -293,7 +293,13 @@ function EventSummary() {
                 {
                   icon: <StarIcon fill={colors.emeraldGreen50} />,
                   label: 'participações',
-                  onClick: () => {},
+                  onClick: () => {
+                    window.open(
+                      import.meta.env.VITE_URL_PARTICIPACOES +
+                        '/index/' +
+                        eventInfoData?.nid_agrupa_evento
+                    );
+                  },
                 },
                 {
                   icon: <PrinterIcon fill={colors.emeraldGreen50} />,
