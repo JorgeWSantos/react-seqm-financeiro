@@ -357,18 +357,6 @@ function EventSummary() {
               <EventTable data={data} columns={columns} isLoading={isLoading} />
             </DivRight>
           </Scrollable>
-
-          {showShareOptions && <ShareOptions url={shareUrl} />}
-
-          {data?.length > 0 && (
-            <PrintArea
-              title={switchResumeChecked ? 'RESUMO GERAL' : 'RESUMO DA MODALIDADE'}
-              columns={columns}
-              data={data}
-              cards={printCards}
-              info={printInfo}
-            />
-          )}
         </ContentDektop>
       ) : (
         <ContentMobile
@@ -376,8 +364,7 @@ function EventSummary() {
             maxWidth: '100vw',
           }}
         >
-          <></>
-          {/* <DivTopMobile>
+          <DivTopMobile>
             <DivInfoCard>
               <InfoCard
                 title={eventSummaryData
@@ -416,8 +403,20 @@ function EventSummary() {
                 )}
               </>
             )}
-          </Scrollable> */}
+          </Scrollable>
         </ContentMobile>
+      )}
+
+      {showShareOptions && <ShareOptions url={shareUrl} />}
+
+      {data?.length > 0 && (
+        <PrintArea
+          title={switchResumeChecked ? 'RESUMO GERAL' : 'RESUMO DA MODALIDADE'}
+          columns={columns}
+          data={data}
+          cards={printCards}
+          info={printInfo}
+        />
       )}
     </ContainerMain>
   );

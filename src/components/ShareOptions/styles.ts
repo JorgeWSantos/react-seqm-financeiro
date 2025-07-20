@@ -2,8 +2,8 @@ import styled from 'styled-components';
 
 export const ShareOptionsContainer = styled.div`
   position: absolute;
-  right: 10px;
-  top: 8px;
+  right: 30px;
+  top: 64px;
   z-index: 9999;
   background: white;
   border: 1px solid #eee;
