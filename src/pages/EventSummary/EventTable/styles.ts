@@ -6,7 +6,7 @@ export const DivContainerTableRight = styled.div`
   align-items: center;
   margin-top: 1rem;
 
-  @media (max-width: ${breakpointsPx.lg}) {
+  @media (max-width: ${breakpointsPx.md}) {
     overflow-x: scroll;
     margin-top: 0;
 

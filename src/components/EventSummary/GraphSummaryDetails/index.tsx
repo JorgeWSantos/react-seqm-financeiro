@@ -132,7 +132,7 @@ const GraphSummaryDetails = ({
       </TopEventSummary>
 
       <BottomEventSummary>
-        <ResponsiveContainer width="100%" height={isTabletOrMobile ? 200 : 200}>
+        <ResponsiveContainer width="100%" height={isTabletOrMobile ? 200 : 220}>
           <AreaChart
             data={chartData}
             syncId="anyId"
@@ -146,7 +146,10 @@ const GraphSummaryDetails = ({
             <CartesianGrid stroke={colors.emeraldGreen30} strokeDasharray="3 3" />
             <XAxis
               dataKey="name"
-              tick={{ fill: colors.white85, fontSize: fontSizes.x }}
+              tick={{
+                fill: colors.white85,
+                fontSize: isTabletOrMobile ? '5pt' : fontSizes.x,
+              }}
               axisLine={{ stroke: colors.emeraldGreen30 }}
               tickLine={{ stroke: colors.emeraldGreen30 }}
             />
@@ -154,7 +157,10 @@ const GraphSummaryDetails = ({
               domain={[minInscricoes, maxInscricoes]}
               ticks={[...ticks]}
               interval={0}
-              tick={{ fill: colors.white85, fontSize: fontSizes.x }}
+              tick={{
+                fill: colors.white85,
+                fontSize: isTabletOrMobile ? '5pt' : fontSizes.x,
+              }}
               axisLine={{ stroke: colors.emeraldGreen30 }}
               tickLine={{ stroke: colors.emeraldGreen30 }}
             />
