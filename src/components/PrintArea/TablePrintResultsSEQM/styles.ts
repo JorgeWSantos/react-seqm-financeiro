@@ -24,7 +24,7 @@ export const StyledTablePrintResultsSEQM = styled.table<{
   }
 
   tbody tr:nth-child(even) {
-    background-color: ${colors.greenTransparent15};
+    background-color: ${colors.grayFigma6};
   }
 
   font-family: ${fonts.default};
@@ -53,30 +53,6 @@ export const StyledBodyTablePrintResultsSEQM = styled.tbody`
     padding: 0.5625rem ${space[2]};
   }
 
-  .aqha-column {
-    box-sizing: border-box;
-    background-color: ${colors.greenTransparent30} !important;
-
-    td:first-child {
-      position: relative;
-
-      &::before {
-        content: '';
-        display: block;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 4px;
-        height: 100%;
-        background: ${colors.green500}; // Exemplo de cor, ajuste conforme necessário
-        pointer-events: none; // Para não bloquear interações
-        z-index: 1;
-      }
-
-      box-sizing: border-box;
-    }
-  }
-
   @media (max-width: ${breakpointsPx.lg}) {
     tr td {
       padding: ${space[2]};
@@ -90,6 +66,9 @@ export const StyledTablePrintResultsSEQMTextTd = styled(Text).attrs({
   lineHeight: 'tight',
 })<{ $bold?: boolean }>`
   font-weight: ${({ $bold }) => ($bold ? fontWeights.semiBold : fontWeights.regular)};
+  max-height: 16px;
+  color: ${colors.grayFigma2};
+  margin-top: -14px;
 
   @media (max-width: ${breakpointsPx.lg}) {
     font-size: ${fontSizes.ssm};

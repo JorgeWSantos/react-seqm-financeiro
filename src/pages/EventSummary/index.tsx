@@ -29,7 +29,7 @@ import {
 } from './styles';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePage } from '@src/contexts/page/usePage';
-import { CheckIcon, PrinterIcon, StarIcon, TrophyIcon } from '@abqm-ds/icons';
+import { CheckIcon, DashIcon, PrinterIcon, StarIcon, TrophyIcon } from '@abqm-ds/icons';
 import { colors } from '@abqm-ds/tokens';
 import type { TableEventSummaryData } from './types';
 import { useParams } from 'react-router';
@@ -150,7 +150,11 @@ function EventSummary() {
       label: 'ORGANIZADOR',
       width: '7%',
       align: 'center',
-      render: (item) => <Text>{item.organizator === 'Sim' ? <CheckIcon /> : '-'}</Text>,
+      render: (item) => (
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          {item.organizator === 'Sim' ? <CheckIcon /> : <DashIcon />}
+        </div>
+      ),
     },
     {
       key: 'judge',
@@ -158,8 +162,8 @@ function EventSummary() {
       width: '7%',
       align: 'center',
       render: (item) => (
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          {item.judge === 'Sim' ? <CheckIcon /> : '-'}
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          {item.judge === 'Sim' ? <CheckIcon /> : <DashIcon />}
         </div>
       ),
     },
@@ -170,7 +174,7 @@ function EventSummary() {
       width: '7%',
       render: (item) => (
         <div style={{ display: 'flex', justifyContent: 'center' }}>
-          {item.ABQM === 'Sim' ? <CheckIcon /> : '-'}
+          {item.ABQM === 'Sim' ? <CheckIcon /> : <DashIcon />}
         </div>
       ),
     },
@@ -315,7 +319,7 @@ function EventSummary() {
             </DivRight>
           </Scrollable>
 
-          {/* {data?.length > 0 && <PrintArea columns={columns} data={data} />} */}
+          {data?.length > 0 && <PrintArea columns={columns} data={data} />}
         </ContentDektop>
       ) : (
         <ContentMobile

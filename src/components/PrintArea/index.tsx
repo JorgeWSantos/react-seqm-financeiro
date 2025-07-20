@@ -12,6 +12,7 @@ import {
   DivTitle,
   DivCardsRow,
   DivCard,
+  DivTable,
 } from './styles';
 import { RanchSortingIconSEQM } from '@abqm-ds/icons';
 import { TablePrintResultsSEQM } from './TablePrintResultsSEQM';
@@ -71,10 +72,16 @@ const PrintArea = ({ columns, data }: { columns: any[]; data: any[] }) => {
             <p>DATA DO EVENTO</p>
             <p>00/00/0000</p>
           </DivCard>
+          <DivCard>
+            <p>DATA DO EVENTO</p>
+            <p>00/00/0000</p>
+          </DivCard>
         </DivCardsRow>
       </DivWrapper>
 
-      <TablePrintResultsSEQM data={data} columns={columns} />
+      <DivTable>
+        <TablePrintResultsSEQM data={data} columns={columns} />
+      </DivTable>
     </PrintAreaWrapper>
   );
 };

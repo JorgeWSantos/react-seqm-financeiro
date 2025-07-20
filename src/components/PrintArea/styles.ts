@@ -1,3 +1,4 @@
+import { colors } from '@abqm-ds/tokens';
 import styled from 'styled-components';
 
 export const PrintAreaWrapper = styled.div`
@@ -83,6 +84,13 @@ export const DivWrapper = styled.div`
   width: 100%;
   /* margin-top: 8pt; */
 `;
+export const DivTable = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-top: 8pt;
+`;
 
 export const DivTitle = styled.div`
   margin-bottom: 12pt;
@@ -104,7 +112,7 @@ export const DivCardsRow = styled.div`
 export const DivCard = styled.div`
   width: 100%;
   height: 40pt;
-  background-color: #f0f0f0;
+  background-color: ${colors.grayFigma5};
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -113,11 +121,10 @@ export const DivCard = styled.div`
   padding-bottom: 10pt;
 
   p {
-    font-size: 8pt;
+    font-size: 6pt;
   }
 
   p + p {
-    font-size: 10pt;
-    font-weight: 600;
+    font-size: 11pt;
   }
 `;
