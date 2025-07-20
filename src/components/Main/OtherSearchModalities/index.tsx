@@ -1,7 +1,7 @@
 import type { ResultModalities } from '@src/pages/Main/types.api';
 import RoundedButtonModalitie from '../DivButtonModality';
 import { Container, ContentModalities, HeadingModalities } from './styles';
-import { getModalityIcon } from '@src/utils/getModalityIcon';
+import { getModalityIcon } from '@abqm-ds/react';
 
 interface OtherSearchModalitiesProps {
   title: string;

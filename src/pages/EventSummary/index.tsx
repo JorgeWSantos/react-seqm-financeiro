@@ -1,13 +1,9 @@
 import {
-  ActivityIndicator,
   ContentDektop,
   ContentMobile,
-  Dropdown,
   getNameProveById,
   Header,
   HeaderNavigatorDesktop,
-  RoundedModalityButton,
-  TableSEQM,
   Text,
   type DataDropdown,
   type TableColumnSEQM,
@@ -15,22 +11,19 @@ import {
 
 import {} from 'react-share';
 import ShareOptions from '../../components/ShareOptions';
-// ...existing code...
 
 import { useDeviceType } from '@abqm-ds/react';
 
 import {
   ButtonTop10,
   ContainerMain,
-  DivContainerTableRight,
   DivDropDownSearch,
   DivLeft,
   DivRight,
   DivTopRight,
-  LoadingContainer,
-  NotFoundContainer,
   Scrollable,
 } from './styles';
+import EventTable from './EventTable';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePage } from '@src/contexts/page/usePage';
 import {
@@ -55,10 +48,10 @@ import type {
   ResultModalityByProve,
 } from './types.api';
 import { useCallback, useEffect, useState } from 'react';
-import { getModalityIcon } from '@src/utils/getModalityIcon';
 import { handlePrintPDF } from '@src/components/PrintArea/utils';
 import PrintArea from '@src/components/PrintArea';
 import type { PrintHeaderProps } from '@src/components/PrintArea/PrintHeader';
+import ModalityDropdown from './ModalityDropdown';
 
 function EventSummary() {
   const pageTitle = 'Resultados »';
@@ -343,31 +336,12 @@ function EventSummary() {
             <DivRight>
               <DivTopRight>
                 <DivDropDownSearch>
-                  <RoundedModalityButton
-                    style={{ width: 44, height: 44 }}
-                    icon={
-                      getModalityIcon(Number(prove_id)) ? (
-                        getModalityIcon(Number(prove_id))!({})
-                      ) : (
-                        <></>
-                      )
-                    }
-                    svgFullWidth
-                    text={getNameProveById(Number(prove_id))}
-                    variant="secondary"
-                  />
-
-                  <Dropdown
-                    variant="tertiary"
-                    data={provesDropdown}
-                    setValue={(value) => {
-                      setProveSelected(value);
-                      handleGetSummary({
-                        prove_id_selected: value.id,
-                      });
-                    }}
-                    value={proveSelected}
-                    maxHeight="26rem"
+                  <ModalityDropdown
+                    prove_id={prove_id}
+                    provesDropdown={provesDropdown}
+                    proveSelected={proveSelected}
+                    setProveSelected={setProveSelected}
+                    handleGetSummary={handleGetSummary}
                   />
                 </DivDropDownSearch>
 
@@ -385,29 +359,7 @@ function EventSummary() {
                 </ButtonTop10>
               </DivTopRight>
 
-              <DivContainerTableRight>
-                {data?.length > 0 ? (
-                  <TableSEQM data={data} columns={columns} />
-                ) : (
-                  <>
-                    {isLoading ? (
-                      <LoadingContainer>
-                        <ActivityIndicator width={20} height={20} />
-                      </LoadingContainer>
-                    ) : (
-                      <NotFoundContainer>
-                        <Text
-                          fontSize="smm"
-                          fontWeight="semiBold"
-                          color={colors.emeraldGreen75}
-                        >
-                          Nenhum resultado encontrado
-                        </Text>
-                      </NotFoundContainer>
-                    )}
-                  </>
-                )}
-              </DivContainerTableRight>
+              <EventTable data={data} columns={columns} isLoading={isLoading} />
             </DivRight>
           </Scrollable>
 
