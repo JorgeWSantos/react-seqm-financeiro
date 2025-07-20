@@ -5,7 +5,7 @@ export const PrintAreaWrapper = styled.div`
   position: absolute;
   left: 200px;
   padding: 20pt;
-  /* left: -9999px; */
+  left: -9999px;
   text-align: center;
   width: 210mm;
   height: 297mm;

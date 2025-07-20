@@ -1,52 +1,29 @@
-import React from 'react';
-import SVG from './logo-seqm.svg';
+// ...existing code...
 import {
   PrintAreaWrapper,
-  PrintAreaHeader,
-  LogoWrapper,
-  DetailsWrapper,
-  DetailsInfo,
-  IconWrapper,
-  EventName,
   DivWrapper,
   DivTitle,
   DivCardsRow,
   DivCard,
   DivTable,
 } from './styles';
-import { RanchSortingIconSEQM } from '@abqm-ds/icons';
 import { TablePrintResultsSEQM } from './TablePrintResultsSEQM';
-// import { TablePrintResultsSEQM } from './TablePrintResultsSEQM';
+import PrintHeader from './PrintHeader';
 
-const PrintHeader: React.FC = () => {
-  return (
-    <PrintAreaHeader>
-      <LogoWrapper>
-        <img src={SVG} width={'170px'} alt="SEQM Logo" />
-      </LogoWrapper>
+interface CardProps {
+  title: string;
+  value: string;
+}
 
-      <DetailsWrapper>
-        <EventName>NOME DO EVENTO</EventName>
-
-        <DetailsInfo>
-          <p>Nome do responsável do evento</p>
-          <p>Cidade, UF</p>
-          <p>00/00/0000 - 00/00/0000</p>
-        </DetailsInfo>
-      </DetailsWrapper>
-
-      <IconWrapper>
-        <RanchSortingIconSEQM width={'40pt'} height={'40pt'} fill="#424242" />
-        <p style={{ marginTop: '-6pt' }}>Ranch Sorting</p>
-      </IconWrapper>
-    </PrintAreaHeader>
-  );
-};
-
-const PrintArea = ({ columns, data }: { columns: any[]; data: any[] }) => {
-  console.log('PrintArea columns:', columns);
-  console.log('PrintArea data:', data);
-
+const PrintArea = ({
+  columns,
+  data,
+  cards,
+}: {
+  columns: any[];
+  data: any[];
+  cards: CardProps[];
+}) => {
   return (
     <PrintAreaWrapper id="print-area">
       <PrintHeader />
@@ -56,26 +33,12 @@ const PrintArea = ({ columns, data }: { columns: any[]; data: any[] }) => {
           <p>RESUMO DA MODALIDADE</p>
         </DivTitle>
         <DivCardsRow>
-          <DivCard>
-            <p>DATA DO EVENTO</p>
-            <p>00/00/0000</p>
-          </DivCard>
-          <DivCard>
-            <p>DATA DO EVENTO</p>
-            <p>00/00/0000</p>
-          </DivCard>
-          <DivCard>
-            <p>DATA DO EVENTO</p>
-            <p>00/00/0000</p>
-          </DivCard>
-          <DivCard>
-            <p>DATA DO EVENTO</p>
-            <p>00/00/0000</p>
-          </DivCard>
-          <DivCard>
-            <p>DATA DO EVENTO</p>
-            <p>00/00/0000</p>
-          </DivCard>
+          {cards.map((card, index) => (
+            <DivCard key={index}>
+              <p>{card.title}</p>
+              <p>{card.value}</p>
+            </DivCard>
+          ))}
         </DivCardsRow>
       </DivWrapper>
 

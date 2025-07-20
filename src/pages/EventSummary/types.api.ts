@@ -20,7 +20,6 @@ export type ResultModalityByProve = {
 };
 
 export type NumberEvents = {
-  prova: string;
   inscricoes: string;
   competidores: string;
   animais: string;

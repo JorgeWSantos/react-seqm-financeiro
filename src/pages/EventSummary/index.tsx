@@ -68,9 +68,22 @@ function EventSummary() {
   const [eventInfoData, setEventInfoData] = useState<InfoEventSummaryData | null>(
     {} as InfoEventSummaryData
   );
+  const [eventSummaryNumbers, setEventSummaryNumbers] = useState<{
+    inscricoes: string;
+    competidores: string;
+    animais: string;
+    premiacao: string;
+  }>({
+    inscricoes: '0',
+    competidores: '0',
+    animais: '0',
+    premiacao: 'sem premiação',
+  });
+
   const [listToShow, setListToShow] = useState<ResultModalityByProve[]>([]);
   const [provesDropdown, setProvesDropdown] = useState<DataDropdown[]>([]);
   const [proveSelected, setProveSelected] = useState<DataDropdown | null>(null);
+  const [switchResumeChecked, setSwitchResumeChecked] = useState(false);
 
   console.log('proveSelected', proveSelected);
 
@@ -138,6 +151,36 @@ function EventSummary() {
 
     loadData();
   }, [prove_id, handleGetSummary, handleGetEventInfo]);
+
+  useEffect(() => {
+    if (!eventSummaryData || !eventSummaryData.numeros_evento) {
+      return;
+    }
+    const resumes = eventSummaryData.numeros_evento || [];
+
+    const resumeData = {
+      inscricoes: resumes?.[0].inscricoes ?? '0',
+      competidores: resumes?.[0].competidores ?? '0',
+      animais: resumes?.[0].animais ?? '0',
+      premiacao: resumes?.[0].premiacao ?? 'sem premiação',
+    };
+
+    const generalResume = {
+      inscricoes: resumes?.[1].inscricoes ?? '0',
+      competidores: resumes?.[1].competidores ?? '0',
+      animais: resumes?.[1].animais ?? '0',
+      premiacao: resumes?.[1].premiacao ?? 'sem premiação',
+    };
+
+    console.log('resumeData', resumeData);
+    console.log('generalResume', generalResume);
+
+    if (switchResumeChecked) {
+      setEventSummaryNumbers(resumeData);
+    } else {
+      setEventSummaryNumbers(generalResume);
+    }
+  }, [eventSummaryData, switchResumeChecked]);
 
   const columns: Array<TableColumnSEQM<TableEventSummaryData>> = [
     {
@@ -238,11 +281,9 @@ function EventSummary() {
               <InfoEventDetails data={eventInfoData} />
 
               <EventSummaryDetails
-                data={
-                  eventSummaryData.numeros_evento?.length > 0
-                    ? eventSummaryData.numeros_evento
-                    : null
-                }
+                data={eventSummaryNumbers}
+                switchChecked={switchResumeChecked}
+                setSwitchChecked={setSwitchResumeChecked}
               />
 
               <GraphSummaryDetails data={eventSummaryData.tipo_estatistica_prova} />
@@ -319,7 +360,37 @@ function EventSummary() {
             </DivRight>
           </Scrollable>
 
-          {data?.length > 0 && <PrintArea columns={columns} data={data} />}
+          {data?.length > 0 && (
+            <PrintArea
+              columns={columns}
+              data={data}
+              cards={[
+                {
+                  title: 'DATA DO EVENTO',
+                  value: eventInfoData ? `${eventInfoData.data_inicio || '--'}` : 'N/A',
+                },
+                {
+                  title: 'INSCRIÇÕES',
+                  value: eventSummaryNumbers.inscricoes,
+                },
+                {
+                  title: 'COMPETIDORES',
+                  value: eventSummaryNumbers.competidores,
+                },
+                {
+                  title: 'ANIMAIS',
+                  value: eventSummaryNumbers.animais,
+                },
+                {
+                  title: 'PREMIAÇÃO',
+                  value:
+                    eventSummaryNumbers.premiacao === 'sem premiação'
+                      ? 'R$ 0,00'
+                      : 'R$ ' + eventSummaryNumbers.premiacao,
+                },
+              ]}
+            />
+          )}
         </ContentDektop>
       ) : (
         <ContentMobile
