@@ -34,10 +34,16 @@ export type GraphStatistics = {
   inscricoes: number;
 };
 
+export type ProvesEventSummary = {
+  nid_prova: number;
+  cds_tipo_prova: string;
+};
+
 export interface EventSummaryResponseData {
   resultado_modalidade_prova: Array<ResultModalityByProve> | [];
   numeros_evento: Array<NumberEvents> | [];
   tipo_estatistica_prova: Array<GraphStatistics> | [];
+  provas: Array<ProvesEventSummary> | [];
 }
 
 export type EventSummaryResponse = ApiResponse<{

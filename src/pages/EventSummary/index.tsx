@@ -5,11 +5,11 @@ import {
   Dropdown,
   getNameProveById,
   Header,
-  HeaderMobileNavigator,
   HeaderNavigatorDesktop,
   RoundedModalityButton,
   TableSEQM,
   Text,
+  type DataDropdown,
   type TableColumnSEQM,
 } from '@abqm-ds/react';
 
@@ -33,19 +33,20 @@ import { CheckIcon, PrinterIcon, StarIcon, TrophyIcon } from '@abqm-ds/icons';
 import { colors } from '@abqm-ds/tokens';
 import type { TableEventSummaryData } from './types';
 import { useParams } from 'react-router';
-import InfoEventDetails from './InfoEventDetails';
-import EventSummaryDetails from './EventSummaryDetails';
-import GraphSummaryDetails from './GraphSummaryDetails';
+import InfoEventDetails from '../../components/EventSummary/InfoEventDetails';
+import EventSummaryDetails from '../../components/EventSummary/EventSummaryDetails';
+import GraphSummaryDetails from '../../components/EventSummary/GraphSummaryDetails';
 import { useEventSummary } from '@src/services/useEventSummary';
 import type {
   EventSummaryResponseData,
   InfoEventSummaryData,
+  ProvesEventSummary,
   ResultModalityByProve,
 } from './types.api';
 import { useCallback, useEffect, useState } from 'react';
 import { getModalityIcon } from '@src/utils/getModalityIcon';
-import PrintArea from './PrintArea';
-import { handlePrintPDF } from './PrintArea/utils';
+import { handlePrintPDF } from '@src/components/PrintArea/utils';
+import PrintArea from '@src/components/PrintArea';
 
 function EventSummary() {
   const pageTitle = 'Resultados »';
@@ -68,21 +69,42 @@ function EventSummary() {
     {} as InfoEventSummaryData
   );
   const [listToShow, setListToShow] = useState<ResultModalityByProve[]>([]);
-  const [searchValue, setSearchValue] = useState<string>('');
+  const [provesDropdown, setProvesDropdown] = useState<DataDropdown[]>([]);
+  const [proveSelected, setProveSelected] = useState<DataDropdown | null>(null);
 
-  const handleGetSummary = useCallback(async () => {
-    if (!prove_id || !event_id) {
-      setIsLoading(false);
-      return;
-    }
+  console.log('proveSelected', proveSelected);
 
-    const data = await getEventSummary({
-      prove_id: prove_id === 'nao-pontuados' ? 0 : Number(prove_id),
-      event_id: Number(event_id),
-    });
+  const handleGetSummary = useCallback(
+    async ({ prove_id_selected }: { prove_id_selected: string }) => {
+      if (!prove_id_selected || !event_id) {
+        setIsLoading(false);
+        return;
+      }
 
-    setEventSummaryData(data);
-  }, [getEventSummary, prove_id, event_id]);
+      const data = await getEventSummary({
+        prove_id: prove_id_selected === 'nao-pontuados' ? 0 : Number(prove_id_selected),
+        event_id: Number(event_id),
+      });
+
+      setEventSummaryData(data);
+      setListToShow(data.resultado_modalidade_prova);
+
+      const formatToDropdown = (items: ProvesEventSummary[]) =>
+        items.map((item) => ({
+          id: item.nid_prova.toString(),
+          label: item.cds_tipo_prova,
+          value: item.cds_tipo_prova,
+        }));
+
+      const provesFormatted = formatToDropdown(data.provas);
+
+      setProvesDropdown(provesFormatted);
+      setProveSelected(
+        provesFormatted.filter((item) => item.id === prove_id_selected)[0]
+      );
+    },
+    [getEventSummary, event_id]
+  );
 
   const handleGetEventInfo = useCallback(async () => {
     if (!event_id) {
@@ -104,29 +126,11 @@ function EventSummary() {
     });
   }, [setPage, location]);
 
-  // Effect to filter the list based on searchValue
-  useEffect(() => {
-    if (searchValue.trim() === '') {
-      setListToShow(eventSummaryData.resultado_modalidade_prova);
-      return;
-    }
-
-    const filteredList = eventSummaryData.resultado_modalidade_prova.filter(
-      (item) => item.cds_evento.toLowerCase().includes(searchValue.toLowerCase()) // ||
-      // item.cds_empresa.toLowerCase().includes(searchValue.toLowerCase()) ||
-      // item.cds_local_evento.toLowerCase().includes(searchValue.toLowerCase()) ||
-      // item.data_inicio_evento.includes(searchValue) ||
-      // item.data_fim_evento.includes(searchValue)
-    );
-
-    setListToShow(filteredList);
-  }, [searchValue, eventSummaryData]);
-
   useEffect(() => {
     const loadData = async () => {
       setIsLoading(true);
 
-      await handleGetSummary();
+      await handleGetSummary({ prove_id_selected: prove_id || '' });
       await handleGetEventInfo();
 
       setIsLoading(false);
@@ -256,16 +260,18 @@ function EventSummary() {
                     text={getNameProveById(Number(prove_id))}
                     variant="secondary"
                   />
+
                   <Dropdown
                     variant="tertiary"
-                    data={[
-                      {
-                        id: 'all',
-                        label: 'Todas as categorias',
-                        value: 'all',
-                      },
-                    ]}
-                    onChange={(value) => {}}
+                    data={provesDropdown}
+                    setValue={(value) => {
+                      setProveSelected(value);
+                      handleGetSummary({
+                        prove_id_selected: value.id,
+                      });
+                    }}
+                    value={proveSelected}
+                    maxHeight="26rem"
                   />
                 </DivDropDownSearch>
 
@@ -316,15 +322,6 @@ function EventSummary() {
           style={{
             maxWidth: '100vw',
           }}
-          headerMobileNavigator={
-            <HeaderMobileNavigator
-              hasBackButton
-              onGoBack={() => navigate('/')}
-              headingText="Ranch Sorting"
-              hasSearch
-              onChangeSearch={(v) => setSearchValue(v.target.value)}
-            />
-          }
         >
           <></>
           {/* <DivTopMobile>

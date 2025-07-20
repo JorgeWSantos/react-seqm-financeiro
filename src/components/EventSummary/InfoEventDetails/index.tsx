@@ -1,6 +1,6 @@
 import { EventSummaryDefaultIcon } from '@abqm-ds/icons';
 import { InfoEvent, InfoEventDetailed, Information } from './styles';
-import type { InfoEventSummaryData } from '../types.api';
+import type { InfoEventSummaryData } from '../../../pages/EventSummary/types.api';
 
 const InfoEventDetails = ({ data }: { data: InfoEventSummaryData | null }) => {
   return (

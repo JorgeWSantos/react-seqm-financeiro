@@ -10,7 +10,7 @@ import {
 } from './styles';
 import { colors } from '@abqm-ds/tokens';
 import { FileEarmarkCheckIcon } from '@abqm-ds/icons';
-import type { NumberEvents } from '../types.api';
+import type { NumberEvents } from '../../../pages/EventSummary/types.api';
 
 interface CardSummaryProps {
   title?: string;
@@ -38,19 +38,24 @@ const CardSummary = ({ title, subTitle }: CardSummaryProps) => {
 const EventSummaryDetails = ({ data }: { data: Array<NumberEvents> | null }) => {
   const [switchChecked, setSwitchChecked] = useState(false);
 
-  const resumeData = data?.[0] || {
-    inscricoes: '0',
-    competidores: '0',
-    animais: '0',
-    premiacao: 'sem premiação',
+  console.log('data?.[0]', data?.[0]);
+
+  const resumeData = {
+    inscricoes: data?.[0].inscricoes ?? '0',
+    competidores: data?.[0].competidores ?? '0',
+    animais: data?.[0].animais ?? '0',
+    premiacao: data?.[0].premiacao ?? 'sem premiação',
   };
 
   const generalResume = data?.[1] || {
-    inscricoes: '0',
-    competidores: '0',
-    animais: '0',
-    premiacao: 'sem premiação',
+    inscricoes: data?.[1].inscricoes ?? '0',
+    competidores: data?.[1].competidores ?? '0',
+    animais: data?.[1].animais ?? '0',
+    premiacao: data?.[1].premiacao ?? 'sem premiação',
   };
+
+  console.log('resumeData', resumeData);
+  console.log('generalResume', generalResume);
 
   return (
     <EventSummaryContainer>
