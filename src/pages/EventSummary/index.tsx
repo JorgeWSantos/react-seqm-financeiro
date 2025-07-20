@@ -381,6 +381,7 @@ function EventSummary() {
                 }}
                 value={proveSelected}
                 maxHeight="26rem"
+                maxWidth="20rem"
               />
             </HeaderMobileNavigator>
           }
@@ -397,7 +398,10 @@ function EventSummary() {
                 setSwitchChecked={setSwitchResumeChecked}
               />
 
-              <GraphSummaryDetails data={eventSummaryData.tipo_estatistica_prova} />
+              <GraphSummaryDetails
+                data={eventSummaryData.tipo_estatistica_prova}
+                isTabletOrMobile={isTabletOrMobile}
+              />
             </DivLeft>
 
             <DivRight>

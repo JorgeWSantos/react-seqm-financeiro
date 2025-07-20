@@ -95,6 +95,10 @@ export const BottomEventSummary = styled.div`
   box-sizing: border-box;
 
   background-color: ${colors.black30};
+
+  @media (max-width: ${breakpointsPx.lg}) {
+    height: 220px;
+  }
 `;
 
 export const CustomTooltipContainer = styled.div`

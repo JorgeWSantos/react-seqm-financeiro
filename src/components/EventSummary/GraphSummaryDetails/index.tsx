@@ -40,9 +40,16 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return null;
 };
 
-const GraphSummaryDetails = ({ data }: { data: GraphStatistics[] }) => {
+const GraphSummaryDetails = ({
+  data,
+  isTabletOrMobile,
+}: {
+  data: GraphStatistics[];
+  isTabletOrMobile: boolean;
+}) => {
   const [chartData, setChartData] = useState<any[]>([]);
   const [isOficial, setIsOficial] = useState<'local' | 'nacional'>('local'); // Assuming 'local' is the default value for isOficial
+
   const maxInscricoesRaw = data?.reduce((max, item) => Math.max(max, item.inscricoes), 0);
   const minInscricoesRaw = data?.reduce(
     (min, item) => Math.min(min, item.inscricoes),
@@ -125,10 +132,8 @@ const GraphSummaryDetails = ({ data }: { data: GraphStatistics[] }) => {
       </TopEventSummary>
 
       <BottomEventSummary>
-        <ResponsiveContainer width="100%" height={240}>
+        <ResponsiveContainer width="100%" height={isTabletOrMobile ? 200 : 200}>
           <AreaChart
-            width={500}
-            height={240}
             data={chartData}
             syncId="anyId"
             margin={{
