@@ -22,6 +22,7 @@ import {
   YAxis,
 } from 'recharts';
 import { useEffect, useState } from 'react';
+
 // Tooltip customizado para exibir o valor de pv
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {

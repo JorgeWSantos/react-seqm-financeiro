@@ -26,8 +26,12 @@ export const DivLeft = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  gap: 2rem;
+  gap: 1rem;
   padding-top: 0.5rem;
+
+  @media (max-width: ${breakpointsPx.lg}) {
+    gap: 1.5rem;
+  }
 `;
 
 export const DivRight = styled.div`
@@ -46,12 +50,6 @@ export const DivTopRight = styled.div`
   border-bottom: ${radii.px} solid ${colors.white25};
   border-radius: 8px;
   position: relative;
-`;
-
-export const DivContainerTableRight = styled.div`
-  display: flex;
-  align-items: center;
-  margin-top: 1rem;
 `;
 
 export const DivDropDownSearch = styled.div`
@@ -83,16 +81,6 @@ export const ButtonTop10 = styled.div`
     filter: brightness(1.1);
     transition: filter 0.3s ease;
   }
-`;
-
-export const LoadingContainer = styled.div`
-  width: 100%;
-  height: 100%;
-`;
-
-export const NotFoundContainer = styled.div`
-  width: 100%;
-  padding: 1rem 0;
 `;
 
 export const DivTopMobile = styled.div`

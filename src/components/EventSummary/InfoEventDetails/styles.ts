@@ -20,10 +20,13 @@ export const InfoEvent = styled.div`
 `;
 
 export const ImageContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   min-width: 70px;
   max-width: 70px;
-  min-height: 70px;
-  max-height: 70px;
+  min-height: 60px;
+  max-height: 60px;
 
   border-radius: ${radii.sm};
   border: ${radii.px} solid ${colors.white25};

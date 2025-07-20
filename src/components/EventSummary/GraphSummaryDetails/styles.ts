@@ -1,4 +1,4 @@
-import { colors, radii, space } from '@abqm-ds/tokens';
+import { breakpointsPx, colors, radii, space } from '@abqm-ds/tokens';
 import styled, { css } from 'styled-components';
 
 export const GraphSummaryContainer = styled.div`
@@ -19,6 +19,10 @@ export const TopEventSummary = styled.div`
   min-height: 2rem;
   gap: ${space[2]};
   padding: 0 ${space[4]};
+
+  @media (max-width: ${breakpointsPx.lg}) {
+    min-height: 2.5rem;
+  }
 `;
 
 export const TopLeftEventSummary = styled.div`

@@ -1,9 +1,19 @@
+import { breakpointsPx } from '@abqm-ds/tokens';
 import styled from 'styled-components';
 
 export const DivContainerTableRight = styled.div`
   display: flex;
   align-items: center;
   margin-top: 1rem;
+
+  @media (max-width: ${breakpointsPx.lg}) {
+    overflow-x: scroll;
+    margin-top: 0;
+
+    table {
+      min-width: 32rem;
+    }
+  }
 `;
 
 export const LoadingContainer = styled.div`

@@ -6,7 +6,7 @@ export const EventSummaryContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 4.7625rem;
+  min-height: 4.7625rem;
   background-color: ${colors.emeraldGreen25};
   border-radius: 0.375rem;
   overflow: hidden; // garante que filhos respeitem o border-radius
