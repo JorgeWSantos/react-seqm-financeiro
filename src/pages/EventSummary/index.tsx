@@ -93,8 +93,6 @@ function EventSummary() {
   const [proveSelected, setProveSelected] = useState<DataDropdown | null>(null);
   const [switchResumeChecked, setSwitchResumeChecked] = useState(false);
 
-  console.log('proveSelected', proveSelected);
-
   const handleGetSummary = useCallback(
     async ({ prove_id_selected }: { prove_id_selected: string }) => {
       if (!prove_id_selected || !event_id) {
@@ -179,9 +177,6 @@ function EventSummary() {
       animais: resumes?.[1].animais ?? '0',
       premiacao: resumes?.[1].premiacao ?? 'sem premiação',
     };
-
-    console.log('resumeData', resumeData);
-    console.log('generalResume', generalResume);
 
     if (switchResumeChecked) {
       setEventSummaryNumbers(resumeData);

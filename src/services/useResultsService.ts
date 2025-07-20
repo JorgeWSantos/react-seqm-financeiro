@@ -15,8 +15,6 @@ export function useResultsService() {
 
       const { data, message, success } = response.data;
 
-      console.log('getResultados', data, message, success);
-
       if (!success) {
         Toast.show({
           message: message || 'Ops, ocorreu um erro ao carregar as modalidades!',
