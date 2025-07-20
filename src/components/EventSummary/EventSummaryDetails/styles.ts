@@ -1,14 +1,19 @@
-import { colors, space } from '@abqm-ds/tokens';
+import { Text } from '@abqm-ds/react';
+import { breakpointsPx, colors, fontSizes, space } from '@abqm-ds/tokens';
 import styled from 'styled-components';
 
 export const EventSummaryContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 76.2px;
+  height: 4.7625rem;
   background-color: ${colors.emeraldGreen25};
   border-radius: 0.375rem;
   overflow: hidden; // garante que filhos respeitem o border-radius
+
+  @media (max-width: ${breakpointsPx.lg}) {
+    min-height: 5.875rem;
+  }
 `;
 
 export const TopEventSummary = styled.div`
@@ -17,9 +22,14 @@ export const TopEventSummary = styled.div`
   justify-content: space-between;
 
   width: 100%;
+  height: 100%;
   min-height: 2rem;
   gap: ${space[2]};
   padding: 0.375rem ${space[4]};
+
+  @media (max-width: ${breakpointsPx.lg}) {
+    gap: ${space[6]};
+  }
 `;
 
 export const TopLeftEventSummary = styled.div`
@@ -27,6 +37,10 @@ export const TopLeftEventSummary = styled.div`
   align-items: center;
 
   gap: ${space[2]};
+
+  @media (max-width: ${breakpointsPx.lg}) {
+    max-width: 56%;
+  }
 `;
 
 export const TopRightEventSummary = styled.div`
@@ -34,6 +48,16 @@ export const TopRightEventSummary = styled.div`
   align-items: center;
 
   gap: ${space[2]};
+`;
+
+export const StyledTextTopRightES = styled(Text).attrs({
+  fontSize: 'xs',
+  lineHeight: 'short',
+  color: colors.white75,
+})`
+  @media (max-width: ${breakpointsPx.lg}) {
+    font-size: ${fontSizes.xxs};
+  }
 `;
 
 export const BottomEventSummary = styled.div`

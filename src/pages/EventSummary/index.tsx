@@ -401,31 +401,6 @@ function EventSummary() {
             </DivLeft>
 
             <DivRight>
-              <DivTopRight>
-                <DivDropDownSearch>
-                  <ModalityDropdown
-                    prove_id={prove_id}
-                    provesDropdown={provesDropdown}
-                    proveSelected={proveSelected}
-                    setProveSelected={setProveSelected}
-                    handleGetSummary={handleGetSummary}
-                  />
-                </DivDropDownSearch>
-
-                <ButtonTop10>
-                  <TrophyIcon fill={colors.white75} />
-                  <Text
-                    fontSize="ssm"
-                    fontWeight="semiBold"
-                    lineHeight="tight"
-                    color={colors.white75}
-                    style={{ marginTop: '2px' }}
-                  >
-                    TOP 10
-                  </Text>
-                </ButtonTop10>
-              </DivTopRight>
-
               <EventTable data={data} columns={columns} isLoading={isLoading} />
             </DivRight>
           </Scrollable>

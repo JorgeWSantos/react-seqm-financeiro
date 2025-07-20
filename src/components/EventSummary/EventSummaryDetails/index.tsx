@@ -3,6 +3,7 @@ import {
   BottomEventSummary,
   EventSummaryContainer,
   StyledCard,
+  StyledTextTopRightES,
   TopEventSummary,
   TopLeftEventSummary,
   TopRightEventSummary,
@@ -47,7 +48,7 @@ const EventSummaryDetails = ({
     <EventSummaryContainer>
       <TopEventSummary>
         <TopLeftEventSummary>
-          <FileEarmarkCheckIcon fill={colors.white75} />
+          <FileEarmarkCheckIcon fill={colors.white75} width={14} height={14} />
 
           <Text fontSize="ssm" lineHeight="tight" color={colors.white85}>
             Números da modalidade neste evento
@@ -60,9 +61,7 @@ const EventSummaryDetails = ({
             onChange={() => setSwitchChecked(!switchChecked)}
           />
 
-          <Text fontSize="xs" lineHeight="short" color={colors.white75}>
-            Resumo geral
-          </Text>
+          <StyledTextTopRightES>Resumo geral</StyledTextTopRightES>
         </TopRightEventSummary>
       </TopEventSummary>
 
