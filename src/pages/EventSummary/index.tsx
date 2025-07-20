@@ -13,6 +13,10 @@ import {
   type TableColumnSEQM,
 } from '@abqm-ds/react';
 
+import {} from 'react-share';
+import ShareOptions from '../../components/ShareOptions';
+// ...existing code...
+
 import { useDeviceType } from '@abqm-ds/react';
 
 import {
@@ -29,7 +33,14 @@ import {
 } from './styles';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePage } from '@src/contexts/page/usePage';
-import { CheckIcon, DashIcon, PrinterIcon, StarIcon, TrophyIcon } from '@abqm-ds/icons';
+import {
+  CheckIcon,
+  DashIcon,
+  PrinterIcon,
+  ShareIcon,
+  StarIcon,
+  TrophyIcon,
+} from '@abqm-ds/icons';
 import { colors } from '@abqm-ds/tokens';
 import type { TableEventSummaryData } from './types';
 import { useParams } from 'react-router';
@@ -51,6 +62,9 @@ import type { PrintHeaderProps } from '@src/components/PrintArea/PrintHeader';
 
 function EventSummary() {
   const pageTitle = 'Resultados »';
+
+  const [showShareOptions, setShowShareOptions] = useState(false);
+  const shareUrl = window.location.href;
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -287,9 +301,10 @@ function EventSummary() {
                   onClick: handlePrintPDF,
                 },
                 {
-                  icon: <PrinterIcon fill={colors.emeraldGreen50} />,
+                  icon: <ShareIcon fill={colors.emeraldGreen50} />,
                   label: 'compartilhar',
-                  onClick: () => {},
+                  onClick: () => setShowShareOptions((prev) => !prev),
+                  isActive: showShareOptions,
                 },
               ]}
             />
@@ -389,6 +404,8 @@ function EventSummary() {
               </DivContainerTableRight>
             </DivRight>
           </Scrollable>
+
+          {showShareOptions && <ShareOptions url={shareUrl} />}
 
           {data?.length > 0 && (
             <PrintArea

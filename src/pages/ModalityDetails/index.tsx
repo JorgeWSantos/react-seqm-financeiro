@@ -273,7 +273,7 @@ function ModalityDetail() {
                   icon: <FilterIcon fill={colors.emeraldGreen50} />,
                   label: 'filtro',
                   onClick: openModal,
-                  isFiltered: !deepEqual(filter, initialFilter),
+                  isActive: !deepEqual(filter, initialFilter),
                 },
               ]}
             />
