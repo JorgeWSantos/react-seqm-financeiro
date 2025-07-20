@@ -34,15 +34,15 @@ export const StyledTablePrintResultsSEQM = styled.table<{
 export const StyledHeadTablePrintResultsSEQM = styled.thead`
   tr th {
     padding: ${space[1]} ${space[2]};
-    font-size: ${fontSizes.xxs};
   }
 `;
 
 export const StyledTablePrintResultsSEQMTextTh = styled(Text).attrs({
-  fontSize: 'xxs',
-  fontWeight: 'semiBold',
+  fontWeight: 'bold',
   lineHeight: 'tight',
-})``;
+})`
+  font-size: 6pt;
+`;
 
 export const StyledBodyTablePrintResultsSEQM = styled.tbody`
   tr {
@@ -61,14 +61,14 @@ export const StyledBodyTablePrintResultsSEQM = styled.tbody`
 `;
 
 export const StyledTablePrintResultsSEQMTextTd = styled(Text).attrs({
-  fontSize: 'xxs',
   fontWeight: 'regular',
   lineHeight: 'tight',
 })<{ $bold?: boolean }>`
+  font-size: 8pt;
   font-weight: ${({ $bold }) => ($bold ? fontWeights.semiBold : fontWeights.regular)};
-  max-height: 16px;
+  max-height: 1rem;
   color: ${colors.grayFigma2};
-  margin-top: -14px;
+  margin-top: -0.875rem;
 
   @media (max-width: ${breakpointsPx.lg}) {
     font-size: ${fontSizes.ssm};

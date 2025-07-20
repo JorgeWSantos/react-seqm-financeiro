@@ -1,3 +1,4 @@
+import { space } from '@abqm-ds/tokens';
 import styled from 'styled-components';
 
 export const PrintAreaHeader = styled.div`
@@ -6,14 +7,14 @@ export const PrintAreaHeader = styled.div`
   background-color: white;
   display: flex;
   justify-content: space-between;
-  padding: 2pt;
+  padding: ${space[1]};
 
   border-bottom: 1px solid #ccc;
 `;
 
 export const LogoWrapper = styled.div`
   border-right: 1px solid #ccc;
-  padding-right: 8px;
+  padding-right: ${space[2]};
 `;
 
 export const DetailsWrapper = styled.div`
@@ -25,13 +26,12 @@ export const DetailsWrapper = styled.div`
 
   width: 100%;
 
-  padding-left: 8px;
-  padding-bottom: 5pt;
+  padding-left: ${space[2]};
+  padding-bottom: ${space[2]};
   min-height: 60pt !important;
-  /* background-color: red; */
 
   p {
-    margin-top: -7pt;
+    margin-top: -${space[2]};
   }
 `;
 
@@ -41,10 +41,10 @@ export const IconWrapper = styled.div`
   align-items: flex-end;
   justify-content: flex-end;
   font-size: 9pt;
-  padding-bottom: 5pt;
+  padding-bottom: ${space[2]};
 
   svg {
-    margin-bottom: -8pt;
+    margin-bottom: -${space[2]};
   }
 `;
 

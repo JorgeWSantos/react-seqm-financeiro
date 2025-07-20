@@ -8,7 +8,7 @@ import {
   DivTable,
 } from './styles';
 import { TablePrintResultsSEQM } from './TablePrintResultsSEQM';
-import PrintHeader from './PrintHeader';
+import PrintHeader, { type PrintHeaderProps } from './PrintHeader';
 
 interface CardProps {
   title: string;
@@ -16,22 +16,27 @@ interface CardProps {
 }
 
 const PrintArea = ({
+  title,
   columns,
   data,
   cards,
+  info,
 }: {
+  title: string;
   columns: any[];
   data: any[];
   cards: CardProps[];
+  info: PrintHeaderProps;
 }) => {
   return (
     <PrintAreaWrapper id="print-area">
-      <PrintHeader />
+      <PrintHeader data={info} />
 
       <DivWrapper>
         <DivTitle>
-          <p>RESUMO DA MODALIDADE</p>
+          <p>{title}</p>
         </DivTitle>
+
         <DivCardsRow>
           {cards.map((card, index) => (
             <DivCard key={index}>

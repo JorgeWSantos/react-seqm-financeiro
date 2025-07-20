@@ -47,6 +47,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { getModalityIcon } from '@src/utils/getModalityIcon';
 import { handlePrintPDF } from '@src/components/PrintArea/utils';
 import PrintArea from '@src/components/PrintArea';
+import type { PrintHeaderProps } from '@src/components/PrintArea/PrintHeader';
 
 function EventSummary() {
   const pageTitle = 'Resultados »';
@@ -237,6 +238,35 @@ function EventSummary() {
     inscriptions: item.participantes.toString(),
   }));
 
+  const printCards = [
+    {
+      title: 'INSCRIÇÕES',
+      value: eventSummaryNumbers.inscricoes,
+    },
+    {
+      title: 'COMPETIDORES',
+      value: eventSummaryNumbers.competidores,
+    },
+    {
+      title: 'ANIMAIS',
+      value: eventSummaryNumbers.animais,
+    },
+    {
+      title: eventSummaryNumbers.premiacao === 'sem premiação' ? '' : 'PREMIAÇÃO',
+      value: eventSummaryNumbers.premiacao,
+    },
+  ];
+
+  const printInfo: PrintHeaderProps = {
+    eventName: eventInfoData?.cds_evento || '',
+    responsibleName: eventInfoData?.organizador || '',
+    city: eventInfoData?.local || '',
+    state: eventInfoData?.estado || '',
+    startDate: eventInfoData?.data_inicio || '',
+    endDate: eventInfoData?.data_fim || '',
+    modalityName: getNameProveById(Number(prove_id)) || '',
+  };
+
   return (
     <ContainerMain>
       {!isTabletOrMobile ? (
@@ -362,33 +392,11 @@ function EventSummary() {
 
           {data?.length > 0 && (
             <PrintArea
+              title={switchResumeChecked ? 'RESUMO GERAL' : 'RESUMO DA MODALIDADE'}
               columns={columns}
               data={data}
-              cards={[
-                {
-                  title: 'DATA DO EVENTO',
-                  value: eventInfoData ? `${eventInfoData.data_inicio || '--'}` : 'N/A',
-                },
-                {
-                  title: 'INSCRIÇÕES',
-                  value: eventSummaryNumbers.inscricoes,
-                },
-                {
-                  title: 'COMPETIDORES',
-                  value: eventSummaryNumbers.competidores,
-                },
-                {
-                  title: 'ANIMAIS',
-                  value: eventSummaryNumbers.animais,
-                },
-                {
-                  title: 'PREMIAÇÃO',
-                  value:
-                    eventSummaryNumbers.premiacao === 'sem premiação'
-                      ? 'R$ 0,00'
-                      : 'R$ ' + eventSummaryNumbers.premiacao,
-                },
-              ]}
+              cards={printCards}
+              info={printInfo}
             />
           )}
         </ContentDektop>

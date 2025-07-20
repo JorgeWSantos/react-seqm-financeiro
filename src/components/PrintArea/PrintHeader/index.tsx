@@ -10,7 +10,17 @@ import {
 } from './styles';
 import { RanchSortingIconSEQM } from '@abqm-ds/icons';
 
-const PrintHeader: React.FC = () => {
+export type PrintHeaderProps = {
+  eventName: string;
+  responsibleName: string;
+  city: string;
+  state: string;
+  startDate: string;
+  endDate: string;
+  modalityName: string;
+};
+
+const PrintHeader = ({ data }: { data: PrintHeaderProps }) => {
   return (
     <PrintAreaHeader>
       <LogoWrapper>
@@ -18,18 +28,22 @@ const PrintHeader: React.FC = () => {
       </LogoWrapper>
 
       <DetailsWrapper>
-        <EventName>NOME DO EVENTO</EventName>
+        <EventName>{data.eventName}</EventName>
 
         <DetailsInfo>
-          <p>Nome do responsável do evento</p>
-          <p>Cidade, UF</p>
-          <p>00/00/0000 - 00/00/0000</p>
+          <p>{data.responsibleName}</p>
+          <p>
+            {data.city}, {data.state}
+          </p>
+          <p>
+            {data.startDate} - {data.endDate}
+          </p>
         </DetailsInfo>
       </DetailsWrapper>
 
       <IconWrapper>
         <RanchSortingIconSEQM width={'40pt'} height={'40pt'} fill="#424242" />
-        <p style={{ marginTop: '-6pt' }}>Ranch Sorting</p>
+        <p style={{ marginTop: '-6pt' }}>{data.modalityName}</p>
       </IconWrapper>
     </PrintAreaHeader>
   );
