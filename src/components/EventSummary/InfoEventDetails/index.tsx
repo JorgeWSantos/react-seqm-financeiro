@@ -1,6 +1,7 @@
 import { EventSummaryDefaultIcon } from '@abqm-ds/icons';
 import { InfoEvent, InfoEventDetailed, Information } from './styles';
 import type { InfoEventSummaryData } from '../../../pages/EventSummary/types.api';
+import { fontWeights } from '@abqm-ds/tokens';
 
 const InfoEventDetails = ({ data }: { data: InfoEventSummaryData | null }) => {
   return (
@@ -24,7 +25,10 @@ const InfoEventDetails = ({ data }: { data: InfoEventSummaryData | null }) => {
       <InfoEventDetailed>
         <Information>
           <p className="title">organizador</p>
-          <p className="subtitle" style={{ marginLeft: '0.1rem' }}>
+          <p
+            className="subtitle"
+            style={{ marginLeft: '0.1rem', fontWeight: fontWeights.semiBold }}
+          >
             {data?.organizador || '--'}
           </p>
         </Information>

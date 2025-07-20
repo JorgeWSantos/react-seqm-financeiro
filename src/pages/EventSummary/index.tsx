@@ -296,7 +296,7 @@ function EventSummary() {
           }
           headerNavigator={
             <HeaderNavigatorDesktop
-              title={'34º Congresso Brasileiro da Raça Quarto de Milha'}
+              title={eventInfoData?.cds_evento || ''}
               hasBackButton
               onGoBack={() => navigate('/modalidade/' + prove_id)}
             />

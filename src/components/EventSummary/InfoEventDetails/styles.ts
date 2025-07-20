@@ -34,7 +34,7 @@ export const Information = styled.div`
   .subtitle {
     color: ${colors.emeraldGreen75};
     font-size: ${fontSizes.xxs};
-    font-weight: ${fontWeights.semiBold};
+    font-weight: ${fontWeights.regular};
     line-height: ${lineHeights.shorter};
   }
 
