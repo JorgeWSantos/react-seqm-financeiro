@@ -8,7 +8,7 @@ export const PrintAreaWrapper = styled.div`
   left: -9999px;
   text-align: center;
   width: 210mm;
-  height: 297mm;
+  height: 290mm;
   background-color: white;
 `;
 
