@@ -335,7 +335,7 @@ function EventSummary() {
       isActive: showShareOptions,
       showOptionsToShare: {
         show: showShareOptions,
-        children: <ShareOptions url={shareUrl} />,
+        children: <ShareOptions url={shareUrl} variantArrow="bottom" />,
       },
       variant: 'outline-white-25',
     },
