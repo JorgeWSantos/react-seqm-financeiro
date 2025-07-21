@@ -6,14 +6,12 @@ import {
   Header,
   HeaderMobileNavigator,
   HeaderNavigatorDesktop,
+  ShareOptions,
   Text,
-  Toast,
   type DataDropdown,
   type FooterWithButtonsPropsType,
   type TableColumnSEQM,
 } from '@abqm-ds/react';
-
-// import ShareOptions from '../../components/ShareOptions';
 
 import { useDeviceType } from '@abqm-ds/react';
 
@@ -61,7 +59,7 @@ import Layout from '@src/Layout';
 function EventSummary() {
   const pageTitle = 'Resultados »';
 
-  // const [showShareOptions, setShowShareOptions] = useState(false);
+  const [showShareOptions, setShowShareOptions] = useState(false);
   const shareUrl = window.location.href;
 
   const navigate = useNavigate();
@@ -298,21 +296,50 @@ function EventSummary() {
         <ShareIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />
       ),
       label: 'compartilhar',
-      onClick: () => {
-        Toast.show({
-          message: 'Link copiado para sua área de transferência!',
-        });
-
-        navigator.clipboard.writeText(shareUrl);
+      onClick: () => setShowShareOptions((prev) => !prev),
+      isActive: showShareOptions,
+      showOptionsToShare: {
+        show: showShareOptions,
+        children: <ShareOptions url={shareUrl} />,
       },
-      // isActive: showShareOptions,
     },
   ];
 
-  const buttonsMobileFooter: FooterWithButtonsPropsType = buttonsHeader.map((btn) => ({
-    ...btn,
-    variant: 'outline-white-25',
-  }));
+  const buttonsMobileFooter: FooterWithButtonsPropsType = [
+    {
+      icon: <StarIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />,
+      label: 'participações',
+      onClick: () => {
+        window.open(
+          import.meta.env.VITE_URL_PARTICIPACOES +
+            '/index/' +
+            eventInfoData?.nid_agrupa_evento
+        );
+      },
+      variant: 'outline-white-25',
+    },
+    {
+      icon: (
+        <PrinterIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />
+      ),
+      label: 'imprimir',
+      onClick: handlePrintPDF,
+      variant: 'outline-white-25',
+    },
+    {
+      icon: (
+        <ShareIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />
+      ),
+      label: 'compartilhar',
+      onClick: () => setShowShareOptions((prev) => !prev),
+      isActive: showShareOptions,
+      showOptionsToShare: {
+        show: showShareOptions,
+        children: <ShareOptions url={shareUrl} />,
+      },
+      variant: 'outline-white-25',
+    },
+  ];
 
   return (
     <Layout
@@ -439,8 +466,6 @@ function EventSummary() {
           </ContentMobile>
         )}
 
-        {/* {showShareOptions && <ShareOptions url={shareUrl} />} */}
-
         {data?.length > 0 && (
           <PrintArea
             title={switchResumeChecked ? 'RESUMO GERAL' : 'RESUMO DA MODALIDADE'}
@@ -450,6 +475,8 @@ function EventSummary() {
             info={printInfo}
           />
         )}
+
+        {showShareOptions && !isTabletOrMobile && <ShareOptions url={shareUrl} />}
       </ContainerMain>
     </Layout>
   );
