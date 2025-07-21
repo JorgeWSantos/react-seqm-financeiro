@@ -12,12 +12,21 @@ import {
   type MenuType,
 } from '@abqm-ds/react';
 import { useAuth } from './contexts/auth/useAuth.ts';
-import type { MenuResponseObj } from './types.ts';
+// import type { MenuResponseObj } from './types.ts';
 import { useEffect, useState } from 'react';
 import { useMenuService } from './services/useMenuService.ts';
-import { Outlet } from 'react-router-dom';
 
-function MainApp() {
+function Layout({
+  children,
+  footerButtonsMobile,
+}: {
+  children?: React.ReactNode;
+  footerButtonsMobile?: Array<{
+    label: string;
+    onClick: () => void;
+    icon: React.ReactNode;
+  }>;
+}) {
   const { isTabletOrMobile } = useDeviceType();
   const { user, logout, token } = useAuth();
   const { getMenu } = useMenuService();
@@ -45,7 +54,7 @@ function MainApp() {
   };
 
   return (
-    <GlobalContainer>
+    <GlobalContainer footerButtonsMobile={footerButtonsMobile}>
       {/* Desktop */}
       <ContainerDesktop style={{ display: isTabletOrMobile ? 'none' : 'grid' }}>
         <SideBarDesktop
@@ -55,7 +64,7 @@ function MainApp() {
           onLogin={redirectToLogin}
           token={token || ''}
         />
-        <Outlet />
+        {children}
       </ContainerDesktop>
       {/* Mobile */}
       <ContainerMobile style={{ display: isTabletOrMobile ? 'flex' : 'none' }}>
@@ -71,10 +80,10 @@ function MainApp() {
             onLogout: logout,
           }}
         />
-        <Outlet />
+        {children}
       </ContainerMobile>
     </GlobalContainer>
   );
 }
 
-export default MainApp;
+export default Layout;
