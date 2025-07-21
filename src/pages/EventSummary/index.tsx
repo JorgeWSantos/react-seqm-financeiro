@@ -32,6 +32,7 @@ import { usePage } from '@src/contexts/page/usePage';
 import {
   CheckIcon,
   DashIcon,
+  FilterIcon,
   PrinterIcon,
   ShareIcon,
   StarIcon,
@@ -55,6 +56,7 @@ import { handlePrintPDF } from '@src/components/PrintArea/utils';
 import PrintArea from '@src/components/PrintArea';
 import type { PrintHeaderProps } from '@src/components/PrintArea/PrintHeader';
 import ModalityDropdown from './ModalityDropdown';
+import Layout from '@src/Layout';
 
 function EventSummary() {
   const pageTitle = 'Resultados »';
@@ -69,7 +71,7 @@ function EventSummary() {
   const event_id = params.event_id;
 
   const { setPage } = usePage();
-  const { isTabletOrMobile } = useDeviceType();
+  const { isTabletOrMobile, isMobile } = useDeviceType();
   const { getEventSummary, getInfoEvent } = useEventSummary();
 
   const [isLoading, setIsLoading] = useState(true);
@@ -272,157 +274,176 @@ function EventSummary() {
     modalityName: getNameProveById(Number(prove_id)) || '',
   };
 
+  const buttonsNavigation = [
+    {
+      icon: <StarIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />,
+      label: 'participações',
+      onClick: () => {
+        window.open(
+          import.meta.env.VITE_URL_PARTICIPACOES +
+            '/index/' +
+            eventInfoData?.nid_agrupa_evento
+        );
+      },
+      variant: 'outline-white-25',
+    },
+    {
+      icon: (
+        <PrinterIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />
+      ),
+      label: 'imprimir',
+      onClick: handlePrintPDF,
+      variant: 'outline-white-25',
+    },
+    {
+      icon: (
+        <ShareIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />
+      ),
+      label: 'compartilhar',
+      onClick: () => setShowShareOptions((prev) => !prev),
+      isActive: showShareOptions,
+      variant: 'outline-white-25',
+    },
+  ];
+
   return (
-    <ContainerMain>
-      {!isTabletOrMobile ? (
-        <ContentDektop
-          header={
-            <Header
-              text={pageTitle}
-              subTitle={getNameProveById(Number(prove_id))}
-              buttons={[
-                {
-                  icon: <StarIcon fill={colors.emeraldGreen50} />,
-                  label: 'participações',
-                  onClick: () => {
-                    window.open(
-                      import.meta.env.VITE_URL_PARTICIPACOES +
-                        '/index/' +
-                        eventInfoData?.nid_agrupa_evento
-                    );
-                  },
-                },
-                {
-                  icon: <PrinterIcon fill={colors.emeraldGreen50} />,
-                  label: 'imprimir',
-                  onClick: handlePrintPDF,
-                },
-                {
-                  icon: <ShareIcon fill={colors.emeraldGreen50} />,
-                  label: 'compartilhar',
-                  onClick: () => setShowShareOptions((prev) => !prev),
-                  isActive: showShareOptions,
-                },
-              ]}
-            />
-          }
-          headerNavigator={
-            <HeaderNavigatorDesktop
-              title={eventInfoData?.cds_evento || ''}
-              hasBackButton
-              onGoBack={() => navigate('/modalidade/' + prove_id)}
-            />
-          }
-          contentBoxStyles={{
-            padding: '1.5rem',
-            gap: '0.25rem',
-          }}
-        >
-          <Scrollable>
-            <DivLeft>
-              <InfoEventDetails data={eventInfoData} />
-
-              <EventSummaryDetails
-                data={eventSummaryNumbers}
-                switchChecked={switchResumeChecked}
-                setSwitchChecked={setSwitchResumeChecked}
+    <Layout
+      {...(isTabletOrMobile && {
+        footerButtonsMobile: buttonsNavigation,
+      })}
+    >
+      <ContainerMain>
+        {!isTabletOrMobile ? (
+          <ContentDektop
+            header={
+              <Header
+                text={pageTitle}
+                subTitle={getNameProveById(Number(prove_id))}
+                buttons={buttonsNavigation}
               />
-
-              <GraphSummaryDetails data={eventSummaryData.tipo_estatistica_prova} />
-            </DivLeft>
-
-            <DivRight>
-              <DivTopRight>
-                <DivDropDownSearch>
-                  <ModalityDropdown
-                    prove_id={prove_id}
-                    provesDropdown={provesDropdown}
-                    proveSelected={proveSelected}
-                    setProveSelected={setProveSelected}
-                    handleGetSummary={handleGetSummary}
-                  />
-                </DivDropDownSearch>
-
-                <ButtonTop10>
-                  <TrophyIcon fill={colors.white75} />
-                  <Text
-                    fontSize="ssm"
-                    fontWeight="semiBold"
-                    lineHeight="tight"
-                    color={colors.white75}
-                    style={{ marginTop: '2px' }}
-                  >
-                    TOP 10
-                  </Text>
-                </ButtonTop10>
-              </DivTopRight>
-
-              <EventTable data={data} columns={columns} isLoading={isLoading} />
-            </DivRight>
-          </Scrollable>
-        </ContentDektop>
-      ) : (
-        <ContentMobile
-          style={{
-            maxWidth: '100dvw',
-          }}
-          headerMobileNavigator={
-            <HeaderMobileNavigator
-              title={eventInfoData?.cds_evento || ''}
-              hasBackButton
-              onGoBack={() => navigate('/modalidade/' + prove_id)}
-            >
-              <Dropdown
-                variant="secondary"
-                data={provesDropdown}
-                setValue={(value) => {
-                  setProveSelected(value);
-                  handleGetSummary({ prove_id_selected: value.id });
-                }}
-                value={proveSelected}
-                maxHeight="26rem"
-                maxWidth="20rem"
+            }
+            headerNavigator={
+              <HeaderNavigatorDesktop
+                title={eventInfoData?.cds_evento || ''}
+                hasBackButton
+                onGoBack={() => navigate('/modalidade/' + prove_id)}
               />
-            </HeaderMobileNavigator>
-          }
-        >
-          <Scrollable>
-            <StyledHeadingMobile>{eventInfoData?.cds_evento}</StyledHeadingMobile>
+            }
+            contentBoxStyles={{
+              padding: '1.5rem',
+              gap: '0.25rem',
+            }}
+          >
+            <Scrollable>
+              <DivLeft>
+                <InfoEventDetails data={eventInfoData} />
 
-            <DivLeft>
-              <InfoEventDetails data={eventInfoData} />
+                <EventSummaryDetails
+                  data={eventSummaryNumbers}
+                  switchChecked={switchResumeChecked}
+                  setSwitchChecked={setSwitchResumeChecked}
+                />
 
-              <EventSummaryDetails
-                data={eventSummaryNumbers}
-                switchChecked={switchResumeChecked}
-                setSwitchChecked={setSwitchResumeChecked}
-              />
+                <GraphSummaryDetails
+                  data={eventSummaryData.tipo_estatistica_prova}
+                  isTabletOrMobile={isTabletOrMobile}
+                />
+              </DivLeft>
 
-              <GraphSummaryDetails
-                data={eventSummaryData.tipo_estatistica_prova}
-                isTabletOrMobile={isTabletOrMobile}
-              />
-            </DivLeft>
+              <DivRight>
+                <DivTopRight>
+                  <DivDropDownSearch>
+                    <ModalityDropdown
+                      prove_id={prove_id}
+                      provesDropdown={provesDropdown}
+                      proveSelected={proveSelected}
+                      setProveSelected={setProveSelected}
+                      handleGetSummary={handleGetSummary}
+                    />
+                  </DivDropDownSearch>
 
-            <DivRight>
-              <EventTable data={data} columns={columns} isLoading={isLoading} />
-            </DivRight>
-          </Scrollable>
-        </ContentMobile>
-      )}
+                  <ButtonTop10>
+                    <TrophyIcon fill={colors.white75} />
+                    <Text
+                      fontSize="ssm"
+                      fontWeight="semiBold"
+                      lineHeight="tight"
+                      color={colors.white75}
+                      style={{ marginTop: '2px' }}
+                    >
+                      TOP 10
+                    </Text>
+                  </ButtonTop10>
+                </DivTopRight>
 
-      {showShareOptions && <ShareOptions url={shareUrl} />}
+                <EventTable data={data} columns={columns} isLoading={isLoading} />
+              </DivRight>
+            </Scrollable>
+          </ContentDektop>
+        ) : (
+          <ContentMobile
+            style={{
+              maxWidth: '100dvw',
+            }}
+            headerMobileNavigator={
+              <HeaderMobileNavigator
+                title={eventInfoData?.cds_evento || ''}
+                hasBackButton
+                onGoBack={() => navigate('/modalidade/' + prove_id)}
+              >
+                <Dropdown
+                  variant="secondary"
+                  data={provesDropdown}
+                  setValue={(value) => {
+                    setProveSelected(value);
+                    handleGetSummary({ prove_id_selected: value.id });
+                  }}
+                  value={proveSelected}
+                  maxHeight="26rem"
+                  maxWidth={isMobile ? '100%' : '20rem'}
+                />
+              </HeaderMobileNavigator>
+            }
+            hasFooterButtons
+          >
+            <Scrollable>
+              <StyledHeadingMobile>{eventInfoData?.cds_evento}</StyledHeadingMobile>
 
-      {data?.length > 0 && (
-        <PrintArea
-          title={switchResumeChecked ? 'RESUMO GERAL' : 'RESUMO DA MODALIDADE'}
-          columns={columns}
-          data={data}
-          cards={printCards}
-          info={printInfo}
-        />
-      )}
-    </ContainerMain>
+              <DivLeft>
+                <InfoEventDetails data={eventInfoData} />
+
+                <EventSummaryDetails
+                  data={eventSummaryNumbers}
+                  switchChecked={switchResumeChecked}
+                  setSwitchChecked={setSwitchResumeChecked}
+                />
+
+                <GraphSummaryDetails
+                  data={eventSummaryData.tipo_estatistica_prova}
+                  isTabletOrMobile={isTabletOrMobile}
+                />
+              </DivLeft>
+
+              <DivRight>
+                <EventTable data={data} columns={columns} isLoading={isLoading} />
+              </DivRight>
+            </Scrollable>
+          </ContentMobile>
+        )}
+
+        {showShareOptions && <ShareOptions url={shareUrl} />}
+
+        {data?.length > 0 && (
+          <PrintArea
+            title={switchResumeChecked ? 'RESUMO GERAL' : 'RESUMO DA MODALIDADE'}
+            columns={columns}
+            data={data}
+            cards={printCards}
+            info={printInfo}
+          />
+        )}
+      </ContainerMain>
+    </Layout>
   );
 }
 
