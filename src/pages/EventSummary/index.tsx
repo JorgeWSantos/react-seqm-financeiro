@@ -320,14 +320,6 @@ function EventSummary() {
     },
     {
       icon: (
-        <PrinterIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />
-      ),
-      label: 'imprimir',
-      onClick: handlePrintPDF,
-      variant: 'outline-white-25',
-    },
-    {
-      icon: (
         <ShareIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />
       ),
       label: 'compartilhar',
