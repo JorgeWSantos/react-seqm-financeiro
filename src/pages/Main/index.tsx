@@ -11,6 +11,7 @@ import { useResultsService } from '@src/services/useResultsService';
 import { usePage } from '@src/contexts/page/usePage';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import Layout from '@src/Layout';
 
 function Main() {
   const pageTitle = 'Resultados';
@@ -53,45 +54,47 @@ function Main() {
   }, [setPage]);
 
   return (
-    <ContainerMain>
-      {!isTabletOrMobile ? (
-        <ContentDektop
-          header={<Header text={pageTitle} />}
-          contentBoxStyles={{ padding: '1rem 2.5rem', gap: '0' }}
-        >
-          <>
-            <NotPointedEvents onClick={onClickModality} />
-            <ContainerDesktopMain>
+    <Layout>
+      <ContainerMain>
+        {!isTabletOrMobile ? (
+          <ContentDektop
+            header={<Header text={pageTitle} />}
+            contentBoxStyles={{ padding: '1rem 2.5rem', gap: '0' }}
+          >
+            <>
+              <NotPointedEvents onClick={onClickModality} />
+              <ContainerDesktopMain>
+                <MoreSearchedModalities
+                  title="MODALIDADES MAIS BUSCADAS"
+                  data={allModalities.top_modalidades}
+                  onClick={onClickModality}
+                />
+                <OtherSearchModalities
+                  title="DEMAIS MODALIDADES"
+                  data={allModalities.modalidades}
+                  onClick={onClickModality}
+                />
+              </ContainerDesktopMain>
+            </>
+          </ContentDektop>
+        ) : (
+          <ContentMobile>
+            <ContainerMobileMain className="container-mobile-main">
               <MoreSearchedModalities
-                title="MODALIDADES MAIS BUSCADAS"
-                data={allModalities.top_modalidades}
                 onClick={onClickModality}
+                title="MAIS BUSCADAS"
+                data={allModalities.top_modalidades}
               />
               <OtherSearchModalities
+                onClick={onClickModality}
                 title="DEMAIS MODALIDADES"
                 data={allModalities.modalidades}
-                onClick={onClickModality}
               />
-            </ContainerDesktopMain>
-          </>
-        </ContentDektop>
-      ) : (
-        <ContentMobile>
-          <ContainerMobileMain className="container-mobile-main">
-            <MoreSearchedModalities
-              onClick={onClickModality}
-              title="MAIS BUSCADAS"
-              data={allModalities.top_modalidades}
-            />
-            <OtherSearchModalities
-              onClick={onClickModality}
-              title="DEMAIS MODALIDADES"
-              data={allModalities.modalidades}
-            />
-          </ContainerMobileMain>
-        </ContentMobile>
-      )}
-    </ContainerMain>
+            </ContainerMobileMain>
+          </ContentMobile>
+        )}
+      </ContainerMain>
+    </Layout>
   );
 }
 
