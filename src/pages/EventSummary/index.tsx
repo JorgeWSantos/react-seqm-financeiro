@@ -8,10 +8,10 @@ import {
   HeaderNavigatorDesktop,
   Text,
   type DataDropdown,
+  type FooterWithButtonsPropsType,
   type TableColumnSEQM,
 } from '@abqm-ds/react';
 
-import {} from 'react-share';
 import ShareOptions from '../../components/ShareOptions';
 
 import { useDeviceType } from '@abqm-ds/react';
@@ -32,7 +32,6 @@ import { usePage } from '@src/contexts/page/usePage';
 import {
   CheckIcon,
   DashIcon,
-  FilterIcon,
   PrinterIcon,
   ShareIcon,
   StarIcon,
@@ -274,7 +273,7 @@ function EventSummary() {
     modalityName: getNameProveById(Number(prove_id)) || '',
   };
 
-  const buttonsNavigation = [
+  const buttonsHeader = [
     {
       icon: <StarIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />,
       label: 'participações',
@@ -285,7 +284,6 @@ function EventSummary() {
             eventInfoData?.nid_agrupa_evento
         );
       },
-      variant: 'outline-white-25',
     },
     {
       icon: (
@@ -293,7 +291,6 @@ function EventSummary() {
       ),
       label: 'imprimir',
       onClick: handlePrintPDF,
-      variant: 'outline-white-25',
     },
     {
       icon: (
@@ -302,14 +299,18 @@ function EventSummary() {
       label: 'compartilhar',
       onClick: () => setShowShareOptions((prev) => !prev),
       isActive: showShareOptions,
-      variant: 'outline-white-25',
     },
   ];
+
+  const buttonsMobileFooter: FooterWithButtonsPropsType = buttonsHeader.map((btn) => ({
+    ...btn,
+    variant: 'outline-white-25',
+  }));
 
   return (
     <Layout
       {...(isTabletOrMobile && {
-        footerButtonsMobile: buttonsNavigation,
+        footerButtonsMobile: buttonsMobileFooter,
       })}
     >
       <ContainerMain>
@@ -319,7 +320,7 @@ function EventSummary() {
               <Header
                 text={pageTitle}
                 subTitle={getNameProveById(Number(prove_id))}
-                buttons={buttonsNavigation}
+                buttons={buttonsHeader}
               />
             }
             headerNavigator={

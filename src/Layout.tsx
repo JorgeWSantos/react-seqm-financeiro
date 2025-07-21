@@ -1,7 +1,3 @@
-// import { StrictMode } from 'react';
-// import { AppRoutes } from './routes/index.tsx';
-// import { BrowserRouter } from 'react-router-dom';
-
 import {
   ContainerDesktop,
   ContainerMobile,
@@ -9,6 +5,7 @@ import {
   HeaderMobile,
   SideBarDesktop,
   useDeviceType,
+  type FooterWithButtonsPropsType,
   type MenuType,
 } from '@abqm-ds/react';
 import { useAuth } from './contexts/auth/useAuth.ts';
@@ -21,11 +18,7 @@ function Layout({
   footerButtonsMobile,
 }: {
   children?: React.ReactNode;
-  footerButtonsMobile?: Array<{
-    label: string;
-    onClick: () => void;
-    icon: React.ReactNode;
-  }>;
+  footerButtonsMobile?: FooterWithButtonsPropsType;
 }) {
   const { isTabletOrMobile } = useDeviceType();
   const { user, logout, token } = useAuth();
