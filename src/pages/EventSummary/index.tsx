@@ -7,12 +7,13 @@ import {
   HeaderMobileNavigator,
   HeaderNavigatorDesktop,
   Text,
+  Toast,
   type DataDropdown,
   type FooterWithButtonsPropsType,
   type TableColumnSEQM,
 } from '@abqm-ds/react';
 
-import ShareOptions from '../../components/ShareOptions';
+// import ShareOptions from '../../components/ShareOptions';
 
 import { useDeviceType } from '@abqm-ds/react';
 
@@ -60,7 +61,7 @@ import Layout from '@src/Layout';
 function EventSummary() {
   const pageTitle = 'Resultados »';
 
-  const [showShareOptions, setShowShareOptions] = useState(false);
+  // const [showShareOptions, setShowShareOptions] = useState(false);
   const shareUrl = window.location.href;
 
   const navigate = useNavigate();
@@ -297,8 +298,14 @@ function EventSummary() {
         <ShareIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />
       ),
       label: 'compartilhar',
-      onClick: () => setShowShareOptions((prev) => !prev),
-      isActive: showShareOptions,
+      onClick: () => {
+        Toast.show({
+          message: 'Link copiado para sua área de transferência!',
+        });
+
+        navigator.clipboard.writeText(shareUrl);
+      },
+      // isActive: showShareOptions,
     },
   ];
 
@@ -432,7 +439,7 @@ function EventSummary() {
           </ContentMobile>
         )}
 
-        {showShareOptions && <ShareOptions url={shareUrl} />}
+        {/* {showShareOptions && <ShareOptions url={shareUrl} />} */}
 
         {data?.length > 0 && (
           <PrintArea
