@@ -1,11 +1,26 @@
 // src/routes/AppRoutes.tsx
-import { Routes, Route } from 'react-router-dom';
-import Main from '@pages/Main';
+// import Layout from '../index';
+import Main from '@pages/Main/index.tsx';
+import EventSummary from '@src/pages/EventSummary';
+import ModalityDetail from '@src/pages/ModalityDetails';
+import { createBrowserRouter } from 'react-router-dom';
 
-export function AppRoutes() {
-  return (
-    <Routes>
-      <Route path="/" element={<Main />} />
-    </Routes>
-  );
-}
+export const router = createBrowserRouter([
+  // {
+  //   // element: <Layout />,
+  //   children: [
+  {
+    index: true,
+    element: <Main />,
+  },
+  {
+    path: 'modalidade/:prove_id',
+    element: <ModalityDetail />,
+  },
+  {
+    path: 'modalidade/:prove_id/evento/:event_id',
+    element: <EventSummary />,
+  },
+  // ],
+  // },
+]);
