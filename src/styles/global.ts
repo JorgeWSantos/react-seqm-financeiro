@@ -126,4 +126,12 @@ table {
     scrollbar-width: thin;
     scrollbar-color: ${colors.white50} transparent;
   }
+
+  .recharts-wrapper:focus,
+  .recharts-wrapper svg:focus,
+  .recharts-wrapper g:focus {
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
 `;
