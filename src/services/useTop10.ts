@@ -6,8 +6,8 @@ import type {
   ModalityDetailsResponseData,
 } from '@src/pages/ModalityDetails/types.api';
 
-export function useModalityDetails() {
-  const getModalityDetails = useCallback(
+export function useTop10() {
+  const getTop10 = useCallback(
     async ({
       prove_id,
       year,
@@ -28,8 +28,6 @@ export function useModalityDetails() {
             },
           }
         );
-
-        console.log('response', response);
 
         const { data, message, success } = response.data;
 
@@ -70,6 +68,6 @@ export function useModalityDetails() {
   );
 
   return {
-    getModalityDetails,
+    getTop10,
   };
 }

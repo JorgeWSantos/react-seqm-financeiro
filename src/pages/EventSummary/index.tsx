@@ -65,6 +65,8 @@ function EventSummary() {
   const navigate = useNavigate();
   const location = useLocation();
   const params = useParams();
+  // TODO: preparar tela para os eventos não pontuados
+  // modalidade/nao-pontuados/evento/38648
   const prove_id = params.prove_id;
   const event_id = params.event_id;
 

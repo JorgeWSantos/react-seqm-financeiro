@@ -27,7 +27,7 @@ import {
   NotFoundContainer,
   Scrollable,
 } from './styles';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePage } from '@src/contexts/page/usePage';
 import { FilterIcon, SearchIcon } from '@abqm-ds/icons';
@@ -35,8 +35,8 @@ import { colors } from '@abqm-ds/tokens';
 import { useModalityDetails } from '@src/services/useModalityDetails';
 import type { ModalityDetailsResponseData, ResultModality } from './types.api';
 import type { ModalDetailsFilter, ModalitiesEvents } from './types';
-import { useParams } from 'react-router';
-import { ModalFilter } from './ModalFilter';
+import { Link, useParams } from 'react-router';
+import { ModalFilter } from '@components/ModalityDetails/ModalFilter';
 import Layout from '@src/Layout';
 
 function ModalityDetail() {
@@ -218,6 +218,21 @@ function ModalityDetail() {
     closeModal();
   }, [initialFilter, fetchModalities, closeModal]);
 
+  const redirectToEvent = useCallback(
+    ({
+      children,
+      prove_id,
+      event_id,
+    }: {
+      children: ReactNode;
+      prove_id: string | number;
+      event_id: number;
+    }) => {
+      return <Link to={`/modalidade/${prove_id}/evento/${event_id}`}>{children}</Link>;
+    },
+    []
+  );
+
   const columns: Array<TableColumnSEQM<ModalitiesEvents>> = [
     {
       key: 'event',
@@ -225,19 +240,49 @@ function ModalityDetail() {
       width: '35%',
       render: (row: ModalitiesEvents) => {
         if (row.isOficial) {
-          return <TableSEQMColumnOficial textBold={true} value={row.event} />;
+          return redirectToEvent({
+            children: <TableSEQMColumnOficial textBold={true} value={row.event} />,
+            prove_id: row.prove_id === 0 ? 'nao-pontuados' : row.prove_id ?? 0,
+            event_id: row.event_id ?? 0,
+          });
         }
 
-        return <StyledTableSEQMTextTd $bold>{row.event}</StyledTableSEQMTextTd>;
+        return redirectToEvent({
+          children: <StyledTableSEQMTextTd $bold>{row.event}</StyledTableSEQMTextTd>,
+          prove_id: row.prove_id === 0 ? 'nao-pontuados' : row.prove_id ?? 0,
+          event_id: row.event_id ?? 0,
+        });
       },
       textBold: true,
     },
-    { key: 'organizator', label: 'ORGANIZADOR', width: '35%' },
+    {
+      key: 'organizator',
+      label: 'ORGANIZADOR',
+      width: '35%',
+      render: (row: ModalitiesEvents) => (
+        <>
+          {redirectToEvent({
+            children: <StyledTableSEQMTextTd>{row.organizator}</StyledTableSEQMTextTd>,
+            prove_id: row.prove_id === 0 ? 'nao-pontuados' : row.prove_id ?? 0,
+            event_id: row.event_id ?? 0,
+          })}
+        </>
+      ),
+    },
     {
       key: 'local',
       label: 'LOCAL',
       width: '20%',
       align: 'left',
+      render: (row: ModalitiesEvents) => (
+        <>
+          {redirectToEvent({
+            children: <StyledTableSEQMTextTd>{row.local}</StyledTableSEQMTextTd>,
+            prove_id: row.prove_id ?? 0,
+            event_id: row.event_id ?? 0,
+          })}
+        </>
+      ),
     },
     {
       key: 'init',
@@ -260,6 +305,12 @@ function ModalityDetail() {
     init: item.data_inicio_evento,
     end: item.data_fim_evento,
     isOficial: item.bid_oficial,
+
+    //not showed on table
+    event_id: item.nid_evento,
+    organizator_id: item.nid_empresa,
+    event_group_id: item.nid_agrupa_evento,
+    prove_id: item.nid_prova,
   }));
 
   return (
@@ -336,7 +387,7 @@ function ModalityDetail() {
               <HeaderMobileNavigator
                 hasBackButton
                 onGoBack={() => navigate('/')}
-                headingText="Ranch Sorting"
+                headingText={getNameProveById(Number(prove_id))}
                 hasSearch
                 onChangeSearch={(v) => setSearchValue(v.target.value)}
               />
