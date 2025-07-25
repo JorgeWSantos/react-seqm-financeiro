@@ -1,7 +1,7 @@
 import React from 'react';
 import { TableSEQM, ActivityIndicator, Text } from '@abqm-ds/react';
 import type { TableColumnSEQM } from '@abqm-ds/react';
-import type { TableEventSummaryData } from '../types';
+import type { TableEventSummaryData } from '../../../pages/EventSummary/types';
 import { colors } from '@abqm-ds/tokens';
 import { DivContainerTableRight, LoadingContainer, NotFoundContainer } from './styles';
 

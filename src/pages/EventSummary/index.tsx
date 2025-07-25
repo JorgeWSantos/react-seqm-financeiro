@@ -25,7 +25,7 @@ import {
   Scrollable,
   StyledHeadingMobile,
 } from './styles';
-import EventTable from './EventTable';
+import EventTable from '@components/EventSummary/EventTable';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePage } from '@src/contexts/page/usePage';
 import {
@@ -39,9 +39,9 @@ import {
 import { colors } from '@abqm-ds/tokens';
 import type { TableEventSummaryData } from './types';
 import { useParams } from 'react-router';
-import InfoEventDetails from '../../components/EventSummary/InfoEventDetails';
-import EventSummaryDetails from '../../components/EventSummary/EventSummaryDetails';
-import GraphSummaryDetails from '../../components/EventSummary/GraphSummaryDetails';
+import InfoEventDetails from '@components/EventSummary/InfoEventDetails';
+import EventSummaryDetails from '@components/EventSummary/EventSummaryDetails';
+import GraphSummaryDetails from '@components/EventSummary/GraphSummaryDetails';
 import { useEventSummary } from '@src/services/useEventSummary';
 import type {
   EventSummaryResponseData,
@@ -53,7 +53,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { handlePrintPDF } from '@src/components/PrintArea/utils';
 import PrintArea from '@src/components/PrintArea';
 import type { PrintHeaderProps } from '@src/components/PrintArea/PrintHeader';
-import ModalityDropdown from './ModalityDropdown';
+import ModalityDropdown from '@components/EventSummary/ModalityDropdown';
 import Layout from '@src/Layout';
 
 function EventSummary() {
@@ -76,9 +76,11 @@ function EventSummary() {
   const [eventSummaryData, setEventSummaryData] = useState<EventSummaryResponseData>(
     {} as EventSummaryResponseData
   );
+
   const [eventInfoData, setEventInfoData] = useState<InfoEventSummaryData | null>(
     {} as InfoEventSummaryData
   );
+
   const [eventSummaryNumbers, setEventSummaryNumbers] = useState<{
     inscricoes: string;
     competidores: string;
