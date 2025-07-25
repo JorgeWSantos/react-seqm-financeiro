@@ -24,7 +24,7 @@ function Layout({
   const { user, logout, token } = useAuth();
   const { getMenu } = useMenuService();
 
-  const [menu, setMenu] = useState<MenuType>([]);
+  const [menu] = useState<MenuType>([]);
   const pageTitle = 'Resultados';
 
   useEffect(() => {

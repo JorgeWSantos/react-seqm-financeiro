@@ -40,6 +40,7 @@ export function useEventSummary() {
           });
 
           return {
+            provas: [],
             numeros_evento: [],
             resultado_modalidade_prova: [],
             tipo_estatistica_prova: [],
@@ -56,6 +57,7 @@ export function useEventSummary() {
         console.warn(error);
 
         return {
+          provas: [],
           numeros_evento: [],
           resultado_modalidade_prova: [],
           tipo_estatistica_prova: [],
