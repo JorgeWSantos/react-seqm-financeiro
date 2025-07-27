@@ -1,10 +1,7 @@
 import { Toast } from '@abqm-ds/react';
 import { useCallback } from 'react';
 import { apiResultados } from './api';
-import type {
-  Top10Response,
-  Top10ResponseData,
-} from '@src/pages/ModalityResults/types.api';
+import type { Top10Response, Top10ResponseData } from '@src/pages/Top10/types.api';
 
 export function useTop10() {
   const getTop10 = useCallback(
