@@ -442,28 +442,26 @@ function EventSummary() {
             }
             hasFooterButtons
           >
-            <Scrollable>
-              <StyledHeadingMobile>{eventInfoData?.cds_evento}</StyledHeadingMobile>
+            <StyledHeadingMobile>{eventInfoData?.cds_evento}</StyledHeadingMobile>
 
-              <DivLeft>
-                <InfoEventDetails data={eventInfoData} />
+            <DivLeft>
+              <InfoEventDetails data={eventInfoData} />
 
-                <EventSummaryDetails
-                  data={eventSummaryNumbers}
-                  switchChecked={switchResumeChecked}
-                  setSwitchChecked={setSwitchResumeChecked}
-                />
+              <EventSummaryDetails
+                data={eventSummaryNumbers}
+                switchChecked={switchResumeChecked}
+                setSwitchChecked={setSwitchResumeChecked}
+              />
 
-                <GraphSummaryDetails
-                  data={eventSummaryData.tipo_estatistica_prova}
-                  isTabletOrMobile={isTabletOrMobile}
-                />
-              </DivLeft>
+              <GraphSummaryDetails
+                data={eventSummaryData.tipo_estatistica_prova}
+                isTabletOrMobile={isTabletOrMobile}
+              />
+            </DivLeft>
 
-              <DivRight>
-                <EventTable data={data} columns={columns} isLoading={isLoading} />
-              </DivRight>
-            </Scrollable>
+            <DivRight>
+              <EventTable data={data} columns={columns} isLoading={isLoading} />
+            </DivRight>
           </ContentMobile>
         )}
 
