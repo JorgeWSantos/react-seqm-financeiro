@@ -6,10 +6,8 @@ import {
   Header,
   HeaderMobileNavigator,
   HeaderNavigatorDesktop,
-  InfoCard,
   StyledTableSEQMTextTd,
   TableSEQM,
-  TableSEQMColumnOficial,
   Text,
   TextInput,
   type TableColumnSEQM,
@@ -17,26 +15,17 @@ import {
 
 import { useDeviceType } from '@abqm-ds/react';
 
-import {
-  ContainerMain,
-  DivInfoCard,
-  DivTopMobile,
-  LoadingContainer,
-  NotFoundContainer,
-  Scrollable,
-} from './styles';
+import { ContainerMain, LoadingContainer, NotFoundContainer, Scrollable } from './styles';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePage } from '@src/contexts/page/usePage';
 import { SearchIcon } from '@abqm-ds/icons';
 import { colors } from '@abqm-ds/tokens';
 import { useTop10 } from '@src/services/useTop10';
-import type { Top10ResponseData, Top10Data, EventDetailsTop10 } from './types.api';
-import type { ModalitiesEvents, TableTop10 } from './types';
+import type { Top10Data, EventDetailsTop10 } from './types.api';
+import type { TableTop10 } from './types';
 import { useParams } from 'react-router';
 import Layout from '@src/Layout';
-import { useEventSummary } from '@src/services/useEventSummary';
-import type { InfoEventSummaryData } from '../EventSummary/types.api';
 
 function Top10() {
   const params = useParams();
@@ -54,7 +43,6 @@ function Top10() {
   const { isTabletOrMobile } = useDeviceType();
   const { getTop10 } = useTop10();
   const [isLoading, setIsLoading] = useState(true);
-  const { getInfoEvent } = useEventSummary();
 
   const [allList, setAllList] = useState<Top10Data[]>([]);
   const [listToShow, setListToShow] = useState<Top10Data[]>([]);
