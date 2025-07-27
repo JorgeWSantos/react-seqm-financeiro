@@ -38,7 +38,7 @@ import {
 } from '@abqm-ds/icons';
 import { colors } from '@abqm-ds/tokens';
 import type { TableEventSummaryData } from './types';
-import { useParams } from 'react-router';
+import { Link, useParams } from 'react-router';
 import InfoEventDetails from '@components/EventSummary/InfoEventDetails';
 import EventSummaryDetails from '@components/EventSummary/EventSummaryDetails';
 import GraphSummaryDetails from '@components/EventSummary/GraphSummaryDetails';
@@ -194,7 +194,7 @@ function EventSummary() {
 
   const columns: Array<TableColumnSEQM<TableEventSummaryData>> = [
     {
-      key: 'category',
+      key: 'modality',
       label: 'CATEGORIA',
       width: '60%',
     },
@@ -239,8 +239,9 @@ function EventSummary() {
     },
   ];
 
+  //remove repetitive data of modality (backend)
   const data: Array<TableEventSummaryData> = listToShow?.map((item) => ({
-    category: item.cds_evento.toUpperCase(),
+    modality: item.cds_modalidade.toUpperCase(),
     organizator: item.cds_status_organizador ? 'Sim' : 'Não',
     judge: item.cds_status_juiz ? 'Sim' : 'Não',
     ABQM: item.cds_status_abqm ? 'Sim' : 'Não',
@@ -395,15 +396,19 @@ function EventSummary() {
 
                   <ButtonTop10>
                     <TrophyIcon fill={colors.white75} />
-                    <Text
-                      fontSize="ssm"
-                      fontWeight="semiBold"
-                      lineHeight="tight"
-                      color={colors.white75}
-                      style={{ marginTop: '2px' }}
+                    <Link
+                      to={`/modalidade/${listToShow[0]?.nid_prova}/evento/${listToShow[0]?.nid_evento}/prova-evento/${listToShow[0]?.nid_prova_evento}/top10`}
                     >
-                      TOP 10
-                    </Text>
+                      <Text
+                        fontSize="ssm"
+                        fontWeight="semiBold"
+                        lineHeight="tight"
+                        color={colors.white75}
+                        style={{ marginTop: '2px' }}
+                      >
+                        TOP 10
+                      </Text>
+                    </Link>
                   </ButtonTop10>
                 </DivTopRight>
 
