@@ -1,53 +1,48 @@
 import { Toast } from '@abqm-ds/react';
 import { useCallback } from 'react';
 import { apiResultados } from './api';
-import type {
-  ModalityDetailsResponse,
-  ModalityDetailsResponseData,
-} from '@src/pages/ModalityDetails/types.api';
+import type { Top10Response, Top10ResponseData } from '@src/pages/Top10/types.api';
 
 export function useTop10() {
   const getTop10 = useCallback(
     async ({
-      prove_id,
-      year,
-      month,
+      prove_event_id,
     }: {
-      prove_id?: number | null;
-      month?: string;
-      year?: string;
-    } = {}): Promise<ModalityDetailsResponseData> => {
+      prove_event_id?: number | null;
+    } = {}): Promise<Top10ResponseData> => {
       try {
-        const response = await apiResultados.get<ModalityDetailsResponse>(
-          '/v1/ResultadoPorModalidade',
+        const response = await apiResultados.get<Top10Response>(
+          '/v1/ResultadoProvaEvento',
           {
             params: {
-              id_prova: prove_id,
-              ano: year,
-              ...(!!month && { mes: month }),
+              nid_prova_evento: prove_event_id,
             },
           }
         );
+
+        console.log('Response from Top10:', response);
 
         const { data, message, success } = response.data;
 
         if (!success) {
           Toast.show({
-            message:
-              message || 'Ops, ocorreu um erro ao carregar os detalhes da modalidade!',
+            message: message || 'Ops, ocorreu um erro ao carregar os dados do top 10!',
             type: 'error',
             timeout: 3000,
           });
 
           return {
-            eventos: [],
-            eventos_nao_pontuados: [],
-            eventos_por_mes_sem_resultado: [],
-            eventos_por_mes: [],
+            top10: [],
+            detalhe_evento: null,
           };
         }
 
-        return data.resultado;
+        return (
+          data.resultado_prova_evento || {
+            top10: [],
+            detalhe_evento: null,
+          }
+        );
       } catch (error) {
         Toast.show({
           message: 'Ops, ocorreu um erro ao buscar as informações!',
@@ -57,10 +52,8 @@ export function useTop10() {
         console.warn(error);
 
         return {
-          eventos: [],
-          eventos_nao_pontuados: [],
-          eventos_por_mes_sem_resultado: [],
-          eventos_por_mes: [],
+          top10: [],
+          detalhe_evento: null,
         };
       }
     },

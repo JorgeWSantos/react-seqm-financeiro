@@ -31,78 +31,51 @@ import { usePage } from '@src/contexts/page/usePage';
 import { SearchIcon } from '@abqm-ds/icons';
 import { colors } from '@abqm-ds/tokens';
 import { useTop10 } from '@src/services/useTop10';
-import type { Top10ResponseData, Top10Data } from './types.api';
+import type { Top10ResponseData, Top10Data, EventDetailsTop10 } from './types.api';
 import type { ModalitiesEvents } from './types';
 import { useParams } from 'react-router';
 import Layout from '@src/Layout';
+import { useEventSummary } from '@src/services/useEventSummary';
+import type { InfoEventSummaryData } from '../EventSummary/types.api';
 
 function Top10() {
-  const pageTitle = 'Resultados';
+  const params = useParams();
+  const prove_id = params.prove_id;
+  const prove_event_id = params.prove_event_id;
+
+  const pageTitle = 'Resultados »';
+  const subTitle = getNameProveById(Number(prove_id)) + ' » TOP 10';
 
   const navigate = useNavigate();
   const location = useLocation();
-  const params = useParams();
-  const prove_id = params.prove_id;
 
   const { setPage } = usePage();
   const { isTabletOrMobile } = useDeviceType();
   const { getTop10 } = useTop10();
   const [isLoading, setIsLoading] = useState(true);
+  const { getInfoEvent } = useEventSummary();
 
   const [allList, setAllList] = useState<Top10Data[]>([]);
   const [listToShow, setListToShow] = useState<Top10Data[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
 
-  const setResultsToShow = useCallback(
-    ({ data, isOficial }: { data: Top10ResponseData; isOficial: string }) => {
-      const eventsToShow = [];
-
-      if (data.eventos.length > 0) {
-        eventsToShow.push(...data.eventos);
-      }
-
-      if (data.eventos_nao_pontuados.length > 0) {
-        eventsToShow.push(...data.eventos_nao_pontuados);
-      }
-
-      setListToShow(
-        isOficial !== ''
-          ? eventsToShow.filter((item) => String(item.bid_oficial) === isOficial)
-          : eventsToShow
-      );
-      setAllList(
-        isOficial !== ''
-          ? eventsToShow.filter((item) => String(item.bid_oficial) === isOficial)
-          : eventsToShow
-      );
-    },
-    []
+  const [eventInfoData, setEventInfoData] = useState<EventDetailsTop10 | null>(
+    {} as EventDetailsTop10
   );
 
-  const fetchModalities = useCallback(
-    async ({
-      year,
-      month,
-      isOficial,
-    }: {
-      year: string;
-      month: string;
-      isOficial: string;
-    }) => {
-      setIsLoading(true);
+  const handleGetResultsTop10 = useCallback(async () => {
+    if (!prove_event_id) {
+      return;
+    }
 
-      const data = await getTop10({
-        prove_id: prove_id === 'nao-pontuados' ? 0 : Number(prove_id),
-        year,
-        month,
-      });
+    const data = await getTop10({
+      prove_event_id: Number(prove_event_id),
+    });
 
-      setResultsToShow({ data, isOficial });
+    console.log('Top10 data:', data);
 
-      setIsLoading(false);
-    },
-    [getTop10, prove_id, setResultsToShow]
-  );
+    setEventInfoData(data.detalhe_evento);
+  }, [getTop10, prove_event_id]);
 
   // Effect to set the page title and path
   useEffect(() => {
@@ -112,24 +85,28 @@ function Top10() {
     });
   }, [setPage, location]);
 
-  // Effect to filter the list based on searchValue
+  // // Effect to filter the list based on searchValue
+  // useEffect(() => {
+  //   if (searchValue.trim() === '') {
+  //     setListToShow(allList);
+  //     return;
+  //   }
+
+  //   const filteredList = allList.filter(
+  //     (item) =>
+  //       item.cds_evento.toLowerCase().includes(searchValue.toLowerCase()) ||
+  //       item.cds_empresa.toLowerCase().includes(searchValue.toLowerCase()) ||
+  //       item.cds_local_evento.toLowerCase().includes(searchValue.toLowerCase()) ||
+  //       item.data_inicio_evento.includes(searchValue) ||
+  //       item.data_fim_evento.includes(searchValue)
+  //   );
+
+  //   setListToShow(filteredList);
+  // }, [searchValue, allList]);
+
   useEffect(() => {
-    if (searchValue.trim() === '') {
-      setListToShow(allList);
-      return;
-    }
-
-    const filteredList = allList.filter(
-      (item) =>
-        item.cds_evento.toLowerCase().includes(searchValue.toLowerCase()) ||
-        item.cds_empresa.toLowerCase().includes(searchValue.toLowerCase()) ||
-        item.cds_local_evento.toLowerCase().includes(searchValue.toLowerCase()) ||
-        item.data_inicio_evento.includes(searchValue) ||
-        item.data_fim_evento.includes(searchValue)
-    );
-
-    setListToShow(filteredList);
-  }, [searchValue, allList]);
+    handleGetResultsTop10();
+  }, [handleGetResultsTop10]);
 
   const columns: Array<TableColumnSEQM<ModalitiesEvents>> = [
     {
@@ -180,10 +157,10 @@ function Top10() {
       <ContainerMain>
         {!isTabletOrMobile ? (
           <ContentDektop
-            header={<Header text={pageTitle} buttons={[]} />}
+            header={<Header text={pageTitle} subTitle={subTitle} buttons={[]} />}
             headerNavigator={
               <HeaderNavigatorDesktop
-                title={getNameProveById(Number(prove_id))}
+                title={eventInfoData?.cds_evento || ''}
                 hasBackButton
                 onGoBack={() => navigate('/')}
               >
