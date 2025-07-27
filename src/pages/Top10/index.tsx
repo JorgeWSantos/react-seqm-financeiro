@@ -32,7 +32,7 @@ import { SearchIcon } from '@abqm-ds/icons';
 import { colors } from '@abqm-ds/tokens';
 import { useTop10 } from '@src/services/useTop10';
 import type { Top10ResponseData, Top10Data, EventDetailsTop10 } from './types.api';
-import type { ModalitiesEvents } from './types';
+import type { ModalitiesEvents, TableTop10 } from './types';
 import { useParams } from 'react-router';
 import Layout from '@src/Layout';
 import { useEventSummary } from '@src/services/useEventSummary';
@@ -42,6 +42,7 @@ function Top10() {
   const params = useParams();
   const prove_id = params.prove_id;
   const prove_event_id = params.prove_event_id;
+  const event_id = params.event_id;
 
   const pageTitle = 'Resultados »';
   const subTitle = getNameProveById(Number(prove_id)) + ' » TOP 10';
@@ -74,7 +75,26 @@ function Top10() {
 
     console.log('Top10 data:', data);
 
+    const teams: any[] = [];
+
+    for (const registry of data.top10) {
+      const existingGroup = teams.find(
+        (group) => group.classification === registry.nnr_classificacao_abqm
+      );
+      if (existingGroup) {
+        existingGroup.items.push(registry);
+      } else {
+        teams.push(registry);
+      }
+    }
+
+    setAllList(teams);
+    setListToShow(teams);
+
+    console.log('Teams:', teams);
+
     setEventInfoData(data.detalhe_evento);
+    setIsLoading(false);
   }, [getTop10, prove_event_id]);
 
   // Effect to set the page title and path
@@ -85,71 +105,78 @@ function Top10() {
     });
   }, [setPage, location]);
 
-  // // Effect to filter the list based on searchValue
-  // useEffect(() => {
-  //   if (searchValue.trim() === '') {
-  //     setListToShow(allList);
-  //     return;
-  //   }
+  // Effect to filter the list based on searchValue
+  useEffect(() => {
+    console.log('Search Value:', searchValue);
 
-  //   const filteredList = allList.filter(
-  //     (item) =>
-  //       item.cds_evento.toLowerCase().includes(searchValue.toLowerCase()) ||
-  //       item.cds_empresa.toLowerCase().includes(searchValue.toLowerCase()) ||
-  //       item.cds_local_evento.toLowerCase().includes(searchValue.toLowerCase()) ||
-  //       item.data_inicio_evento.includes(searchValue) ||
-  //       item.data_fim_evento.includes(searchValue)
-  //   );
+    if (searchValue.trim() === '') {
+      setListToShow(allList);
+      return;
+    }
 
-  //   setListToShow(filteredList);
-  // }, [searchValue, allList]);
+    const filteredList = allList.filter(
+      (item) =>
+        item.cds_nome_competidor.toLowerCase().includes(searchValue.toLowerCase()) ||
+        item.cds_nome_animal.toLowerCase().includes(searchValue.toLowerCase()) ||
+        item.proprietario.includes(searchValue) ||
+        item.cds_pontuacao.includes(searchValue)
+    );
+
+    setListToShow(filteredList);
+  }, [searchValue, allList]);
 
   useEffect(() => {
     handleGetResultsTop10();
   }, [handleGetResultsTop10]);
 
-  const columns: Array<TableColumnSEQM<ModalitiesEvents>> = [
+  const columns: Array<TableColumnSEQM<TableTop10>> = [
     {
-      key: 'event',
-      label: 'EVENTO',
-      width: '35%',
-      render: (row: ModalitiesEvents) => {
-        if (row.isOficial) {
-          return <TableSEQMColumnOficial textBold={true} value={row.event} />;
-        }
+      key: 'abqm',
+      label: 'ABQM',
+      width: '3%',
+      // textBold: true,
 
-        return <StyledTableSEQMTextTd $bold>{row.event}</StyledTableSEQMTextTd>;
-      },
-      textBold: true,
+      align: 'center',
     },
-    { key: 'organizator', label: 'ORGANIZADOR', width: '35%' },
+    { key: 'competitor', label: 'COMPETIDOR', width: '15%' },
     {
-      key: 'local',
-      label: 'LOCAL',
+      key: 'animal',
+      label: 'ANIMAL',
+      width: '20%',
+      align: 'left',
+      render: (row: TableTop10) => {
+        return <StyledTableSEQMTextTd $bold>{row.animal}</StyledTableSEQMTextTd>;
+      },
+    },
+    {
+      key: 'owner',
+      label: 'PROPRIETÁRIO',
       width: '20%',
       align: 'left',
     },
     {
-      key: 'init',
-      label: 'INÍCIO',
+      key: 'tn',
+      label: 'T/N',
       align: 'center',
       minWidth: '76px',
     },
-    {
-      key: 'end',
-      label: 'FIM',
-      minWidth: '76px',
-      align: 'center',
-    },
+    // { key: 'modality', label: 'MODALIDADE', width: '20%' },
+    // {
+    //   key: 'filiation',
+    //   label: 'Filiação',
+    //   minWidth: '76px',
+    //   align: 'center',
+    // },
   ];
 
-  const data: Array<ModalitiesEvents> = listToShow.map((item) => ({
-    event: item.cds_evento.toUpperCase(),
-    organizator: item.cds_empresa.toUpperCase(),
-    local: item.cds_local_evento.toUpperCase(),
-    init: item.data_inicio_evento,
-    end: item.data_fim_evento,
-    isOficial: item.bid_oficial,
+  const data: Array<TableTop10> = listToShow.map((item, index) => ({
+    abqm: `${index + 1}°`,
+    competitor: item.cds_nome_competidor.toUpperCase(),
+    animal: item.cds_nome_animal.toUpperCase(),
+    owner: item.proprietario.toUpperCase(),
+    tn: item.cds_pontuacao,
+    // modality: item.cds_modalidade.toUpperCase(),
+    // filitation: item.cds_filiacao,
   }));
 
   return (
@@ -162,7 +189,9 @@ function Top10() {
               <HeaderNavigatorDesktop
                 title={eventInfoData?.cds_evento || ''}
                 hasBackButton
-                onGoBack={() => navigate('/')}
+                onGoBack={() =>
+                  navigate('/modalidade/' + prove_id + '/evento/' + event_id)
+                }
               >
                 <TextInput
                   placeholder="Buscar"

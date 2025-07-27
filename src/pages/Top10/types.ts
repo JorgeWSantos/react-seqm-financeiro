@@ -1,8 +1,9 @@
-export interface ModalitiesEvents {
-  event: string;
-  organizator: string;
-  local: string;
-  init: string;
-  end: string;
-  isOficial?: boolean; // Optional property for AQHA-specific columns
+export interface TableTop10 {
+  abqm: string;
+  // modality: string;
+  competitor: string;
+  animal: string;
+  tn: string;
+  // filitation: string;
+  owner: string;
 }
