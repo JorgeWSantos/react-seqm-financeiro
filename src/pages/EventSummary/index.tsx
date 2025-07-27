@@ -7,6 +7,7 @@ import {
   HeaderMobileNavigator,
   HeaderNavigatorDesktop,
   ShareOptions,
+  StyledTableSEQMTextTd,
   Text,
   type DataDropdown,
   type FooterWithButtonsPropsType,
@@ -49,7 +50,7 @@ import type {
   ProvesEventSummary,
   ResultModalityByProve,
 } from './types.api';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, type ReactNode } from 'react';
 import { handlePrintPDF } from '@src/components/PrintArea/utils';
 import PrintArea from '@src/components/PrintArea';
 import type { PrintHeaderProps } from '@src/components/PrintArea/PrintHeader';
@@ -192,11 +193,47 @@ function EventSummary() {
     }
   }, [eventSummaryData, switchResumeChecked]);
 
+  const redirectToClassificatory = useCallback(
+    ({
+      children,
+      prove_id,
+      event_id,
+      prove_event_id,
+      classificatory_id,
+    }: {
+      children: ReactNode;
+      prove_id: string | number;
+      event_id: number;
+      prove_event_id: number;
+      classificatory_id: number;
+    }) => {
+      return (
+        <Link
+          to={`/modalidade/${prove_id}/evento/${event_id}/prova-evento/${prove_event_id}/classificatoria/${classificatory_id}`}
+        >
+          {children}
+        </Link>
+      );
+    },
+    []
+  );
+
   const columns: Array<TableColumnSEQM<TableEventSummaryData>> = [
     {
       key: 'modality',
       label: 'CATEGORIA',
       width: '60%',
+      render: (row: TableEventSummaryData) => (
+        <>
+          {redirectToClassificatory({
+            children: <StyledTableSEQMTextTd>{row.modality}</StyledTableSEQMTextTd>,
+            prove_id: row.prove_id === 0 ? 'nao-pontuados' : row.prove_id ?? 0,
+            event_id: row.event_id ?? 0,
+            classificatory_id: row.classificatory_id ?? 0,
+            prove_event_id: row.prove_event_id ?? 0,
+          })}
+        </>
+      ),
     },
     {
       key: 'organizator',
@@ -246,6 +283,10 @@ function EventSummary() {
     judge: item.cds_status_juiz ? 'Sim' : 'Não',
     ABQM: item.cds_status_abqm ? 'Sim' : 'Não',
     inscriptions: item.participantes.toString(),
+    prove_id: item.nid_prova,
+    event_id: item.nid_evento,
+    prove_event_id: item.nid_prova_evento,
+    classificatory_id: item.nid_prova_evento_classificatoria,
   }));
 
   const printCards = [

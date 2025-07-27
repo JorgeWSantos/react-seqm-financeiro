@@ -6,6 +6,10 @@ export interface TableEventSummaryData {
   judge: string;
   ABQM: string;
   inscriptions: string;
+  prove_id: number;
+  event_id: number;
+  prove_event_id: number;
+  classificatory_id: number;
 }
 
 export interface ModalDetailsFilter {
