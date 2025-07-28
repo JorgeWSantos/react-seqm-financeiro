@@ -35,7 +35,7 @@ import { FilterIcon, SearchIcon } from '@abqm-ds/icons';
 import { colors } from '@abqm-ds/tokens';
 import { useModalityDetails } from '@src/services/useModalityDetails';
 import type { ModalityDetailsResponseData, ResultModality } from './types.api';
-import type { ModalDetailsFilter, ModalitiesEvents } from './types';
+import type { ModalDetailsFilter } from './types';
 import { Link, useParams } from 'react-router';
 import { ModalFilter } from '@components/ModalityDetails/ModalFilter';
 import Layout from '@src/Layout';

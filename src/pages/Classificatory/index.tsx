@@ -23,7 +23,6 @@ import { SearchIcon } from '@abqm-ds/icons';
 import { colors } from '@abqm-ds/tokens';
 import { useClassificatory } from '@src/services/useClassificatory';
 import type { ClassificatoryData, EventDetailsClassificatory } from './types.api';
-import type { TableClassificatory } from './types';
 import { useParams } from 'react-router';
 import Layout from '@src/Layout';
 
@@ -52,6 +51,11 @@ function Classificatory() {
     {} as EventDetailsClassificatory
   );
 
+  console.log('remover após o build do sonarqube', {
+    allList,
+    searchValue,
+  });
+
   const handleGetResultsClassificatory = useCallback(async () => {
     if (!prove_event_id) {
       return;
@@ -67,6 +71,7 @@ function Classificatory() {
     setListToShow(data.lista_classificacao);
 
     // setEventInfoData(data.detalhe_evento);
+    setEventInfoData(null);
     setIsLoading(false);
   }, [getClassificatory, prove_event_id]);
 
