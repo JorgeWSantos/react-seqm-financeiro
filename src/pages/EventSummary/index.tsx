@@ -7,10 +7,13 @@ import {
   HeaderMobileNavigator,
   HeaderNavigatorDesktop,
   ShareOptions,
+  StyledTableSEQMTextTd,
+  TableSEQM,
   Text,
   type DataDropdown,
   type FooterWithButtonsPropsType,
   type TableColumnSEQM,
+  type TableRowSEQM,
 } from '@abqm-ds/react';
 
 import { useDeviceType } from '@abqm-ds/react';
@@ -25,7 +28,7 @@ import {
   Scrollable,
   StyledHeadingMobile,
 } from './styles';
-import EventTable from './EventTable';
+import EventTable from '@components/EventSummary/EventTable';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePage } from '@src/contexts/page/usePage';
 import {
@@ -38,10 +41,10 @@ import {
 } from '@abqm-ds/icons';
 import { colors } from '@abqm-ds/tokens';
 import type { TableEventSummaryData } from './types';
-import { useParams } from 'react-router';
-import InfoEventDetails from '../../components/EventSummary/InfoEventDetails';
-import EventSummaryDetails from '../../components/EventSummary/EventSummaryDetails';
-import GraphSummaryDetails from '../../components/EventSummary/GraphSummaryDetails';
+import { Link, useParams } from 'react-router';
+import InfoEventDetails from '@components/EventSummary/InfoEventDetails';
+import EventSummaryDetails from '@components/EventSummary/EventSummaryDetails';
+import GraphSummaryDetails from '@components/EventSummary/GraphSummaryDetails';
 import { useEventSummary } from '@src/services/useEventSummary';
 import type {
   EventSummaryResponseData,
@@ -49,11 +52,11 @@ import type {
   ProvesEventSummary,
   ResultModalityByProve,
 } from './types.api';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, type ReactNode } from 'react';
 import { handlePrintPDF } from '@src/components/PrintArea/utils';
 import PrintArea from '@src/components/PrintArea';
 import type { PrintHeaderProps } from '@src/components/PrintArea/PrintHeader';
-import ModalityDropdown from './ModalityDropdown';
+import ModalityDropdown from '@components/EventSummary/ModalityDropdown';
 import Layout from '@src/Layout';
 
 function EventSummary() {
@@ -65,6 +68,8 @@ function EventSummary() {
   const navigate = useNavigate();
   const location = useLocation();
   const params = useParams();
+  // TODO: preparar tela para os eventos não pontuados
+  // modalidade/nao-pontuados/evento/38648
   const prove_id = params.prove_id;
   const event_id = params.event_id;
 
@@ -76,9 +81,11 @@ function EventSummary() {
   const [eventSummaryData, setEventSummaryData] = useState<EventSummaryResponseData>(
     {} as EventSummaryResponseData
   );
+
   const [eventInfoData, setEventInfoData] = useState<InfoEventSummaryData | null>(
     {} as InfoEventSummaryData
   );
+
   const [eventSummaryNumbers, setEventSummaryNumbers] = useState<{
     inscricoes: string;
     competidores: string;
@@ -188,9 +195,38 @@ function EventSummary() {
     }
   }, [eventSummaryData, switchResumeChecked]);
 
-  const columns: Array<TableColumnSEQM<TableEventSummaryData>> = [
+  const redirectToClassificatory = useCallback(
+    ({
+      children,
+      prove_id,
+      event_id,
+      prove_event_id,
+      classificatory_id,
+    }: {
+      children: ReactNode;
+      prove_id: string | number;
+      event_id: number;
+      prove_event_id: number;
+      classificatory_id: number;
+    }) => {
+      return (
+        <Link
+          style={{
+            height: '100%',
+            width: '100%',
+          }}
+          to={`/modalidade/${prove_id}/evento/${event_id}/prova-evento/${prove_event_id}/classificatoria/${classificatory_id}`}
+        >
+          {children}
+        </Link>
+      );
+    },
+    []
+  );
+
+  const tableColumns: Array<TableColumnSEQM> = [
     {
-      key: 'category',
+      key: 'modality',
       label: 'CATEGORIA',
       width: '60%',
     },
@@ -199,33 +235,18 @@ function EventSummary() {
       label: 'ORGANIZADOR',
       width: '7%',
       align: 'center',
-      render: (item) => (
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          {item.organizator === 'Sim' ? <CheckIcon /> : <DashIcon />}
-        </div>
-      ),
     },
     {
       key: 'judge',
       label: 'JUÍZ',
       width: '7%',
       align: 'center',
-      render: (item) => (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          {item.judge === 'Sim' ? <CheckIcon /> : <DashIcon />}
-        </div>
-      ),
     },
     {
       key: 'ABQM',
       label: 'ABQM',
       align: 'center',
       width: '7%',
-      render: (item) => (
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          {item.ABQM === 'Sim' ? <CheckIcon /> : <DashIcon />}
-        </div>
-      ),
     },
     {
       key: 'inscriptions',
@@ -235,12 +256,47 @@ function EventSummary() {
     },
   ];
 
-  const data: Array<TableEventSummaryData> = listToShow?.map((item) => ({
-    category: item.cds_evento.toUpperCase(),
-    organizator: item.cds_status_organizador ? 'Sim' : 'Não',
-    judge: item.cds_status_juiz ? 'Sim' : 'Não',
-    ABQM: item.cds_status_abqm ? 'Sim' : 'Não',
-    inscriptions: item.participantes.toString(),
+  console.log('listToShow', listToShow);
+
+  //remove repetitive data of modality (backend)
+  const tableData: Array<TableRowSEQM> = listToShow?.map((item) => ({
+    modality: {
+      render: () =>
+        redirectToClassificatory({
+          children: <StyledTableSEQMTextTd>{item.cds_modalidade}</StyledTableSEQMTextTd>,
+          prove_id: item.nid_prova === 0 ? 'nao-pontuados' : item.nid_prova ?? 0,
+          event_id: item.nid_evento ?? 0,
+          classificatory_id: item.nid_prova_evento_classificatoria ?? 0,
+          prove_event_id: item.nid_prova_evento ?? 0,
+        }),
+    },
+    organizator: {
+      render: () => (
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          {item.cds_status_organizador ? <CheckIcon /> : <DashIcon />}
+        </div>
+      ),
+    },
+    judge: {
+      render: () => (
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+          }}
+        >
+          {item.cds_status_juiz ? <CheckIcon /> : <DashIcon />}
+        </div>
+      ),
+    },
+    ABQM: {
+      render: () => (
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          {item.cds_status_abqm ? <CheckIcon /> : <DashIcon />}
+        </div>
+      ),
+    },
+    inscriptions: { value: item.participantes.toString() },
   }));
 
   const printCards = [
@@ -391,19 +447,27 @@ function EventSummary() {
 
                   <ButtonTop10>
                     <TrophyIcon fill={colors.white75} />
-                    <Text
-                      fontSize="ssm"
-                      fontWeight="semiBold"
-                      lineHeight="tight"
-                      color={colors.white75}
-                      style={{ marginTop: '2px' }}
+                    <Link
+                      to={`/modalidade/${listToShow[0]?.nid_prova}/evento/${listToShow[0]?.nid_evento}/prova-evento/${listToShow[0]?.nid_prova_evento}/top10`}
                     >
-                      TOP 10
-                    </Text>
+                      <Text
+                        fontSize="ssm"
+                        fontWeight="semiBold"
+                        lineHeight="tight"
+                        color={colors.white75}
+                        style={{ marginTop: '2px' }}
+                      >
+                        TOP 10
+                      </Text>
+                    </Link>
                   </ButtonTop10>
                 </DivTopRight>
 
-                <EventTable data={data} columns={columns} isLoading={isLoading} />
+                <EventTable
+                  data={tableData}
+                  columns={tableColumns}
+                  isLoading={isLoading}
+                />
               </DivRight>
             </Scrollable>
           </ContentDektop>
@@ -433,36 +497,34 @@ function EventSummary() {
             }
             hasFooterButtons
           >
-            <Scrollable>
-              <StyledHeadingMobile>{eventInfoData?.cds_evento}</StyledHeadingMobile>
+            <StyledHeadingMobile>{eventInfoData?.cds_evento}</StyledHeadingMobile>
 
-              <DivLeft>
-                <InfoEventDetails data={eventInfoData} />
+            <DivLeft>
+              <InfoEventDetails data={eventInfoData} />
 
-                <EventSummaryDetails
-                  data={eventSummaryNumbers}
-                  switchChecked={switchResumeChecked}
-                  setSwitchChecked={setSwitchResumeChecked}
-                />
+              <EventSummaryDetails
+                data={eventSummaryNumbers}
+                switchChecked={switchResumeChecked}
+                setSwitchChecked={setSwitchResumeChecked}
+              />
 
-                <GraphSummaryDetails
-                  data={eventSummaryData.tipo_estatistica_prova}
-                  isTabletOrMobile={isTabletOrMobile}
-                />
-              </DivLeft>
+              <GraphSummaryDetails
+                data={eventSummaryData.tipo_estatistica_prova}
+                isTabletOrMobile={isTabletOrMobile}
+              />
+            </DivLeft>
 
-              <DivRight>
-                <EventTable data={data} columns={columns} isLoading={isLoading} />
-              </DivRight>
-            </Scrollable>
+            <DivRight>
+              <EventTable data={tableData} columns={tableColumns} isLoading={isLoading} />
+            </DivRight>
           </ContentMobile>
         )}
 
-        {data?.length > 0 && (
+        {tableData?.length > 0 && (
           <PrintArea
             title={switchResumeChecked ? 'RESUMO GERAL' : 'RESUMO DA MODALIDADE'}
-            columns={columns}
-            data={data}
+            columns={tableColumns}
+            data={tableData}
             cards={printCards}
             info={printInfo}
           />

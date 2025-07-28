@@ -7,7 +7,7 @@ import {
   type RadioGroupOption,
 } from '@abqm-ds/react';
 import { DivButton, DivGroup, ModalContent, TextGroup } from './styles';
-import type { ModalDetailsFilter } from '../types';
+import type { ModalDetailsFilter } from '../../../pages/ModalityDetails/types';
 import type { Dispatch, SetStateAction } from 'react';
 
 interface ModalFilterProps {

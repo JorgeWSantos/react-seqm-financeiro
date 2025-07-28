@@ -29,6 +29,8 @@ export function useModalityDetails() {
           }
         );
 
+        console.log('response', response);
+
         const { data, message, success } = response.data;
 
         if (!success) {
