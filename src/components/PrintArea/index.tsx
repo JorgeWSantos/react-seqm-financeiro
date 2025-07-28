@@ -9,6 +9,7 @@ import {
 } from './styles';
 import { TablePrintResultsSEQM } from './TablePrintResultsSEQM';
 import PrintHeader, { type PrintHeaderProps } from './PrintHeader';
+import type { TableColumnSEQM, TableRowSEQM } from '@abqm-ds/react';
 
 interface CardProps {
   title: string;
@@ -23,8 +24,8 @@ const PrintArea = ({
   info,
 }: {
   title: string;
-  columns: any[];
-  data: any[];
+  columns: Array<TableColumnSEQM>;
+  data: Array<TableRowSEQM>;
   cards: CardProps[];
   info: PrintHeaderProps;
 }) => {

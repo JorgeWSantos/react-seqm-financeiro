@@ -8,6 +8,7 @@ import {
   HeaderNavigatorDesktop,
   ShareOptions,
   StyledTableSEQMTextTd,
+  TableSEQM,
   Text,
   type DataDropdown,
   type FooterWithButtonsPropsType,
@@ -210,6 +211,10 @@ function EventSummary() {
     }) => {
       return (
         <Link
+          style={{
+            height: '100%',
+            width: '100%',
+          }}
           to={`/modalidade/${prove_id}/evento/${event_id}/prova-evento/${prove_event_id}/classificatoria/${classificatory_id}`}
         >
           {children}
@@ -219,30 +224,30 @@ function EventSummary() {
     []
   );
 
-  const columns: Array<TableColumnSEQM> = [
-    // {
-    //   key: 'modality',
-    //   label: 'CATEGORIA',
-    //   width: '60%',
-    // },
-    // {
-    //   key: 'organizator',
-    //   label: 'ORGANIZADOR',
-    //   width: '7%',
-    //   align: 'center',
-    // },
-    // {
-    //   key: 'judge',
-    //   label: 'JUÍZ',
-    //   width: '7%',
-    //   align: 'center',
-    // },
-    // {
-    //   key: 'ABQM',
-    //   label: 'ABQM',
-    //   align: 'center',
-    //   width: '7%',
-    // },
+  const tableColumns: Array<TableColumnSEQM> = [
+    {
+      key: 'modality',
+      label: 'CATEGORIA',
+      width: '60%',
+    },
+    {
+      key: 'organizator',
+      label: 'ORGANIZADOR',
+      width: '7%',
+      align: 'center',
+    },
+    {
+      key: 'judge',
+      label: 'JUÍZ',
+      width: '7%',
+      align: 'center',
+    },
+    {
+      key: 'ABQM',
+      label: 'ABQM',
+      align: 'center',
+      width: '7%',
+    },
     {
       key: 'inscriptions',
       label: 'INSCRIÇÕES',
@@ -254,43 +259,43 @@ function EventSummary() {
   console.log('listToShow', listToShow);
 
   //remove repetitive data of modality (backend)
-  const data: Array<TableRowSEQM> = listToShow?.map((item) => ({
-    // modality: {
-    //   render: () => (
-    //     <>
-    //       {redirectToClassificatory({
-    //         children: (
-    //           <StyledTableSEQMTextTd>{item.cds_modalidade}</StyledTableSEQMTextTd>
-    //         ),
-    //         prove_id: item.nid_prova === 0 ? 'nao-pontuados' : item.nid_prova ?? 0,
-    //         event_id: item.nid_evento ?? 0,
-    //         classificatory_id: item.nid_prova_evento_classificatoria ?? 0,
-    //         prove_event_id: item.nid_prova_evento ?? 0,
-    //       })}
-    //     </>
-    //   ),
-    // },
-    // organizator: {
-    //   render: () => (
-    //     <div style={{ display: 'flex', justifyContent: 'center' }}>
-    //       {item.cds_status_organizador ? <CheckIcon /> : <DashIcon />}
-    //     </div>
-    //   ),
-    // },
-    // judge: {
-    //   render: () => (
-    //     <div style={{ display: 'flex', justifyContent: 'center' }}>
-    //       {item.cds_status_juiz ? <CheckIcon /> : <DashIcon />}
-    //     </div>
-    //   ),
-    // },
-    // ABQM: {
-    //   render: () => (
-    //     <div style={{ display: 'flex', justifyContent: 'center' }}>
-    //       {item.cds_status_abqm ? <CheckIcon /> : <DashIcon />}
-    //     </div>
-    //   ),
-    // },
+  const tableData: Array<TableRowSEQM> = listToShow?.map((item) => ({
+    modality: {
+      render: () =>
+        redirectToClassificatory({
+          children: <StyledTableSEQMTextTd>{item.cds_modalidade}</StyledTableSEQMTextTd>,
+          prove_id: item.nid_prova === 0 ? 'nao-pontuados' : item.nid_prova ?? 0,
+          event_id: item.nid_evento ?? 0,
+          classificatory_id: item.nid_prova_evento_classificatoria ?? 0,
+          prove_event_id: item.nid_prova_evento ?? 0,
+        }),
+    },
+    organizator: {
+      render: () => (
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          {item.cds_status_organizador ? <CheckIcon /> : <DashIcon />}
+        </div>
+      ),
+    },
+    judge: {
+      render: () => (
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+          }}
+        >
+          {item.cds_status_juiz ? <CheckIcon /> : <DashIcon />}
+        </div>
+      ),
+    },
+    ABQM: {
+      render: () => (
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          {item.cds_status_abqm ? <CheckIcon /> : <DashIcon />}
+        </div>
+      ),
+    },
     inscriptions: { value: item.participantes.toString() },
   }));
 
@@ -458,7 +463,11 @@ function EventSummary() {
                   </ButtonTop10>
                 </DivTopRight>
 
-                <EventTable data={data} columns={columns} isLoading={isLoading} />
+                <EventTable
+                  data={tableData}
+                  columns={tableColumns}
+                  isLoading={isLoading}
+                />
               </DivRight>
             </Scrollable>
           </ContentDektop>
@@ -506,16 +515,16 @@ function EventSummary() {
             </DivLeft>
 
             <DivRight>
-              <EventTable data={data} columns={columns} isLoading={isLoading} />
+              <EventTable data={tableData} columns={tableColumns} isLoading={isLoading} />
             </DivRight>
           </ContentMobile>
         )}
 
-        {data?.length > 0 && (
+        {tableData?.length > 0 && (
           <PrintArea
             title={switchResumeChecked ? 'RESUMO GERAL' : 'RESUMO DA MODALIDADE'}
-            columns={columns}
-            data={data}
+            columns={tableColumns}
+            data={tableData}
             cards={printCards}
             info={printInfo}
           />

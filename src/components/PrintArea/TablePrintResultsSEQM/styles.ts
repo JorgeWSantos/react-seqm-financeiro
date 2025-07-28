@@ -50,13 +50,11 @@ export const StyledBodyTablePrintResultsSEQM = styled.tbody`
   }
 
   tr td {
-    padding: 0.5625rem ${space[2]};
+    padding: 0.5rem ${space[2]};
   }
 
-  @media (max-width: ${breakpointsPx.lg}) {
-    tr td {
-      padding: ${space[2]};
-    }
+  p {
+    margin-top: -10pt;
   }
 `;
 
@@ -66,9 +64,7 @@ export const StyledTablePrintResultsSEQMTextTd = styled(Text).attrs({
 })<{ $bold?: boolean }>`
   font-size: 8pt;
   font-weight: ${({ $bold }) => ($bold ? fontWeights.semiBold : fontWeights.regular)};
-  max-height: 1rem;
   color: ${colors.grayFigma2};
-  margin-top: -0.875rem;
 
   @media (max-width: ${breakpointsPx.lg}) {
     font-size: ${fontSizes.ssm};
