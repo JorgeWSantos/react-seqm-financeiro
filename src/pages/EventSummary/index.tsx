@@ -12,6 +12,7 @@ import {
   type DataDropdown,
   type FooterWithButtonsPropsType,
   type TableColumnSEQM,
+  type TableRowSEQM,
 } from '@abqm-ds/react';
 
 import { useDeviceType } from '@abqm-ds/react';
@@ -218,56 +219,30 @@ function EventSummary() {
     []
   );
 
-  const columns: Array<TableColumnSEQM<TableEventSummaryData>> = [
-    {
-      key: 'modality',
-      label: 'CATEGORIA',
-      width: '60%',
-      render: (row: TableEventSummaryData) => (
-        <>
-          {redirectToClassificatory({
-            children: <StyledTableSEQMTextTd>{row.modality}</StyledTableSEQMTextTd>,
-            prove_id: row.prove_id === 0 ? 'nao-pontuados' : row.prove_id ?? 0,
-            event_id: row.event_id ?? 0,
-            classificatory_id: row.classificatory_id ?? 0,
-            prove_event_id: row.prove_event_id ?? 0,
-          })}
-        </>
-      ),
-    },
-    {
-      key: 'organizator',
-      label: 'ORGANIZADOR',
-      width: '7%',
-      align: 'center',
-      render: (item) => (
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          {item.organizator === 'Sim' ? <CheckIcon /> : <DashIcon />}
-        </div>
-      ),
-    },
-    {
-      key: 'judge',
-      label: 'JUÍZ',
-      width: '7%',
-      align: 'center',
-      render: (item) => (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          {item.judge === 'Sim' ? <CheckIcon /> : <DashIcon />}
-        </div>
-      ),
-    },
-    {
-      key: 'ABQM',
-      label: 'ABQM',
-      align: 'center',
-      width: '7%',
-      render: (item) => (
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          {item.ABQM === 'Sim' ? <CheckIcon /> : <DashIcon />}
-        </div>
-      ),
-    },
+  const columns: Array<TableColumnSEQM> = [
+    // {
+    //   key: 'modality',
+    //   label: 'CATEGORIA',
+    //   width: '60%',
+    // },
+    // {
+    //   key: 'organizator',
+    //   label: 'ORGANIZADOR',
+    //   width: '7%',
+    //   align: 'center',
+    // },
+    // {
+    //   key: 'judge',
+    //   label: 'JUÍZ',
+    //   width: '7%',
+    //   align: 'center',
+    // },
+    // {
+    //   key: 'ABQM',
+    //   label: 'ABQM',
+    //   align: 'center',
+    //   width: '7%',
+    // },
     {
       key: 'inscriptions',
       label: 'INSCRIÇÕES',
@@ -276,17 +251,47 @@ function EventSummary() {
     },
   ];
 
+  console.log('listToShow', listToShow);
+
   //remove repetitive data of modality (backend)
-  const data: Array<TableEventSummaryData> = listToShow?.map((item) => ({
-    modality: item.cds_modalidade.toUpperCase(),
-    organizator: item.cds_status_organizador ? 'Sim' : 'Não',
-    judge: item.cds_status_juiz ? 'Sim' : 'Não',
-    ABQM: item.cds_status_abqm ? 'Sim' : 'Não',
-    inscriptions: item.participantes.toString(),
-    prove_id: item.nid_prova,
-    event_id: item.nid_evento,
-    prove_event_id: item.nid_prova_evento,
-    classificatory_id: item.nid_prova_evento_classificatoria,
+  const data: Array<TableRowSEQM> = listToShow?.map((item) => ({
+    // modality: {
+    //   render: () => (
+    //     <>
+    //       {redirectToClassificatory({
+    //         children: (
+    //           <StyledTableSEQMTextTd>{item.cds_modalidade}</StyledTableSEQMTextTd>
+    //         ),
+    //         prove_id: item.nid_prova === 0 ? 'nao-pontuados' : item.nid_prova ?? 0,
+    //         event_id: item.nid_evento ?? 0,
+    //         classificatory_id: item.nid_prova_evento_classificatoria ?? 0,
+    //         prove_event_id: item.nid_prova_evento ?? 0,
+    //       })}
+    //     </>
+    //   ),
+    // },
+    // organizator: {
+    //   render: () => (
+    //     <div style={{ display: 'flex', justifyContent: 'center' }}>
+    //       {item.cds_status_organizador ? <CheckIcon /> : <DashIcon />}
+    //     </div>
+    //   ),
+    // },
+    // judge: {
+    //   render: () => (
+    //     <div style={{ display: 'flex', justifyContent: 'center' }}>
+    //       {item.cds_status_juiz ? <CheckIcon /> : <DashIcon />}
+    //     </div>
+    //   ),
+    // },
+    // ABQM: {
+    //   render: () => (
+    //     <div style={{ display: 'flex', justifyContent: 'center' }}>
+    //       {item.cds_status_abqm ? <CheckIcon /> : <DashIcon />}
+    //     </div>
+    //   ),
+    // },
+    inscriptions: { value: item.participantes.toString() },
   }));
 
   const printCards = [
