@@ -1,30 +1,39 @@
 import type { ApiResponse } from '@src/services/types.api';
 
 export type ClassificatoryData = {
-  cds_pontuacao: string;
-};
-
-export type EventDetailsClassificatory = {
-  nid_agrupa_evento: number;
-  nid_evento: number;
-  nid_prova_evento: number;
-  nid_prova_evento_classificatoria: number;
-  cds_evento: string;
-  cds_modalidade: string;
-  cds_url: string;
-  ccd_tipo_classificatoria: string;
-  nnr_passada: number;
-  cds_tipo_avaliacao: string;
-  bid_juvenil: boolean;
-  cds_tipo_prova: string;
-  dtm_data_prova: string;
-  nid_prova: number;
+  nid_equipe: number;
+  cds_ordem_entrada: string;
+  cds_classificacao: string;
+  cds_classificacao_aqha: string;
+  cds_classificacao_castrado: string;
+  cds_classificacao_nucleo: string;
+  cds_classificacao_d: string;
+  cds_media: string;
+  cds_pontuacoes: string;
+  cds_media_final: string;
+  cds_media_aqha: string;
+  cds_media_final_nucleo: string;
+  bid_aqha: boolean;
+  bid_castrado: boolean;
+  bid_nucleo: boolean;
+  bid_abqm: boolean;
+  qtde_competidores: number;
+  bid_nucleo_participa_abqm: boolean;
+  nnr_senha: number | null;
+  nnr_bois: number | null;
+  boi_virado: number;
+  nid_treinador: number;
+  nvl_premiacao_corrida: number;
+  indice_velocidade: number;
+  nvl_tempo_corrida: number;
+  nome_treinador: string | null;
 };
 
 export interface ClassificatoryResponseData {
-  detalhe_evento: null;
+  cds_prova_classificatoria: string;
+  lista_classificacao: ClassificatoryData | [];
 }
 
 export type ClassificatoryResponse = ApiResponse<{
-  resultado_prova_evento: ClassificatoryResponseData;
+  list_page_product: Array<ClassificatoryResponseData>;
 }>;

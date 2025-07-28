@@ -15,7 +15,7 @@ export function useClassificatory() {
     } = {}): Promise<ClassificatoryResponseData> => {
       try {
         const response = await apiResultados.get<ClassificatoryResponse>(
-          '/v1/ResultadoProvaEvento',
+          '/v1/ListaClassificacaoEtapas',
           {
             params: {
               nid_prova_evento: prove_event_id,
@@ -23,38 +23,34 @@ export function useClassificatory() {
           }
         );
 
-        console.log('Response from Classificatory:', response);
-
         const { data, message, success } = response.data;
 
         if (!success) {
           Toast.show({
-            message: message || 'Ops, ocorreu um erro ao carregar os dados do top 10!',
+            message:
+              message || 'Ops, ocorreu um erro ao carregar os dados da classificação!',
             type: 'error',
             timeout: 3000,
           });
 
           return {
-            detalhe_evento: null,
+            cds_prova_classificatoria: '',
+            lista_classificacao: [],
           };
         }
 
-        return (
-          data.resultado_prova_evento || {
-            top10: [],
-            detalhe_evento: null,
-          }
-        );
+        return data.list_page_product[0];
       } catch (error) {
         Toast.show({
-          message: 'Ops, ocorreu um erro ao buscar as informações!',
+          message: 'Ops, ocorreu um erro ao carregar os dados da classificação!',
           type: 'error',
           timeout: 30000,
         });
         console.warn(error);
 
         return {
-          detalhe_evento: null,
+          cds_prova_classificatoria: '',
+          lista_classificacao: [],
         };
       }
     },
