@@ -8,7 +8,6 @@ import {
   HeaderNavigatorDesktop,
   ShareOptions,
   StyledTableSEQMTextTd,
-  TableSEQM,
   Text,
   type DataDropdown,
   type FooterWithButtonsPropsType,
@@ -40,7 +39,6 @@ import {
   TrophyIcon,
 } from '@abqm-ds/icons';
 import { colors } from '@abqm-ds/tokens';
-import type { TableEventSummaryData } from './types';
 import { Link, useParams } from 'react-router';
 import InfoEventDetails from '@components/EventSummary/InfoEventDetails';
 import EventSummaryDetails from '@components/EventSummary/EventSummaryDetails';

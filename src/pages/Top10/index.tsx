@@ -11,6 +11,7 @@ import {
   Text,
   TextInput,
   type TableColumnSEQM,
+  type TableRowSEQM,
 } from '@abqm-ds/react';
 
 import { useDeviceType } from '@abqm-ds/react';
@@ -23,7 +24,6 @@ import { SearchIcon } from '@abqm-ds/icons';
 import { colors } from '@abqm-ds/tokens';
 import { useTop10 } from '@src/services/useTop10';
 import type { Top10Data, EventDetailsTop10 } from './types.api';
-import type { TableTop10 } from './types';
 import { useParams } from 'react-router';
 import Layout from '@src/Layout';
 
@@ -117,13 +117,11 @@ function Top10() {
     handleGetResultsTop10();
   }, [handleGetResultsTop10]);
 
-  const columns: Array<TableColumnSEQM<TableTop10>> = [
+  const columns: Array<TableColumnSEQM> = [
     {
       key: 'abqm',
       label: 'ABQM',
       width: '3%',
-      // textBold: true,
-
       align: 'center',
     },
     { key: 'competitor', label: 'COMPETIDOR', width: '15%' },
@@ -132,9 +130,6 @@ function Top10() {
       label: 'ANIMAL',
       width: '20%',
       align: 'left',
-      render: (row: TableTop10) => {
-        return <StyledTableSEQMTextTd $bold>{row.animal}</StyledTableSEQMTextTd>;
-      },
     },
     {
       key: 'owner',
@@ -157,13 +152,21 @@ function Top10() {
     // },
   ];
 
-  const data: Array<TableTop10> = listToShow.map((item, index) => ({
-    abqm: `${index + 1}°`,
-    competitor: item.cds_nome_competidor.toUpperCase(),
-    animal: item.cds_nome_animal.toUpperCase(),
-    owner: item.proprietario.toUpperCase(),
-    tn: item.cds_pontuacao,
-    // modality: item.cds_modalidade.toUpperCase(),
+  const data: Array<TableRowSEQM> = listToShow.map((item, index) => ({
+    abqm: { value: `${index + 1}°` },
+    competitor: { value: item.cds_nome_competidor.toUpperCase() },
+    animal: {
+      render: () => {
+        return (
+          <StyledTableSEQMTextTd $bold>
+            {item.cds_nome_animal.toUpperCase()}
+          </StyledTableSEQMTextTd>
+        );
+      },
+    },
+    owner: { value: item.proprietario.toUpperCase() },
+    tn: { value: item.cds_pontuacao },
+    // modality: { value: item.cds_modalidade.toUpperCase() },
     // filitation: item.cds_filiacao,
   }));
 
