@@ -15,6 +15,7 @@ import {
   Text,
   TextInput,
   type TableColumnSEQM,
+  type TableRowSEQM,
 } from '@abqm-ds/react';
 
 import { useDeviceType } from '@abqm-ds/react';
@@ -233,56 +234,22 @@ function ModalityDetail() {
     []
   );
 
-  const columns: Array<TableColumnSEQM<ModalitiesEvents>> = [
+  const columns: Array<TableColumnSEQM> = [
     {
       key: 'event',
       label: 'EVENTO',
       width: '35%',
-      render: (row: ModalitiesEvents) => {
-        if (row.isOficial) {
-          return redirectToEvent({
-            children: <TableSEQMColumnOficial textBold={true} value={row.event} />,
-            prove_id: row.prove_id === 0 ? 'nao-pontuados' : row.prove_id ?? 0,
-            event_id: row.event_id ?? 0,
-          });
-        }
-
-        return redirectToEvent({
-          children: <StyledTableSEQMTextTd $bold>{row.event}</StyledTableSEQMTextTd>,
-          prove_id: row.prove_id === 0 ? 'nao-pontuados' : row.prove_id ?? 0,
-          event_id: row.event_id ?? 0,
-        });
-      },
-      textBold: true,
     },
     {
       key: 'organizator',
       label: 'ORGANIZADOR',
       width: '35%',
-      render: (row: ModalitiesEvents) => (
-        <>
-          {redirectToEvent({
-            children: <StyledTableSEQMTextTd>{row.organizator}</StyledTableSEQMTextTd>,
-            prove_id: row.prove_id === 0 ? 'nao-pontuados' : row.prove_id ?? 0,
-            event_id: row.event_id ?? 0,
-          })}
-        </>
-      ),
     },
     {
       key: 'local',
       label: 'LOCAL',
       width: '20%',
       align: 'left',
-      render: (row: ModalitiesEvents) => (
-        <>
-          {redirectToEvent({
-            children: <StyledTableSEQMTextTd>{row.local}</StyledTableSEQMTextTd>,
-            prove_id: row.prove_id ?? 0,
-            event_id: row.event_id ?? 0,
-          })}
-        </>
-      ),
     },
     {
       key: 'init',
@@ -298,20 +265,69 @@ function ModalityDetail() {
     },
   ];
 
-  const data: Array<ModalitiesEvents> = listToShow.map((item) => ({
-    event: item.cds_evento.toUpperCase(),
-    organizator: item.cds_empresa.toUpperCase(),
-    local: item.cds_local_evento.toUpperCase(),
-    init: item.data_inicio_evento,
-    end: item.data_fim_evento,
-    isOficial: item.bid_oficial,
+  console.log('listToShow', listToShow);
 
-    //not showed on table
-    event_id: item.nid_evento,
-    organizator_id: item.nid_empresa,
-    event_group_id: item.nid_agrupa_evento,
-    prove_id: item.nid_prova,
+  const data: Array<TableRowSEQM> = listToShow.map((item) => ({
+    event: {
+      render: () => {
+        if (item.bid_oficial) {
+          return redirectToEvent({
+            children: (
+              <TableSEQMColumnOficial
+                textBold={true}
+                value={item.cds_evento.toUpperCase()}
+              />
+            ),
+            prove_id: item.nid_prova === 0 ? 'nao-pontuados' : item.nid_prova ?? 0,
+            event_id: item.nid_evento ?? 0,
+          });
+        }
+
+        return redirectToEvent({
+          children: (
+            <StyledTableSEQMTextTd $bold>
+              {item.cds_evento.toUpperCase()}
+            </StyledTableSEQMTextTd>
+          ),
+          prove_id: item.nid_prova ?? 0,
+          event_id: item.nid_evento ?? 0,
+        });
+      },
+    },
+    organizator: {
+      render: () =>
+        redirectToEvent({
+          children: (
+            <StyledTableSEQMTextTd>
+              {item.cds_empresa.toUpperCase()}
+            </StyledTableSEQMTextTd>
+          ),
+          prove_id: item.nid_prova ?? 0,
+          event_id: item.nid_evento ?? 0,
+        }),
+    },
+    local: {
+      render: () =>
+        redirectToEvent({
+          children: (
+            <StyledTableSEQMTextTd>
+              {item.cds_local_evento.toUpperCase()}
+            </StyledTableSEQMTextTd>
+          ),
+          prove_id: item.nid_prova ?? 0,
+          event_id: item.nid_evento ?? 0,
+        }),
+    },
+    init: { value: item.data_inicio_evento },
+    end: { value: item.data_fim_evento },
+    isoficial: { value: item.bid_oficial === true },
   }));
+
+  //not showed on table
+  // event_id: item.nid_evento,
+  // organizator_id: item.nid_empresa,
+  // event_group_id: item.nid_agrupa_evento,
+  // prove_id: item.nid_prova,
 
   return (
     <Layout>
