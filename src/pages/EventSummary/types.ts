@@ -1,11 +1,15 @@
 import type { DataDropdown, RadioGroupOption } from '@abqm-ds/react';
 
 export interface TableEventSummaryData {
-  category: string;
+  modality: string;
   organizator: string;
   judge: string;
   ABQM: string;
   inscriptions: string;
+  prove_id: number;
+  event_id: number;
+  prove_event_id: number;
+  classificatory_id: number;
 }
 
 export interface ModalDetailsFilter {

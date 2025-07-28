@@ -37,7 +37,7 @@ export const TablePrintResultsSEQM = ({
       </StyledHeadTablePrintResultsSEQM>
       <StyledBodyTablePrintResultsSEQM>
         {data.map((row, idx) => (
-          <tr key={idx} className={row.isOficial ? 'aqha-column' : ''}>
+          <tr key={idx} className={row?.isoficial?.value ? 'aqha-column' : ''}>
             {columns.map((col) => (
               <td
                 key={col.key}
@@ -48,13 +48,13 @@ export const TablePrintResultsSEQM = ({
                   textAlign: col.align || 'left',
                 }}
               >
-                {col.render ? (
-                  col.render(row)
+                {row[col.key]?.render && typeof row[col.key].render === 'function' ? (
+                  row[col.key]?.render?.()
                 ) : (
                   <StyledTablePrintResultsSEQMTextTd
                     {...(col.textBold && { $bold: true })}
                   >
-                    {row[col.key]}
+                    {row[col.key]?.value}
                   </StyledTablePrintResultsSEQMTextTd>
                 )}
               </td>
