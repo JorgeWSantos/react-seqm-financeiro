@@ -21,11 +21,11 @@ export function useGeneralService() {
 
       return response.data.data || { link_login: '', list_menu: [] };
     } catch (error) {
-      Toast.show({
-        message: 'Ops, ocorreu um erro ao carregar o menu!',
-        type: 'error',
-        timeout: 3000,
-      });
+      // Toast.show({
+      //   message: 'Ops, ocorreu um erro ao carregar o menu!',
+      //   type: 'error',
+      //   timeout: 3000,
+      // });
       console.warn(error);
       return { link_login: '', list_menu: [] };
     }
