@@ -12,7 +12,7 @@ const headersDefault = {
 // ABQM.API
 // TODO: ALTERAR PARA UMA NOVA API
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: import.meta.env.VITE_API_GERAL,
   headers: {
     ...headersDefault,
   },
@@ -21,12 +21,12 @@ const api = axios.create({
 api.interceptors.request.use((config) => {
   const token = getToken();
 
-  if (!token) {
+  if (token) {
     // Cancela a requisição se não houver token
-    return Promise.reject(new Error('Token não encontrado'));
+    // return Promise.reject(new Error('Token não encontrado'));
+    config.headers.Authorization = `Bearer ${token}`;
   }
 
-  config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
 
