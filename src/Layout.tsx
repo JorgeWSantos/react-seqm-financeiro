@@ -11,7 +11,7 @@ import {
 import { useAuth } from './contexts/auth/useAuth.ts';
 // import type { MenuResponseObj } from './types.ts';
 import { useEffect, useState } from 'react';
-import { useMenuService } from './services/useMenuService.ts';
+import { useGeneralService, type MenuResponseObj } from './services/useGeneralService.ts';
 
 function Layout({
   children,
@@ -22,18 +22,18 @@ function Layout({
 }) {
   const { isTabletOrMobile } = useDeviceType();
   const { user, logout, token } = useAuth();
-  const { getMenu } = useMenuService();
+  const { getMenu } = useGeneralService();
 
-  const [menu] = useState<MenuType>([]);
+  const [menu, setMenu] = useState<MenuType>([]);
   const pageTitle = 'Resultados';
 
   useEffect(() => {
     // TODO definir em que API vai ficar o menu
-    // const loadMenu = async () => {
-    //   const menu: MenuResponseObj = await getMenu();
-    //   setMenu(menu.list_menu);
-    // };
-    // loadMenu();
+    const loadMenu = async () => {
+      const menu: MenuResponseObj = await getMenu();
+      setMenu(menu.list_menu);
+    };
+    loadMenu();
   }, [getMenu]);
 
   const redirectToLogin = () => {
