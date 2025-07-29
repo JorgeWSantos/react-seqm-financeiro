@@ -1,13 +1,15 @@
 import { useCallback, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { api } from '../../services/api';
 import { AuthContext } from './authContext';
 import { removeToken, getToken, setToken } from '@src/services/auth';
 import type { LoggedUser } from '@abqm-ds/react';
+import { useGeneralService } from '@src/services/useGeneralService';
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<LoggedUser | null>(null);
   const [tokenContext, setTokenContext] = useState<string | null>(getToken());
+
+  const { getPersonData } = useGeneralService();
 
   const logout = useCallback(() => {
     removeToken();
@@ -22,12 +24,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const fetchUserDatabyToken = useCallback(async () => {
     try {
-      const { data } = await api.get('/pessoa/dadospessoa');
+      const { data, success } = await getPersonData();
 
-      if (data.success) {
-        const _userData = data.data[0];
-        setUser(_userData);
-        return _userData;
+      if (success) {
+        setUser(data.dados_pessoa);
+        return '';
       } else {
         logout();
         return null;
@@ -36,7 +37,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       logout();
       return null;
     }
-  }, [logout]);
+  }, [logout, getPersonData]);
 
   useQuery({
     queryKey: ['token', tokenContext],

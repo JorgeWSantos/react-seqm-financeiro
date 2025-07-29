@@ -25,6 +25,7 @@ import { useClassificatory } from '@src/services/useClassificatory';
 import type { ClassificatoryData, EventDetailsClassificatory } from './types.api';
 import { useParams } from 'react-router';
 import Layout from '@src/Layout';
+import AnimalTableData from './AnimalTableData';
 
 function Classificatory() {
   const params = useParams();
@@ -109,38 +110,72 @@ function Classificatory() {
 
   const columns: Array<TableColumnSEQM> = [
     {
-      key: 'nucleo',
-      label: 'Núcleo',
-      width: '3%',
-      align: 'center',
-    },
-    {
       key: 'abqm',
       label: 'ABQM',
       width: '3%',
-      // textBold: true,
       align: 'center',
     },
     {
-      key: 'competidor',
-      label: 'Competidor',
-      width: '90%',
+      key: 'competitor',
+      label: 'COMPETIDOR',
+      width: '32%',
+      align: 'left',
+    },
+    {
+      key: 'animal',
+      label: 'ANIMAL',
+      width: '20%',
+      align: 'left',
+    },
+    {
+      key: 'owner',
+      label: 'PROPRIETÁRIO',
+      width: '20%',
+      align: 'left',
+    },
+    {
+      key: 'tn',
+      label: 'T/N',
+      width: '5%',
       align: 'left',
     },
   ];
 
-  const data: Array<TableRowSEQM> = listToShow.map((item) => ({
-    nucleo: { value: item.cds_classificacao },
+  const data: Array<TableRowSEQM> = listToShow.map((item, index) => ({
+    // nucleo: { value: item.cds_classificacao },
     abqm: { value: item.cds_classificacao },
-    competidor: {
+    competitor: {
       render: () => {
         return (
-          <Text fontSize="xs" fontWeight="semiBold" color={colors.emeraldGreen75}>
+          <Text fontSize="xxs" fontWeight="semiBold" color={colors.emeraldGreen75}>
             {item.equipe.map((e) => e.cds_competidor).join(', ')}
           </Text>
         );
       },
     },
+    animal: {
+      render: () => {
+        return (
+          <AnimalTableData
+            nameAnimal={item.equipe.map((e) => e.cds_animal).join(', ')}
+            imgAnimal={
+              'https://intranet.abqm.com.br/Comercial/Content/Arquivos/FotoAnimal/P029810.jpg'
+            }
+            isHallOfFame={index === 0}
+          />
+        );
+      },
+    },
+    owner: {
+      render: () => {
+        return (
+          <Text fontSize="xxs" fontWeight="semiBold" color={colors.emeraldGreen75}>
+            {item.equipe.map((e) => e.cds_proprietario).join(', ')}
+          </Text>
+        );
+      },
+    },
+    tn: { value: item.cds_media },
   }));
 
   return (
