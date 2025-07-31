@@ -10,9 +10,9 @@ const TooltipContentComponent = ({
 }) => (
   <TooltipContent>
     {typeof ImgAnimal === 'string' ? (
-      <img src={ImgAnimal} />
+      <img className="tooltip-image" src={ImgAnimal} />
     ) : typeof ImgAnimal === 'function' ? (
-      <ImgAnimal />
+      <ImgAnimal className="tooltip-svg" />
     ) : null}
 
     <TooltipContentRight>

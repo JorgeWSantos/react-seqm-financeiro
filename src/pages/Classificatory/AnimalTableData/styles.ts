@@ -1,4 +1,4 @@
-import { LaurelIcon, MedalIcon } from '@abqm-ds/icons';
+import { LaurelIcon } from '@abqm-ds/icons';
 import { Text } from '@abqm-ds/react';
 import { colors, fontWeights } from '@abqm-ds/tokens';
 import { Tooltip } from 'react-tooltip';
@@ -17,14 +17,15 @@ export const DivImage = styled.div`
   position: relative;
   display: flex;
   align-items: center;
-  width: 1.188rem;
+  min-width: 1.188rem;
 
   img,
-  svg {
+  .image-animal-default {
     transform: scale(${scaleImages});
     position: relative;
     border-radius: 50%;
-    width: 1.188rem;
+    min-width: 1.188rem;
+    max-width: 1.188rem;
     height: 1.188rem;
     object-fit: cover;
     border: 1px solid transparent;
@@ -47,7 +48,7 @@ export const DivBorder = styled.div<{ $medalColor: string }>`
 
 export const LaurelImage = styled(LaurelIcon)`
   position: absolute;
-  top: 0rem;
+  margin-top: 0.05rem;
   left: -0.05rem;
   width: 1.3rem;
   height: 1.3rem;
@@ -66,6 +67,14 @@ export const DivTexts = styled.div`
   flex-direction: column;
 `;
 
+export const StyledTextHallOfFameNameAnimal = styled(Text).attrs({
+  fontSize: 'xxs',
+  fontWeight: 'semiBold',
+  color: colors.brown700,
+})`
+  white-space: nowrap;
+`;
+
 export const StyledTextHallOfFame = styled(Text)`
   font-size: 5.5pt;
   font-weight: ${fontWeights.semiBold};
@@ -74,10 +83,11 @@ export const StyledTextHallOfFame = styled(Text)`
   margin-top: -0.05rem;
 `;
 
-export const MedalImg = styled(MedalIcon)`
-  width: 0.75rem;
-  height: 0.75rem;
-  margin-top: -0.075rem;
+export const MedalImg = styled.img`
+  width: 1rem;
+  height: 1rem;
+  aspect-ratio: 1/1;
+  margin-top: -0.08rem;
 `;
 
 /// tooltip
@@ -88,4 +98,13 @@ export const StyledTooltip = styled(Tooltip)<{ hasSomething?: boolean }>`
   border-radius: 0.5rem !important;
   display: ${({ hasSomething }) => (hasSomething ? 'flex' : 'none')} !important;
   display: flex;
+
+  /* Aplica apenas se a tooltip estiver com a classe de topo */
+  &.react-tooltip__place-top,
+  &.react-tooltip__place-bottom {
+    transform: translateX(45%) !important;
+    .react-tooltip-arrow {
+      left: 10px !important;
+    }
+  }
 `;

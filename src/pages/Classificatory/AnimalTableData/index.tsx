@@ -1,4 +1,3 @@
-import { Text } from '@abqm-ds/react';
 import {
   ContainerImage,
   DivBorder,
@@ -8,11 +7,13 @@ import {
   LaurelImage,
   MedalImg,
   StyledTextHallOfFame,
+  StyledTextHallOfFameNameAnimal,
   StyledTooltip,
 } from './styles';
 import { colors } from '@abqm-ds/tokens';
 import { DefaultHorseRoundedIconIMG, DefaultHorseSquadIconIMG } from '@abqm-ds/icons';
 import TooltipContentComponent from './TooltipContentComponent';
+import MedalSVG from './medal.svg';
 
 interface AnimalTableDataProps {
   nameAnimal: string;
@@ -74,7 +75,7 @@ const AnimalTableData = ({
         {typeof ImageSrc === 'string' ? (
           <img src={ImageSrc} />
         ) : ImageSrc ? (
-          <ImageSrc />
+          <ImageSrc className="image-animal-default" />
         ) : (
           <></>
         )}
@@ -89,16 +90,14 @@ const AnimalTableData = ({
 
       <DivInfo style={{ overflow: 'visible' }}>
         <DivTexts>
-          <Text fontSize="xxs" fontWeight="semiBold" color={colors.brown700}>
-            {nameAnimal}
-          </Text>
+          <StyledTextHallOfFameNameAnimal>{nameAnimal}</StyledTextHallOfFameNameAnimal>
 
           {isHallOfFameAnimal && (
             <StyledTextHallOfFame>HALL DA FAMA 2017</StyledTextHallOfFame>
           )}
         </DivTexts>
 
-        <MedalImg />
+        <MedalImg src={MedalSVG} />
 
         {/* Tooltip para DivImage */}
         <StyledTooltip
@@ -112,12 +111,13 @@ const AnimalTableData = ({
               ? `.tooltip-anchor-laurelimage[data-tooltip-id='tooltip-laurelimage-${nameAnimal}']`
               : `.tooltip-anchor-divimage[data-tooltip-id='tooltip-divimage-${nameAnimal}']`
           }
-          openOnClick
+          // openOnClick
           clickable
           place="top"
           positionStrategy="fixed"
           hasSomething={hasSomething}
           opacity={1}
+          className="custom-tooltip" // Classe para estilizar
         >
           <TooltipContentComponent ImgAnimal={imageSrcTooltip} />
         </StyledTooltip>

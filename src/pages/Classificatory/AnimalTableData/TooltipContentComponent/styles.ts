@@ -5,8 +5,8 @@ export const TooltipContent = styled.div`
   display: flex;
   justify-content: center;
 
-  img,
-  svg {
+  .tooltip-image,
+  .tooltip-svg {
     width: 6rem;
     height: 6rem;
     object-fit: cover;
