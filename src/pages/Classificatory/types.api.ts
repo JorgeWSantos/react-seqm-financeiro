@@ -1,6 +1,8 @@
 import type { ApiResponse } from '@src/services/types.api';
 
 export type TeamClassificatory = {
+  all_around_amador: string | null;
+  all_around_jovem: string | null;
   bid_abqm: boolean;
   bid_animal_nucleo: boolean;
   bid_aqha: boolean;
@@ -14,13 +16,17 @@ export type TeamClassificatory = {
   conquistas: string[];
   cor_medalha: string;
   criador_hf: string | null;
+  hall_da_fama: string | null;
   img_animal: string | null;
+  modalidades_awards: string | null;
   nid_animal: number;
   nid_competidor: number;
   nid_criador: number;
   nid_proprietario: number;
   nnr_senha: number | null;
   proprietario_hf: string | null;
+  ranking_geral_awards: string | null;
+  registro_de_merito: string;
 };
 
 export type ClassificatoryData = {
@@ -50,7 +56,8 @@ export type ClassificatoryData = {
   indice_velocidade: number;
   nvl_tempo_corrida: number;
   nome_treinador: string | null;
-  equipe: TeamClassificatory[];
+  // equipe: TeamClassificatory[];
+  equipe: TeamClassificatory;
 };
 
 export type EventDetailsClassificatory = {
@@ -65,11 +72,6 @@ export type EventDetailsClassificatory = {
   bid_oficial: boolean;
 };
 
-export interface ClassificatoryResponseData {
-  cds_prova_classificatoria: string;
-  lista_classificacao: ClassificatoryData[] | [];
-}
-
 export type ClassificatoryResponse = ApiResponse<{
-  list_page_product: Array<ClassificatoryResponseData>;
+  list_page_classificacao_etapas: Array<ClassificatoryData> | [];
 }>;

@@ -1,6 +1,10 @@
+import { LaurelIcon, MedalIcon } from '@abqm-ds/icons';
 import { Text } from '@abqm-ds/react';
 import { colors, fontWeights } from '@abqm-ds/tokens';
+import { Tooltip } from 'react-tooltip';
 import styled from 'styled-components';
+
+const scaleImages = 1;
 
 export const ContainerImage = styled.div`
   position: relative;
@@ -15,23 +19,9 @@ export const DivImage = styled.div`
   align-items: center;
   width: 1.188rem;
 
-  .image-bg {
-    position: absolute;
-    left: -0.11rem;
-    /* left: 50%;
-    top: 50%; */
-    /* transform: translate(-50%, -50%); */
-    width: 1.4rem;
-    height: 1.45rem;
-    border-radius: 50%;
-    background-color: transparent;
-    border: 2px solid ${colors.yellow200};
-    z-index: 0;
-    transform: scale(1);
-  }
-
-  img {
-    transform: scale(1);
+  img,
+  svg {
+    transform: scale(${scaleImages});
     position: relative;
     border-radius: 50%;
     width: 1.188rem;
@@ -42,13 +32,27 @@ export const DivImage = styled.div`
   }
 `;
 
-export const LaurelImage = styled.img`
+export const DivBorder = styled.div<{ $medalColor: string }>`
   position: absolute;
-  top: 0.05rem;
-  left: -1.4rem;
-  min-width: 1.6rem;
-  min-height: 1.6rem;
+  left: -0.05rem;
+  top: -0.05rem;
+  width: 1.3rem;
+  height: 1.3rem;
+  border-radius: 50%;
+  background-color: transparent;
+  border: 2px solid ${({ $medalColor }) => $medalColor};
+  z-index: 0;
+  transform: scale(${scaleImages});
+`;
+
+export const LaurelImage = styled(LaurelIcon)`
+  position: absolute;
+  top: 0rem;
+  left: -0.05rem;
+  width: 1.3rem;
+  height: 1.3rem;
   z-index: 2;
+  transform: scale(${scaleImages});
 `;
 
 export const DivInfo = styled.div`
@@ -68,4 +72,20 @@ export const StyledTextHallOfFame = styled(Text)`
   color: ${colors.brown700};
   text-transform: uppercase;
   margin-top: -0.05rem;
+`;
+
+export const MedalImg = styled(MedalIcon)`
+  width: 0.75rem;
+  height: 0.75rem;
+  margin-top: -0.075rem;
+`;
+
+/// tooltip
+export const StyledTooltip = styled(Tooltip)<{ hasSomething?: boolean }>`
+  background-color: white !important;
+  z-index: 999999;
+  padding: 0.25rem 1rem 0.25rem 0.25rem !important;
+  border-radius: 0.5rem !important;
+  display: ${({ hasSomething }) => (hasSomething ? 'flex' : 'none')} !important;
+  display: flex;
 `;

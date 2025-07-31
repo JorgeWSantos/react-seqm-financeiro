@@ -52,11 +52,6 @@ function Classificatory() {
     {} as EventDetailsClassificatory
   );
 
-  console.log('remover após o build do sonarqube', {
-    allList,
-    searchValue,
-  });
-
   const handleGetResultsClassificatory = useCallback(async () => {
     if (!prove_event_id) {
       return;
@@ -66,10 +61,10 @@ function Classificatory() {
       prove_event_id: Number(prove_event_id),
     });
 
-    console.log('Classificatory data:', data.lista_classificacao);
+    console.log('Classificatory data:', data);
 
-    setAllList(data.lista_classificacao);
-    setListToShow(data.lista_classificacao);
+    setAllList(data);
+    setListToShow([...data, ...data]);
 
     // setEventInfoData(data.detalhe_evento);
     setEventInfoData(null);
@@ -84,7 +79,7 @@ function Classificatory() {
     });
   }, [setPage, location]);
 
-  // // Effect to filter the list based on searchValue
+  // Effect to filter the list based on searchValue
   // useEffect(() => {
   //   console.log('Search Value:', searchValue);
 
@@ -93,12 +88,8 @@ function Classificatory() {
   //     return;
   //   }
 
-  //   const filteredList = allList.filter(
-  //     (item) =>
-  //       item.cds_nome_competidor.toLowerCase().includes(searchValue.toLowerCase()) ||
-  //       item.cds_nome_animal.toLowerCase().includes(searchValue.toLowerCase()) ||
-  //       item.proprietario.includes(searchValue) ||
-  //       item.cds_pontuacao.includes(searchValue)
+  //   const filteredList = allList.filter((item) =>
+  //     item.cds_classificacao.toLowerCase().includes(searchValue.toLowerCase())
   //   );
 
   //   setListToShow(filteredList);
@@ -118,7 +109,7 @@ function Classificatory() {
     {
       key: 'competitor',
       label: 'COMPETIDOR',
-      width: '32%',
+      width: '28%',
       align: 'left',
     },
     {
@@ -130,7 +121,7 @@ function Classificatory() {
     {
       key: 'owner',
       label: 'PROPRIETÁRIO',
-      width: '20%',
+      width: '24%',
       align: 'left',
     },
     {
@@ -141,6 +132,8 @@ function Classificatory() {
     },
   ];
 
+  console.log('List to show:', listToShow);
+
   const data: Array<TableRowSEQM> = listToShow.map((item, index) => ({
     // nucleo: { value: item.cds_classificacao },
     abqm: { value: item.cds_classificacao },
@@ -148,7 +141,8 @@ function Classificatory() {
       render: () => {
         return (
           <Text fontSize="xxs" fontWeight="semiBold" color={colors.emeraldGreen75}>
-            {item.equipe.map((e) => e.cds_competidor).join(', ')}
+            {/* {item.equipe.map((e) => e.cds_competidor).join(', ')} */}
+            {item.equipe.cds_competidor}
           </Text>
         );
       },
@@ -157,11 +151,15 @@ function Classificatory() {
       render: () => {
         return (
           <AnimalTableData
-            nameAnimal={item.equipe.map((e) => e.cds_animal).join(', ')}
+            // nameAnimal={item.equipe.map((e) => e.cds_animal).join(', ')}
+            nameAnimal={item.equipe.cds_animal}
             imgAnimal={
-              'https://intranet.abqm.com.br/Comercial/Content/Arquivos/FotoAnimal/P029810.jpg'
+              // 'https://intranet.abqm.com.br/Comercial/Content/Arquivos/FotoAnimal/P029810.jpg'
+              item.equipe.img_animal || ''
             }
-            isHallOfFame={index === 0}
+            isHallOfFameAnimal={index === 0}
+            medal={item.equipe.cor_medalha || ''}
+            // index={index}
           />
         );
       },
@@ -170,7 +168,8 @@ function Classificatory() {
       render: () => {
         return (
           <Text fontSize="xxs" fontWeight="semiBold" color={colors.emeraldGreen75}>
-            {item.equipe.map((e) => e.cds_proprietario).join(', ')}
+            {/* {item.equipe.map((e) => e.cds_proprietario).join(', ')} */}
+            {item.equipe.cds_proprietario}
           </Text>
         );
       },

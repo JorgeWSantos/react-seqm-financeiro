@@ -2,8 +2,8 @@ import { Toast } from '@abqm-ds/react';
 import { useCallback } from 'react';
 import { apiResultados } from './api';
 import type {
+  ClassificatoryData,
   ClassificatoryResponse,
-  ClassificatoryResponseData,
 } from '@src/pages/Classificatory/types.api';
 
 export function useClassificatory() {
@@ -12,7 +12,7 @@ export function useClassificatory() {
       prove_event_id,
     }: {
       prove_event_id?: number | null;
-    } = {}): Promise<ClassificatoryResponseData> => {
+    } = {}): Promise<ClassificatoryData[] | []> => {
       try {
         const response = await apiResultados.get<ClassificatoryResponse>(
           '/v1/ListaClassificacaoEtapas',
@@ -33,13 +33,10 @@ export function useClassificatory() {
             timeout: 3000,
           });
 
-          return {
-            cds_prova_classificatoria: '',
-            lista_classificacao: [],
-          };
+          return [];
         }
 
-        return data.list_page_product[0];
+        return data.list_page_classificacao_etapas;
       } catch (error) {
         Toast.show({
           message: 'Ops, ocorreu um erro ao carregar os dados da classificação!',
@@ -48,10 +45,7 @@ export function useClassificatory() {
         });
         console.warn(error);
 
-        return {
-          cds_prova_classificatoria: '',
-          lista_classificacao: [],
-        };
+        return [];
       }
     },
     []
