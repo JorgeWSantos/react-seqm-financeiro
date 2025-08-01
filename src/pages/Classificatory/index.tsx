@@ -140,27 +140,30 @@ function Classificatory() {
     competitor: {
       render: () => {
         return (
-          <Text fontSize="xxs" fontWeight="semiBold" color={colors.emeraldGreen75}>
-            {/* {item.equipe.map((e) => e.cds_competidor).join(', ')} */}
-            {item.equipe.cds_competidor}
-          </Text>
+          <>
+            {item.equipe.map((e) => (
+              <Text fontSize="xxs" fontWeight="semiBold" color={colors.emeraldGreen75}>
+                {e.cds_competidor}
+              </Text>
+            ))}
+          </>
         );
       },
     },
     animal: {
       render: () => {
         return (
-          <AnimalTableData
-            // nameAnimal={item.equipe.map((e) => e.cds_animal).join(', ')}
-            nameAnimal={item.equipe.cds_animal}
-            imgAnimal={
-              // 'https://intranet.abqm.com.br/Comercial/Content/Arquivos/FotoAnimal/P029810.jpg'
-              item.equipe.img_animal || ''
-            }
-            isHallOfFameAnimal={index === 0}
-            medal={item.equipe.cor_medalha || ''}
-            // index={index}
-          />
+          <>
+            {item.equipe.map((e) => (
+              <AnimalTableData
+                nameAnimal={e.cds_animal}
+                imgAnimal={e.img_animal || ''}
+                isHallOfFameAnimal={(e.hall_da_fama && e.hall_da_fama !== '') || false}
+                medal={e.cor_medalha}
+                // index={index}
+              />
+            ))}
+          </>
         );
       },
     },
@@ -168,8 +171,8 @@ function Classificatory() {
       render: () => {
         return (
           <Text fontSize="xxs" fontWeight="semiBold" color={colors.emeraldGreen75}>
-            {/* {item.equipe.map((e) => e.cds_proprietario).join(', ')} */}
-            {item.equipe.cds_proprietario}
+            {item.equipe.map((e) => e.cds_proprietario).join(', ')}
+            {/* {item.equipe.cds_proprietario} */}
           </Text>
         );
       },

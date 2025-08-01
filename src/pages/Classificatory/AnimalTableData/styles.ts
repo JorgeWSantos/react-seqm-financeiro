@@ -70,9 +70,10 @@ export const DivTexts = styled.div`
 export const StyledTextHallOfFameNameAnimal = styled(Text).attrs({
   fontSize: 'xxs',
   fontWeight: 'semiBold',
-  color: colors.brown700,
-})`
+})<{ $isHallOfFameAnimal: boolean | undefined }>`
   white-space: nowrap;
+  color: ${({ $isHallOfFameAnimal }) =>
+    $isHallOfFameAnimal ? colors.brown700 : 'inherit'};
 `;
 
 export const StyledTextHallOfFame = styled(Text)`

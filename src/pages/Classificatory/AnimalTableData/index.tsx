@@ -90,14 +90,16 @@ const AnimalTableData = ({
 
       <DivInfo style={{ overflow: 'visible' }}>
         <DivTexts>
-          <StyledTextHallOfFameNameAnimal>{nameAnimal}</StyledTextHallOfFameNameAnimal>
+          <StyledTextHallOfFameNameAnimal $isHallOfFameAnimal={isHallOfFameAnimal}>
+            {nameAnimal}
+          </StyledTextHallOfFameNameAnimal>
 
           {isHallOfFameAnimal && (
             <StyledTextHallOfFame>HALL DA FAMA 2017</StyledTextHallOfFame>
           )}
         </DivTexts>
 
-        <MedalImg src={MedalSVG} />
+        {isHallOfFameAnimal && <MedalImg src={MedalSVG} />}
 
         {/* Tooltip para DivImage */}
         <StyledTooltip

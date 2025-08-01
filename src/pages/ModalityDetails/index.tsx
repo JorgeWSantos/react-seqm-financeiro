@@ -161,6 +161,28 @@ function ModalityDetail() {
     [getModalityDetails, prove_id, setResultsToShow]
   );
 
+  const handleApplyFilter = useCallback(() => {
+    fetchModalities({
+      year: filter.year.value,
+      month: filter.month.value,
+      isOficial: filter.oficial.value,
+    });
+
+    closeModal();
+  }, [filter, fetchModalities, closeModal]);
+
+  const handleClearFilter = useCallback(() => {
+    setFilter(initialFilter);
+
+    fetchModalities({
+      year: initialFilter.year.value,
+      month: initialFilter.month.value,
+      isOficial: initialFilter.oficial.value,
+    });
+    closeModal();
+  }, [initialFilter, fetchModalities, closeModal]);
+
+  // Effect to call api
   useEffect(() => {
     if (filter === initialFilter) {
       fetchModalities({
@@ -197,27 +219,6 @@ function ModalityDetail() {
 
     setListToShow(filteredList);
   }, [searchValue, allList]);
-
-  const handleApplyFilter = useCallback(() => {
-    fetchModalities({
-      year: filter.year.value,
-      month: filter.month.value,
-      isOficial: filter.oficial.value,
-    });
-
-    closeModal();
-  }, [filter, fetchModalities, closeModal]);
-
-  const handleClearFilter = useCallback(() => {
-    setFilter(initialFilter);
-
-    fetchModalities({
-      year: initialFilter.year.value,
-      month: initialFilter.month.value,
-      isOficial: initialFilter.oficial.value,
-    });
-    closeModal();
-  }, [initialFilter, fetchModalities, closeModal]);
 
   const redirectToEvent = useCallback(
     ({
@@ -264,8 +265,6 @@ function ModalityDetail() {
       align: 'center',
     },
   ];
-
-  console.log('listToShow', listToShow);
 
   const data: Array<TableRowSEQM> = listToShow.map((item) => ({
     event: {
@@ -322,12 +321,6 @@ function ModalityDetail() {
     end: { value: item.data_fim_evento },
     isoficial: { value: item.bid_oficial === true },
   }));
-
-  //not showed on table
-  // event_id: item.nid_evento,
-  // organizator_id: item.nid_empresa,
-  // event_group_id: item.nid_agrupa_evento,
-  // prove_id: item.nid_prova,
 
   return (
     <Layout>
@@ -397,7 +390,7 @@ function ModalityDetail() {
         ) : (
           <ContentMobile
             style={{
-              maxWidth: '100vw',
+              maxWidth: '100dvw',
             }}
             headerMobileNavigator={
               <HeaderMobileNavigator

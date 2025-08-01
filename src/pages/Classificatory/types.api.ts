@@ -57,7 +57,7 @@ export type ClassificatoryData = {
   nvl_tempo_corrida: number;
   nome_treinador: string | null;
   // equipe: TeamClassificatory[];
-  equipe: TeamClassificatory;
+  equipe: TeamClassificatory[];
 };
 
 export type EventDetailsClassificatory = {

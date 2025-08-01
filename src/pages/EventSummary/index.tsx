@@ -254,9 +254,6 @@ function EventSummary() {
     },
   ];
 
-  console.log('listToShow', listToShow);
-
-  //remove repetitive data of modality (backend)
   const tableData: Array<TableRowSEQM> = listToShow?.map((item) => ({
     modality: {
       render: () =>

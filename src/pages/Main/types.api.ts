@@ -16,5 +16,4 @@ interface ResultModalitiesResponseDataData {
   list_resultados_qtde_por_modalidade: ResultModalitiesResponseData[];
 }
 
-// export type ResultModalitiesResponse = ApiResponse<ResultModalitiesResponseData>;
 export type ResultModalitiesResponse = ApiResponse<ResultModalitiesResponseDataData>;

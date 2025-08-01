@@ -43,7 +43,7 @@ function Main() {
   );
 
   const { data: allModalities = { top_modalidades: [], modalidades: [] } } = useQuery({
-    queryKey: ['modalities'],
+    queryKey: [''],
     queryFn: getResultados,
     staleTime: 1000 * 60 * 3, // 3 minutos
     gcTime: 1000 * 60 * 3,
@@ -55,7 +55,7 @@ function Main() {
 
   return (
     <Layout>
-      <ContainerMain>
+      <>
         {!isTabletOrMobile ? (
           <ContentDektop
             header={<Header text={pageTitle} />}
@@ -79,7 +79,7 @@ function Main() {
           </ContentDektop>
         ) : (
           <ContentMobile>
-            <ContainerMobileMain className="container-mobile-main">
+            <ContainerMobileMain>
               <MoreSearchedModalities
                 onClick={onClickModality}
                 title="MAIS BUSCADAS"
@@ -93,7 +93,7 @@ function Main() {
             </ContainerMobileMain>
           </ContentMobile>
         )}
-      </ContainerMain>
+      </>
     </Layout>
   );
 }
