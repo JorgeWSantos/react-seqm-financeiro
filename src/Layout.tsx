@@ -33,8 +33,6 @@ function Layout({
     window.location.href = url;
   };
 
-  console.log('menu', menu);
-
   return (
     <GlobalContainer footerButtonsMobile={footerButtonsMobile}>
       {/* Desktop */}
