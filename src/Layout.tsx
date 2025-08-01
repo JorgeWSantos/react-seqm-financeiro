@@ -6,12 +6,9 @@ import {
   SideBarDesktop,
   useDeviceType,
   type FooterWithButtonsPropsType,
-  type MenuType,
 } from '@abqm-ds/react';
 import { useAuth } from './contexts/auth/useAuth.ts';
-// import type { MenuResponseObj } from './types.ts';
-import { useEffect, useState } from 'react';
-import { useGeneralService, type MenuResponseObj } from './services/useGeneralService.ts';
+import { useMenu } from './contexts/menu/useMenu.ts';
 
 function Layout({
   children,
@@ -22,19 +19,9 @@ function Layout({
 }) {
   const { isTabletOrMobile } = useDeviceType();
   const { user, logout, token } = useAuth();
-  const { getMenu } = useGeneralService();
+  const { menu } = useMenu();
 
-  const [menu, setMenu] = useState<MenuType>([]);
   const pageTitle = 'Resultados';
-
-  useEffect(() => {
-    // TODO definir em que API vai ficar o menu
-    const loadMenu = async () => {
-      const menu: MenuResponseObj = await getMenu();
-      setMenu(menu.list_menu);
-    };
-    loadMenu();
-  }, [getMenu]);
 
   const redirectToLogin = () => {
     console.log('import.meta.env.VITE_URL_LOGIN', import.meta.env.VITE_URL_LOGIN);
@@ -45,6 +32,8 @@ function Layout({
 
     window.location.href = url;
   };
+
+  console.log('menu', menu);
 
   return (
     <GlobalContainer footerButtonsMobile={footerButtonsMobile}>

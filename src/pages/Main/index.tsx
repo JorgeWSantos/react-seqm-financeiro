@@ -5,7 +5,7 @@ import { useDeviceType } from '@abqm-ds/react';
 import NotPointedEvents from '@src/components/Main/NotPointedEvents';
 import MoreSearchedModalities from '@src/components/Main/MoreSearchedModalities';
 import OtherSearchModalities from '@src/components/Main/OtherSearchModalities';
-import { ContainerDesktopMain, ContainerMain, ContainerMobileMain } from './styles';
+import { ContainerDesktopMain, ContainerMobileMain } from './styles';
 import { useCallback, useEffect } from 'react';
 import { useResultsService } from '@src/services/useResultsService';
 import { usePage } from '@src/contexts/page/usePage';
