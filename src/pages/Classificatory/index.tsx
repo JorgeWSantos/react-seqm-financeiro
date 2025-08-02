@@ -66,10 +66,27 @@ function Classificatory() {
     setAllList(data);
     setListToShow([...data, ...data]);
 
+    const detalhedoevento = {
+      bid_oficial: true,
+      cds_evento: 'MOCK - 1° Festival ABQM Jovem 2025',
+      data_fim: 'MOCK - 18/01/2025',
+      data_inicio: 'MOCK - 09/01/2025',
+      estado: 'MOCK - SP',
+      local: 'MOCK - Haras Raphaela',
+      logotipo: 'https://img.seqm.com.br/saep/PRD/logotipo/6386899376395470251.png',
+      nid_agrupa_evento: 39374,
+      organizador:
+        'MOCK - ABQM - Associação Brasileira de Criadores de Cavalo Quarto de Milha',
+    };
+
     // setEventInfoData(data.detalhe_evento);
-    setEventInfoData(null);
+    setEventInfoData(detalhedoevento);
     setIsLoading(false);
   }, [getClassificatory, prove_event_id]);
+
+  const handleOnGoBack = useCallback(() => {
+    navigate('/modalidade/' + prove_id + '/evento/' + event_id);
+  }, [event_id, navigate, prove_id]);
 
   // Effect to set the page title and path
   useEffect(() => {
@@ -97,13 +114,13 @@ function Classificatory() {
   }, [handleGetResultsClassificatory]);
 
   const columns: Array<TableColumnSEQM> = [
-    {
-      key: 'nucleo',
-      label: 'NÚCLEO',
-      width: '4%',
-      minWidth: '3rem',
-      align: 'center',
-    },
+    // {
+    //   key: 'nucleo',
+    //   label: 'NÚCLEO',
+    //   width: '4%',
+    //   minWidth: '3rem',
+    //   align: 'center',
+    // },
     {
       key: 'abqm',
       label: 'ABQM',
@@ -154,8 +171,8 @@ function Classificatory() {
                 idAnimal={e.nid_animal}
                 nameAnimal={e.cds_animal}
                 imgAnimal={e.img_animal}
-                isHallOfFameAnimal={e.hall_da_fama || (i === 0 ? '2017' : null)}
-                // isHallOfFameAnimal={true}
+                isHallOfFameAnimal={e.hall_da_fama}
+                // isHallOfFameAnimal={e.hall_da_fama || (i === 0 ? '2017' : null)}
                 medal={e.cor_medalha}
                 registerAnimal={'P000000'}
               />
@@ -186,10 +203,9 @@ function Classificatory() {
             headerNavigator={
               <HeaderNavigatorDesktop
                 title={eventInfoData?.cds_evento || ''}
+                subtitle={eventInfoData?.data_inicio || ''}
                 hasBackButton
-                onGoBack={() =>
-                  navigate('/modalidade/' + prove_id + '/evento/' + event_id)
-                }
+                onGoBack={handleOnGoBack}
               >
                 <TextInput
                   placeholder="Buscar"
@@ -236,7 +252,7 @@ function Classificatory() {
             headerMobileNavigator={
               <HeaderMobileNavigator
                 hasBackButton
-                onGoBack={() => navigate('/')}
+                onGoBack={handleOnGoBack}
                 headingText={getNameProveById(Number(prove_id))}
                 hasSearch
                 onChangeSearch={(v) => setSearchValue(v.target.value)}
