@@ -1,10 +1,11 @@
 import { LaurelIcon } from '@abqm-ds/icons';
 import { Text } from '@abqm-ds/react';
-import { colors, fontWeights } from '@abqm-ds/tokens';
+import { breakpointsPx, colors, fontSizes, fontWeights } from '@abqm-ds/tokens';
 import { Tooltip } from 'react-tooltip';
 import styled from 'styled-components';
 
 const scaleImages = 1;
+const scaleImagesMobile = 1.05;
 
 export const ContainerImage = styled.div`
   position: relative;
@@ -12,6 +13,10 @@ export const ContainerImage = styled.div`
   align-items: center;
   gap: 0.25rem;
   height: 1.25rem;
+
+  @media (max-width: ${breakpointsPx.lg}) {
+    height: 2rem;
+  }
 `;
 
 export const DivImage = styled.div`
@@ -31,6 +36,10 @@ export const DivImage = styled.div`
     object-fit: cover;
     border: 1px solid transparent;
     z-index: 1;
+
+    @media (max-width: ${breakpointsPx.lg}) {
+      transform: scale(${scaleImagesMobile});
+    }
   }
 `;
 
@@ -45,6 +54,10 @@ export const DivBorder = styled.div<{ $medalColor: string }>`
   border: 2px solid ${({ $medalColor }) => $medalColor};
   z-index: 0;
   transform: scale(${scaleImages});
+
+  @media (max-width: ${breakpointsPx.lg}) {
+    transform: scale(${scaleImagesMobile});
+  }
 `;
 
 export const LaurelImage = styled(LaurelIcon)`
@@ -55,6 +68,10 @@ export const LaurelImage = styled(LaurelIcon)`
   height: 1.3rem;
   z-index: 2;
   transform: scale(${scaleImages});
+
+  @media (max-width: ${breakpointsPx.lg}) {
+    transform: scale(${scaleImagesMobile});
+  }
 `;
 
 export const DivInfo = styled.div`
@@ -80,6 +97,10 @@ export const StyledTextHallOfFameNameAnimal = styled(Text).attrs({
     $isHallOfFameAnimal ? colors.brown700 : 'inherit'};
   height: 14px;
   margin-bottom: -0.1rem;
+
+  @media (max-width: ${breakpointsPx.lg}) {
+    font-size: ${fontSizes.ssm};
+  }
 `;
 
 export const StyledTextHallOfFame = styled(Text)`
@@ -87,7 +108,10 @@ export const StyledTextHallOfFame = styled(Text)`
   font-weight: ${fontWeights.semiBold};
   color: ${colors.brown700};
   text-transform: uppercase;
-  margin-bottom: -0.08rem;
+
+  @media (max-width: ${breakpointsPx.lg}) {
+    font-size: ${fontSizes.x};
+  }
 `;
 
 export const StyledTextRegister = styled(Text)`
@@ -96,6 +120,10 @@ export const StyledTextRegister = styled(Text)`
   /* color: ${colors.brown700}; */
   text-transform: uppercase;
   margin-bottom: -0.08rem;
+
+  @media (max-width: ${breakpointsPx.lg}) {
+    font-size: ${fontSizes.xxs};
+  }
 `;
 
 export const MedalImg = styled.img`
