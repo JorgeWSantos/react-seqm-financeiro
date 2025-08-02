@@ -19,7 +19,7 @@ export const StyledTextHallOfFameOwner = styled(Text).attrs({
 })<{ $isHallOfFameOwner: boolean | undefined }>`
   display: flex;
 
-  white-space: nowrap;
+  /* white-space: nowrap; */
   color: ${({ $isHallOfFameOwner }) =>
     $isHallOfFameOwner ? colors.brown700 : 'inherit'};
 
@@ -46,5 +46,5 @@ export const MedalImg = styled.img`
   width: 1rem;
   height: 1rem;
   aspect-ratio: 1/1;
-  margin-top: -0.06rem;
+  margin-top: -0.15rem;
 `;

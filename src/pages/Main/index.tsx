@@ -59,7 +59,7 @@ function Main() {
         {!isTabletOrMobile ? (
           <ContentDektop
             header={<Header text={pageTitle} />}
-            contentBoxStyles={{ padding: '1rem 2.5rem', gap: '0' }}
+            contentBoxStyles={{ padding: '1rem 2.5rem', gap: '0', overflow: 'auto' }}
           >
             <>
               <NotPointedEvents onClick={onClickModality} />

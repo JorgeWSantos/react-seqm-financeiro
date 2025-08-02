@@ -63,8 +63,8 @@ function Classificatory() {
       prove_event_id: Number(prove_event_id),
     });
 
-    setAllList(data);
-    setListToShow([...data, ...data]);
+    setAllList([...data, ...data, ...data]);
+    setListToShow([...data, ...data, ...data]); // Duplicating for testing purposes
 
     const detalhedoevento = {
       bid_oficial: true,
@@ -149,7 +149,7 @@ function Classificatory() {
     {
       key: 'tn',
       label: 'T/N',
-      width: '8%',
+      width: '5%',
       align: 'center',
     },
   ];
@@ -185,7 +185,8 @@ function Classificatory() {
       render: () => {
         return item.equipe.map((e, i) => (
           <OwnerTableData
-            isHallOfFameOwner={e.proprietario_hf || (i === 0 ? '2017' : null)}
+            // isHallOfFameOwner={e.proprietario_hf || (i === 0 ? '2017' : null)}
+            isHallOfFameOwner={e.proprietario_hf}
             value={e.cds_proprietario}
           />
         ));
@@ -217,6 +218,7 @@ function Classificatory() {
             contentBoxStyles={{
               padding: '1.5rem',
               gap: '0.25rem',
+              overflow: 'visible',
             }}
             count={data.length}
           >
@@ -248,6 +250,7 @@ function Classificatory() {
           <ContentMobile
             style={{
               maxWidth: '100vw',
+              overflow: 'visible',
             }}
             headerMobileNavigator={
               <HeaderMobileNavigator
