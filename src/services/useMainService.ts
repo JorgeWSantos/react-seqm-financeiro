@@ -6,7 +6,7 @@ import type {
   ResultModalitiesResponseData,
 } from '@src/pages/Main/types.api';
 
-export function useResultsService() {
+export function useMainService() {
   const getResultados = useCallback(async (): Promise<ResultModalitiesResponseData> => {
     try {
       const response = await apiResultados.get<ResultModalitiesResponse>(

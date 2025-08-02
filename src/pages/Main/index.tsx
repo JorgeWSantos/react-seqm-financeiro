@@ -7,7 +7,7 @@ import MoreSearchedModalities from '@src/components/Main/MoreSearchedModalities'
 import OtherSearchModalities from '@src/components/Main/OtherSearchModalities';
 import { ContainerDesktopMain, ContainerMobileMain } from './styles';
 import { useCallback, useEffect } from 'react';
-import { useResultsService } from '@src/services/useResultsService';
+import { useMainService } from '@src/services/useMainService';
 import { usePage } from '@src/contexts/page/usePage';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
@@ -19,7 +19,7 @@ function Main() {
   const navigate = useNavigate();
   const { setPage, currentPage } = usePage();
   const { isTabletOrMobile } = useDeviceType();
-  const { getResultados, saveMoreSearched } = useResultsService();
+  const { getResultados, saveMoreSearched } = useMainService();
 
   const onClickModality = useCallback(
     async ({
