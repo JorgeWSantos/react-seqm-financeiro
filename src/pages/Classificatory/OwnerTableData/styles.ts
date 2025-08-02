@@ -1,5 +1,5 @@
 import { Text } from '@abqm-ds/react';
-import { colors, fontWeights } from '@abqm-ds/tokens';
+import { breakpointsPx, colors, fontSizes, fontWeights } from '@abqm-ds/tokens';
 import styled from 'styled-components';
 
 export const OwnerTableDataContainer = styled.div`
@@ -7,6 +7,10 @@ export const OwnerTableDataContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   height: 1.25rem;
+
+  @media (max-width: ${breakpointsPx.lg}) {
+    height: 2rem;
+  }
 `;
 
 export const StyledTextHallOfFameOwner = styled(Text).attrs({
@@ -18,6 +22,12 @@ export const StyledTextHallOfFameOwner = styled(Text).attrs({
   white-space: nowrap;
   color: ${({ $isHallOfFameOwner }) =>
     $isHallOfFameOwner ? colors.brown700 : 'inherit'};
+
+  margin-bottom: -0.115rem;
+
+  @media (max-width: ${breakpointsPx.lg}) {
+    font-size: ${fontSizes.ssm};
+  }
 `;
 
 export const StyledSubTextHallOfFame = styled(Text)`
@@ -26,6 +36,10 @@ export const StyledSubTextHallOfFame = styled(Text)`
   color: ${colors.brown700};
   text-transform: uppercase;
   margin-top: -0.05rem;
+
+  @media (max-width: ${breakpointsPx.lg}) {
+    font-size: ${fontSizes.x};
+  }
 `;
 
 export const MedalImg = styled.img`

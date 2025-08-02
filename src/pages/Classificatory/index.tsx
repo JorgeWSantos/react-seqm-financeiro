@@ -98,6 +98,13 @@ function Classificatory() {
 
   const columns: Array<TableColumnSEQM> = [
     {
+      key: 'nucleo',
+      label: 'NÚCLEO',
+      width: '4%',
+      minWidth: '3rem',
+      align: 'center',
+    },
+    {
       key: 'abqm',
       label: 'ABQM',
       width: '5%',
@@ -126,12 +133,12 @@ function Classificatory() {
       key: 'tn',
       label: 'T/N',
       width: '8%',
-      align: 'left',
+      align: 'center',
     },
   ];
 
   const data: Array<TableRowSEQM> = listToShow.map((item, index) => ({
-    // nucleo: { value: item.cds_classificacao },
+    nucleo: { value: item.cds_classificacao },
     abqm: { value: `${item.cds_classificacao + (item.cds_classificacao ? '°' : '')}` },
     competitor: {
       render: () => {
@@ -238,7 +245,7 @@ function Classificatory() {
           >
             <Scrollable>
               {data.length > 0 ? (
-                <TableSEQM data={data} columns={columns} width={'100rem'} />
+                <TableSEQM data={data} columns={columns} width={'60rem'} />
               ) : (
                 <>
                   {isLoading ? (
