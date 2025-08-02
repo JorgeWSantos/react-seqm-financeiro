@@ -11,6 +11,7 @@ export const ContainerImage = styled.div`
   display: flex;
   align-items: center;
   gap: 0.25rem;
+  height: 1.25rem;
 `;
 
 export const DivImage = styled.div`
@@ -58,22 +59,27 @@ export const LaurelImage = styled(LaurelIcon)`
 
 export const DivInfo = styled.div`
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 0.25rem;
+  height: 100%;
 `;
 
 export const DivTexts = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
 `;
 
 export const StyledTextHallOfFameNameAnimal = styled(Text).attrs({
   fontSize: 'xxs',
   fontWeight: 'semiBold',
 })<{ $isHallOfFameAnimal: boolean | undefined }>`
+  display: flex;
   white-space: nowrap;
   color: ${({ $isHallOfFameAnimal }) =>
     $isHallOfFameAnimal ? colors.brown700 : 'inherit'};
+  height: 14px;
+  margin-bottom: -0.1rem;
 `;
 
 export const StyledTextHallOfFame = styled(Text)`
@@ -81,14 +87,22 @@ export const StyledTextHallOfFame = styled(Text)`
   font-weight: ${fontWeights.semiBold};
   color: ${colors.brown700};
   text-transform: uppercase;
-  margin-top: -0.05rem;
+  margin-bottom: -0.08rem;
+`;
+
+export const StyledTextRegister = styled(Text)`
+  font-size: 5.5pt;
+  font-weight: ${fontWeights.semiBold};
+  /* color: ${colors.brown700}; */
+  text-transform: uppercase;
+  margin-bottom: -0.08rem;
 `;
 
 export const MedalImg = styled.img`
   width: 1rem;
   height: 1rem;
   aspect-ratio: 1/1;
-  margin-top: -0.08rem;
+  margin-top: -0.06rem;
 `;
 
 /// tooltip

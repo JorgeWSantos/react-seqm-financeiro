@@ -8,6 +8,7 @@ import {
   MedalImg,
   StyledTextHallOfFame,
   StyledTextHallOfFameNameAnimal,
+  StyledTextRegister,
   StyledTooltip,
 } from './styles';
 import { colors } from '@abqm-ds/tokens';
@@ -16,9 +17,11 @@ import TooltipContentComponent from './TooltipContentComponent';
 import MedalSVG from './medal.svg';
 
 interface AnimalTableDataProps {
+  idAnimal: number;
   nameAnimal: string;
-  imgAnimal?: string;
-  isHallOfFameAnimal?: boolean;
+  imgAnimal: string | null;
+  isHallOfFameAnimal: string | null;
+  registerAnimal?: string;
   medal?: string;
   recordOfMerity?: string;
   modalityAwards?: string;
@@ -29,8 +32,10 @@ interface AnimalTableDataProps {
 }
 
 const AnimalTableData = ({
+  idAnimal,
   nameAnimal,
-  imgAnimal,
+  imgAnimal = '',
+  registerAnimal,
   isHallOfFameAnimal,
   medal = '',
   recordOfMerity,
@@ -51,8 +56,10 @@ const AnimalTableData = ({
     'yellow-medal': colors.yellow200,
   };
 
-  const ImageSrc = imgAnimal !== '' ? imgAnimal : DefaultHorseRoundedIconIMG;
-  const imageSrcTooltip = imgAnimal !== '' ? imgAnimal : DefaultHorseSquadIconIMG;
+  const ImageSrc =
+    imgAnimal !== '' && imgAnimal !== null ? imgAnimal : DefaultHorseRoundedIconIMG;
+  const imageSrcTooltip =
+    imgAnimal !== '' && imgAnimal !== null ? imgAnimal : DefaultHorseSquadIconIMG;
 
   const hasSomething = !!(
     medal ||
@@ -68,10 +75,14 @@ const AnimalTableData = ({
   return (
     <ContainerImage>
       <DivImage
+        key={idAnimal}
+        id={idAnimal.toString()}
         className="tooltip-anchor-divimage"
         data-tooltip-id={`tooltip-divimage-${nameAnimal}`}
       >
-        <DivBorder $medalColor={isHallOfFameAnimal ? colors.yellow200 : medalha[medal]} />
+        <DivBorder
+          $medalColor={isHallOfFameAnimal ? colors.yellow200 : medalha[medal ?? '']}
+        />
         {typeof ImageSrc === 'string' ? (
           <img src={ImageSrc} />
         ) : ImageSrc ? (
@@ -90,16 +101,17 @@ const AnimalTableData = ({
 
       <DivInfo style={{ overflow: 'visible' }}>
         <DivTexts>
-          <StyledTextHallOfFameNameAnimal $isHallOfFameAnimal={isHallOfFameAnimal}>
+          <StyledTextHallOfFameNameAnimal $isHallOfFameAnimal={!!isHallOfFameAnimal}>
             {nameAnimal}
+            {isHallOfFameAnimal && <MedalImg src={MedalSVG} />}
           </StyledTextHallOfFameNameAnimal>
 
-          {isHallOfFameAnimal && (
+          {isHallOfFameAnimal ? (
             <StyledTextHallOfFame>HALL DA FAMA 2017</StyledTextHallOfFame>
+          ) : (
+            <StyledTextRegister>{registerAnimal}</StyledTextRegister>
           )}
         </DivTexts>
-
-        {isHallOfFameAnimal && <MedalImg src={MedalSVG} />}
 
         {/* Tooltip para DivImage */}
         <StyledTooltip

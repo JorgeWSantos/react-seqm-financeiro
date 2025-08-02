@@ -26,6 +26,8 @@ import type { ClassificatoryData, EventDetailsClassificatory } from './types.api
 import { useParams } from 'react-router';
 import Layout from '@src/Layout';
 import AnimalTableData from './AnimalTableData';
+import { CompetitorTableData } from './CompetitorTableData';
+import { OwnerTableData } from './OwnerTableData';
 
 function Classificatory() {
   const params = useParams();
@@ -61,8 +63,6 @@ function Classificatory() {
       prove_event_id: Number(prove_event_id),
     });
 
-    console.log('Classificatory data:', data);
-
     setAllList(data);
     setListToShow([...data, ...data]);
 
@@ -79,21 +79,18 @@ function Classificatory() {
     });
   }, [setPage, location]);
 
-  // Effect to filter the list based on searchValue
-  // useEffect(() => {
-  //   console.log('Search Value:', searchValue);
+  useEffect(() => {
+    if (searchValue.trim() === '') {
+      setListToShow(allList);
+      return;
+    }
 
-  //   if (searchValue.trim() === '') {
-  //     setListToShow(allList);
-  //     return;
-  //   }
+    const filteredList = allList.filter((item) =>
+      item.cds_classificacao.toLowerCase().includes(searchValue.toLowerCase())
+    );
 
-  //   const filteredList = allList.filter((item) =>
-  //     item.cds_classificacao.toLowerCase().includes(searchValue.toLowerCase())
-  //   );
-
-  //   setListToShow(filteredList);
-  // }, [searchValue, allList]);
+    setListToShow(filteredList);
+  }, [searchValue, allList]);
 
   useEffect(() => {
     handleGetResultsClassificatory();
@@ -103,64 +100,57 @@ function Classificatory() {
     {
       key: 'abqm',
       label: 'ABQM',
-      width: '3%',
+      width: '5%',
+      minWidth: '2.5rem',
       align: 'center',
     },
     {
       key: 'competitor',
       label: 'COMPETIDOR',
-      width: '28%',
+      width: '30%',
       align: 'left',
     },
     {
       key: 'animal',
       label: 'ANIMAL',
-      width: '20%',
+      width: '27%',
       align: 'left',
     },
     {
       key: 'owner',
       label: 'PROPRIETÁRIO',
-      width: '24%',
+      width: '30%',
       align: 'left',
     },
     {
       key: 'tn',
       label: 'T/N',
-      width: '5%',
+      width: '8%',
       align: 'left',
     },
   ];
 
-  console.log('List to show:', listToShow);
-
   const data: Array<TableRowSEQM> = listToShow.map((item, index) => ({
     // nucleo: { value: item.cds_classificacao },
-    abqm: { value: item.cds_classificacao },
+    abqm: { value: `${item.cds_classificacao + (item.cds_classificacao ? '°' : '')}` },
     competitor: {
       render: () => {
-        return (
-          <>
-            {item.equipe.map((e) => (
-              <Text fontSize="xxs" fontWeight="semiBold" color={colors.emeraldGreen75}>
-                {e.cds_competidor}
-              </Text>
-            ))}
-          </>
-        );
+        return item.equipe.map((e) => <CompetitorTableData value={e.cds_competidor} />);
       },
     },
     animal: {
       render: () => {
         return (
           <>
-            {item.equipe.map((e) => (
+            {item.equipe.map((e, i) => (
               <AnimalTableData
+                idAnimal={e.nid_animal}
                 nameAnimal={e.cds_animal}
-                imgAnimal={e.img_animal || ''}
-                isHallOfFameAnimal={(e.hall_da_fama && e.hall_da_fama !== '') || false}
+                imgAnimal={e.img_animal}
+                isHallOfFameAnimal={e.hall_da_fama || (i === 0 ? '2017' : null)}
+                // isHallOfFameAnimal={true}
                 medal={e.cor_medalha}
-                // index={index}
+                registerAnimal={'P000000'}
               />
             ))}
           </>
@@ -169,12 +159,12 @@ function Classificatory() {
     },
     owner: {
       render: () => {
-        return (
-          <Text fontSize="xxs" fontWeight="semiBold" color={colors.emeraldGreen75}>
-            {item.equipe.map((e) => e.cds_proprietario).join(', ')}
-            {/* {item.equipe.cds_proprietario} */}
-          </Text>
-        );
+        return item.equipe.map((e, i) => (
+          <OwnerTableData
+            isHallOfFameOwner={e.proprietario_hf || (i === 0 ? '2017' : null)}
+            value={e.cds_proprietario}
+          />
+        ));
       },
     },
     tn: { value: item.cds_media },

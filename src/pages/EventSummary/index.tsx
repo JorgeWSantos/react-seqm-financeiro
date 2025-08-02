@@ -226,30 +226,35 @@ function EventSummary() {
     {
       key: 'modality',
       label: 'CATEGORIA',
-      width: '60%',
+      width: '58%',
+      minWidth: '150px',
     },
     {
       key: 'organizator',
       label: 'ORGANIZADOR',
-      width: '7%',
+      width: '15%',
+      minWidth: '90px',
       align: 'center',
     },
     {
       key: 'judge',
       label: 'JUÍZ',
       width: '7%',
+      minWidth: '50px',
       align: 'center',
     },
     {
       key: 'ABQM',
       label: 'ABQM',
+      minWidth: '50px',
       align: 'center',
       width: '7%',
     },
     {
       key: 'inscriptions',
       label: 'INSCRIÇÕES',
-      width: '7%',
+      width: '16%',
+      minWidth: '90px',
       align: 'center',
     },
   ];
