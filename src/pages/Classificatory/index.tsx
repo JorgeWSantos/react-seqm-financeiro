@@ -1,11 +1,13 @@
 import {
   ActivityIndicator,
+  AnimalTableData,
   ContentDektop,
   ContentMobile,
   getNameProveById,
   Header,
   HeaderMobileNavigator,
   HeaderNavigatorDesktop,
+  OwnerTableData,
   TableSEQM,
   Text,
   TextInput,
@@ -25,9 +27,7 @@ import { useClassificatory } from '@src/services/useClassificatory';
 import type { ClassificatoryData, EventDetailsClassificatory } from './types.api';
 import { useParams } from 'react-router';
 import Layout from '@src/Layout';
-import AnimalTableData from './AnimalTableData';
 import { CompetitorTableData } from './CompetitorTableData';
-import { OwnerTableData } from './OwnerTableData';
 
 function Classificatory() {
   const params = useParams();
@@ -186,7 +186,8 @@ function Classificatory() {
         return item.equipe.map((e) => (
           <OwnerTableData
             // isHallOfFameOwner={e.proprietario_hf || (i === 0 ? '2017' : null)}
-            isHallOfFameOwner={e.proprietario_hf}
+            // isHallOfFameOwner={e.proprietario_hf}
+            isHallOfFameOwner={true}
             value={e.cds_proprietario}
           />
         ));
