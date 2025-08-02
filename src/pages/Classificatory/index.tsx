@@ -154,7 +154,7 @@ function Classificatory() {
     },
   ];
 
-  const data: Array<TableRowSEQM> = listToShow.map((item, index) => ({
+  const data: Array<TableRowSEQM> = listToShow.map((item) => ({
     nucleo: { value: item.cds_classificacao },
     abqm: { value: `${item.cds_classificacao + (item.cds_classificacao ? '°' : '')}` },
     competitor: {
@@ -166,7 +166,7 @@ function Classificatory() {
       render: () => {
         return (
           <>
-            {item.equipe.map((e, i) => (
+            {item.equipe.map((e) => (
               <AnimalTableData
                 idAnimal={e.nid_animal}
                 nameAnimal={e.cds_animal}
@@ -183,7 +183,7 @@ function Classificatory() {
     },
     owner: {
       render: () => {
-        return item.equipe.map((e, i) => (
+        return item.equipe.map((e) => (
           <OwnerTableData
             // isHallOfFameOwner={e.proprietario_hf || (i === 0 ? '2017' : null)}
             isHallOfFameOwner={e.proprietario_hf}
