@@ -9,6 +9,7 @@ import {
   HeaderMobileNavigator,
   HeaderNavigatorDesktop,
   OwnerTableData,
+  ShareOptions,
   TableSEQM,
   Text,
   TextInput,
@@ -22,13 +23,16 @@ import { ContainerMain, LoadingContainer, NotFoundContainer, Scrollable } from '
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePage } from '@src/contexts/page/usePage';
-import { SearchIcon } from '@abqm-ds/icons';
+import { PrinterIcon, SearchIcon, ShareIcon, StarIcon } from '@abqm-ds/icons';
 import { colors } from '@abqm-ds/tokens';
 import { useClassificatory } from '@src/services/useClassificatory';
 import type { ClassificatoryData } from './types.classificatory.api';
 import { useParams } from 'react-router';
 import Layout from '@src/Layout';
-import type { EventDetailsData } from './types.event-details.api';
+import type { ClassificatoryEventData, ClassificatoryInscriptionsResumeData } from './types.event-details.api';
+import type { PrintHeaderProps } from '@src/components/PrintArea/PrintHeader';
+import PrintArea from '@src/components/PrintArea';
+import { handlePrintPDF } from '@src/components/PrintArea/utils';
 
 function Classificatory() {
   const params = useParams();
@@ -49,9 +53,18 @@ function Classificatory() {
   const [listToShow, setListToShow] = useState<ClassificatoryData[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
 
-  const [eventInfoData, setEventInfoData] = useState<EventDetailsData | null>(
-    {} as EventDetailsData
+  const [eventInfoData, setEventInfoData] = useState<ClassificatoryEventData | null>(
+    {} as ClassificatoryEventData
   );
+
+  const [resumeInscriptionsData, setResumeInscriptionsData] =
+    useState<ClassificatoryInscriptionsResumeData | null>({} as ClassificatoryInscriptionsResumeData);
+
+  const [judmentCard, setJudgmentCard] = useState<string>('');
+
+  const [showShareOptions, setShowShareOptions] = useState(false);
+  const shareUrl = window.location.href;
+
 
   const handleGetResultsClassificatory = useCallback(async () => {
     if (!prove_event_id) {
@@ -81,6 +94,14 @@ function Classificatory() {
 
     if (detalhe_evento) {
       setEventInfoData(detalhe_evento);
+    }
+
+    if (resumo_inscricoes) {
+      setResumeInscriptionsData(resumo_inscricoes);
+    }
+
+    if (cartao_julgamento) {
+      setJudgmentCard(cartao_julgamento);
     }
 
     setIsLoading(false);
@@ -116,7 +137,7 @@ function Classificatory() {
     handleGetEventDetails();
   }, [handleGetResultsClassificatory, handleGetEventDetails]);
 
-  const columns: Array<TableColumnSEQM> = [
+  const tableColumns: Array<TableColumnSEQM> = [
     // {
     //   key: 'nucleo',
     //   label: 'NÚCLEO',
@@ -157,20 +178,20 @@ function Classificatory() {
     },
   ];
 
-  const data: Array<TableRowSEQM> = listToShow.map((item) => ({
+  const tableData: Array<TableRowSEQM> = listToShow.map((item) => ({
     nucleo: { value: item.cds_classificacao },
     abqm: { value: `${item.cds_classificacao + (item.cds_classificacao ? '°' : '')}` },
     competitor: {
       render: () => {
-        return item.equipe.map((e) => <CompetitorTableData value={e.cds_competidor} />);
+        return item.equipe.map((e) => <CompetitorTableData key={e.nid_competidor} value={e.cds_competidor} />);
       },
     },
     animal: {
       render: () => {
         return (
-          <>
-            {item.equipe.map((e) => (
+          item.equipe.map((e) => (
               <AnimalTableData
+                key={e.nid_animal}
                 idAnimal={e.nid_animal}
                 nameAnimal={e.cds_animal}
                 imgAnimal={e.img_animal}
@@ -180,8 +201,7 @@ function Classificatory() {
                 medal={e.cor_medalha}
                 registerAnimal={'P000000'}
               />
-            ))}
-          </>
+            ))
         );
       },
     },
@@ -189,6 +209,7 @@ function Classificatory() {
       render: () => {
         return item.equipe.map((e) => (
           <OwnerTableData
+            key={e.cds_proprietario}
             // isHallOfFameOwner={e.proprietario_hf || (i === 0 ? '2017' : null)}
             isHallOfFameOwner={e.proprietario_hf}
             value={e.cds_proprietario}
@@ -199,16 +220,81 @@ function Classificatory() {
     tn: { value: item.cds_media },
   }));
 
+  const printCards = [
+    {
+      title: 'DATA DO EVENTO',
+      value: eventInfoData?.dtm_data_prova?.slice(0, 10) || '',
+    },
+    {
+      title: 'INSCRIÇÕES',
+      value: resumeInscriptionsData?.nnr_qtde_inscricoes || 0,
+    },
+    {
+      title: 'COMPETIDORES',
+      value: resumeInscriptionsData?.nnr_qtde_competidores || 0,
+    },
+    {
+      title: 'ANIMAIS',
+      value: resumeInscriptionsData?.nnr_qtde_animais || 0,
+    },
+  ];
+
+  const printInfo: PrintHeaderProps = {
+    eventName: eventInfoData?.cds_evento || '',
+    responsibleName: 'MOCK DATA ORGANIZADOR',
+    city: 'MOCK DATA LOCAL',
+    state: 'MOCK DATA ESTADO',
+    startDate: 'MOCK DATA DATA INICIO',
+    endDate: 'MOCK DATA DATA FIM',
+    modalityName: getNameProveById(Number(prove_id)) || '',
+  };
+
+  const buttonsHeader = [
+    {
+      icon: <StarIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />,
+      label: 'participações',
+      onClick: () => {
+        window.open(
+          import.meta.env.VITE_URL_PARTICIPACOES +
+            '/index/' +
+            eventInfoData?.nid_agrupa_evento
+        );
+      },
+    },
+    {
+      icon: (
+        <PrinterIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />
+      ),
+      label: 'imprimir',
+      onClick: handlePrintPDF,
+    },
+    {
+      icon: (
+        <ShareIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />
+      ),
+      label: 'compartilhar',
+      onClick: () => setShowShareOptions((prev) => !prev),
+      isActive: showShareOptions,
+      showOptionsToShare: {
+        show: showShareOptions,
+        children: <ShareOptions url={shareUrl} />,
+      },
+    },
+  ];
+
+
+  console.log('eventInfoData', eventInfoData);
+
   return (
     <Layout>
       <ContainerMain>
         {!isTabletOrMobile ? (
           <ContentDektop
-            header={<Header text={pageTitle} subTitle={subTitle} buttons={[]} />}
+            header={<Header text={pageTitle} subTitle={subTitle} buttons={buttonsHeader} />}
             headerNavigator={
               <HeaderNavigatorDesktop
-                title={eventInfoData?.cds_evento || ''}
-                subtitle={eventInfoData?.data_inicio || ''}
+                title={eventInfoData?.cds_modalidade || ''}
+                subtitle={eventInfoData?.cds_evento || ''}
                 hasBackButton
                 onGoBack={handleOnGoBack}
               >
@@ -224,11 +310,11 @@ function Classificatory() {
               gap: '0.25rem',
               overflow: 'visible',
             }}
-            count={data.length}
+            count={tableData.length}
           >
             <Scrollable>
-              {data.length > 0 ? (
-                <TableSEQM data={data} columns={columns} />
+              {tableData.length > 0 ? (
+                <TableSEQM data={tableData} columns={tableColumns} />
               ) : (
                 <>
                   {isLoading ? (
@@ -267,8 +353,8 @@ function Classificatory() {
             }
           >
             <Scrollable>
-              {data.length > 0 ? (
-                <TableSEQM data={data} columns={columns} width={'64rem'} />
+              {tableData.length > 0 ? (
+                <TableSEQM data={tableData} columns={tableColumns} width={'64rem'} />
               ) : (
                 <>
                   {isLoading ? (
@@ -291,6 +377,18 @@ function Classificatory() {
             </Scrollable>
           </ContentMobile>
         )}
+
+        {tableData?.length > 0 && (
+          <PrintArea
+            title={'RESULTADOS DO EVENTO'}
+            columns={tableColumns}
+            data={tableData}
+            cards={printCards}
+            info={printInfo}
+          />
+        )}
+        {showShareOptions && !isTabletOrMobile && <ShareOptions url={shareUrl} />}
+
       </ContainerMain>
     </Layout>
   );

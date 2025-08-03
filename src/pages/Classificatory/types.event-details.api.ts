@@ -1,18 +1,36 @@
 import type { ApiResponse } from '@src/services/types.api';
 
-export type EventDetailsData = {
+// export type EventDetailsData = {
+//   cds_evento: string;
+//   organizador: string;
+//   local: string;
+//   estado: string;
+//   data_inicio: string;
+//   data_fim: string;
+//   logotipo: string;
+//   nid_agrupa_evento: number;
+//   bid_oficial: boolean;
+// };
+
+export type ClassificatoryEventData = {
+  bid_juvenil: boolean;
+  ccd_tipo_classificatoria: string;
   cds_evento: string;
-  organizador: string;
-  local: string;
-  estado: string;
-  data_inicio: string;
-  data_fim: string;
-  logotipo: string;
+  cds_modalidade: string;
+  cds_tipo_avaliacao: string;
+  cds_tipo_prova: string;
+  cds_url: string;
+  dtm_data_prova: string;
   nid_agrupa_evento: number;
-  bid_oficial: boolean;
+  nid_evento: number;
+  nid_prova: number;
+  nid_prova_evento: number;
+  nid_prova_evento_classificatoria: number;
+  nnr_passada: number;
 };
 
-export type InscriptionsResumeData = {
+
+export type ClassificatoryInscriptionsResumeData = {
   nn_qtde_base_pontuacao: number;
   nnr_qtde_inscricoes: number;
   nnr_qtde_inscricoes_passadas: number;
@@ -30,12 +48,12 @@ export type InscriptionsResumeData = {
   nnr_qtde_inscricoes_passadas_aqha: number;
 };
 
-export type EventDetailsResponseData = {
-  detalhe_evento: EventDetailsData | null;
-  resumo_inscricoes: InscriptionsResumeData | null;
+export type ClassificatoryEventDetailsResponseData = {
+  detalhe_evento: ClassificatoryEventData | null;
+  resumo_inscricoes: ClassificatoryInscriptionsResumeData | null;
   cartao_julgamento: string;
 };
 
-export type EventDetailsResponse = ApiResponse<{
-  resultado_detalhe_evento_prova_evento: EventDetailsResponseData;
+export type ClassificatoryEventDetailsResponse = ApiResponse<{
+  resultado_detalhe_evento_prova_evento: ClassificatoryEventDetailsResponseData;
 }>;
