@@ -1,0 +1,31 @@
+{
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.rulers": [
+      {
+        "column": 80,
+        "color": "#ea922d"
+      }
+    ]
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.rulers": [
+      {
+        "column": 80,
+        "color": "#ea922d"
+      }
+    ]
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features",
+    "editor.rulers": [
+      {
+        "column": 80,
+        "color": "#ea922d"
+      }
+    ]
+  },
+  "editor.wordWrap": "wordWrapColumn",
+  "editor.wordWrapColumn": 80
+}
