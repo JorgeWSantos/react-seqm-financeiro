@@ -1,6 +1,7 @@
 import {
   ActivityIndicator,
   AnimalTableData,
+  CompetitorTableData,
   ContentDektop,
   ContentMobile,
   getNameProveById,
@@ -27,7 +28,6 @@ import { useClassificatory } from '@src/services/useClassificatory';
 import type { ClassificatoryData, EventDetailsClassificatory } from './types.api';
 import { useParams } from 'react-router';
 import Layout from '@src/Layout';
-import { CompetitorTableData } from './CompetitorTableData';
 
 function Classificatory() {
   const params = useParams();
