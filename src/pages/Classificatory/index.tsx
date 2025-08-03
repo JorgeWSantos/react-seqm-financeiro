@@ -25,15 +25,14 @@ import { usePage } from '@src/contexts/page/usePage';
 import { SearchIcon } from '@abqm-ds/icons';
 import { colors } from '@abqm-ds/tokens';
 import { useClassificatory } from '@src/services/useClassificatory';
-import type { ClassificatoryData, EventDetailsClassificatory } from './types.api';
+import type { ClassificatoryData } from './types.classificatory.api';
 import { useParams } from 'react-router';
 import Layout from '@src/Layout';
+import type { EventDetailsData } from './types.event-details.api';
 
 function Classificatory() {
   const params = useParams();
-  const prove_id = params.prove_id;
-  const prove_event_id = params.prove_event_id;
-  const event_id = params.event_id;
+  const { prove_id, prove_event_id, event_id, id_classificatory } = params;
 
   const pageTitle = 'Resultados »';
   const subTitle = getNameProveById(Number(prove_id));
@@ -43,15 +42,15 @@ function Classificatory() {
 
   const { setPage } = usePage();
   const { isTabletOrMobile } = useDeviceType();
-  const { getClassificatory } = useClassificatory();
+  const { getClassificatory, getEventDetails } = useClassificatory();
   const [isLoading, setIsLoading] = useState(true);
 
   const [allList, setAllList] = useState<ClassificatoryData[]>([]);
   const [listToShow, setListToShow] = useState<ClassificatoryData[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
 
-  const [eventInfoData, setEventInfoData] = useState<EventDetailsClassificatory | null>(
-    {} as EventDetailsClassificatory
+  const [eventInfoData, setEventInfoData] = useState<EventDetailsData | null>(
+    {} as EventDetailsData
   );
 
   const handleGetResultsClassificatory = useCallback(async () => {
@@ -63,26 +62,29 @@ function Classificatory() {
       prove_event_id: Number(prove_event_id),
     });
 
-    setAllList([...data, ...data, ...data]);
-    setListToShow([...data, ...data, ...data]); // Duplicating for testing purposes
+    setAllList(data);
+    setListToShow(data); // Duplicating for testing purposes
 
-    const detalhedoevento = {
-      bid_oficial: true,
-      cds_evento: 'MOCK - 1° Festival ABQM Jovem 2025',
-      data_fim: 'MOCK - 18/01/2025',
-      data_inicio: 'MOCK - 09/01/2025',
-      estado: 'MOCK - SP',
-      local: 'MOCK - Haras Raphaela',
-      logotipo: 'https://img.seqm.com.br/saep/PRD/logotipo/6386899376395470251.png',
-      nid_agrupa_evento: 39374,
-      organizador:
-        'MOCK - ABQM - Associação Brasileira de Criadores de Cavalo Quarto de Milha',
-    };
-
-    // setEventInfoData(data.detalhe_evento);
-    setEventInfoData(detalhedoevento);
     setIsLoading(false);
   }, [getClassificatory, prove_event_id]);
+
+  const handleGetEventDetails = useCallback(async () => {
+    if (!prove_event_id || !id_classificatory) {
+      return;
+    }
+
+    const { detalhe_evento, resumo_inscricoes, cartao_julgamento } =
+      await getEventDetails({
+        prove_event_id: Number(prove_event_id),
+        prove_event_classificatory_id: Number(id_classificatory),
+      });
+
+    if (detalhe_evento) {
+      setEventInfoData(detalhe_evento);
+    }
+
+    setIsLoading(false);
+  }, [getEventDetails, prove_event_id, id_classificatory]);
 
   const handleOnGoBack = useCallback(() => {
     navigate('/modalidade/' + prove_id + '/evento/' + event_id);
@@ -111,7 +113,8 @@ function Classificatory() {
 
   useEffect(() => {
     handleGetResultsClassificatory();
-  }, [handleGetResultsClassificatory]);
+    handleGetEventDetails();
+  }, [handleGetResultsClassificatory, handleGetEventDetails]);
 
   const columns: Array<TableColumnSEQM> = [
     // {
