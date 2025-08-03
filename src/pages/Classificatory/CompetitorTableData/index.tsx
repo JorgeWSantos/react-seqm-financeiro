@@ -1,12 +1,8 @@
-import { Text } from '@abqm-ds/react';
-import { CompetitorTableDataContainer } from './styles';
-import { colors } from '@abqm-ds/tokens';
+import { CompetitorTableDataContainer, StyledTextCompetitor } from './styles';
 
 const CompetitorTableData = ({ value }: { value: string }) => (
   <CompetitorTableDataContainer>
-    <Text fontSize="xxs" fontWeight="semiBold" color={colors.emeraldGreen75}>
-      {value}
-    </Text>
+    <StyledTextCompetitor>{value}</StyledTextCompetitor>
   </CompetitorTableDataContainer>
 );
 export { CompetitorTableData };

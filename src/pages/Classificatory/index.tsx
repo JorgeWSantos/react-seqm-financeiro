@@ -143,13 +143,13 @@ function Classificatory() {
     {
       key: 'owner',
       label: 'PROPRIETÁRIO',
-      width: '30%',
+      width: '36%',
       align: 'left',
     },
     {
       key: 'tn',
       label: 'T/N',
-      width: '5%',
+      width: '8%',
       align: 'center',
     },
   ];
@@ -172,6 +172,7 @@ function Classificatory() {
                 nameAnimal={e.cds_animal}
                 imgAnimal={e.img_animal}
                 isHallOfFameAnimal={e.hall_da_fama}
+                // isHallOfFameAnimal={'2014'}
                 // isHallOfFameAnimal={e.hall_da_fama || (i === 0 ? '2017' : null)}
                 medal={e.cor_medalha}
                 registerAnimal={'P000000'}
@@ -186,8 +187,7 @@ function Classificatory() {
         return item.equipe.map((e) => (
           <OwnerTableData
             // isHallOfFameOwner={e.proprietario_hf || (i === 0 ? '2017' : null)}
-            // isHallOfFameOwner={e.proprietario_hf}
-            isHallOfFameOwner={true}
+            isHallOfFameOwner={e.proprietario_hf}
             value={e.cds_proprietario}
           />
         ));
@@ -265,7 +265,7 @@ function Classificatory() {
           >
             <Scrollable>
               {data.length > 0 ? (
-                <TableSEQM data={data} columns={columns} width={'60rem'} />
+                <TableSEQM data={data} columns={columns} width={'64rem'} />
               ) : (
                 <>
                   {isLoading ? (
