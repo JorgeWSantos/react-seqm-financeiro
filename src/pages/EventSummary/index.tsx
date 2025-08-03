@@ -335,8 +335,8 @@ function EventSummary() {
       onClick: () => {
         window.open(
           import.meta.env.VITE_URL_PARTICIPACOES +
-            '/index/' +
-            eventInfoData?.nid_agrupa_evento
+          '/index/' +
+          eventInfoData?.nid_agrupa_evento
         );
       },
     },
@@ -368,8 +368,8 @@ function EventSummary() {
       onClick: () => {
         window.open(
           import.meta.env.VITE_URL_PARTICIPACOES +
-            '/index/' +
-            eventInfoData?.nid_agrupa_evento
+          '/index/' +
+          eventInfoData?.nid_agrupa_evento
         );
       },
       variant: 'outline-white-25',
@@ -445,11 +445,11 @@ function EventSummary() {
                     />
                   </DivDropDownSearch>
 
-                  <ButtonTop10>
-                    <TrophyIcon fill={colors.white75} />
-                    <Link
-                      to={`/modalidade/${listToShow[0]?.nid_prova}/evento/${listToShow[0]?.nid_evento}/prova-evento/${listToShow[0]?.nid_prova_evento}/top10`}
-                    >
+                  <Link
+                    to={`/modalidade/${listToShow[0]?.nid_prova}/evento/${listToShow[0]?.nid_evento}/prova-evento/${listToShow[0]?.nid_prova_evento}/top10`}
+                  >
+                    <ButtonTop10>
+                      <TrophyIcon fill={colors.white75} />
                       <Text
                         fontSize="ssm"
                         fontWeight="semiBold"
@@ -459,8 +459,8 @@ function EventSummary() {
                       >
                         TOP 10
                       </Text>
-                    </Link>
-                  </ButtonTop10>
+                    </ButtonTop10>
+                  </Link>
                 </DivTopRight>
 
                 <EventTable
@@ -532,7 +532,7 @@ function EventSummary() {
 
         {showShareOptions && !isTabletOrMobile && <ShareOptions url={shareUrl} />}
       </ContainerMain>
-    </Layout>
+    </Layout >
   );
 }
 
