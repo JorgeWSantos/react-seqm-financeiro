@@ -34,7 +34,7 @@ export function useMainService() {
       };
     } catch (error) {
       Toast.show({
-        message: 'Ops, ocorreu um errs!',
+        message: 'Ops, ocorreu um erro ao carregar os resultados!',
         type: 'error',
         timeout: 30000,
       });
