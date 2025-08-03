@@ -11,9 +11,6 @@ interface EventTableProps {
 }
 
 const EventTable: React.FC<EventTableProps> = ({ data, columns, isLoading }) => {
-  console.log('EventTable data:', data);
-  console.log('EventTable columns:', columns);
-
   return (
     <DivContainerTableRight>
       {data?.length > 0 ? (
