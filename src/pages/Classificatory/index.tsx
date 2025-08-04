@@ -122,9 +122,29 @@ function Classificatory() {
       return;
     }
 
-    const filteredList = allList.filter((item) =>
-      item.cds_classificacao.toLowerCase().includes(searchValue.toLowerCase())
-    );
+    const search = searchValue.toLowerCase();
+
+    const filteredList = allList.filter((item) => {
+      // Filtro por classificação
+      const matchClassificacao = item.cds_classificacao.toLowerCase().includes(search);
+      const matchTN = item.cds_media.toLowerCase().includes(search);
+
+
+      // Filtro por nome do animal dentro de equipe
+      const matchAnimal = item.equipe?.some((e) =>
+        e.cds_animal?.toLowerCase().includes(search)
+      );
+      // Filtro por nome do competidor dentro de equipe
+      const matchCompetitor = item.equipe?.some((e) =>
+        e.cds_competidor?.toLowerCase().includes(search)
+      );
+      // Filtro por nome do proprietario dentro de equipe
+      const matchOwner = item.equipe?.some((e) =>
+        e.cds_proprietario?.toLowerCase().includes(search)
+      );
+
+      return matchClassificacao || matchAnimal || matchCompetitor || matchOwner || matchTN;
+    });
 
     setListToShow(filteredList);
   }, [searchValue, allList]);
