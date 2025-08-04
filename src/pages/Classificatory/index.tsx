@@ -1,5 +1,4 @@
 import {
-  ActivityIndicator,
   AnimalTableData,
   CompetitorTableData,
   ContentDektop,
@@ -10,8 +9,6 @@ import {
   HeaderNavigatorDesktop,
   OwnerTableData,
   ShareOptions,
-  TableSEQM,
-  Text,
   TextInput,
   type TableColumnSEQM,
   type TableRowSEQM,
@@ -19,7 +16,7 @@ import {
 
 import { useDeviceType } from '@abqm-ds/react';
 
-import { ContainerMain, LoadingContainer, NotFoundContainer, Scrollable } from './styles';
+import { ContainerMain, Scrollable } from './styles';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePage } from '@src/contexts/page/usePage';
@@ -33,6 +30,7 @@ import type { ClassificatoryEventData, ClassificatoryInscriptionsResumeData } fr
 import type { PrintHeaderProps } from '@src/components/PrintArea/PrintHeader';
 import PrintArea from '@src/components/PrintArea';
 import { handlePrintPDF } from '@src/components/PrintArea/utils';
+import TableWithLoader from '@src/components/EventSummary/TableWithLoader';
 
 function Classificatory() {
   const params = useParams();
@@ -76,7 +74,7 @@ function Classificatory() {
     });
 
     setAllList(data);
-    setListToShow(data); // Duplicating for testing purposes
+    setListToShow(data);
 
     setIsLoading(false);
   }, [getClassificatory, prove_event_id]);
@@ -104,7 +102,6 @@ function Classificatory() {
       setJudgmentCard(cartao_julgamento);
     }
 
-    setIsLoading(false);
   }, [getEventDetails, prove_event_id, id_classificatory]);
 
   const handleOnGoBack = useCallback(() => {
@@ -190,18 +187,18 @@ function Classificatory() {
       render: () => {
         return (
           item.equipe.map((e) => (
-              <AnimalTableData
-                key={e.nid_animal}
-                idAnimal={e.nid_animal}
-                nameAnimal={e.cds_animal}
-                imgAnimal={e.img_animal}
-                isHallOfFameAnimal={e.hall_da_fama}
-                // isHallOfFameAnimal={'2014'}
-                // isHallOfFameAnimal={e.hall_da_fama || (i === 0 ? '2017' : null)}
-                medal={e.cor_medalha}
-                registerAnimal={'P000000'}
-              />
-            ))
+            <AnimalTableData
+              key={e.nid_animal}
+              idAnimal={e.nid_animal}
+              nameAnimal={e.cds_animal}
+              imgAnimal={e.img_animal}
+              isHallOfFameAnimal={e.hall_da_fama}
+              // isHallOfFameAnimal={'2014'}
+              // isHallOfFameAnimal={e.hall_da_fama || (i === 0 ? '2017' : null)}
+              medal={e.cor_medalha}
+              registerAnimal={'P000000'}
+            />
+          ))
         );
       },
     },
@@ -223,19 +220,19 @@ function Classificatory() {
   const printCards = [
     {
       title: 'DATA DO EVENTO',
-      value: eventInfoData?.dtm_data_prova?.slice(0, 10) || '',
+      value: eventInfoData?.dtm_data_prova?.slice(0, 10) || '0',
     },
     {
       title: 'INSCRIÇÕES',
-      value: resumeInscriptionsData?.nnr_qtde_inscricoes || 0,
+      value: resumeInscriptionsData?.nnr_qtde_inscricoes?.toString() || '0',
     },
     {
       title: 'COMPETIDORES',
-      value: resumeInscriptionsData?.nnr_qtde_competidores || 0,
+      value: resumeInscriptionsData?.nnr_qtde_competidores?.toString() || '0',
     },
     {
       title: 'ANIMAIS',
-      value: resumeInscriptionsData?.nnr_qtde_animais || 0,
+      value: resumeInscriptionsData?.nnr_qtde_animais?.toString() || '0',
     },
   ];
 
@@ -256,8 +253,8 @@ function Classificatory() {
       onClick: () => {
         window.open(
           import.meta.env.VITE_URL_PARTICIPACOES +
-            '/index/' +
-            eventInfoData?.nid_agrupa_evento
+          '/index/' +
+          eventInfoData?.nid_agrupa_evento
         );
       },
     },
@@ -313,27 +310,11 @@ function Classificatory() {
             count={tableData.length}
           >
             <Scrollable>
-              {tableData.length > 0 ? (
-                <TableSEQM data={tableData} columns={tableColumns} />
-              ) : (
-                <>
-                  {isLoading ? (
-                    <LoadingContainer>
-                      <ActivityIndicator width={20} height={20} />
-                    </LoadingContainer>
-                  ) : (
-                    <NotFoundContainer>
-                      <Text
-                        fontSize="smm"
-                        fontWeight="semiBold"
-                        color={colors.emeraldGreen75}
-                      >
-                        Nenhum resultado encontrado
-                      </Text>
-                    </NotFoundContainer>
-                  )}
-                </>
-              )}
+              <TableWithLoader
+                data={tableData}
+                columns={tableColumns}
+                isLoading={isLoading}
+              />
             </Scrollable>
           </ContentDektop>
         ) : (
@@ -353,27 +334,12 @@ function Classificatory() {
             }
           >
             <Scrollable>
-              {tableData.length > 0 ? (
-                <TableSEQM data={tableData} columns={tableColumns} width={'64rem'} />
-              ) : (
-                <>
-                  {isLoading ? (
-                    <LoadingContainer>
-                      <ActivityIndicator width={20} height={20} />
-                    </LoadingContainer>
-                  ) : (
-                    <NotFoundContainer>
-                      <Text
-                        fontSize="smm"
-                        fontWeight="semiBold"
-                        color={colors.emeraldGreen75}
-                      >
-                        Nenhum resultado encontrado
-                      </Text>
-                    </NotFoundContainer>
-                  )}
-                </>
-              )}
+              <TableWithLoader
+                data={tableData}
+                columns={tableColumns}
+                isLoading={isLoading}
+                minWidthTable="62rem"
+              />
             </Scrollable>
           </ContentMobile>
         )}
