@@ -1,4 +1,4 @@
-import type { TeamClassificatory } from './types.api';
+import type { TeamClassificatory } from './types.classificatory.api';
 
 export interface TableClassificatory {
   abqm: string;

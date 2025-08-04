@@ -60,18 +60,6 @@ export type ClassificatoryData = {
   equipe: TeamClassificatory[];
 };
 
-export type EventDetailsClassificatory = {
-  cds_evento: string;
-  organizador: string;
-  local: string;
-  estado: string;
-  data_inicio: string;
-  data_fim: string;
-  logotipo: string;
-  nid_agrupa_evento: number;
-  bid_oficial: boolean;
-};
-
 export type ClassificatoryResponse = ApiResponse<{
   list_page_classificacao_etapas: Array<ClassificatoryData> | [];
 }>;

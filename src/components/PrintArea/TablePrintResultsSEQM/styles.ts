@@ -18,6 +18,8 @@ export const StyledTablePrintResultsSEQM = styled.table<{
   border-collapse: collapse;
   width: ${({ $width }) => $width || '100%'};
   height: ${({ $height }) => $height || 'unset'};
+  display: flex;
+  flex-direction: column;
 
   tbody tr:nth-child(odd) {
     background-color: ${colors.white25};
@@ -32,6 +34,10 @@ export const StyledTablePrintResultsSEQM = styled.table<{
 `;
 
 export const StyledHeadTablePrintResultsSEQM = styled.thead`
+  tr {
+    display: flex;
+  }
+
   tr th {
     padding: ${space[1]} ${space[2]};
   }
@@ -46,22 +52,37 @@ export const StyledTablePrintResultsSEQMTextTh = styled(Text).attrs({
 
 export const StyledBodyTablePrintResultsSEQM = styled.tbody`
   tr {
-    max-height: 2rem;
+    /* max-height: 2rem; */
+    display: flex;
+    flex-direction: row;
   }
 
   tr td {
-    padding: 0.5rem ${space[2]};
+    padding: 1rem ${space[2]};
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: -10pt;
+
+    gap: 0.25rem;
   }
 
-  p {
-    margin-top: -10pt;
+  svg {
+    margin-bottom: -10pt;
+  }
+
+  .animal-table-data-container {
+    .tooltip-anchor-divimage {
+      display: none !important;
+    }
   }
 `;
 
 export const StyledTablePrintResultsSEQMTextTd = styled(Text).attrs({
   fontWeight: 'regular',
   lineHeight: 'tight',
-})<{ $bold?: boolean }>`
+}) <{ $bold?: boolean }>`
   font-size: 8pt;
   font-weight: ${({ $bold }) => ($bold ? fontWeights.semiBold : fontWeights.regular)};
   color: ${colors.grayFigma2};

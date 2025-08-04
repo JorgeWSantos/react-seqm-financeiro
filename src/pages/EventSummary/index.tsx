@@ -27,7 +27,7 @@ import {
   Scrollable,
   StyledHeadingMobile,
 } from './styles';
-import EventTable from '@components/EventSummary/EventTable';
+import TableWithLoader from '@src/components/EventSummary/TableWithLoader';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePage } from '@src/contexts/page/usePage';
 import {
@@ -463,7 +463,7 @@ function EventSummary() {
                   </Link>
                 </DivTopRight>
 
-                <EventTable
+                <TableWithLoader
                   data={tableData}
                   columns={tableColumns}
                   isLoading={isLoading}
@@ -515,7 +515,7 @@ function EventSummary() {
             </DivLeft>
 
             <DivRight>
-              <EventTable data={tableData} columns={tableColumns} isLoading={isLoading} />
+              <TableWithLoader data={tableData} columns={tableColumns} isLoading={isLoading} />
             </DivRight>
           </ContentMobile>
         )}
