@@ -63,7 +63,6 @@ function Top10() {
       prove_event_id: Number(prove_event_id),
     });
 
-
     setAllList(data.top10);
     setListToShow(data.top10);
 
@@ -93,7 +92,9 @@ function Top10() {
         item.cds_pontuacao?.toLowerCase().includes(searchValue.toLowerCase()) ||
         item.equipe?.some(
           (equipeItem) =>
-            equipeItem.cds_competidor?.toLowerCase().includes(searchValue.toLowerCase()) ||
+            equipeItem.cds_competidor
+              ?.toLowerCase()
+              .includes(searchValue.toLowerCase()) ||
             equipeItem.cds_animal?.toLowerCase().includes(searchValue.toLowerCase()) ||
             equipeItem.cds_proprietario?.toLowerCase().includes(searchValue.toLowerCase())
         )
@@ -132,7 +133,6 @@ function Top10() {
       align: 'center',
       minWidth: '76px',
     },
-
   ];
 
   console.log('List to show:', listToShow);
@@ -175,7 +175,7 @@ function Top10() {
         ));
       },
     },
-    tn: { value: item.cds_pontuacao }
+    tn: { value: item.cds_pontuacao },
   }));
 
   return (
@@ -202,7 +202,7 @@ function Top10() {
             contentBoxStyles={{
               padding: '1.5rem',
               gap: '0.25rem',
-              overflow: 'visible'
+              overflow: 'visible',
             }}
             count={data.length}
           >
@@ -234,7 +234,7 @@ function Top10() {
           <ContentMobile
             style={{
               maxWidth: '100vw',
-              overflow: 'visible'
+              overflow: 'visible',
             }}
             headerMobileNavigator={
               <HeaderMobileNavigator
@@ -245,7 +245,6 @@ function Top10() {
                 onChangeSearch={(v) => setSearchValue(v.target.value)}
               />
             }
-            
           >
             <Scrollable>
               {data.length > 0 ? (
