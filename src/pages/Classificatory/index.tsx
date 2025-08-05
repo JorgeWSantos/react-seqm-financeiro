@@ -239,7 +239,7 @@ function Classificatory() {
         ));
       },
     },
-    tn: { value: item.cds_media },
+    tn: { value: item.cds_media_final },
   }));
 
   const printCards = [
