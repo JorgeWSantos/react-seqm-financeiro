@@ -31,6 +31,7 @@ import type { PrintHeaderProps } from '@src/components/PrintArea/PrintHeader';
 import PrintArea from '@src/components/PrintArea';
 import { handlePrintPDF } from '@src/components/PrintArea/utils';
 import TableWithLoader from '@src/components/EventSummary/TableWithLoader';
+import { convertToBrazilDate } from '@src/utils/formatDate';
 
 function Classificatory() {
   const params = useParams();
@@ -58,7 +59,7 @@ function Classificatory() {
   const [resumeInscriptionsData, setResumeInscriptionsData] =
     useState<ClassificatoryInscriptionsResumeData | null>({} as ClassificatoryInscriptionsResumeData);
 
-  const [judmentCard, setJudgmentCard] = useState<string>('');
+  // const [judmentCard, setJudgmentCard] = useState<string>('');
 
   const [showShareOptions, setShowShareOptions] = useState(false);
   const shareUrl = window.location.href;
@@ -84,7 +85,7 @@ function Classificatory() {
       return;
     }
 
-    const { detalhe_evento, resumo_inscricoes, cartao_julgamento } =
+    const { detalhe_evento, resumo_inscricoes } =
       await getEventDetails({
         prove_event_id: Number(prove_event_id),
         prove_event_classificatory_id: Number(id_classificatory),
@@ -98,9 +99,9 @@ function Classificatory() {
       setResumeInscriptionsData(resumo_inscricoes);
     }
 
-    if (cartao_julgamento) {
-      setJudgmentCard(cartao_julgamento);
-    }
+    // if (cartao_julgamento) {
+    //   setJudgmentCard(cartao_julgamento);
+    // }
 
   }, [getEventDetails, prove_event_id, id_classificatory]);
 
@@ -154,14 +155,18 @@ function Classificatory() {
     handleGetEventDetails();
   }, [handleGetResultsClassificatory, handleGetEventDetails]);
 
+  const hasNucleoColumn = listToShow.findIndex((item) => item.cds_classificacao_nucleo !== '');
+
   const tableColumns: Array<TableColumnSEQM> = [
-    // {
-    //   key: 'nucleo',
-    //   label: 'NÚCLEO',
-    //   width: '4%',
-    //   minWidth: '3rem',
-    //   align: 'center',
-    // },
+    ...(hasNucleoColumn !== -1
+      ? [{
+        key: 'nucleo',
+        label: 'NÚCLEO',
+        width: '4%',
+        minWidth: '3rem',
+        align: 'center' as const,
+      }]
+      : []),
     {
       key: 'abqm',
       label: 'ABQM',
@@ -196,19 +201,19 @@ function Classificatory() {
   ];
 
   const tableData: Array<TableRowSEQM> = listToShow.map((item) => ({
-    nucleo: { value: item.cds_classificacao },
-    abqm: { value: `${item.cds_classificacao + (item.cds_classificacao ? '°' : '')}` },
+    nucleo: { value: item.cds_classificacao_nucleo || ' ' },
+    abqm: { value: `${item.cds_classificacao + (item.cds_classificacao ? '°' : ' ')}` },
     competitor: {
       render: () => {
-        return item.equipe.map((e) => <CompetitorTableData key={e.nid_competidor} value={e.cds_competidor} />);
+        return item.equipe.map((e, i) => <CompetitorTableData key={new Date().getTime() + i} value={e.cds_competidor} />);
       },
     },
     animal: {
       render: () => {
         return (
-          item.equipe.map((e) => (
+          item.equipe.map((e, i) => (
             <AnimalTableData
-              key={e.nid_animal}
+              key={new Date().getTime() + i}
               idAnimal={e.nid_animal}
               nameAnimal={e.cds_animal}
               imgAnimal={e.img_animal}
@@ -224,9 +229,9 @@ function Classificatory() {
     },
     owner: {
       render: () => {
-        return item.equipe.map((e) => (
+        return item.equipe.map((e, i) => (
           <OwnerTableData
-            key={e.cds_proprietario}
+            key={new Date().getTime() + i}
             // isHallOfFameOwner={e.proprietario_hf || (i === 0 ? '2017' : null)}
             isHallOfFameOwner={e.proprietario_hf}
             value={e.cds_proprietario}
@@ -240,7 +245,7 @@ function Classificatory() {
   const printCards = [
     {
       title: 'DATA DO EVENTO',
-      value: eventInfoData?.dtm_data_prova?.slice(0, 10) || '0',
+      value: convertToBrazilDate(eventInfoData?.dtm_data_prova || '') || '0',
     },
     {
       title: 'INSCRIÇÕES',
@@ -298,9 +303,6 @@ function Classificatory() {
       },
     },
   ];
-
-
-  console.log('eventInfoData', eventInfoData);
 
   return (
     <Layout>
