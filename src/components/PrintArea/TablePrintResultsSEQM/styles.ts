@@ -68,6 +68,10 @@ export const StyledBodyTablePrintResultsSEQM = styled.tbody`
     gap: 0.25rem;
   }
 
+  span, p {
+    white-space: normal !important;
+  }
+
   svg {
     margin-bottom: -10pt;
   }
