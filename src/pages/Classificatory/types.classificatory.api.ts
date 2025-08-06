@@ -60,6 +60,13 @@ export type ClassificatoryData = {
   equipe: TeamClassificatory[];
 };
 
+
+export type ClassificatoryResponseData = {
+  cartao_julgamento: string;
+  lista_classificacao: Array<ClassificatoryData> | [];
+  tipo_etapa: string;
+};
+
 export type ClassificatoryResponse = ApiResponse<{
-  list_page_classificacao_etapas: Array<ClassificatoryData> | [];
+  list_page_classificacao_etapas: Array<ClassificatoryResponseData> | [];
 }>;

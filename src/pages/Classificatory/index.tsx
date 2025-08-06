@@ -26,7 +26,10 @@ import { useClassificatory } from '@src/services/useClassificatory';
 import type { ClassificatoryData } from './types.classificatory.api';
 import { useParams } from 'react-router';
 import Layout from '@src/Layout';
-import type { ClassificatoryEventData, ClassificatoryInscriptionsResumeData } from './types.event-details.api';
+import type {
+  ClassificatoryEventData,
+  ClassificatoryInscriptionsResumeData,
+} from './types.event-details.api';
 import type { PrintHeaderProps } from '@src/components/PrintArea/PrintHeader';
 import PrintArea from '@src/components/PrintArea';
 import { handlePrintPDF } from '@src/components/PrintArea/utils';
@@ -57,13 +60,14 @@ function Classificatory() {
   );
 
   const [resumeInscriptionsData, setResumeInscriptionsData] =
-    useState<ClassificatoryInscriptionsResumeData | null>({} as ClassificatoryInscriptionsResumeData);
+    useState<ClassificatoryInscriptionsResumeData | null>(
+      {} as ClassificatoryInscriptionsResumeData
+    );
 
   // const [judmentCard, setJudgmentCard] = useState<string>('');
 
   const [showShareOptions, setShowShareOptions] = useState(false);
   const shareUrl = window.location.href;
-
 
   const handleGetResultsClassificatory = useCallback(async () => {
     if (!prove_event_id) {
@@ -74,8 +78,8 @@ function Classificatory() {
       prove_event_id: Number(prove_event_id),
     });
 
-    setAllList(data);
-    setListToShow(data);
+    setAllList(data[0]?.lista_classificacao || []);
+    setListToShow(data[0]?.lista_classificacao || []);
 
     setIsLoading(false);
   }, [getClassificatory, prove_event_id]);
@@ -85,11 +89,10 @@ function Classificatory() {
       return;
     }
 
-    const { detalhe_evento, resumo_inscricoes } =
-      await getEventDetails({
-        prove_event_id: Number(prove_event_id),
-        prove_event_classificatory_id: Number(id_classificatory),
-      });
+    const { detalhe_evento, resumo_inscricoes } = await getEventDetails({
+      prove_event_id: Number(prove_event_id),
+      prove_event_classificatory_id: Number(id_classificatory),
+    });
 
     if (detalhe_evento) {
       setEventInfoData(detalhe_evento);
@@ -102,7 +105,6 @@ function Classificatory() {
     // if (cartao_julgamento) {
     //   setJudgmentCard(cartao_julgamento);
     // }
-
   }, [getEventDetails, prove_event_id, id_classificatory]);
 
   const handleOnGoBack = useCallback(() => {
@@ -130,7 +132,6 @@ function Classificatory() {
       const matchClassificacao = item.cds_classificacao.toLowerCase().includes(search);
       const matchTN = item.cds_media.toLowerCase().includes(search);
 
-
       // Filtro por nome do animal dentro de equipe
       const matchAnimal = item.equipe?.some((e) =>
         e.cds_animal?.toLowerCase().includes(search)
@@ -144,7 +145,9 @@ function Classificatory() {
         e.cds_proprietario?.toLowerCase().includes(search)
       );
 
-      return matchClassificacao || matchAnimal || matchCompetitor || matchOwner || matchTN;
+      return (
+        matchClassificacao || matchAnimal || matchCompetitor || matchOwner || matchTN
+      );
     });
 
     setListToShow(filteredList);
@@ -155,17 +158,21 @@ function Classificatory() {
     handleGetEventDetails();
   }, [handleGetResultsClassificatory, handleGetEventDetails]);
 
-  const hasNucleoColumn = listToShow.findIndex((item) => item.cds_classificacao_nucleo !== '');
+  const hasNucleoColumn = listToShow.findIndex(
+    (item) => item.cds_classificacao_nucleo !== ''
+  );
 
   const tableColumns: Array<TableColumnSEQM> = [
     ...(hasNucleoColumn !== -1
-      ? [{
-        key: 'nucleo',
-        label: 'NÚCLEO',
-        width: '4%',
-        minWidth: '3rem',
-        align: 'center' as const,
-      }]
+      ? [
+          {
+            key: 'nucleo',
+            label: 'NÚCLEO',
+            width: '4%',
+            minWidth: '3rem',
+            align: 'center' as const,
+          },
+        ]
       : []),
     {
       key: 'abqm',
@@ -205,26 +212,26 @@ function Classificatory() {
     abqm: { value: `${item.cds_classificacao + (item.cds_classificacao ? '°' : ' ')}` },
     competitor: {
       render: () => {
-        return item.equipe.map((e, i) => <CompetitorTableData key={new Date().getTime() + i} value={e.cds_competidor} />);
+        return item.equipe.map((e, i) => (
+          <CompetitorTableData key={new Date().getTime() + i} value={e.cds_competidor} />
+        ));
       },
     },
     animal: {
       render: () => {
-        return (
-          item.equipe.map((e, i) => (
-            <AnimalTableData
-              key={new Date().getTime() + i}
-              idAnimal={e.nid_animal}
-              nameAnimal={e.cds_animal}
-              imgAnimal={e.img_animal}
-              isHallOfFameAnimal={e.hall_da_fama}
-              // isHallOfFameAnimal={'2014'}
-              // isHallOfFameAnimal={e.hall_da_fama || (i === 0 ? '2017' : null)}
-              medal={e.cor_medalha}
-              registerAnimal={'P000000'}
-            />
-          ))
-        );
+        return item.equipe.map((e, i) => (
+          <AnimalTableData
+            key={new Date().getTime() + i}
+            idAnimal={e.nid_animal}
+            nameAnimal={e.cds_animal}
+            imgAnimal={e.img_animal}
+            isHallOfFameAnimal={e.hall_da_fama}
+            // isHallOfFameAnimal={'2014'}
+            // isHallOfFameAnimal={e.hall_da_fama || (i === 0 ? '2017' : null)}
+            medal={e.cor_medalha}
+            registerAnimal={'P000000'}
+          />
+        ));
       },
     },
     owner: {
@@ -278,8 +285,8 @@ function Classificatory() {
       onClick: () => {
         window.open(
           import.meta.env.VITE_URL_PARTICIPACOES +
-          '/index/' +
-          eventInfoData?.nid_agrupa_evento
+            '/index/' +
+            eventInfoData?.nid_agrupa_evento
         );
       },
     },
@@ -309,7 +316,9 @@ function Classificatory() {
       <ContainerMain>
         {!isTabletOrMobile ? (
           <ContentDektop
-            header={<Header text={pageTitle} subTitle={subTitle} buttons={buttonsHeader} />}
+            header={
+              <Header text={pageTitle} subTitle={subTitle} buttons={buttonsHeader} />
+            }
             headerNavigator={
               <HeaderNavigatorDesktop
                 title={eventInfoData?.cds_modalidade || ''}
@@ -327,11 +336,10 @@ function Classificatory() {
             contentBoxStyles={{
               padding: '1.5rem',
               gap: '0.25rem',
-              overflow: 'visible',
             }}
             count={tableData.length}
           >
-            <Scrollable>
+            <Scrollable style={{ overflow: 'visible' }}>
               <TableWithLoader
                 data={tableData}
                 columns={tableColumns}
@@ -376,7 +384,6 @@ function Classificatory() {
           />
         )}
         {showShareOptions && !isTabletOrMobile && <ShareOptions url={shareUrl} />}
-
       </ContainerMain>
     </Layout>
   );
