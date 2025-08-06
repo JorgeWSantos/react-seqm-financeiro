@@ -2,12 +2,12 @@ import { Toast } from '@abqm-ds/react';
 import { useCallback } from 'react';
 import { apiResultados } from './api';
 import type {
-  ClassificatoryData,
   ClassificatoryResponse,
+  ClassificatoryResponseData,
 } from '@src/pages/Classificatory/types.classificatory.api';
 import type {
-  EventDetailsResponse,
-  EventDetailsResponseData,
+  ClassificatoryEventDetailsResponse,
+  ClassificatoryEventDetailsResponseData,
 } from '@src/pages/Classificatory/types.event-details.api';
 
 export function useClassificatory() {
@@ -16,7 +16,7 @@ export function useClassificatory() {
       prove_event_id,
     }: {
       prove_event_id?: number | null;
-    } = {}): Promise<ClassificatoryData[] | []> => {
+    } = {}): Promise<ClassificatoryResponseData[] | []> => {
       try {
         const response = await apiResultados.get<ClassificatoryResponse>(
           '/v1/ListaClassificacaoEtapas',
@@ -62,9 +62,9 @@ export function useClassificatory() {
     }: {
       prove_event_id?: number | null;
       prove_event_classificatory_id?: number | null;
-    } = {}): Promise<EventDetailsResponseData> => {
+    } = {}): Promise<ClassificatoryEventDetailsResponseData> => {
       try {
-        const response = await apiResultados.get<EventDetailsResponse>(
+        const response = await apiResultados.get<ClassificatoryEventDetailsResponse>(
           '/v1/DetalheEventoProvaEvento',
           {
             params: {
