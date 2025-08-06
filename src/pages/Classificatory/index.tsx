@@ -225,11 +225,17 @@ function Classificatory() {
             idAnimal={e.nid_animal}
             nameAnimal={e.cds_animal}
             imgAnimal={e.img_animal}
-            isHallOfFameAnimal={e.hall_da_fama}
-            // isHallOfFameAnimal={'2014'}
-            // isHallOfFameAnimal={e.hall_da_fama || (i === 0 ? '2017' : null)}
+            registerOfMerity={e.registro_de_merito}
+            modalityAwards={e.modalidades_awards}
+            superHorseAward={e.super_horse}
+            allAroundAmateur={e.all_around_amador}
+            allAroundYoung={e.all_around_jovem}
+            rankingGeneralAward={e.ranking_geral_awards}
             medal={e.cor_medalha}
             registerAnimal={'P000000'}
+            isHallOfFameAnimal={e.hall_da_fama}
+            // isHallOfFameAnimal={e.hall_da_fama || (i === 0 ? '2017' : null)}
+            // isHallOfFameAnimal={'2014'}
           />
         ));
       },

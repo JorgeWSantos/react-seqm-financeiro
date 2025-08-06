@@ -27,6 +27,7 @@ export type TeamClassificatory = {
   proprietario_hf: string | null;
   ranking_geral_awards: string | null;
   registro_de_merito: string;
+  super_horse: string | null;
 };
 
 export type ClassificatoryData = {
