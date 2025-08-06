@@ -1,12 +1,14 @@
 import {
   ActivityIndicator,
+  AnimalTableData,
+  CompetitorTableData,
   ContentDektop,
   ContentMobile,
   getNameProveById,
   Header,
   HeaderMobileNavigator,
   HeaderNavigatorDesktop,
-  StyledTableSEQMTextTd,
+  OwnerTableData,
   TableSEQM,
   Text,
   TextInput,
@@ -61,25 +63,8 @@ function Top10() {
       prove_event_id: Number(prove_event_id),
     });
 
-    console.log('Top10 data:', data);
-
-    const teams: any[] = [];
-
-    for (const registry of data.top10) {
-      const existingGroup = teams.find(
-        (group) => group.classification === registry.nnr_classificacao_abqm
-      );
-      if (existingGroup) {
-        existingGroup.items.push(registry);
-      } else {
-        teams.push(registry);
-      }
-    }
-
-    setAllList(teams);
-    setListToShow(teams);
-
-    console.log('Teams:', teams);
+    setAllList(data.top10);
+    setListToShow(data.top10);
 
     setEventInfoData(data.detalhe_evento);
     setIsLoading(false);
@@ -104,10 +89,15 @@ function Top10() {
 
     const filteredList = allList.filter(
       (item) =>
-        item.cds_nome_competidor.toLowerCase().includes(searchValue.toLowerCase()) ||
-        item.cds_nome_animal.toLowerCase().includes(searchValue.toLowerCase()) ||
-        item.proprietario.includes(searchValue) ||
-        item.cds_pontuacao.includes(searchValue)
+        item.cds_pontuacao?.toLowerCase().includes(searchValue.toLowerCase()) ||
+        item.equipe?.some(
+          (equipeItem) =>
+            equipeItem.cds_competidor
+              ?.toLowerCase()
+              .includes(searchValue.toLowerCase()) ||
+            equipeItem.cds_animal?.toLowerCase().includes(searchValue.toLowerCase()) ||
+            equipeItem.cds_proprietario?.toLowerCase().includes(searchValue.toLowerCase())
+        )
     );
 
     setListToShow(filteredList);
@@ -121,20 +111,20 @@ function Top10() {
     {
       key: 'abqm',
       label: 'ABQM',
-      width: '3%',
+      width: '8%',
       align: 'center',
     },
-    { key: 'competitor', label: 'COMPETIDOR', width: '15%' },
+    { key: 'competitor', label: 'COMPETIDOR', width: '30%' },
     {
       key: 'animal',
       label: 'ANIMAL',
-      width: '20%',
+      width: '30%',
       align: 'left',
     },
     {
       key: 'owner',
       label: 'PROPRIETÁRIO',
-      width: '20%',
+      width: '30%',
       align: 'left',
     },
     {
@@ -143,31 +133,49 @@ function Top10() {
       align: 'center',
       minWidth: '76px',
     },
-    // { key: 'modality', label: 'MODALIDADE', width: '20%' },
-    // {
-    //   key: 'filiation',
-    //   label: 'Filiação',
-    //   minWidth: '76px',
-    //   align: 'center',
-    // },
   ];
+
+  console.log('List to show:', listToShow);
 
   const data: Array<TableRowSEQM> = listToShow.map((item, index) => ({
     abqm: { value: `${index + 1}°` },
-    competitor: { value: item.cds_nome_competidor.toUpperCase() },
+    competitor: {
+      render: () => {
+        return item.equipe.map((e) => <CompetitorTableData value={e.cds_competidor} />);
+      },
+    },
     animal: {
       render: () => {
         return (
-          <StyledTableSEQMTextTd $bold>
-            {item.cds_nome_animal.toUpperCase()}
-          </StyledTableSEQMTextTd>
+          <>
+            {item.equipe.map((e) => (
+              <AnimalTableData
+                idAnimal={e.nid_animal}
+                nameAnimal={e.cds_animal}
+                imgAnimal={e.img_animal}
+                isHallOfFameAnimal={e.hall_da_fama}
+                // isHallOfFameAnimal={'2014'}
+                // isHallOfFameAnimal={e.hall_da_fama || (i === 0 ? '2017' : null)}
+                medal={e.cor_medalha}
+                registerAnimal={'P000000'}
+              />
+            ))}
+          </>
         );
       },
     },
-    owner: { value: item.proprietario.toUpperCase() },
+    owner: {
+      render: () => {
+        return item.equipe.map((e) => (
+          <OwnerTableData
+            // isHallOfFameOwner={e.proprietario_hf || (i === 0 ? '2017' : null)}
+            isHallOfFameOwner={e.proprietario_hf}
+            value={e.cds_proprietario}
+          />
+        ));
+      },
+    },
     tn: { value: item.cds_pontuacao },
-    // modality: { value: item.cds_modalidade.toUpperCase() },
-    // filitation: item.cds_filiacao,
   }));
 
   return (
@@ -194,6 +202,7 @@ function Top10() {
             contentBoxStyles={{
               padding: '1.5rem',
               gap: '0.25rem',
+              overflow: 'visible',
             }}
             count={data.length}
           >
@@ -225,6 +234,7 @@ function Top10() {
           <ContentMobile
             style={{
               maxWidth: '100vw',
+              overflow: 'visible',
             }}
             headerMobileNavigator={
               <HeaderMobileNavigator
