@@ -18,16 +18,24 @@ import {
 
 import { useDeviceType } from '@abqm-ds/react';
 
-import { ContainerMain, LoadingContainer, NotFoundContainer, Scrollable } from './styles';
+import {
+  ContainerMain,
+  LoadingContainer,
+  NotFoundContainer,
+  Scrollable,
+  EventHeader,
+} from './styles';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePage } from '@src/contexts/page/usePage';
 import { SearchIcon } from '@abqm-ds/icons';
-import { colors } from '@abqm-ds/tokens';
+import { colors, fonts } from '@abqm-ds/tokens';
 import { useTop10 } from '@src/services/useTop10';
 import type { Top10Data, EventDetailsTop10 } from './types.api';
 import { useParams } from 'react-router';
 import Layout from '@src/Layout';
+
+import MedalTop10 from '@src/assets/images/medal-top10.svg';
 
 function Top10() {
   const params = useParams();
@@ -246,6 +254,20 @@ function Top10() {
               />
             }
           >
+            <EventHeader>
+              <img src={MedalTop10} width={70} height={70} alt="Medalha Top 10" />
+
+              <Text
+                fontSize="xl"
+                fontWeight="regular"
+                color={colors.green900}
+                lineHeight="initial"
+                // fontFamily={fonts.secondary}
+                style={{ fontFamily: fonts.secondary, letterSpacing: '-2px' }}
+              >
+                {eventInfoData?.cds_evento || 'Classificação'}
+              </Text>
+            </EventHeader>
             <Scrollable>
               {data.length > 0 ? (
                 <TableSEQM data={data} columns={columns} width={'100rem'} />
