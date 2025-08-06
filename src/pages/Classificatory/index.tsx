@@ -336,7 +336,6 @@ function Classificatory() {
             contentBoxStyles={{
               padding: '1.5rem',
               gap: '0.25rem',
-              overflow: 'visible',
             }}
             count={tableData.length}
           >
