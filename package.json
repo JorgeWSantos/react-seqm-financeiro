@@ -19,9 +19,9 @@
     "upgrade:ui": "npx npm-check-updates -u @abqm-ds/icons @abqm-ds/react @abqm-ds/tokens && npm install"
   },
   "dependencies": {
-    "@abqm-ds/icons": "^2.0.0",
-    "@abqm-ds/react": "^2.0.2",
-    "@abqm-ds/tokens": "^2.0.0",
+    "@abqm-ds/icons": "^2.0.2",
+    "@abqm-ds/react": "^2.0.4",
+    "@abqm-ds/tokens": "^2.0.2",
     "@tanstack/react-query": "5.77.2",
     "axios": "1.9.0",
     "html2pdf.js": "^0.10.3",
