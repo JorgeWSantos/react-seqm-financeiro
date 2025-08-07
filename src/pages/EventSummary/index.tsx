@@ -10,8 +10,6 @@ import {
   StyledTableSEQMTextTd,
   Text,
   type DataDropdown,
-  type FooterWithButtonsPropsType,
-  // type FooterWithButtonsPropsType,
   type TableColumnSEQM,
   type TableRowSEQM,
 } from '@abqm-ds/react';
@@ -56,7 +54,7 @@ import type { PrintHeaderProps } from '@src/components/PrintArea/PrintHeader';
 import ModalityDropdown from '@components/EventSummary/ModalityDropdown';
 import { useInfoEvent } from '@src/services/General/useInfoEvent';
 import type { InfoEventData } from '@src/services/General/types.info-event.api';
-import { FooterWithButtons } from './FooterWithButtons';
+import { FooterWithButtons, type FooterWithButtonsPropsType } from './FooterWithButtons';
 
 function EventSummary() {
   const pageTitle = 'Resultados »';
