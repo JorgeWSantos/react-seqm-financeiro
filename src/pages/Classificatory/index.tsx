@@ -38,6 +38,7 @@ import TabOption from '@src/components/Classificatory/TabOption';
 import type { InfoEventData } from '@src/services/General/types.info-event.api';
 import { useInfoEvent } from '@src/services/General/useInfoEvent';
 import { InfoCardsGroup } from './InfoCards';
+import type { Tab } from './types';
 
 const Classificatory = () => {
   const params = useParams();
@@ -55,12 +56,11 @@ const Classificatory = () => {
   const { getInfoEvent } = useInfoEvent();
 
   const [isLoading, setIsLoading] = useState(true);
-  const [allList, setAllList] = useState<ClassificatoryData[]>([]);
+  // const [allList, setAllList] = useState<ClassificatoryData[]>([]);
   const [listToShow, setListToShow] = useState<ClassificatoryData[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
-  const [activeTab, setActiveTab] = useState<'classificatory' | 'final'>(
-    'classificatory'
-  );
+  const [tabsToShow, setTabsToShow] = useState<Tab[]>([]);
+  const [activeTab, setActiveTab] = useState<string>('');
 
   // Ref para acessar o método print do PrintArea
   const printAreaRef = useRef<{ print: () => void }>(null);
@@ -92,9 +92,24 @@ const Classificatory = () => {
       prove_event_id: Number(prove_event_id),
     });
 
-    console.log('data classificatory', data);
+    if (data.length > 0) {
+      const _tabs: Tab[] = [];
 
-    setAllList(data[0]?.lista_classificacao || []);
+      data.map((item) => {
+        _tabs.push({
+          tipo_etapa: item.tipo_etapa,
+          cartao_julgamento: item.cartao_julgamento,
+          lista_classificacao: item.lista_classificacao,
+        } as Tab);
+      });
+
+      console.log('Tabs:', _tabs);
+
+      setActiveTab(_tabs[0]?.tipo_etapa || '');
+      setTabsToShow(_tabs);
+    }
+
+    // setAllList(data[0]?.lista_classificacao || []);
     setListToShow(data[0]?.lista_classificacao || []);
 
     setIsLoading(false);
@@ -156,6 +171,14 @@ const Classificatory = () => {
   }, [setPage, location]);
 
   useEffect(() => {
+    let allList: ClassificatoryData[] = [];
+
+    if (tabsToShow.length > 0) {
+      allList =
+        tabsToShow.filter((item) => item.tipo_etapa === activeTab)[0]
+          .lista_classificacao || [];
+    }
+
     if (searchValue.trim() === '') {
       setListToShow(allList);
       return;
@@ -187,7 +210,7 @@ const Classificatory = () => {
     });
 
     setListToShow(filteredList);
-  }, [searchValue, allList]);
+  }, [activeTab, searchValue, tabsToShow]);
 
   useEffect(() => {
     handleGetResultsClassificatory();
@@ -421,16 +444,14 @@ const Classificatory = () => {
       >
         <TabAndCards>
           <div className="empty">
-            <TabOption
-              title="Classificatória"
-              active={activeTab === 'classificatory'}
-              onClick={() => setActiveTab('classificatory')}
-            />
-            <TabOption
-              title="Final"
-              active={activeTab === 'final'}
-              onClick={() => setActiveTab('final')}
-            />
+            {tabsToShow.map((tab, index) => (
+              <TabOption
+                key={index}
+                title={tab.tipo_etapa}
+                active={activeTab === tab.tipo_etapa}
+                onClick={() => setActiveTab(tab.tipo_etapa)}
+              />
+            ))}
           </div>
 
           <InfoCardsGroup
