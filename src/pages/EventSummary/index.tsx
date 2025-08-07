@@ -335,8 +335,8 @@ function EventSummary() {
       onClick: () => {
         window.open(
           import.meta.env.VITE_URL_PARTICIPACOES +
-          '/index/' +
-          eventInfoData?.nid_agrupa_evento
+            '/index/' +
+            eventInfoData?.nid_agrupa_evento
         );
       },
     },
@@ -363,17 +363,31 @@ function EventSummary() {
 
   const buttonsMobileFooter: FooterWithButtonsPropsType = [
     {
+      icon: (
+        <TrophyIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />
+      ),
+      label: 'top 10',
+      onClick: () => {
+        navigate(
+          `/modalidade/${listToShow[0]?.nid_prova}/evento/${listToShow[0]?.nid_evento}/prova-evento/${listToShow[0]?.nid_prova_evento}/top10`
+        );
+      },
+      variant: 'outline-white-25',
+    },
+
+    {
       icon: <StarIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />,
       label: 'participações',
       onClick: () => {
         window.open(
           import.meta.env.VITE_URL_PARTICIPACOES +
-          '/index/' +
-          eventInfoData?.nid_agrupa_evento
+            '/index/' +
+            eventInfoData?.nid_agrupa_evento
         );
       },
       variant: 'outline-white-25',
     },
+
     {
       icon: (
         <ShareIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />
@@ -515,7 +529,11 @@ function EventSummary() {
             </DivLeft>
 
             <DivRight>
-              <TableWithLoader data={tableData} columns={tableColumns} isLoading={isLoading} />
+              <TableWithLoader
+                data={tableData}
+                columns={tableColumns}
+                isLoading={isLoading}
+              />
             </DivRight>
           </ContentMobile>
         )}
@@ -532,7 +550,7 @@ function EventSummary() {
 
         {showShareOptions && !isTabletOrMobile && <ShareOptions url={shareUrl} />}
       </ContainerMain>
-    </Layout >
+    </Layout>
   );
 }
 
