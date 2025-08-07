@@ -38,9 +38,8 @@ import TabOption from '@src/components/Classificatory/TabOption';
 import type { InfoEventData } from '@src/services/General/types.info-event.api';
 import { useInfoEvent } from '@src/services/General/useInfoEvent';
 import { InfoCardsGroup } from './InfoCards';
-import { useReactToPrint } from 'react-to-print';
 
-function Classificatory() {
+const Classificatory = () => {
   const params = useParams();
   const { prove_id, prove_event_id, event_id, id_classificatory } = params;
 
@@ -60,8 +59,8 @@ function Classificatory() {
   const [listToShow, setListToShow] = useState<ClassificatoryData[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
 
-  const contentRef = useRef<HTMLDivElement>(null);
-  const reactToPrintFn = useReactToPrint({ contentRef });
+  // Ref para acessar o método print do PrintArea
+  const printAreaRef = useRef<{ print: () => void }>(null);
 
   const [classificatoryEventInfoData, setClassificatoryEventInfoData] =
     useState<ClassificatoryEventData | null>({} as ClassificatoryEventData);
@@ -137,10 +136,10 @@ function Classificatory() {
 
   const onTriggerPrintPDF = useCallback(async () => {
     await handleGetEventInfo();
-    setTimeout(async () => {
-      await reactToPrintFn();
+    setTimeout(() => {
+      printAreaRef.current?.print();
     }, 1000);
-  }, [handleGetEventInfo, reactToPrintFn]);
+  }, [handleGetEventInfo]);
 
   // Effect to set the page title and path
 
@@ -444,7 +443,7 @@ function Classificatory() {
 
       {tableData?.length > 0 && (
         <PrintArea
-          ref={contentRef}
+          ref={printAreaRef}
           title={'RESULTADOS DO EVENTO'}
           columns={tableColumns}
           data={tableData}
@@ -456,6 +455,6 @@ function Classificatory() {
       {showShareOptions && !isTabletOrMobile && <ShareOptions url={shareUrl} />}
     </ContainerMain>
   );
-}
+};
 
 export default Classificatory;

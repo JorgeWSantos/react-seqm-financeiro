@@ -49,8 +49,7 @@ import type {
   ProvesEventSummary,
   ResultModalityByProve,
 } from '@services/EventSummary/types.api';
-import { useCallback, useEffect, useState, type ReactNode } from 'react';
-import { handlePrintPDF } from '@src/components/PrintArea/utils';
+import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import PrintArea from '@src/components/PrintArea';
 import type { PrintHeaderProps } from '@src/components/PrintArea/PrintHeader';
 import ModalityDropdown from '@components/EventSummary/ModalityDropdown';
@@ -77,6 +76,10 @@ function EventSummary() {
   const { getInfoEvent } = useInfoEvent();
 
   const [isLoading, setIsLoading] = useState(true);
+
+  // Ref para acessar o método print do PrintArea
+  const printAreaRef = useRef<{ print: () => void }>(null);
+
   const [eventSummaryData, setEventSummaryData] = useState<EventSummaryResponseData>(
     {} as EventSummaryResponseData
   );
@@ -145,6 +148,13 @@ function EventSummary() {
 
     setEventInfoData(data);
   }, [getInfoEvent, event_id]);
+
+  const onTriggerPrintPDF = useCallback(async () => {
+    await handleGetEventInfo();
+    setTimeout(() => {
+      printAreaRef.current?.print();
+    }, 1000);
+  }, [handleGetEventInfo]);
 
   // Effect to set the page title and path
   useEffect(() => {
@@ -346,7 +356,7 @@ function EventSummary() {
         <PrinterIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />
       ),
       label: 'imprimir',
-      onClick: handlePrintPDF,
+      onClick: onTriggerPrintPDF,
     },
     {
       icon: (
@@ -541,11 +551,13 @@ function EventSummary() {
 
       {tableData?.length > 0 && (
         <PrintArea
+          ref={printAreaRef}
           title={switchResumeChecked ? 'RESUMO GERAL' : 'RESUMO DA MODALIDADE'}
           columns={tableColumns}
           data={tableData}
           cards={printCards}
           info={printInfo}
+          totalForPage={7}
         />
       )}
 
