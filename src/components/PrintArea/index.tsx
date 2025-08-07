@@ -1,4 +1,3 @@
-// ...existing code...
 import {
   PrintAreaWrapper,
   DivWrapper,
@@ -7,6 +6,7 @@ import {
   DivCard,
   DivTable,
   PrintContainer,
+  FooterPrint,
 } from './styles';
 import { TablePrintResultsSEQM } from './TablePrintResultsSEQM';
 import PrintHeader, { type PrintHeaderProps } from './PrintHeader';
@@ -67,6 +67,15 @@ const PrintArea = ({
                 columns={columns}
               />
             </DivTable>
+
+            <FooterPrint>
+              <p>
+                {new Date().toLocaleDateString()} - {new Date().toLocaleTimeString()}
+              </p>
+              <p>
+                Página {pageIndex + 1} de {totalPages}
+              </p>
+            </FooterPrint>
           </PrintContainer>
         );
       })}

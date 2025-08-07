@@ -384,15 +384,6 @@ function Classificatory() {
           </Scrollable>
         </ContentMobile>
 
-        {tableData?.length > 0 && (
-          <PrintArea
-            title={'RESULTADOS DO EVENTO'}
-            columns={tableColumns}
-            data={tableData}
-            cards={printCards}
-            info={printInfo}
-          />
-        )}
         {showShareOptions && !isTabletOrMobile && <ShareOptions url={shareUrl} />}
       </ContainerMain>
     );

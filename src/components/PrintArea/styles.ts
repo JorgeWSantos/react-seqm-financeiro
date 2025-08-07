@@ -14,6 +14,7 @@ export const PrintAreaWrapper = styled.div`
 `;
 
 export const PrintContainer = styled.div`
+  position: relative;
   page-break-after: always;
   height: 297mm;
   padding: 16pt;
@@ -134,5 +135,23 @@ export const DivCard = styled.div`
 
   p + p {
     font-size: 11pt;
+  }
+`;
+
+export const FooterPrint = styled.div`
+  position: absolute;
+  bottom: 16px;
+  display: flex;
+  width: 100%;
+  left: 0;
+  flex: 1;
+  justify-content: space-between;
+  font-size: 12px;
+  padding: 0 24px;
+  color: #888;
+  pointer-events: none;
+
+  p {
+    color: ${colors.emeraldGreen75};
   }
 `;
