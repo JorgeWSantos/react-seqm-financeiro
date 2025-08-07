@@ -10,6 +10,12 @@ export const PrintAreaWrapper = styled.div`
   background-color: white;
 `;
 
+export const PrintContainer = styled.div`
+  page-break-after: always;
+  height: 297mm;
+  padding: 16pt;
+`;
+
 export const PrintAreaHeader = styled.div`
   margin: 0 auto;
   width: 100%;

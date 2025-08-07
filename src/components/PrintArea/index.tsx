@@ -6,6 +6,7 @@ import {
   DivCardsRow,
   DivCard,
   DivTable,
+  PrintContainer,
 } from './styles';
 import { TablePrintResultsSEQM } from './TablePrintResultsSEQM';
 import PrintHeader, { type PrintHeaderProps } from './PrintHeader';
@@ -38,13 +39,7 @@ const PrintArea = ({
     <PrintAreaWrapper id="print-area">
       {Array.from({ length: totalPages }).map((_, pageIndex) => {
         return (
-          <div
-            style={{
-              pageBreakAfter: 'always',
-              height: '297mm',
-              padding: '16pt',
-            }}
-          >
+          <PrintContainer key={pageIndex}>
             <PrintHeader data={info} />
 
             <DivWrapper>
@@ -68,7 +63,7 @@ const PrintArea = ({
                 columns={columns}
               />
             </DivTable>
-          </div>
+          </PrintContainer>
         );
       })}
     </PrintAreaWrapper>
