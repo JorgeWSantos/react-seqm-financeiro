@@ -16,13 +16,43 @@ const ItemCard: React.FC<ItemCardProps> = ({ title, info, reverse = false }) => 
     <Container $reverse={reverse}>
       {reverse ? (
         <>
-          <Text fontSize='xxs' color={colors.white50} fontWeight='regular' lineHeight='shorter'>{title}</Text>
-          <Text fontSize='ssm' color={colors.white85} fontWeight='semiBold' lineHeight='tight'>{info}</Text>
+          <Text
+            fontSize="xxs"
+            color={colors.white50}
+            fontWeight="regular"
+            lineHeight="shorter"
+          >
+            {title}
+          </Text>
+          <Text
+            fontSize="ssm"
+            color={colors.white85}
+            fontWeight="semiBold"
+            lineHeight="tight"
+          >
+            {info}
+          </Text>
         </>
       ) : (
         <>
-          <Text fontSize='ssm' color={colors.white85} fontWeight='semiBold' lineHeight='tight'>{info}</Text>
-          <Text fontSize='xxs' color={colors.white50} fontWeight='regular' lineHeight='shorter'>{title}</Text>
+          <Text
+            fontSize="ssm"
+            color={colors.white85}
+            fontWeight="semiBold"
+            lineHeight="tight"
+            style={{ marginBottom: '-3px' }}
+          >
+            {info}
+          </Text>
+          <Text
+            fontSize="xxs"
+            color={colors.white50}
+            fontWeight="regular"
+            lineHeight="shorter"
+            style={{ marginBottom: '-3px' }}
+          >
+            {title}
+          </Text>
         </>
       )}
     </Container>
