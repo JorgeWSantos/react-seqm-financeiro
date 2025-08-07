@@ -24,7 +24,6 @@
     "@abqm-ds/tokens": "^2.0.2",
     "@tanstack/react-query": "5.77.2",
     "axios": "1.9.0",
-    "html2pdf.js": "^0.10.3",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-router-dom": "7.6.1",

@@ -10,6 +10,7 @@ import {
   StyledTableSEQMTextTd,
   Text,
   type DataDropdown,
+  type FooterWithButtonsPropsType,
   // type FooterWithButtonsPropsType,
   type TableColumnSEQM,
   type TableRowSEQM,
@@ -55,6 +56,7 @@ import type { PrintHeaderProps } from '@src/components/PrintArea/PrintHeader';
 import ModalityDropdown from '@components/EventSummary/ModalityDropdown';
 import { useInfoEvent } from '@src/services/General/useInfoEvent';
 import type { InfoEventData } from '@src/services/General/types.info-event.api';
+import { FooterWithButtons } from './FooterWithButtons';
 
 function EventSummary() {
   const pageTitle = 'Resultados »';
@@ -372,47 +374,47 @@ function EventSummary() {
     },
   ];
 
-  // const buttonsMobileFooter: FooterWithButtonsPropsType = [
-  //   {
-  //     icon: (
-  //       <TrophyIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />
-  //     ),
-  //     label: 'top 10',
-  //     onClick: () => {
-  //       navigate(
-  //         `/modalidade/${listToShow[0]?.nid_prova}/evento/${listToShow[0]?.nid_evento}/prova-evento/${listToShow[0]?.nid_prova_evento}/top10`
-  //       );
-  //     },
-  //     variant: 'outline-white-25',
-  //   },
+  const buttonsMobileFooter: FooterWithButtonsPropsType = [
+    {
+      icon: (
+        <TrophyIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />
+      ),
+      label: 'top 10',
+      onClick: () => {
+        navigate(
+          `/modalidade/${listToShow[0]?.nid_prova}/evento/${listToShow[0]?.nid_evento}/prova-evento/${listToShow[0]?.nid_prova_evento}/top10`
+        );
+      },
+      variant: 'outline-white-25',
+    },
 
-  //   {
-  //     icon: <StarIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />,
-  //     label: 'participações',
-  //     onClick: () => {
-  //       window.open(
-  //         import.meta.env.VITE_URL_PARTICIPACOES +
-  //           '/index/' +
-  //           eventInfoData?.nid_agrupa_evento
-  //       );
-  //     },
-  //     variant: 'outline-white-25',
-  //   },
+    {
+      icon: <StarIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />,
+      label: 'participações',
+      onClick: () => {
+        window.open(
+          import.meta.env.VITE_URL_PARTICIPACOES +
+            '/index/' +
+            eventInfoData?.nid_agrupa_evento
+        );
+      },
+      variant: 'outline-white-25',
+    },
 
-  //   {
-  //     icon: (
-  //       <ShareIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />
-  //     ),
-  //     label: 'compartilhar',
-  //     onClick: () => setShowShareOptions((prev) => !prev),
-  //     isActive: showShareOptions,
-  //     showOptionsToShare: {
-  //       show: showShareOptions,
-  //       children: <ShareOptions url={shareUrl} variantArrow="bottom" />,
-  //     },
-  //     variant: 'outline-white-25',
-  //   },
-  // ];
+    {
+      icon: (
+        <ShareIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />
+      ),
+      label: 'compartilhar',
+      onClick: () => setShowShareOptions((prev) => !prev),
+      isActive: showShareOptions,
+      showOptionsToShare: {
+        show: showShareOptions,
+        children: <ShareOptions url={shareUrl} variantArrow="bottom" />,
+      },
+      variant: 'outline-white-25',
+    },
+  ];
 
   return (
     // <Layout
@@ -562,6 +564,8 @@ function EventSummary() {
       )}
 
       {showShareOptions && !isTabletOrMobile && <ShareOptions url={shareUrl} />}
+
+      <FooterWithButtons footerButtonsMobile={buttonsMobileFooter} />
     </ContainerMain>
   );
 }

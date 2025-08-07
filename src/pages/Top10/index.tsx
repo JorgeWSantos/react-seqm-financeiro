@@ -37,7 +37,6 @@ import { useParams } from 'react-router';
 import Layout from '@src/Layout';
 
 import MedalTop10 from '@src/assets/images/medal-top10.svg';
-import { handlePrintPDF } from '@src/components/PrintArea/utils';
 
 function Top10() {
   const params = useParams();
@@ -193,7 +192,7 @@ function Top10() {
         <PrinterIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />
       ),
       label: 'imprimir',
-      onClick: handlePrintPDF,
+      onClick: () => {},
     },
     {
       icon: (
