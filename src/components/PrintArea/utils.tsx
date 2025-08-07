@@ -6,7 +6,13 @@ export const handlePrintPDF = async () => {
     }
     const html2canvas = (await import('html2canvas')).default;
     const jsPDF = (await import('jspdf')).jsPDF;
-    const canvas = await html2canvas(element, { scale: 3 });
+    const canvas = await html2canvas(element, {
+      scale: 3,
+      backgroundColor: '#fff',
+      padding: 0,
+      margin: 0,
+      style: { padding: '0', margin: '0' },
+    });
     const imgData = canvas.toDataURL('image/png');
     const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
     const pageWidth = pdf.internal.pageSize.getWidth();

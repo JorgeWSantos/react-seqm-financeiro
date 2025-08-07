@@ -4,11 +4,9 @@ import styled from 'styled-components';
 export const PrintAreaWrapper = styled.div`
   position: absolute;
   left: 200px;
-  padding: 20pt;
   left: -9999px;
   text-align: center;
   width: 210mm;
-  /* height: 290mm; */
   background-color: white;
 `;
 
@@ -90,6 +88,7 @@ export const DivTable = styled.div`
   align-items: center;
   width: 100%;
   margin-top: 8pt;
+  gap: 3rem;
 `;
 
 export const DivTitle = styled.div`
