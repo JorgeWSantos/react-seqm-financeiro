@@ -12,6 +12,7 @@ import {
   type TableColumnSEQM,
   CompetitorTableData,
   type TableRowSEQM,
+  formatToBRL,
 } from '@abqm-ds/react';
 
 import { useDeviceType } from '@abqm-ds/react';
@@ -37,6 +38,7 @@ import TableWithLoader from '@src/components/EventSummary/TableWithLoader';
 import { convertToBrazilDate } from '@src/utils/formatDate';
 import TabOption from '@src/components/Top10/TabOption';
 import ItemCard from '@src/components/Top10/InfoCard';
+// import { formatToBRL } from '@src/utils/convertMoney';
 
 function Classificatory() {
   const params = useParams();
@@ -417,7 +419,10 @@ function Classificatory() {
 
             <ItemCard
               title="premiação"
-              info={resumeInscriptionsData?.nvl_premiacao?.toString() || '-'}
+              info={formatToBRL({
+                value: resumeInscriptionsData?.nvl_premiacao,
+                fallback: '-',
+              })}
               reverse
             />
 

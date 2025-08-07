@@ -29,6 +29,7 @@ const ItemCard: React.FC<ItemCardProps> = ({ title, info, reverse = false }) => 
             color={colors.white85}
             fontWeight="semiBold"
             lineHeight="tight"
+            style={{ marginTop: '-2px' }}
           >
             {info}
           </Text>
@@ -49,7 +50,7 @@ const ItemCard: React.FC<ItemCardProps> = ({ title, info, reverse = false }) => 
             color={colors.white50}
             fontWeight="regular"
             lineHeight="shorter"
-            style={{ marginBottom: '-3px' }}
+            style={{ marginTop: '-2px' }}
           >
             {title}
           </Text>
