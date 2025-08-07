@@ -58,6 +58,9 @@ const Classificatory = () => {
   const [allList, setAllList] = useState<ClassificatoryData[]>([]);
   const [listToShow, setListToShow] = useState<ClassificatoryData[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
+  const [activeTab, setActiveTab] = useState<'classificatory' | 'final'>(
+    'classificatory'
+  );
 
   // Ref para acessar o método print do PrintArea
   const printAreaRef = useRef<{ print: () => void }>(null);
@@ -88,6 +91,8 @@ const Classificatory = () => {
     const data = await getClassificatory({
       prove_event_id: Number(prove_event_id),
     });
+
+    console.log('data classificatory', data);
 
     setAllList(data[0]?.lista_classificacao || []);
     setListToShow(data[0]?.lista_classificacao || []);
@@ -416,8 +421,16 @@ const Classificatory = () => {
       >
         <TabAndCards>
           <div className="empty">
-            <TabOption title="Classificatória" active={true} />
-            <TabOption title="Final" active={false} />
+            <TabOption
+              title="Classificatória"
+              active={activeTab === 'classificatory'}
+              onClick={() => setActiveTab('classificatory')}
+            />
+            <TabOption
+              title="Final"
+              active={activeTab === 'final'}
+              onClick={() => setActiveTab('final')}
+            />
           </div>
 
           <InfoCardsGroup
@@ -432,6 +445,7 @@ const Classificatory = () => {
             dt_prove={classificatoryEventInfoData?.dtm_data_prova?.toString() || ''}
           />
         </TabAndCards>
+
         <Scrollable>
           <TableWithLoader
             data={tableData}

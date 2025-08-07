@@ -4,7 +4,6 @@ import { colors } from '@abqm-ds/tokens';
 
 interface ContainerProps {
   $active?: boolean;
-  $color?: string;
 }
 
 export const Container = styled.div<ContainerProps>`
@@ -24,6 +23,11 @@ export const Container = styled.div<ContainerProps>`
   border-left: 1px solid ${colors.white25};
 
   cursor: pointer;
-  background: ${({ $active, $color }) => ($active ? $color : 'transparent')};
+  background: ${({ $active }) => ($active ? 'transparent' : colors.emeraldGreen5)};
+  opacity: ${({ $active }) => ($active ? 1 : 0.6)};
   transition: background 0.3s ease;
+
+  &:hover {
+    filter: brightness(1.1);
+  }
 `;
