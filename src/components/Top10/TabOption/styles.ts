@@ -10,11 +10,12 @@ interface ContainerProps {
 export const Container = styled.div<ContainerProps>`
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
-  padding: 12px 0px 0px;
 
-  width: 150px;
+  padding: 8px 12px;
+
+  max-width: 170px;
   height: 24px;
 
   border-radius: 6px 6px 0 0;
@@ -24,7 +25,5 @@ export const Container = styled.div<ContainerProps>`
 
   cursor: pointer;
   background: ${({ $active, $color }) => ($active ? $color : 'transparent')};
-  border-bottom: ${({ $active, $color }) =>
-    $active ? `2px solid ${$color}` : '2px solid transparent'};
-  transition: background 0.2s, border-bottom 0.2s;
+  transition: background 0.3s ease;
 `;
