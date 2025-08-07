@@ -32,10 +32,11 @@ export const TabAndCards = styled.div`
   width: 100%;
   justify-content: space-between;
   flex-direction: row;
+  margin-top: 0.5rem;
 
   .empty {
     display: flex;
-    margin-top: 12px;
+    margin-top: 1rem;
   }
 `;
 

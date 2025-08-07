@@ -349,8 +349,8 @@ function Classificatory() {
           >
             <TabAndCards>
               <div className="empty">
-                <TabOption title="Classificação Geral" active={true} />
-                <TabOption title="Classificação Classificatória" active={false} />
+                <TabOption title="Classificatória" active={true} />
+                <TabOption title="Final" active={false} />
               </div>
 
               <ItemCardGroup>
