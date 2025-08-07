@@ -39,7 +39,7 @@ export const StyledHeadTablePrintResultsSEQM = styled.thead`
   }
 
   tr th {
-    padding: ${space[1]} ${space[2]};
+    padding: 0 ${space[2]};
   }
 `;
 
@@ -58,23 +58,24 @@ export const StyledBodyTablePrintResultsSEQM = styled.tbody`
   }
 
   tr td {
-    padding: 1rem ${space[2]};
+    padding: ${space[2]} ${space[2]};
 
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin-top: -10pt;
+    /* margin-top: -10pt; */
 
     gap: 0.25rem;
   }
 
   span, p {
     white-space: normal !important;
+    font-size: 8pt !important;
   }
 
-  svg {
+  /* svg {
     margin-bottom: -10pt;
-  }
+  } */
 
   // removerá estilios do componente AnimalTableData
   .animal-table-data-container {
@@ -95,6 +96,7 @@ export const StyledBodyTablePrintResultsSEQM = styled.tbody`
 
     .hall-fama-owner-subtext {
       margin-top: 3pt;
+      font-size: 6pt !important;
       color: ${colors.emeraldGreen75} !important;
     }
   }
@@ -104,7 +106,7 @@ export const StyledTablePrintResultsSEQMTextTd = styled(Text).attrs({
   fontWeight: 'regular',
   lineHeight: 'tight',
 }) <{ $bold?: boolean }>`
-  font-size: 8pt;
+  font-size: 9pt !important;
   font-weight: ${({ $bold }) => ($bold ? fontWeights.semiBold : fontWeights.regular)};
   color: ${colors.grayFigma2};
 

@@ -17,7 +17,7 @@ import {
 import { useDeviceType } from '@abqm-ds/react';
 
 import { ContainerMain, Scrollable, TabAndCards } from './styles';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePage } from '@src/contexts/page/usePage';
@@ -32,13 +32,13 @@ import type {
 } from '../../services/Classificatory/types.event-details.api';
 import type { PrintHeaderProps } from '@src/components/PrintArea/PrintHeader';
 import PrintArea from '@src/components/PrintArea';
-import { handlePrintPDF } from '@src/components/PrintArea/utils';
 import TableWithLoader from '@src/components/EventSummary/TableWithLoader';
 import { convertToBrazilDate } from '@src/utils/formatDate';
 import TabOption from '@src/components/Classificatory/TabOption';
 import type { InfoEventData } from '@src/services/General/types.info-event.api';
 import { useInfoEvent } from '@src/services/General/useInfoEvent';
 import { InfoCardsGroup } from './InfoCards';
+import { useReactToPrint } from 'react-to-print';
 
 function Classificatory() {
   const params = useParams();
@@ -56,10 +56,12 @@ function Classificatory() {
   const { getInfoEvent } = useInfoEvent();
 
   const [isLoading, setIsLoading] = useState(true);
-
   const [allList, setAllList] = useState<ClassificatoryData[]>([]);
   const [listToShow, setListToShow] = useState<ClassificatoryData[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
+
+  const contentRef = useRef<HTMLDivElement>(null);
+  const reactToPrintFn = useReactToPrint({ contentRef });
 
   const [classificatoryEventInfoData, setClassificatoryEventInfoData] =
     useState<ClassificatoryEventData | null>({} as ClassificatoryEventData);
@@ -135,10 +137,13 @@ function Classificatory() {
 
   const onTriggerPrintPDF = useCallback(async () => {
     await handleGetEventInfo();
-    await handlePrintPDF();
-  }, [handleGetEventInfo]);
+    setTimeout(async () => {
+      await reactToPrintFn();
+    }, 1000);
+  }, [handleGetEventInfo, reactToPrintFn]);
 
   // Effect to set the page title and path
+
   useEffect(() => {
     setPage({
       page_title: pageTitle,
@@ -195,7 +200,7 @@ function Classificatory() {
           {
             key: 'nucleo',
             label: 'NÚCLEO',
-            width: '4%',
+            width: '6%',
             minWidth: '3rem',
             align: 'center' as const,
           },
@@ -204,7 +209,7 @@ function Classificatory() {
     {
       key: 'abqm',
       label: 'ABQM',
-      width: '5%',
+      width: '6%',
       minWidth: '2.5rem',
       align: 'center',
       sortable: true,
@@ -231,7 +236,7 @@ function Classificatory() {
     {
       key: 'tn',
       label: 'T/N',
-      width: '8%',
+      width: '9%',
       align: 'left',
       sortable: true,
     },
@@ -448,12 +453,13 @@ function Classificatory() {
 
       {tableData?.length > 0 && (
         <PrintArea
+          ref={contentRef}
           title={'RESULTADOS DO EVENTO'}
           columns={tableColumns}
           data={tableData}
           cards={printCards}
           info={printInfo}
-          totalForPage={9}
+          totalForPage={7}
         />
       )}
       {showShareOptions && !isTabletOrMobile && <ShareOptions url={shareUrl} />}

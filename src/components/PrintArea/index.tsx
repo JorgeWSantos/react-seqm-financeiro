@@ -24,6 +24,7 @@ const PrintArea = ({
   cards,
   info,
   totalForPage,
+  ref,
 }: {
   title: string;
   columns: Array<TableColumnSEQM>;
@@ -31,31 +32,34 @@ const PrintArea = ({
   cards: CardProps[];
   info: PrintHeaderProps;
   totalForPage?: number;
+  ref?: React.Ref<HTMLDivElement>;
 }) => {
   const totalPages = Math.ceil(data.length / (totalForPage ?? data.length));
   const totalByPage = totalForPage ?? data.length;
 
   return (
-    <PrintAreaWrapper id="print-area">
+    <PrintAreaWrapper id="print-area" ref={ref}>
       {Array.from({ length: totalPages }).map((_, pageIndex) => {
         return (
           <PrintContainer key={pageIndex}>
             <PrintHeader data={info} />
 
-            <DivWrapper>
-              <DivTitle>
-                <p>{title}</p>
-              </DivTitle>
+            {pageIndex === 0 && (
+              <DivWrapper>
+                <DivTitle>
+                  <p>{title}</p>
+                </DivTitle>
 
-              <DivCardsRow>
-                {cards.map((card, index) => (
-                  <DivCard key={index}>
-                    <p>{card.title}</p>
-                    <p>{card.value}</p>
-                  </DivCard>
-                ))}
-              </DivCardsRow>
-            </DivWrapper>
+                <DivCardsRow>
+                  {cards.map((card, index) => (
+                    <DivCard key={index}>
+                      <p>{card.title}</p>
+                      <p>{card.value}</p>
+                    </DivCard>
+                  ))}
+                </DivCardsRow>
+              </DivWrapper>
+            )}
 
             <DivTable>
               <TablePrintResultsSEQM

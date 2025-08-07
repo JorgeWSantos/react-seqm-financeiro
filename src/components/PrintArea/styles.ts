@@ -3,11 +3,14 @@ import styled from 'styled-components';
 
 export const PrintAreaWrapper = styled.div`
   position: absolute;
-  left: 200px;
+  /* left: 200px; */
   left: -9999px;
   text-align: center;
   width: 210mm;
   background-color: white;
+  @media print {
+    left: unset;
+  }
 `;
 
 export const PrintContainer = styled.div`
@@ -86,7 +89,7 @@ export const DivWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  /* margin-top: 8pt; */
+  margin-top: 8pt;
 `;
 export const DivTable = styled.div`
   display: flex;
@@ -123,7 +126,7 @@ export const DivCard = styled.div`
   align-items: center;
   justify-content: center;
   border-radius: 4px;
-  padding-bottom: 10pt;
+  /* padding-bottom: 10pt; */
 
   p {
     font-size: 6pt;
