@@ -1,12 +1,12 @@
 import { Toast } from '@abqm-ds/react';
 import { useCallback } from 'react';
-import { apiResultados } from './api';
+import { apiResultados } from '../api';
 import type {
   EventSummaryResponse,
   EventSummaryResponseData,
   InfoEventSummaryData,
   InfoEventSummaryResponse,
-} from '@src/pages/EventSummary/types.api';
+} from './types.api';
 
 export function useEventSummary() {
   const getEventSummary = useCallback(

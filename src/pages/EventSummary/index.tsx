@@ -43,13 +43,13 @@ import { Link, useParams } from 'react-router';
 import InfoEventDetails from '@components/EventSummary/InfoEventDetails';
 import EventSummaryDetails from '@components/EventSummary/EventSummaryDetails';
 import GraphSummaryDetails from '@components/EventSummary/GraphSummaryDetails';
-import { useEventSummary } from '@src/services/useEventSummary';
+import { useEventSummary } from '@src/services/EventSummary/useEventSummary';
 import type {
   EventSummaryResponseData,
   InfoEventSummaryData,
   ProvesEventSummary,
   ResultModalityByProve,
-} from './types.api';
+} from '../../services/EventSummary/types.api';
 import { useCallback, useEffect, useState, type ReactNode } from 'react';
 import { handlePrintPDF } from '@src/components/PrintArea/utils';
 import PrintArea from '@src/components/PrintArea';

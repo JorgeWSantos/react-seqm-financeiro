@@ -1,5 +1,5 @@
 // import mapSvgByModality from '@src/utils/mapSvgToModality2';
-import type { ResultModalities } from '@src/pages/Main/types.api';
+import type { ResultModalities } from '@src/services/Main/types.api';
 import RoundedButtonModalitie from '../DivButtonModality';
 import { Container, ContentModalities, HeadingModalities } from './styles';
 import { getModalityIcon } from '@abqm-ds/react';

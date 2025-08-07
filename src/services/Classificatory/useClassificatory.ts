@@ -1,14 +1,14 @@
 import { Toast } from '@abqm-ds/react';
 import { useCallback } from 'react';
-import { apiResultados } from './api';
+import { apiResultados } from '../api';
 import type {
   ClassificatoryResponse,
   ClassificatoryResponseData,
-} from '@src/pages/Classificatory/types.classificatory.api';
+} from './types.classificatory.api';
 import type {
   ClassificatoryEventDetailsResponse,
   ClassificatoryEventDetailsResponseData,
-} from '@src/pages/Classificatory/types.event-details.api';
+} from './types.event-details.api';
 
 export function useClassificatory() {
   const getClassificatory = useCallback(

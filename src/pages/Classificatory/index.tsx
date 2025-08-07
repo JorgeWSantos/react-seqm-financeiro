@@ -24,13 +24,13 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { usePage } from '@src/contexts/page/usePage';
 import { PrinterIcon, SearchIcon, ShareIcon, StarIcon } from '@abqm-ds/icons';
 import { colors } from '@abqm-ds/tokens';
-import { useClassificatory } from '@src/services/useClassificatory';
-import type { ClassificatoryData } from './types.classificatory.api';
+import { useClassificatory } from '@src/services/Classificatory/useClassificatory';
+import type { ClassificatoryData } from '../../services/Classificatory/types.classificatory.api';
 import { useParams } from 'react-router';
 import type {
   ClassificatoryEventData,
   ClassificatoryInscriptionsResumeData,
-} from './types.event-details.api';
+} from '../../services/Classificatory/types.event-details.api';
 import type { PrintHeaderProps } from '@src/components/PrintArea/PrintHeader';
 import PrintArea from '@src/components/PrintArea';
 import { handlePrintPDF } from '@src/components/PrintArea/utils';
@@ -63,6 +63,10 @@ function Classificatory() {
   const [eventInfoData, setEventInfoData] = useState<ClassificatoryEventData | null>(
     {} as ClassificatoryEventData
   );
+
+  // const [eventInfoToPrint, setEventInfoToPrint] = useState<ClassificatoryEventData | null>(
+  //   {} as ClassificatoryEventData
+  // );
 
   const [resumeInscriptionsData, setResumeInscriptionsData] =
     useState<ClassificatoryInscriptionsResumeData | null>(
@@ -392,6 +396,7 @@ function Classificatory() {
         contentBoxStyles={{
           padding: '1.5rem',
           gap: '0.25rem',
+          paddingBottom: 0,
         }}
         count={tableData.length}
       >

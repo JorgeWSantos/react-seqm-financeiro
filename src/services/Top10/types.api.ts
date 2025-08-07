@@ -1,4 +1,4 @@
-import type { ApiResponse } from '@src/services/types.api';
+import type { ApiResponse } from '../types.api';
 
 export type TeamTop10 = {
   all_around_amador: string | null;

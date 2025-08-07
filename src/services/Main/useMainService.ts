@@ -1,10 +1,10 @@
 import { Toast } from '@abqm-ds/react';
 import { useCallback } from 'react';
-import { apiResultados } from './api';
+import { apiResultados } from '../api';
 import type {
   ResultModalitiesResponse,
   ResultModalitiesResponseData,
-} from '@src/pages/Main/types.api';
+} from '@src/services/Main/types.api';
 
 export function useMainService() {
   const getResultados = useCallback(async (): Promise<ResultModalitiesResponseData> => {

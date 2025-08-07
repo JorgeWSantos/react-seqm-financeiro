@@ -31,8 +31,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { usePage } from '@src/contexts/page/usePage';
 import { PrinterIcon, SearchIcon, ShareIcon } from '@abqm-ds/icons';
 import { colors, fonts } from '@abqm-ds/tokens';
-import { useTop10 } from '@src/services/useTop10';
-import type { Top10Data, EventDetailsTop10 } from './types.api';
+import { useTop10 } from '@src/services/Top10/useTop10';
+import type { Top10Data, EventDetailsTop10 } from '../../services/Top10/types.api';
 import { useParams } from 'react-router';
 import Layout from '@src/Layout';
 

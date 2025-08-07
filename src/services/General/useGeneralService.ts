@@ -1,7 +1,7 @@
-import { api } from './api.ts';
+import { api } from '../api.ts';
 import { Toast, type LoggedUser, type MenuType } from '@abqm-ds/react';
 import { useCallback } from 'react';
-import type { ApiResponse } from './types.api.ts';
+import type { ApiResponse } from '../types.api.ts';
 
 export interface MenuResponseObj {
   list_menu: MenuType;
@@ -20,13 +20,12 @@ export function useGeneralService() {
       const response = await api.get<MenuResponse>('/v1/Menu');
 
       return response.data.data || { link_login: '', list_menu: [] };
-    } catch (error) {
-      // Toast.show({
-      //   message: 'Ops, ocorreu um erro ao carregar o menu!',
-      //   type: 'error',
-      //   timeout: 3000,
-      // });
-      console.warn(error);
+    } catch {
+      Toast.show({
+        message: 'Ops, ocorreu um erro ao carregar o menu!',
+        type: 'error',
+        timeout: 3000,
+      });
       return { link_login: '', list_menu: [] };
     }
   }, []);

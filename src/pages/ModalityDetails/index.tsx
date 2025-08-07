@@ -33,8 +33,11 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { usePage } from '@src/contexts/page/usePage';
 import { FilterIcon, SearchIcon } from '@abqm-ds/icons';
 import { colors } from '@abqm-ds/tokens';
-import { useModalityDetails } from '@src/services/useModalityDetails';
-import type { ModalityDetailsResponseData, ResultModality } from './types.api';
+import { useModalityDetails } from '@src/services/ModalityDetails/useModalityDetails';
+import type {
+  ModalityDetailsResponseData,
+  ResultModality,
+} from '../../services/ModalityDetails/types.api';
 import type { ModalDetailsFilter } from './types';
 import { Link, useParams } from 'react-router';
 import { ModalFilter } from '@components/ModalityDetails/ModalFilter';

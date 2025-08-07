@@ -1,7 +1,10 @@
 import { useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { MenuContext } from './menuContext';
-import { useGeneralService, type MenuResponseObj } from '@src/services/useGeneralService';
+import {
+  useGeneralService,
+  type MenuResponseObj,
+} from '@src/services/General/useGeneralService';
 
 export const MenuProvider = ({ children }: { children: React.ReactNode }) => {
   const { getMenu } = useGeneralService();

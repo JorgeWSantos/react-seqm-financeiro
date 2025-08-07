@@ -7,7 +7,7 @@ import MoreSearchedModalities from '@src/components/Main/MoreSearchedModalities'
 import OtherSearchModalities from '@src/components/Main/OtherSearchModalities';
 import { ContainerDesktopMain, ContainerMobileMain } from './styles';
 import { useCallback, useEffect } from 'react';
-import { useMainService } from '@src/services/useMainService';
+import { useMainService } from '@src/services/Main/useMainService';
 import { usePage } from '@src/contexts/page/usePage';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
