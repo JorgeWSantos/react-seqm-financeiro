@@ -414,89 +414,11 @@ function EventSummary() {
     },
   ];
 
-  return (
-    // <Layout
-    //   {...(isTabletOrMobile && {
-    //     footerButtonsMobile: buttonsMobileFooter,
-    //   })}
-    // >
-    <ContainerMain>
-      {!isTabletOrMobile ? (
-        <ContentDektop
-          header={
-            <Header
-              text={pageTitle}
-              subTitle={getNameProveById(Number(prove_id))}
-              buttons={buttonsHeader}
-            />
-          }
-          headerNavigator={
-            <HeaderNavigatorDesktop
-              title={eventInfoData?.cds_evento || ''}
-              hasBackButton
-              onGoBack={() => navigate('/modalidade/' + prove_id)}
-            />
-          }
-          contentBoxStyles={{
-            padding: '1.5rem',
-            gap: '0.25rem',
-          }}
-        >
-          <Scrollable>
-            <DivLeft>
-              <InfoEventDetails data={eventInfoData} />
+  console.log('isTabletOrMobile', isTabletOrMobile);
 
-              <EventSummaryDetails
-                data={eventSummaryNumbers}
-                switchChecked={switchResumeChecked}
-                setSwitchChecked={setSwitchResumeChecked}
-              />
-
-              <GraphSummaryDetails
-                data={eventSummaryData.tipo_estatistica_prova}
-                isTabletOrMobile={isTabletOrMobile}
-              />
-            </DivLeft>
-
-            <DivRight>
-              <DivTopRight>
-                <DivDropDownSearch>
-                  <ModalityDropdown
-                    prove_id={prove_id}
-                    provesDropdown={provesDropdown}
-                    proveSelected={proveSelected}
-                    setProveSelected={setProveSelected}
-                    handleGetSummary={handleGetSummary}
-                  />
-                </DivDropDownSearch>
-
-                <Link
-                  to={`/modalidade/${listToShow[0]?.nid_prova}/evento/${listToShow[0]?.nid_evento}/prova-evento/${listToShow[0]?.nid_prova_evento}/top10`}
-                >
-                  <ButtonTop10>
-                    <TrophyIcon fill={colors.white75} />
-                    <Text
-                      fontSize="ssm"
-                      fontWeight="semiBold"
-                      lineHeight="tight"
-                      color={colors.white75}
-                      style={{ marginTop: '2px' }}
-                    >
-                      TOP 10
-                    </Text>
-                  </ButtonTop10>
-                </Link>
-              </DivTopRight>
-
-              <TableWithLoader
-                data={tableData}
-                columns={tableColumns}
-                isLoading={isLoading}
-              />
-            </DivRight>
-          </Scrollable>
-        </ContentDektop>
-      ) : (
+  if (isTabletOrMobile) {
+    return (
+      <ContainerMain>
         <ContentMobile
           style={{
             maxWidth: '100dvw',
@@ -547,7 +469,90 @@ function EventSummary() {
             />
           </DivRight>
         </ContentMobile>
-      )}
+
+        {showShareOptions && !isTabletOrMobile && <ShareOptions url={shareUrl} />}
+
+        <FooterWithButtons footerButtonsMobile={buttonsMobileFooter} />
+      </ContainerMain>
+    );
+  }
+
+  return (
+    <ContainerMain>
+      <ContentDektop
+        header={
+          <Header
+            text={pageTitle}
+            subTitle={getNameProveById(Number(prove_id))}
+            buttons={buttonsHeader}
+          />
+        }
+        headerNavigator={
+          <HeaderNavigatorDesktop
+            title={eventInfoData?.cds_evento || ''}
+            hasBackButton
+            onGoBack={() => navigate('/modalidade/' + prove_id)}
+          />
+        }
+        contentBoxStyles={{
+          padding: '1.5rem',
+          gap: '0.25rem',
+        }}
+      >
+        <Scrollable>
+          <DivLeft>
+            <InfoEventDetails data={eventInfoData} />
+
+            <EventSummaryDetails
+              data={eventSummaryNumbers}
+              switchChecked={switchResumeChecked}
+              setSwitchChecked={setSwitchResumeChecked}
+            />
+
+            <GraphSummaryDetails
+              data={eventSummaryData.tipo_estatistica_prova}
+              isTabletOrMobile={isTabletOrMobile}
+            />
+          </DivLeft>
+
+          <DivRight>
+            <DivTopRight>
+              <DivDropDownSearch>
+                <ModalityDropdown
+                  prove_id={prove_id}
+                  provesDropdown={provesDropdown}
+                  proveSelected={proveSelected}
+                  setProveSelected={setProveSelected}
+                  handleGetSummary={handleGetSummary}
+                />
+              </DivDropDownSearch>
+
+              <Link
+                to={`/modalidade/${listToShow[0]?.nid_prova}/evento/${listToShow[0]?.nid_evento}/prova-evento/${listToShow[0]?.nid_prova_evento}/top10`}
+              >
+                <ButtonTop10>
+                  <TrophyIcon fill={colors.white75} />
+                  <Text
+                    fontSize="ssm"
+                    fontWeight="semiBold"
+                    lineHeight="tight"
+                    color={colors.white75}
+                    style={{ marginTop: '2px' }}
+                  >
+                    TOP 10
+                  </Text>
+                </ButtonTop10>
+              </Link>
+            </DivTopRight>
+
+            <TableWithLoader
+              data={tableData}
+              columns={tableColumns}
+              isLoading={isLoading}
+            />
+          </DivRight>
+        </Scrollable>
+      </ContentDektop>
 
       {tableData?.length > 0 && (
         <PrintArea
@@ -562,8 +567,6 @@ function EventSummary() {
       )}
 
       {showShareOptions && !isTabletOrMobile && <ShareOptions url={shareUrl} />}
-
-      <FooterWithButtons footerButtonsMobile={buttonsMobileFooter} />
     </ContainerMain>
   );
 }
