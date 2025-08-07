@@ -88,8 +88,6 @@ function Top10() {
 
   // Effect to filter the list based on searchValue
   useEffect(() => {
-    console.log('Search Value:', searchValue);
-
     if (searchValue.trim() === '') {
       setListToShow(allList);
       return;
@@ -119,14 +117,14 @@ function Top10() {
     {
       key: 'abqm',
       label: 'ABQM',
-      width: '8%',
+      width: '6%',
       align: 'center',
     },
     { key: 'competitor', label: 'COMPETIDOR', width: '30%' },
     {
       key: 'animal',
       label: 'ANIMAL',
-      width: '30%',
+      width: '24%',
       align: 'left',
     },
     {
@@ -139,11 +137,9 @@ function Top10() {
       key: 'tn',
       label: 'T/N',
       align: 'center',
-      minWidth: '76px',
+      width: '10%',
     },
   ];
-
-  console.log('List to show:', listToShow);
 
   const data: Array<TableRowSEQM> = listToShow.map((item, index) => ({
     abqm: { value: `${index + 1}°` },
@@ -270,7 +266,7 @@ function Top10() {
             </EventHeader>
             <Scrollable>
               {data.length > 0 ? (
-                <TableSEQM data={data} columns={columns} width={'100rem'} />
+                <TableSEQM data={data} columns={columns} width={'70rem'} />
               ) : (
                 <>
                   {isLoading ? (
