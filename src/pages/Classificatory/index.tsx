@@ -35,7 +35,7 @@ import PrintArea from '@src/components/PrintArea';
 import { handlePrintPDF } from '@src/components/PrintArea/utils';
 import TableWithLoader from '@src/components/EventSummary/TableWithLoader';
 import { convertToBrazilDate } from '@src/utils/formatDate';
-import TabOption from '@src/components/Top10/TabOption';
+import TabOption from '@src/components/Classificatory/TabOption';
 import type { InfoEventData } from '@src/services/General/types.info-event.api';
 import { useInfoEvent } from '@src/services/General/useInfoEvent';
 import { InfoCardsGroup } from './InfoCards';
