@@ -12,11 +12,11 @@ interface TabOptionProps {
 
 const TabOption: React.FC<TabOptionProps> = ({ title, active = false, onClick }) => {
   return (
-    <Container onClick={onClick} $active={active} $color={colors.blue700}>
+    <Container onClick={onClick} $active={active} $color={colors.emeraldGreen15}>
       <Text
         fontSize="xxs"
-        color={active ? colors.white : colors.white85}
-        fontWeight={active ? 'bold' : 'regular'}
+        color={colors.white85}
+        fontWeight="regular"
         lineHeight="shorter"
       >
         {title}
