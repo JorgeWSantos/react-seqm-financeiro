@@ -12,12 +12,11 @@ import {
   type TableColumnSEQM,
   CompetitorTableData,
   type TableRowSEQM,
-  formatToBRL,
 } from '@abqm-ds/react';
 
 import { useDeviceType } from '@abqm-ds/react';
 
-import { ContainerMain, Scrollable, ItemCardGroup, TabAndCards } from './styles';
+import { ContainerMain, Scrollable, TabAndCards } from './styles';
 import { useCallback, useEffect, useState } from 'react';
 
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -37,10 +36,9 @@ import { handlePrintPDF } from '@src/components/PrintArea/utils';
 import TableWithLoader from '@src/components/EventSummary/TableWithLoader';
 import { convertToBrazilDate } from '@src/utils/formatDate';
 import TabOption from '@src/components/Top10/TabOption';
-import ItemCard from '@src/components/Top10/InfoCard';
 import type { InfoEventData } from '@src/services/General/types.info-event.api';
 import { useInfoEvent } from '@src/services/General/useInfoEvent';
-// import { formatToBRL } from '@src/utils/convertMoney';
+import { InfoCardsGroup } from './InfoCards';
 
 function Classificatory() {
   const params = useParams();
@@ -427,40 +425,17 @@ function Classificatory() {
             <TabOption title="Final" active={false} />
           </div>
 
-          <ItemCardGroup>
-            <ItemCard
-              title="inscrições"
-              info={resumeInscriptionsData?.nnr_qtde_inscricoes?.toString() || '-'}
-            />
-
-            <ItemCard
-              title="competidores"
-              info={resumeInscriptionsData?.nnr_qtde_competidores?.toString() || '-'}
-            />
-
-            <ItemCard
-              title="animais"
-              info={resumeInscriptionsData?.nnr_qtde_animais?.toString() || '-'}
-            />
-
-            <ItemCard
-              title="premiação"
-              info={formatToBRL({
-                value: resumeInscriptionsData?.nvl_premiacao,
-                fallback: '-',
-              })}
-              reverse
-            />
-
-            <ItemCard
-              title="data da prova"
-              info={
-                convertToBrazilDate(classificatoryEventInfoData?.dtm_data_prova || '') ||
-                '-'
-              }
-              reverse
-            />
-          </ItemCardGroup>
+          <InfoCardsGroup
+            qtde_animals={resumeInscriptionsData?.nnr_qtde_animais?.toString() || '-'}
+            qtde_competitors={
+              resumeInscriptionsData?.nnr_qtde_competidores?.toString() || '-'
+            }
+            qtde_inscriptions={
+              resumeInscriptionsData?.nnr_qtde_inscricoes?.toString() || '-'
+            }
+            premiation_value={resumeInscriptionsData?.nvl_premiacao?.toString() || '-'}
+            dt_prove={classificatoryEventInfoData?.dtm_data_prova?.toString() || ''}
+          />
         </TabAndCards>
         <Scrollable>
           <TableWithLoader
