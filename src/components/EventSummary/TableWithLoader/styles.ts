@@ -4,7 +4,7 @@ import styled from 'styled-components';
 export const DivContainerTableRight = styled.div`
   display: flex;
   align-items: center;
-  margin-top: 1rem;
+  margin-top: 0.25;
 
   @media (max-width: ${breakpointsPx.md}) {
     overflow-x: scroll;

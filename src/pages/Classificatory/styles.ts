@@ -26,3 +26,24 @@ export const DivInfoCard = styled.div`
   align-items: center;
   gap: 0.125rem;
 `;
+
+export const TabAndCards = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  flex-direction: row;
+  margin-top: 0.5rem;
+
+  .empty {
+    display: flex;
+    margin-top: 1rem;
+  }
+`;
+
+export const ItemCardGroup = styled.div`
+  display: flex;
+  align-content: flex-start;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+`;

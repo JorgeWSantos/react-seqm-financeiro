@@ -10,7 +10,7 @@ import {
   StyledTableSEQMTextTd,
   Text,
   type DataDropdown,
-  type FooterWithButtonsPropsType,
+  // type FooterWithButtonsPropsType,
   type TableColumnSEQM,
   type TableRowSEQM,
 } from '@abqm-ds/react';
@@ -55,7 +55,6 @@ import { handlePrintPDF } from '@src/components/PrintArea/utils';
 import PrintArea from '@src/components/PrintArea';
 import type { PrintHeaderProps } from '@src/components/PrintArea/PrintHeader';
 import ModalityDropdown from '@components/EventSummary/ModalityDropdown';
-import Layout from '@src/Layout';
 
 function EventSummary() {
   const pageTitle = 'Resultados »';
@@ -361,33 +360,47 @@ function EventSummary() {
     },
   ];
 
-  const buttonsMobileFooter: FooterWithButtonsPropsType = [
-    {
-      icon: <StarIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />,
-      label: 'participações',
-      onClick: () => {
-        window.open(
-          import.meta.env.VITE_URL_PARTICIPACOES +
-            '/index/' +
-            eventInfoData?.nid_agrupa_evento
-        );
-      },
-      variant: 'outline-white-25',
-    },
-    {
-      icon: (
-        <ShareIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />
-      ),
-      label: 'compartilhar',
-      onClick: () => setShowShareOptions((prev) => !prev),
-      isActive: showShareOptions,
-      showOptionsToShare: {
-        show: showShareOptions,
-        children: <ShareOptions url={shareUrl} variantArrow="bottom" />,
-      },
-      variant: 'outline-white-25',
-    },
-  ];
+  // const buttonsMobileFooter: FooterWithButtonsPropsType = [
+  //   {
+  //     icon: (
+  //       <TrophyIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />
+  //     ),
+  //     label: 'top 10',
+  //     onClick: () => {
+  //       navigate(
+  //         `/modalidade/${listToShow[0]?.nid_prova}/evento/${listToShow[0]?.nid_evento}/prova-evento/${listToShow[0]?.nid_prova_evento}/top10`
+  //       );
+  //     },
+  //     variant: 'outline-white-25',
+  //   },
+
+  //   {
+  //     icon: <StarIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />,
+  //     label: 'participações',
+  //     onClick: () => {
+  //       window.open(
+  //         import.meta.env.VITE_URL_PARTICIPACOES +
+  //           '/index/' +
+  //           eventInfoData?.nid_agrupa_evento
+  //       );
+  //     },
+  //     variant: 'outline-white-25',
+  //   },
+
+  //   {
+  //     icon: (
+  //       <ShareIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />
+  //     ),
+  //     label: 'compartilhar',
+  //     onClick: () => setShowShareOptions((prev) => !prev),
+  //     isActive: showShareOptions,
+  //     showOptionsToShare: {
+  //       show: showShareOptions,
+  //       children: <ShareOptions url={shareUrl} variantArrow="bottom" />,
+  //     },
+  //     variant: 'outline-white-25',
+  //   },
+  // ];
 
   return (
     // <Layout
@@ -537,9 +550,6 @@ function EventSummary() {
       {showShareOptions && !isTabletOrMobile && <ShareOptions url={shareUrl} />}
     </ContainerMain>
   );
-  {
-    /* </Layout > */
-  }
 }
 
 export default EventSummary;

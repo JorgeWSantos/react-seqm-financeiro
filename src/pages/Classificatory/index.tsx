@@ -16,7 +16,7 @@ import {
 
 import { useDeviceType } from '@abqm-ds/react';
 
-import { ContainerMain, Scrollable } from './styles';
+import { ContainerMain, Scrollable, ItemCardGroup, TabAndCards } from './styles';
 import { useCallback, useEffect, useState } from 'react';
 
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -35,6 +35,8 @@ import PrintArea from '@src/components/PrintArea';
 import { handlePrintPDF } from '@src/components/PrintArea/utils';
 import TableWithLoader from '@src/components/EventSummary/TableWithLoader';
 import { convertToBrazilDate } from '@src/utils/formatDate';
+import TabOption from '@src/components/Top10/TabOption';
+import ItemCard from '@src/components/Top10/InfoCard';
 
 function Classificatory() {
   const params = useParams();
@@ -206,7 +208,7 @@ function Classificatory() {
       key: 'tn',
       label: 'T/N',
       width: '8%',
-      align: 'center',
+      align: 'left',
       sortable: true,
     },
   ];
@@ -391,6 +393,41 @@ function Classificatory() {
         }}
         count={tableData.length}
       >
+        <TabAndCards>
+          <div className="empty">
+            <TabOption title="Classificatória" active={true} />
+            <TabOption title="Final" active={false} />
+          </div>
+
+          <ItemCardGroup>
+            <ItemCard
+              title="inscrições"
+              info={resumeInscriptionsData?.nnr_qtde_inscricoes?.toString() || '-'}
+            />
+
+            <ItemCard
+              title="competidores"
+              info={resumeInscriptionsData?.nnr_qtde_competidores?.toString() || '-'}
+            />
+
+            <ItemCard
+              title="animais"
+              info={resumeInscriptionsData?.nnr_qtde_animais?.toString() || '-'}
+            />
+
+            <ItemCard
+              title="premiação"
+              info={resumeInscriptionsData?.nvl_premiacao?.toString() || '-'}
+              reverse
+            />
+
+            <ItemCard
+              title="data da prova"
+              info={convertToBrazilDate(eventInfoData?.dtm_data_prova || '') || '-'}
+              reverse
+            />
+          </ItemCardGroup>
+        </TabAndCards>
         <Scrollable>
           <TableWithLoader
             data={tableData}

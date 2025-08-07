@@ -9,6 +9,7 @@ import {
   HeaderMobileNavigator,
   HeaderNavigatorDesktop,
   OwnerTableData,
+  ShareOptions,
   TableSEQM,
   Text,
   TextInput,
@@ -28,7 +29,7 @@ import {
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePage } from '@src/contexts/page/usePage';
-import { SearchIcon } from '@abqm-ds/icons';
+import { PrinterIcon, SearchIcon, ShareIcon } from '@abqm-ds/icons';
 import { colors, fonts } from '@abqm-ds/tokens';
 import { useTop10 } from '@src/services/useTop10';
 import type { Top10Data, EventDetailsTop10 } from './types.api';
@@ -36,6 +37,7 @@ import { useParams } from 'react-router';
 import Layout from '@src/Layout';
 
 import MedalTop10 from '@src/assets/images/medal-top10.svg';
+import { handlePrintPDF } from '@src/components/PrintArea/utils';
 
 function Top10() {
   const params = useParams();
@@ -57,6 +59,9 @@ function Top10() {
   const [allList, setAllList] = useState<Top10Data[]>([]);
   const [listToShow, setListToShow] = useState<Top10Data[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
+
+  const [showShareOptions, setShowShareOptions] = useState(false);
+  const shareUrl = window.location.href;
 
   const [eventInfoData, setEventInfoData] = useState<EventDetailsTop10 | null>(
     {} as EventDetailsTop10
@@ -88,8 +93,6 @@ function Top10() {
 
   // Effect to filter the list based on searchValue
   useEffect(() => {
-    console.log('Search Value:', searchValue);
-
     if (searchValue.trim() === '') {
       setListToShow(allList);
       return;
@@ -119,14 +122,14 @@ function Top10() {
     {
       key: 'abqm',
       label: 'ABQM',
-      width: '8%',
+      width: '6%',
       align: 'center',
     },
     { key: 'competitor', label: 'COMPETIDOR', width: '30%' },
     {
       key: 'animal',
       label: 'ANIMAL',
-      width: '30%',
+      width: '24%',
       align: 'left',
     },
     {
@@ -139,11 +142,9 @@ function Top10() {
       key: 'tn',
       label: 'T/N',
       align: 'center',
-      minWidth: '76px',
+      width: '10%',
     },
   ];
-
-  console.log('List to show:', listToShow);
 
   const data: Array<TableRowSEQM> = listToShow.map((item, index) => ({
     abqm: { value: `${index + 1}°` },
@@ -186,12 +187,36 @@ function Top10() {
     tn: { value: item.cds_pontuacao },
   }));
 
+  const buttonsHeader = [
+    {
+      icon: (
+        <PrinterIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />
+      ),
+      label: 'imprimir',
+      onClick: handlePrintPDF,
+    },
+    {
+      icon: (
+        <ShareIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />
+      ),
+      label: 'compartilhar',
+      onClick: () => setShowShareOptions((prev) => !prev),
+      isActive: showShareOptions,
+      showOptionsToShare: {
+        show: showShareOptions,
+        children: <ShareOptions url={shareUrl} />,
+      },
+    },
+  ];
+
   return (
     <Layout>
       <ContainerMain>
         {!isTabletOrMobile ? (
           <ContentDektop
-            header={<Header text={pageTitle} subTitle={subTitle} buttons={[]} />}
+            header={
+              <Header text={pageTitle} subTitle={subTitle} buttons={buttonsHeader} />
+            }
             headerNavigator={
               <HeaderNavigatorDesktop
                 title={eventInfoData?.cds_evento || ''}
@@ -270,7 +295,7 @@ function Top10() {
             </EventHeader>
             <Scrollable>
               {data.length > 0 ? (
-                <TableSEQM data={data} columns={columns} width={'100rem'} />
+                <TableSEQM data={data} columns={columns} width={'70rem'} />
               ) : (
                 <>
                   {isLoading ? (
@@ -293,6 +318,7 @@ function Top10() {
             </Scrollable>
           </ContentMobile>
         )}
+        {showShareOptions && !isTabletOrMobile && <ShareOptions url={shareUrl} />}
       </ContainerMain>
     </Layout>
   );

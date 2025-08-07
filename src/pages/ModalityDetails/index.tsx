@@ -38,7 +38,6 @@ import type { ModalityDetailsResponseData, ResultModality } from './types.api';
 import type { ModalDetailsFilter } from './types';
 import { Link, useParams } from 'react-router';
 import { ModalFilter } from '@components/ModalityDetails/ModalFilter';
-import Layout from '@src/Layout';
 
 function ModalityDetail() {
   const pageTitle = 'Resultados';
@@ -262,7 +261,7 @@ function ModalityDetail() {
       key: 'end',
       label: 'FIM',
       minWidth: '76px',
-      align: 'center',
+      align: 'left',
     },
   ];
 
@@ -323,150 +322,148 @@ function ModalityDetail() {
   }));
 
   return (
-    <Layout>
-      <ContainerMain>
-        {!isTabletOrMobile ? (
-          <ContentDektop
-            header={
-              <Header
-                text={pageTitle}
-                buttons={[
-                  {
-                    icon: <FilterIcon fill={colors.emeraldGreen50} />,
-                    label: 'filtro',
-                    onClick: openModal,
-                    isActive: !deepEqual(filter, initialFilter),
-                  },
-                ]}
+    <ContainerMain>
+      {!isTabletOrMobile ? (
+        <ContentDektop
+          header={
+            <Header
+              text={pageTitle}
+              buttons={[
+                {
+                  icon: <FilterIcon fill={colors.emeraldGreen50} />,
+                  label: 'filtro',
+                  onClick: openModal,
+                  isActive: !deepEqual(filter, initialFilter),
+                },
+              ]}
+            />
+          }
+          headerNavigator={
+            <HeaderNavigatorDesktop
+              title={
+                prove_id === 'nao-pontuados'
+                  ? 'Eventos Não Pontuados'
+                  : getNameProveById(Number(prove_id))
+              }
+              hasBackButton
+              onGoBack={() => navigate('/')}
+            >
+              <TextInput
+                placeholder="Buscar"
+                onChange={(v) => setSearchValue(v.target.value)}
+                icon={<SearchIcon fill={colors.white75} />}
               />
-            }
-            headerNavigator={
-              <HeaderNavigatorDesktop
-                title={
-                  prove_id === 'nao-pontuados'
-                    ? 'Eventos Não Pontuados'
-                    : getNameProveById(Number(prove_id))
-                }
-                hasBackButton
-                onGoBack={() => navigate('/')}
-              >
-                <TextInput
-                  placeholder="Buscar"
-                  onChange={(v) => setSearchValue(v.target.value)}
-                  icon={<SearchIcon fill={colors.white75} />}
-                />
-              </HeaderNavigatorDesktop>
-            }
-            contentBoxStyles={{
-              padding: '1.5rem',
-              gap: '0.25rem',
-            }}
-            count={data.length}
-          >
-            <Scrollable>
-              {data.length > 0 ? (
-                <TableSEQM data={data} columns={columns} />
-              ) : (
-                <>
-                  {isLoading ? (
-                    <LoadingContainer>
-                      <ActivityIndicator width={20} height={20} />
-                    </LoadingContainer>
-                  ) : (
-                    <NotFoundContainer>
-                      <Text
-                        fontSize="smm"
-                        fontWeight="semiBold"
-                        color={colors.emeraldGreen75}
-                      >
-                        Nenhum resultado encontrado
-                      </Text>
-                    </NotFoundContainer>
-                  )}
-                </>
-              )}
-            </Scrollable>
-          </ContentDektop>
-        ) : (
-          <ContentMobile
-            style={{
-              maxWidth: '100dvw',
-            }}
-            headerMobileNavigator={
-              <HeaderMobileNavigator
-                hasBackButton
-                onGoBack={() => navigate('/')}
-                headingText={getNameProveById(Number(prove_id))}
-                hasSearch
-                onChangeSearch={(v) => setSearchValue(v.target.value)}
+            </HeaderNavigatorDesktop>
+          }
+          contentBoxStyles={{
+            padding: '1.5rem',
+            gap: '0.25rem',
+          }}
+          count={data.length}
+        >
+          <Scrollable>
+            {data.length > 0 ? (
+              <TableSEQM data={data} columns={columns} />
+            ) : (
+              <>
+                {isLoading ? (
+                  <LoadingContainer>
+                    <ActivityIndicator width={20} height={20} />
+                  </LoadingContainer>
+                ) : (
+                  <NotFoundContainer>
+                    <Text
+                      fontSize="smm"
+                      fontWeight="semiBold"
+                      color={colors.emeraldGreen75}
+                    >
+                      Nenhum resultado encontrado
+                    </Text>
+                  </NotFoundContainer>
+                )}
+              </>
+            )}
+          </Scrollable>
+        </ContentDektop>
+      ) : (
+        <ContentMobile
+          style={{
+            maxWidth: '100dvw',
+          }}
+          headerMobileNavigator={
+            <HeaderMobileNavigator
+              hasBackButton
+              onGoBack={() => navigate('/')}
+              headingText={getNameProveById(Number(prove_id))}
+              hasSearch
+              onChangeSearch={(v) => setSearchValue(v.target.value)}
+            />
+          }
+        >
+          <DivTopMobile>
+            <DivInfoCard>
+              <InfoCard
+                title={allList
+                  .filter((item) => item.bid_oficial === true)
+                  .length.toString()}
+                subTitle="Oficiais"
               />
-            }
-          >
-            <DivTopMobile>
-              <DivInfoCard>
-                <InfoCard
-                  title={allList
-                    .filter((item) => item.bid_oficial === true)
-                    .length.toString()}
-                  subTitle="Oficiais"
-                />
-                <InfoCard
-                  title={allList
-                    .filter((item) => item.bid_oficial === false)
-                    .length.toString()}
-                  subTitle="Oficializadas"
-                />
-              </DivInfoCard>
+              <InfoCard
+                title={allList
+                  .filter((item) => item.bid_oficial === false)
+                  .length.toString()}
+                subTitle="Oficializadas"
+              />
+            </DivInfoCard>
 
-              <RoundedButton
-                width={'2rem'}
-                height={'2rem'}
-                isActive={!deepEqual(filter, initialFilter)}
-              >
-                <FilterIcon width={'1rem'} height={'1rem'} onClick={openModal} />
-              </RoundedButton>
-            </DivTopMobile>
+            <RoundedButton
+              width={'2rem'}
+              height={'2rem'}
+              isActive={!deepEqual(filter, initialFilter)}
+            >
+              <FilterIcon width={'1rem'} height={'1rem'} onClick={openModal} />
+            </RoundedButton>
+          </DivTopMobile>
 
-            <Scrollable>
-              {data.length > 0 ? (
-                <TableSEQM data={data} columns={columns} width={'100rem'} />
-              ) : (
-                <>
-                  {isLoading ? (
-                    <LoadingContainer>
-                      <ActivityIndicator width={20} height={20} />
-                    </LoadingContainer>
-                  ) : (
-                    <NotFoundContainer>
-                      <Text
-                        fontSize="smm"
-                        fontWeight="semiBold"
-                        color={colors.emeraldGreen75}
-                      >
-                        Nenhum resultado encontrado
-                      </Text>
-                    </NotFoundContainer>
-                  )}
-                </>
-              )}
-            </Scrollable>
-          </ContentMobile>
-        )}
+          <Scrollable>
+            {data.length > 0 ? (
+              <TableSEQM data={data} columns={columns} width={'100rem'} />
+            ) : (
+              <>
+                {isLoading ? (
+                  <LoadingContainer>
+                    <ActivityIndicator width={20} height={20} />
+                  </LoadingContainer>
+                ) : (
+                  <NotFoundContainer>
+                    <Text
+                      fontSize="smm"
+                      fontWeight="semiBold"
+                      color={colors.emeraldGreen75}
+                    >
+                      Nenhum resultado encontrado
+                    </Text>
+                  </NotFoundContainer>
+                )}
+              </>
+            )}
+          </Scrollable>
+        </ContentMobile>
+      )}
 
-        <ModalFilter
-          handleCloseModal={closeModal}
-          item={{}}
-          isModalOpen={modalOpen}
-          filter={filter}
-          setFilter={setFilter}
-          years={years}
-          months={months}
-          optionsOficial={optionsOficial}
-          handleApplyFilter={handleApplyFilter}
-          handleClearFilter={handleClearFilter}
-        />
-      </ContainerMain>
-    </Layout>
+      <ModalFilter
+        handleCloseModal={closeModal}
+        item={{}}
+        isModalOpen={modalOpen}
+        filter={filter}
+        setFilter={setFilter}
+        years={years}
+        months={months}
+        optionsOficial={optionsOficial}
+        handleApplyFilter={handleApplyFilter}
+        handleClearFilter={handleClearFilter}
+      />
+    </ContainerMain>
   );
 }
 

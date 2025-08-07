@@ -1,25 +1,20 @@
-import { colors, space, radii } from '@abqm-ds/tokens'
+import { colors, radii, breakpointsPx } from '@abqm-ds/tokens';
 
-import styled from 'styled-components'
-
+import styled, { css } from 'styled-components';
 
 export const Container = styled.div<{ $reverse?: boolean }>`
   display: flex;
-  justify-content: center;
+  min-width: 80px;
+  padding: 2px 12px;
   flex-direction: column;
   align-items: center;
-  padding: ${space[1]} ${space[5]};
-  min-width: 5rem;
-  height: 2.375rem;
+  justify-content: center;
+
+  height: 32px;
   background: ${colors.emeraldGreen25};
   border-radius: ${radii.xs};
-  flex: none;
-  order: 0;
-  flex-grow: 0;
 
-`
-/* 
-  ${({ $reverse }) =>
+  /* ${({ $reverse }) =>
     $reverse
       ? css`
           span:first-child {
@@ -39,18 +34,17 @@ export const Container = styled.div<{ $reverse?: boolean }>`
     ${({ $reverse }) =>
     $reverse
       ? css`
-            span:first-child {
-              margin-bottom: -0.2rem;
-            }
-          `
+          span:first-child {
+            margin-bottom: -0.2rem;
+          }
+        `
       : css`
-            span:first-child {
-              margin-bottom: -0.1rem;
-            }
-            span + span {
-              margin-bottom: -0.2rem;
-            }
-          `}
-  }
-` */
-
+          span:first-child {
+            margin-bottom: -0.1rem;
+          }
+          span + span {
+            margin-bottom: -0.2rem;
+          }
+        `}
+  } */
+`;
