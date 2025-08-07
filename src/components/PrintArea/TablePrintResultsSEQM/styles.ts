@@ -76,9 +76,26 @@ export const StyledBodyTablePrintResultsSEQM = styled.tbody`
     margin-bottom: -10pt;
   }
 
+  // removerá estilios do componente AnimalTableData
   .animal-table-data-container {
     .tooltip-anchor-divimage {
       display: none !important;
+    }
+  }
+
+  // removerá estilios do componente OwnerTableData
+  .owner-table-data-container {
+    .owner-name {
+      color: ${colors.emeraldGreen75} !important;
+    }
+
+    .hall-fama-owner-icon {
+      display: none;
+    }
+
+    .hall-fama-owner-subtext {
+      margin-top: 3pt;
+      color: ${colors.emeraldGreen75} !important;
     }
   }
 `;

@@ -22,71 +22,55 @@ const PrintArea = ({
   data,
   cards,
   info,
+  totalForPage,
 }: {
   title: string;
   columns: Array<TableColumnSEQM>;
   data: Array<TableRowSEQM>;
   cards: CardProps[];
   info: PrintHeaderProps;
+  totalForPage?: number;
 }) => {
+  const totalPages = Math.ceil(data.length / (totalForPage ?? data.length));
+  const totalByPage = totalForPage ?? data.length;
+
   return (
     <PrintAreaWrapper id="print-area">
-      <div
-        style={{
-          pageBreakAfter: 'always',
-          height: '297mm',
-          padding: '16pt',
-        }}
-      >
-        <PrintHeader data={info} />
+      {Array.from({ length: totalPages }).map((_, pageIndex) => {
+        return (
+          <div
+            style={{
+              pageBreakAfter: 'always',
+              height: '297mm',
+              padding: '16pt',
+            }}
+          >
+            <PrintHeader data={info} />
 
-        <DivWrapper>
-          <DivTitle>
-            <p>{title}</p>
-          </DivTitle>
+            <DivWrapper>
+              <DivTitle>
+                <p>{title}</p>
+              </DivTitle>
 
-          <DivCardsRow>
-            {cards.map((card, index) => (
-              <DivCard key={index}>
-                <p>{card.title}</p>
-                <p>{card.value}</p>
-              </DivCard>
-            ))}
-          </DivCardsRow>
-        </DivWrapper>
+              <DivCardsRow>
+                {cards.map((card, index) => (
+                  <DivCard key={index}>
+                    <p>{card.title}</p>
+                    <p>{card.value}</p>
+                  </DivCard>
+                ))}
+              </DivCardsRow>
+            </DivWrapper>
 
-        <DivTable>
-          <TablePrintResultsSEQM data={data.slice(0, 10)} columns={columns} />
-        </DivTable>
-      </div>
-      <div
-        style={{
-          pageBreakAfter: 'always',
-          height: '297mm',
-          padding: '16pt',
-          backgroundColor: 'red',
-        }}
-      >
-        <PrintHeader data={info} />
-
-        <DivTable>
-          <TablePrintResultsSEQM data={data.slice(8, 19)} columns={columns} />
-        </DivTable>
-      </div>
-      <div
-        style={{
-          pageBreakAfter: 'always',
-          height: '297mm',
-          padding: '16pt',
-          backgroundColor: 'red',
-        }}
-      >
-        <PrintHeader data={info} />
-
-        <DivTable>
-          <TablePrintResultsSEQM data={data.slice(8, 19)} columns={columns} />
-        </DivTable>
-      </div>
+            <DivTable>
+              <TablePrintResultsSEQM
+                data={data.slice(pageIndex * totalByPage, (pageIndex + 1) * totalByPage)}
+                columns={columns}
+              />
+            </DivTable>
+          </div>
+        );
+      })}
     </PrintAreaWrapper>
   );
 };

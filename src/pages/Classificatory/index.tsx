@@ -478,6 +478,7 @@ function Classificatory() {
           data={tableData}
           cards={printCards}
           info={printInfo}
+          totalForPage={9}
         />
       )}
       {showShareOptions && !isTabletOrMobile && <ShareOptions url={shareUrl} />}

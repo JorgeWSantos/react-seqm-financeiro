@@ -9,9 +9,9 @@ export const handlePrintPDF = async () => {
     const canvas = await html2canvas(element, {
       scale: 3,
       backgroundColor: '#fff',
-      padding: 0,
-      margin: 0,
-      style: { padding: '0', margin: '0' },
+      // padding: 0,
+      // margin: 0,
+      // style: { padding: '0', margin: '0' },
     });
     const imgData = canvas.toDataURL('image/png');
     const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
@@ -23,10 +23,13 @@ export const handlePrintPDF = async () => {
     const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
     // Se a imagem for maior que a página, divide em páginas
-    const totalPages = Math.ceil(imgHeight / pageHeight);
 
-    for (let i = 0; i < totalPages; i++) {
-      const position = -i * pageHeight;
+    // Corrige página em branco: calcula altura real da imagem e só gera páginas necessárias
+    let remainingHeight = imgHeight;
+    let position = 0;
+    let pageNum = 1;
+    while (remainingHeight > 0.1) {
+      // const pageImgHeight = Math.min(pageHeight, remainingHeight);
       pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
 
       // Rodapé: data e página
@@ -35,15 +38,19 @@ export const handlePrintPDF = async () => {
       pdf.setFontSize(8);
       pdf.setFont('helvetica');
       pdf.setTextColor(80);
-      // Data à esquerda
       pdf.text(`${dateStr}`, 8, pageHeight - 8, { align: 'left' });
-      // Paginação à direita
-      pdf.text(`${i + 1}/${totalPages}`, pageWidth - 8, pageHeight - 8, {
-        align: 'right',
-      });
+      pdf.text(
+        `${pageNum}/${Math.ceil(imgHeight / pageHeight)}`,
+        pageWidth - 8,
+        pageHeight - 8,
+        { align: 'right' }
+      );
 
-      if (i < totalPages - 1) {
+      remainingHeight -= pageHeight;
+      if (remainingHeight > 0.1) {
         pdf.addPage();
+        position -= pageHeight;
+        pageNum++;
       }
     }
 
