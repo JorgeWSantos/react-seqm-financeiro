@@ -46,15 +46,16 @@ import GraphSummaryDetails from '@components/EventSummary/GraphSummaryDetails';
 import { useEventSummary } from '@src/services/EventSummary/useEventSummary';
 import type {
   EventSummaryResponseData,
-  InfoEventSummaryData,
   ProvesEventSummary,
   ResultModalityByProve,
-} from '../../services/EventSummary/types.api';
+} from '@services/EventSummary/types.api';
 import { useCallback, useEffect, useState, type ReactNode } from 'react';
 import { handlePrintPDF } from '@src/components/PrintArea/utils';
 import PrintArea from '@src/components/PrintArea';
 import type { PrintHeaderProps } from '@src/components/PrintArea/PrintHeader';
 import ModalityDropdown from '@components/EventSummary/ModalityDropdown';
+import { useInfoEvent } from '@src/services/General/useInfoEvent';
+import type { InfoEventData } from '@src/services/General/types.info-event.api';
 
 function EventSummary() {
   const pageTitle = 'Resultados »';
@@ -72,15 +73,16 @@ function EventSummary() {
 
   const { setPage } = usePage();
   const { isTabletOrMobile, isMobile } = useDeviceType();
-  const { getEventSummary, getInfoEvent } = useEventSummary();
+  const { getEventSummary } = useEventSummary();
+  const { getInfoEvent } = useInfoEvent();
 
   const [isLoading, setIsLoading] = useState(true);
   const [eventSummaryData, setEventSummaryData] = useState<EventSummaryResponseData>(
     {} as EventSummaryResponseData
   );
 
-  const [eventInfoData, setEventInfoData] = useState<InfoEventSummaryData | null>(
-    {} as InfoEventSummaryData
+  const [eventInfoData, setEventInfoData] = useState<InfoEventData | null>(
+    {} as InfoEventData
   );
 
   const [eventSummaryNumbers, setEventSummaryNumbers] = useState<{

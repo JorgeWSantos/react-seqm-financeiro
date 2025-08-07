@@ -38,6 +38,8 @@ import TableWithLoader from '@src/components/EventSummary/TableWithLoader';
 import { convertToBrazilDate } from '@src/utils/formatDate';
 import TabOption from '@src/components/Top10/TabOption';
 import ItemCard from '@src/components/Top10/InfoCard';
+import type { InfoEventData } from '@src/services/General/types.info-event.api';
+import { useInfoEvent } from '@src/services/General/useInfoEvent';
 // import { formatToBRL } from '@src/utils/convertMoney';
 
 function Classificatory() {
@@ -53,6 +55,7 @@ function Classificatory() {
   const { setPage } = usePage();
   const { isTabletOrMobile } = useDeviceType();
   const { getClassificatory, getEventDetails } = useClassificatory();
+  const { getInfoEvent } = useInfoEvent();
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -60,13 +63,12 @@ function Classificatory() {
   const [listToShow, setListToShow] = useState<ClassificatoryData[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
 
-  const [eventInfoData, setEventInfoData] = useState<ClassificatoryEventData | null>(
-    {} as ClassificatoryEventData
-  );
+  const [classificatoryEventInfoData, setClassificatoryEventInfoData] =
+    useState<ClassificatoryEventData | null>({} as ClassificatoryEventData);
 
-  // const [eventInfoToPrint, setEventInfoToPrint] = useState<ClassificatoryEventData | null>(
-  //   {} as ClassificatoryEventData
-  // );
+  const [eventInfoData, setEventInfoData] = useState<InfoEventData | null>(
+    {} as InfoEventData
+  );
 
   const [resumeInscriptionsData, setResumeInscriptionsData] =
     useState<ClassificatoryInscriptionsResumeData | null>(
@@ -78,6 +80,7 @@ function Classificatory() {
   const [showShareOptions, setShowShareOptions] = useState(false);
   const shareUrl = window.location.href;
 
+  //functions
   const handleGetResultsClassificatory = useCallback(async () => {
     if (!prove_event_id) {
       return;
@@ -104,7 +107,7 @@ function Classificatory() {
     });
 
     if (detalhe_evento) {
-      setEventInfoData(detalhe_evento);
+      setClassificatoryEventInfoData(detalhe_evento);
     }
 
     if (resumo_inscricoes) {
@@ -116,9 +119,26 @@ function Classificatory() {
     // }
   }, [getEventDetails, prove_event_id, id_classificatory]);
 
+  const handleGetEventInfo = useCallback(async () => {
+    if (!event_id) {
+      return;
+    }
+
+    const data = await getInfoEvent({
+      event_id: Number(event_id),
+    });
+
+    setEventInfoData(data);
+  }, [getInfoEvent, event_id]);
+
   const handleOnGoBack = useCallback(() => {
     navigate('/modalidade/' + prove_id + '/evento/' + event_id);
   }, [event_id, navigate, prove_id]);
+
+  const onTriggerPrintPDF = useCallback(async () => {
+    await handleGetEventInfo();
+    await handlePrintPDF();
+  }, [handleGetEventInfo]);
 
   // Effect to set the page title and path
   useEffect(() => {
@@ -273,7 +293,8 @@ function Classificatory() {
   const printCards = [
     {
       title: 'DATA DO EVENTO',
-      value: convertToBrazilDate(eventInfoData?.dtm_data_prova || '') || '0',
+      value:
+        convertToBrazilDate(classificatoryEventInfoData?.dtm_data_prova || '') || '0',
     },
     {
       title: 'INSCRIÇÕES',
@@ -291,11 +312,11 @@ function Classificatory() {
 
   const printInfo: PrintHeaderProps = {
     eventName: eventInfoData?.cds_evento || '',
-    responsibleName: 'MOCK DATA ORGANIZADOR',
-    city: 'MOCK DATA LOCAL',
-    state: 'MOCK DATA ESTADO',
-    startDate: 'MOCK DATA DATA INICIO',
-    endDate: 'MOCK DATA DATA FIM',
+    responsibleName: eventInfoData?.organizador || '',
+    city: eventInfoData?.local || '',
+    state: eventInfoData?.estado || '',
+    startDate: eventInfoData?.data_inicio || '',
+    endDate: eventInfoData?.data_fim || '',
     modalityName: getNameProveById(Number(prove_id)) || '',
   };
 
@@ -307,7 +328,7 @@ function Classificatory() {
         window.open(
           import.meta.env.VITE_URL_PARTICIPACOES +
             '/index/' +
-            eventInfoData?.nid_agrupa_evento
+            classificatoryEventInfoData?.nid_agrupa_evento
         );
       },
     },
@@ -316,7 +337,7 @@ function Classificatory() {
         <PrinterIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />
       ),
       label: 'imprimir',
-      onClick: handlePrintPDF,
+      onClick: onTriggerPrintPDF,
     },
     {
       icon: (
@@ -380,8 +401,8 @@ function Classificatory() {
         header={<Header text={pageTitle} subTitle={subTitle} buttons={buttonsHeader} />}
         headerNavigator={
           <HeaderNavigatorDesktop
-            title={eventInfoData?.cds_modalidade || ''}
-            subtitle={eventInfoData?.cds_evento || ''}
+            title={classificatoryEventInfoData?.cds_modalidade || ''}
+            subtitle={classificatoryEventInfoData?.cds_evento || ''}
             hasBackButton
             onGoBack={handleOnGoBack}
           >
@@ -433,7 +454,10 @@ function Classificatory() {
 
             <ItemCard
               title="data da prova"
-              info={convertToBrazilDate(eventInfoData?.dtm_data_prova || '') || '-'}
+              info={
+                convertToBrazilDate(classificatoryEventInfoData?.dtm_data_prova || '') ||
+                '-'
+              }
               reverse
             />
           </ItemCardGroup>
