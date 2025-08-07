@@ -9,6 +9,7 @@ import { PageProvider } from './contexts/page/pageProvider';
 import { RouterProvider } from 'react-router';
 import { router } from './routes';
 import { MenuProvider } from './contexts/menu/menuProvider';
+import Layout from './Layout';
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById('root')!).render(
@@ -21,7 +22,9 @@ createRoot(document.getElementById('root')!).render(
           <AuthProvider>
             <MenuProvider>
               <TokenLoginHandler />
-              <RouterProvider router={router} />
+              <Layout>
+                <RouterProvider router={router} />
+              </Layout>
               <ToastRoot />
             </MenuProvider>
           </AuthProvider>

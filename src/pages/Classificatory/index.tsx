@@ -1,6 +1,5 @@
 import {
   AnimalTableData,
-  CompetitorTableData,
   ContentDektop,
   ContentMobile,
   getNameProveById,
@@ -11,6 +10,7 @@ import {
   ShareOptions,
   TextInput,
   type TableColumnSEQM,
+  CompetitorTableData,
   type TableRowSEQM,
 } from '@abqm-ds/react';
 
@@ -18,6 +18,7 @@ import { useDeviceType } from '@abqm-ds/react';
 
 import { ContainerMain, Scrollable } from './styles';
 import { useCallback, useEffect, useState } from 'react';
+
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePage } from '@src/contexts/page/usePage';
 import { PrinterIcon, SearchIcon, ShareIcon, StarIcon } from '@abqm-ds/icons';
@@ -25,7 +26,6 @@ import { colors } from '@abqm-ds/tokens';
 import { useClassificatory } from '@src/services/useClassificatory';
 import type { ClassificatoryData } from './types.classificatory.api';
 import { useParams } from 'react-router';
-import Layout from '@src/Layout';
 import type {
   ClassificatoryEventData,
   ClassificatoryInscriptionsResumeData,
@@ -49,6 +49,7 @@ function Classificatory() {
   const { setPage } = usePage();
   const { isTabletOrMobile } = useDeviceType();
   const { getClassificatory, getEventDetails } = useClassificatory();
+
   const [isLoading, setIsLoading] = useState(true);
 
   const [allList, setAllList] = useState<ClassificatoryData[]>([]);
@@ -180,12 +181,14 @@ function Classificatory() {
       width: '5%',
       minWidth: '2.5rem',
       align: 'center',
+      sortable: true,
     },
     {
       key: 'competitor',
       label: 'COMPETIDOR',
       width: '30%',
       align: 'left',
+      sortable: true,
     },
     {
       key: 'animal',
@@ -204,13 +207,15 @@ function Classificatory() {
       label: 'T/N',
       width: '8%',
       align: 'center',
+      sortable: true,
     },
   ];
 
   const tableData: Array<TableRowSEQM> = listToShow.map((item) => ({
     nucleo: { value: item.cds_classificacao_nucleo || ' ' },
-    abqm: { value: `${item.cds_classificacao + (item.cds_classificacao ? '°' : ' ')}` },
+    abqm: { value: `${item.cds_classificacao + (item.cds_classificacao ? '°' : '')}` },
     competitor: {
+      value: item.equipe[0]?.cds_competidor || '', // to sort
       render: () => {
         return item.equipe.map((e, i) => (
           <CompetitorTableData key={new Date().getTime() + i} value={e.cds_competidor} />
@@ -218,6 +223,7 @@ function Classificatory() {
       },
     },
     animal: {
+      value: item.equipe[0]?.cds_animal || '', // to sort
       render: () => {
         return item.equipe.map((e, i) => (
           <AnimalTableData
@@ -241,6 +247,7 @@ function Classificatory() {
       },
     },
     owner: {
+      value: item.equipe[0]?.cds_proprietario || '', // to sort
       render: () => {
         return item.equipe.map((e, i) => (
           <OwnerTableData
@@ -317,68 +324,33 @@ function Classificatory() {
     },
   ];
 
-  return (
-    <Layout>
+  if (isTabletOrMobile) {
+    return (
       <ContainerMain>
-        {!isTabletOrMobile ? (
-          <ContentDektop
-            header={
-              <Header text={pageTitle} subTitle={subTitle} buttons={buttonsHeader} />
-            }
-            headerNavigator={
-              <HeaderNavigatorDesktop
-                title={eventInfoData?.cds_modalidade || ''}
-                subtitle={eventInfoData?.cds_evento || ''}
-                hasBackButton
-                onGoBack={handleOnGoBack}
-              >
-                <TextInput
-                  placeholder="Buscar"
-                  onChange={(v) => setSearchValue(v.target.value)}
-                  icon={<SearchIcon fill={colors.white75} />}
-                />
-              </HeaderNavigatorDesktop>
-            }
-            contentBoxStyles={{
-              padding: '1.5rem',
-              gap: '0.25rem',
-            }}
-            count={tableData.length}
-          >
-            <Scrollable style={{ overflow: 'visible' }}>
-              <TableWithLoader
-                data={tableData}
-                columns={tableColumns}
-                isLoading={isLoading}
-              />
-            </Scrollable>
-          </ContentDektop>
-        ) : (
-          <ContentMobile
-            style={{
-              maxWidth: '100vw',
-              overflow: 'visible',
-            }}
-            headerMobileNavigator={
-              <HeaderMobileNavigator
-                hasBackButton
-                onGoBack={handleOnGoBack}
-                headingText={getNameProveById(Number(prove_id))}
-                hasSearch
-                onChangeSearch={(v) => setSearchValue(v.target.value)}
-              />
-            }
-          >
-            <Scrollable>
-              <TableWithLoader
-                data={tableData}
-                columns={tableColumns}
-                isLoading={isLoading}
-                minWidthTable="62rem"
-              />
-            </Scrollable>
-          </ContentMobile>
-        )}
+        <ContentMobile
+          style={{
+            maxWidth: '100vw',
+            overflow: 'visible',
+          }}
+          headerMobileNavigator={
+            <HeaderMobileNavigator
+              hasBackButton
+              onGoBack={handleOnGoBack}
+              headingText={getNameProveById(Number(prove_id))}
+              hasSearch
+              onChangeSearch={(v) => setSearchValue(v.target.value)}
+            />
+          }
+        >
+          <Scrollable>
+            <TableWithLoader
+              data={tableData}
+              columns={tableColumns}
+              isLoading={isLoading}
+              minWidthTable="62rem"
+            />
+          </Scrollable>
+        </ContentMobile>
 
         {tableData?.length > 0 && (
           <PrintArea
@@ -391,7 +363,54 @@ function Classificatory() {
         )}
         {showShareOptions && !isTabletOrMobile && <ShareOptions url={shareUrl} />}
       </ContainerMain>
-    </Layout>
+    );
+  }
+
+  return (
+    <ContainerMain>
+      <ContentDektop
+        header={<Header text={pageTitle} subTitle={subTitle} buttons={buttonsHeader} />}
+        headerNavigator={
+          <HeaderNavigatorDesktop
+            title={eventInfoData?.cds_modalidade || ''}
+            subtitle={eventInfoData?.cds_evento || ''}
+            hasBackButton
+            onGoBack={handleOnGoBack}
+          >
+            <TextInput
+              placeholder="Buscar"
+              onChange={(v) => setSearchValue(v.target.value)}
+              icon={<SearchIcon fill={colors.white75} />}
+              debounceDelay={1000}
+            />
+          </HeaderNavigatorDesktop>
+        }
+        contentBoxStyles={{
+          padding: '1.5rem',
+          gap: '0.25rem',
+        }}
+        count={tableData.length}
+      >
+        <Scrollable>
+          <TableWithLoader
+            data={tableData}
+            columns={tableColumns}
+            isLoading={isLoading}
+          />
+        </Scrollable>
+      </ContentDektop>
+
+      {tableData?.length > 0 && (
+        <PrintArea
+          title={'RESULTADOS DO EVENTO'}
+          columns={tableColumns}
+          data={tableData}
+          cards={printCards}
+          info={printInfo}
+        />
+      )}
+      {showShareOptions && !isTabletOrMobile && <ShareOptions url={shareUrl} />}
+    </ContainerMain>
   );
 }
 
