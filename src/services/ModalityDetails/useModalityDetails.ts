@@ -1,10 +1,10 @@
 import { Toast } from '@abqm-ds/react';
 import { useCallback } from 'react';
-import { apiResultados } from './api';
+import { apiResultados } from '../api';
 import type {
   ModalityDetailsResponse,
   ModalityDetailsResponseData,
-} from '@src/pages/ModalityDetails/types.api';
+} from './types.api';
 
 export function useModalityDetails() {
   const getModalityDetails = useCallback(

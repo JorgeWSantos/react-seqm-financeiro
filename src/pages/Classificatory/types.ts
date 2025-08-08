@@ -1,7 +1,7 @@
-import type { TeamClassificatory } from './types.api';
+import type { ClassificatoryData } from "@src/services/Classificatory/types.classificatory.api";
 
-export interface TableClassificatory {
-  abqm: string;
-  nucleo: string;
-  equipe: TeamClassificatory[];
+export interface Tab {
+  tipo_etapa: string;
+  cartao_julgamento: string;
+  lista_classificacao?: ClassificatoryData[];
 }

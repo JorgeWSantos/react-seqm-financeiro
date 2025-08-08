@@ -36,3 +36,9 @@ export const DivInfoCard = styled.div`
   align-items: center;
   gap: 0.125rem;
 `;
+
+export const EventHeader = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`;

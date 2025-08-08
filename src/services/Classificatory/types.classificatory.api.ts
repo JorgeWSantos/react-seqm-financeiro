@@ -1,6 +1,8 @@
 import type { ApiResponse } from '@src/services/types.api';
 
 export type TeamClassificatory = {
+  all_around_amador: string | null;
+  all_around_jovem: string | null;
   bid_abqm: boolean;
   bid_animal_nucleo: boolean;
   bid_aqha: boolean;
@@ -11,16 +13,22 @@ export type TeamClassificatory = {
   cds_competidor: string;
   cds_criador: string;
   cds_proprietario: string;
+  cds_registro_animal: string | null;
   conquistas: string[];
   cor_medalha: string;
   criador_hf: string | null;
+  hall_da_fama: string | null;
   img_animal: string | null;
+  modalidades_awards: string | null;
   nid_animal: number;
   nid_competidor: number;
   nid_criador: number;
   nid_proprietario: number;
   nnr_senha: number | null;
   proprietario_hf: string | null;
+  ranking_geral_awards: string | null;
+  registro_de_merito: string;
+  super_horse: string | null;
 };
 
 export type ClassificatoryData = {
@@ -50,26 +58,17 @@ export type ClassificatoryData = {
   indice_velocidade: number;
   nvl_tempo_corrida: number;
   nome_treinador: string | null;
+  // equipe: TeamClassificatory[];
   equipe: TeamClassificatory[];
 };
 
-export type EventDetailsClassificatory = {
-  cds_evento: string;
-  organizador: string;
-  local: string;
-  estado: string;
-  data_inicio: string;
-  data_fim: string;
-  logotipo: string;
-  nid_agrupa_evento: number;
-  bid_oficial: boolean;
+
+export type ClassificatoryResponseData = {
+  cartao_julgamento: string;
+  lista_classificacao: Array<ClassificatoryData> | [];
+  tipo_etapa: string;
 };
 
-export interface ClassificatoryResponseData {
-  cds_prova_classificatoria: string;
-  lista_classificacao: ClassificatoryData[] | [];
-}
-
 export type ClassificatoryResponse = ApiResponse<{
-  list_page_product: Array<ClassificatoryResponseData>;
+  list_page_classificacao_etapas: Array<ClassificatoryResponseData> | [];
 }>;

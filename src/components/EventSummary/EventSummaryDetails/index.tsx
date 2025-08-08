@@ -10,7 +10,7 @@ import {
 } from './styles';
 import { colors } from '@abqm-ds/tokens';
 import { FileEarmarkCheckIcon } from '@abqm-ds/icons';
-import type { NumberEvents } from '../../../pages/EventSummary/types.api';
+import type { NumberEvents } from '../../../services/EventSummary/types.api';
 
 interface CardSummaryProps {
   title?: string;

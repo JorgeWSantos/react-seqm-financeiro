@@ -4,20 +4,18 @@ import type { TableColumnSEQM, TableRowSEQM } from '@abqm-ds/react';
 import { colors } from '@abqm-ds/tokens';
 import { DivContainerTableRight, LoadingContainer, NotFoundContainer } from './styles';
 
-interface EventTableProps {
+interface TableWithLoaderProps {
   data: TableRowSEQM[];
   columns: TableColumnSEQM[];
   isLoading: boolean;
+  minWidthTable?: string;
 }
 
-const EventTable: React.FC<EventTableProps> = ({ data, columns, isLoading }) => {
-  console.log('EventTable data:', data);
-  console.log('EventTable columns:', columns);
-
+const TableWithLoader: React.FC<TableWithLoaderProps> = ({ data, columns, isLoading, minWidthTable }) => {
   return (
     <DivContainerTableRight>
       {data?.length > 0 ? (
-        <TableSEQM data={data} columns={columns} />
+        <TableSEQM data={data} columns={columns} style={{ minWidth: minWidthTable }} />
       ) : (
         <>
           {isLoading ? (
@@ -36,4 +34,4 @@ const EventTable: React.FC<EventTableProps> = ({ data, columns, isLoading }) => 
     </DivContainerTableRight>
   );
 };
-export default EventTable;
+export default TableWithLoader;

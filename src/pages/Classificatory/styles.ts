@@ -12,16 +12,6 @@ export const Scrollable = styled.div`
   overflow-x: auto;
 `;
 
-export const LoadingContainer = styled.div`
-  width: 100%;
-  height: 100%;
-`;
-
-export const NotFoundContainer = styled.div`
-  width: 100%;
-  padding: 1rem 0;
-`;
-
 export const DivTopMobile = styled.div`
   display: flex;
   justify-content: space-between;
@@ -35,4 +25,17 @@ export const DivInfoCard = styled.div`
   justify-content: flex-start;
   align-items: center;
   gap: 0.125rem;
+`;
+
+export const TabAndCards = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  flex-direction: row;
+  margin-top: 0.5rem;
+
+  .empty {
+    display: flex;
+    margin-top: 1rem;
+  }
 `;

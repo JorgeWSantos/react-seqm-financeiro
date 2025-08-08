@@ -1,12 +1,12 @@
 import { Toast } from '@abqm-ds/react';
 import { useCallback } from 'react';
-import { apiResultados } from './api';
+import { apiResultados } from '../api';
 import type {
   ResultModalitiesResponse,
   ResultModalitiesResponseData,
-} from '@src/pages/Main/types.api';
+} from '@src/services/Main/types.api';
 
-export function useResultsService() {
+export function useMainService() {
   const getResultados = useCallback(async (): Promise<ResultModalitiesResponseData> => {
     try {
       const response = await apiResultados.get<ResultModalitiesResponse>(
@@ -34,7 +34,7 @@ export function useResultsService() {
       };
     } catch (error) {
       Toast.show({
-        message: 'Ops, ocorreu um errs!',
+        message: 'Ops, ocorreu um erro ao carregar os resultados!',
         type: 'error',
         timeout: 30000,
       });

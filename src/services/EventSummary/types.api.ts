@@ -1,4 +1,4 @@
-import type { ApiResponse } from '@src/services/types.api';
+import type { ApiResponse } from '../types.api';
 
 //Proves
 
@@ -47,20 +47,4 @@ export interface EventSummaryResponseData {
 
 export type EventSummaryResponse = ApiResponse<{
   resultado: EventSummaryResponseData;
-}>;
-
-export type InfoEventSummaryData = {
-  cds_evento: string;
-  organizador: string;
-  local: string;
-  estado: string;
-  data_inicio: string;
-  data_fim: string;
-  logotipo: string;
-  nid_agrupa_evento: number;
-  bid_oficial: boolean;
-};
-
-export type InfoEventSummaryResponse = ApiResponse<{
-  dados_evento: InfoEventSummaryData;
 }>;
