@@ -2,6 +2,7 @@ import {
   ContentDektop,
   ContentMobile,
   Dropdown,
+  FooterWithButtons,
   getNameProveById,
   Header,
   HeaderMobileNavigator,
@@ -10,6 +11,7 @@ import {
   StyledTableSEQMTextTd,
   Text,
   type DataDropdown,
+  type FooterWithButtonsPropsType,
   type TableColumnSEQM,
   type TableRowSEQM,
 } from '@abqm-ds/react';
@@ -26,7 +28,7 @@ import {
   Scrollable,
   StyledHeadingMobile,
 } from './styles';
-import TableWithLoader from '@src/components/EventSummary/TableWithLoader';
+import TableWithLoader from '@src/components/TableWithLoader';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePage } from '@src/contexts/page/usePage';
 import {
@@ -54,7 +56,7 @@ import type { PrintHeaderProps } from '@src/components/PrintArea/PrintHeader';
 import ModalityDropdown from '@components/EventSummary/ModalityDropdown';
 import { useInfoEvent } from '@src/services/General/useInfoEvent';
 import type { InfoEventData } from '@src/services/General/types.info-event.api';
-import { FooterWithButtons, type FooterWithButtonsPropsType } from './FooterWithButtons';
+// import { FooterWithButtons, type FooterWithButtonsPropsType } from './FooterWithButtons';
 
 function EventSummary() {
   const pageTitle = 'Resultados »';

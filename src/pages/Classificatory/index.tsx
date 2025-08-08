@@ -32,7 +32,7 @@ import type {
 } from '../../services/Classificatory/types.event-details.api';
 import type { PrintHeaderProps } from '@src/components/PrintArea/PrintHeader';
 import PrintArea from '@src/components/PrintArea';
-import TableWithLoader from '@src/components/EventSummary/TableWithLoader';
+import TableWithLoader from '@src/components/TableWithLoader';
 import { convertToBrazilDate } from '@src/utils/formatDate';
 import TabOption from '@src/components/Classificatory/TabOption';
 import type { InfoEventData } from '@src/services/General/types.info-event.api';
