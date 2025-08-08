@@ -5,18 +5,11 @@ import {
   HeaderMobile,
   SideBarDesktop,
   useDeviceType,
-  type FooterWithButtonsPropsType,
 } from '@abqm-ds/react';
 import { useAuth } from './contexts/auth/useAuth.ts';
 import { useMenu } from './contexts/menu/useMenu.ts';
 
-function Layout({
-  children,
-  footerButtonsMobile,
-}: {
-  children?: React.ReactNode;
-  footerButtonsMobile?: FooterWithButtonsPropsType;
-}) {
+function Layout({ children }: { children?: React.ReactNode }) {
   const { isTabletOrMobile } = useDeviceType();
   const { user, logout, token } = useAuth();
   const { menu } = useMenu();
@@ -34,7 +27,7 @@ function Layout({
   };
 
   return (
-    <GlobalContainer footerButtonsMobile={footerButtonsMobile}>
+    <GlobalContainer>
       {/* Desktop */}
       <ContainerDesktop style={{ display: isTabletOrMobile ? 'none' : 'grid' }}>
         <SideBarDesktop
