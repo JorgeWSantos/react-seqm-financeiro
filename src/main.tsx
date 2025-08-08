@@ -8,6 +8,8 @@ import { TokenLoginHandler } from './token-login-handler';
 import { PageProvider } from './contexts/page/pageProvider';
 import { RouterProvider } from 'react-router';
 import { router } from './routes';
+import { MenuProvider } from './contexts/menu/menuProvider';
+import Layout from './Layout';
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById('root')!).render(
@@ -18,9 +20,13 @@ createRoot(document.getElementById('root')!).render(
       <QueryClientProvider client={queryClient}>
         <PageProvider>
           <AuthProvider>
-            <TokenLoginHandler />
-            <RouterProvider router={router} />
-            <ToastRoot />
+            <MenuProvider>
+              <TokenLoginHandler />
+              <Layout>
+                <RouterProvider router={router} />
+              </Layout>
+              <ToastRoot />
+            </MenuProvider>
           </AuthProvider>
         </PageProvider>
       </QueryClientProvider>

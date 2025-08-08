@@ -25,16 +25,24 @@ Este projeto é parte do ecossistema ABQM e utiliza os pacotes da biblioteca `@a
    cd resultados
    ```
 
-2. Instale as dependências:
+   2.0 Instalar versão 22.14.0 do node
 
-   ```bash
-   npm install
+2.1 Instale as dependências:
+
+```bash
+npm install
+```
+
+3.0 Atualizar o pacote abqm
+
+````bash
+   npm run upgrade:ui
    ```
 
-3. Rode o projeto:
-   ```bash
-   npm run dev
-   ```
+3.1 Rode o projeto:
+```bash
+npm run dev
+````
 
 ---
 

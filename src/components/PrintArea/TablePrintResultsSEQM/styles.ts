@@ -18,6 +18,8 @@ export const StyledTablePrintResultsSEQM = styled.table<{
   border-collapse: collapse;
   width: ${({ $width }) => $width || '100%'};
   height: ${({ $height }) => $height || 'unset'};
+  display: flex;
+  flex-direction: column;
 
   tbody tr:nth-child(odd) {
     background-color: ${colors.white25};
@@ -32,8 +34,12 @@ export const StyledTablePrintResultsSEQM = styled.table<{
 `;
 
 export const StyledHeadTablePrintResultsSEQM = styled.thead`
+  tr {
+    display: flex;
+  }
+
   tr th {
-    padding: ${space[1]} ${space[2]};
+    padding: 0 ${space[2]};
   }
 `;
 
@@ -46,23 +52,61 @@ export const StyledTablePrintResultsSEQMTextTh = styled(Text).attrs({
 
 export const StyledBodyTablePrintResultsSEQM = styled.tbody`
   tr {
-    max-height: 2rem;
+    /* max-height: 2rem; */
+    display: flex;
+    flex-direction: row;
   }
 
   tr td {
-    padding: 0.5rem ${space[2]};
+    padding: ${space[2]} ${space[2]};
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* margin-top: -10pt; */
+
+    gap: 0.25rem;
   }
 
-  p {
-    margin-top: -10pt;
+  span, p {
+    white-space: normal !important;
+    font-size: 8pt !important;
+  }
+
+  /* svg {
+    margin-bottom: -10pt;
+  } */
+
+  // removerá estilios do componente AnimalTableData
+  .animal-table-data-container {
+    .tooltip-anchor-divimage {
+      display: none !important;
+    }
+  }
+
+  // removerá estilios do componente OwnerTableData
+  .owner-table-data-container {
+    .owner-name {
+      color: ${colors.emeraldGreen75} !important;
+    }
+
+    .hall-fama-owner-icon {
+      display: none;
+    }
+
+    .hall-fama-owner-subtext {
+      margin-top: 3pt;
+      font-size: 6pt !important;
+      color: ${colors.emeraldGreen75} !important;
+    }
   }
 `;
 
 export const StyledTablePrintResultsSEQMTextTd = styled(Text).attrs({
   fontWeight: 'regular',
   lineHeight: 'tight',
-})<{ $bold?: boolean }>`
-  font-size: 8pt;
+}) <{ $bold?: boolean }>`
+  font-size: 9pt !important;
   font-weight: ${({ $bold }) => ($bold ? fontWeights.semiBold : fontWeights.regular)};
   color: ${colors.grayFigma2};
 

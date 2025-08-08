@@ -5,13 +5,12 @@ import { useDeviceType } from '@abqm-ds/react';
 import NotPointedEvents from '@src/components/Main/NotPointedEvents';
 import MoreSearchedModalities from '@src/components/Main/MoreSearchedModalities';
 import OtherSearchModalities from '@src/components/Main/OtherSearchModalities';
-import { ContainerDesktopMain, ContainerMain, ContainerMobileMain } from './styles';
+import { ContainerDesktopMain, ContainerMobileMain } from './styles';
 import { useCallback, useEffect } from 'react';
-import { useResultsService } from '@src/services/useResultsService';
+import { useMainService } from '@src/services/Main/useMainService';
 import { usePage } from '@src/contexts/page/usePage';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import Layout from '@src/Layout';
 
 function Main() {
   const pageTitle = 'Resultados';
@@ -19,7 +18,7 @@ function Main() {
   const navigate = useNavigate();
   const { setPage, currentPage } = usePage();
   const { isTabletOrMobile } = useDeviceType();
-  const { getResultados, saveMoreSearched } = useResultsService();
+  const { getResultados, saveMoreSearched } = useMainService();
 
   const onClickModality = useCallback(
     async ({
@@ -43,7 +42,7 @@ function Main() {
   );
 
   const { data: allModalities = { top_modalidades: [], modalidades: [] } } = useQuery({
-    queryKey: ['modalities'],
+    queryKey: [''],
     queryFn: getResultados,
     staleTime: 1000 * 60 * 3, // 3 minutos
     gcTime: 1000 * 60 * 3,
@@ -54,47 +53,45 @@ function Main() {
   }, [setPage]);
 
   return (
-    <Layout>
-      <ContainerMain>
-        {!isTabletOrMobile ? (
-          <ContentDektop
-            header={<Header text={pageTitle} />}
-            contentBoxStyles={{ padding: '1rem 2.5rem', gap: '0' }}
-          >
-            <>
-              <NotPointedEvents onClick={onClickModality} />
-              <ContainerDesktopMain>
-                <MoreSearchedModalities
-                  title="MODALIDADES MAIS BUSCADAS"
-                  data={allModalities.top_modalidades}
-                  onClick={onClickModality}
-                />
-                <OtherSearchModalities
-                  title="DEMAIS MODALIDADES"
-                  data={allModalities.modalidades}
-                  onClick={onClickModality}
-                />
-              </ContainerDesktopMain>
-            </>
-          </ContentDektop>
-        ) : (
-          <ContentMobile>
-            <ContainerMobileMain className="container-mobile-main">
+    <>
+      {!isTabletOrMobile ? (
+        <ContentDektop
+          header={<Header text={pageTitle} />}
+          contentBoxStyles={{ padding: '1rem 2.5rem', gap: '0', overflow: 'auto' }}
+        >
+          <>
+            <NotPointedEvents onClick={onClickModality} />
+            <ContainerDesktopMain>
               <MoreSearchedModalities
-                onClick={onClickModality}
-                title="MAIS BUSCADAS"
+                title="MODALIDADES MAIS BUSCADAS"
                 data={allModalities.top_modalidades}
+                onClick={onClickModality}
               />
               <OtherSearchModalities
-                onClick={onClickModality}
                 title="DEMAIS MODALIDADES"
                 data={allModalities.modalidades}
+                onClick={onClickModality}
               />
-            </ContainerMobileMain>
-          </ContentMobile>
-        )}
-      </ContainerMain>
-    </Layout>
+            </ContainerDesktopMain>
+          </>
+        </ContentDektop>
+      ) : (
+        <ContentMobile>
+          <ContainerMobileMain>
+            <MoreSearchedModalities
+              onClick={onClickModality}
+              title="MAIS BUSCADAS"
+              data={allModalities.top_modalidades}
+            />
+            <OtherSearchModalities
+              onClick={onClickModality}
+              title="DEMAIS MODALIDADES"
+              data={allModalities.modalidades}
+            />
+          </ContainerMobileMain>
+        </ContentMobile>
+      )}
+    </>
   );
 }
 

@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { AuthContext } from './authContext';
 import { removeToken, getToken, setToken } from '@src/services/auth';
 import type { LoggedUser } from '@abqm-ds/react';
-import { useGeneralService } from '@src/services/useGeneralService';
+import { useGeneralService } from '@src/services/General/useGeneralService';
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<LoggedUser | null>(null);

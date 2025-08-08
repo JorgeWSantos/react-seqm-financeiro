@@ -3,13 +3,21 @@ import styled from 'styled-components';
 
 export const PrintAreaWrapper = styled.div`
   position: absolute;
-  left: 200px;
-  padding: 20pt;
+  /* left: 200px; */
   left: -9999px;
   text-align: center;
   width: 210mm;
-  height: 290mm;
   background-color: white;
+  @media print {
+    left: unset;
+  }
+`;
+
+export const PrintContainer = styled.div`
+  position: relative;
+  page-break-after: always;
+  height: 297mm;
+  padding: 16pt;
 `;
 
 export const PrintAreaHeader = styled.div`
@@ -82,7 +90,7 @@ export const DivWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  /* margin-top: 8pt; */
+  margin-top: 8pt;
 `;
 export const DivTable = styled.div`
   display: flex;
@@ -90,6 +98,7 @@ export const DivTable = styled.div`
   align-items: center;
   width: 100%;
   margin-top: 8pt;
+  gap: 3rem;
 `;
 
 export const DivTitle = styled.div`
@@ -118,7 +127,7 @@ export const DivCard = styled.div`
   align-items: center;
   justify-content: center;
   border-radius: 4px;
-  padding-bottom: 10pt;
+  /* padding-bottom: 10pt; */
 
   p {
     font-size: 6pt;
@@ -126,5 +135,23 @@ export const DivCard = styled.div`
 
   p + p {
     font-size: 11pt;
+  }
+`;
+
+export const FooterPrint = styled.div`
+  position: absolute;
+  bottom: 16px;
+  display: flex;
+  width: 100%;
+  left: 0;
+  flex: 1;
+  justify-content: space-between;
+  font-size: 12px;
+  padding: 0 24px;
+  color: #888;
+  pointer-events: none;
+
+  p {
+    color: ${colors.emeraldGreen75};
   }
 `;

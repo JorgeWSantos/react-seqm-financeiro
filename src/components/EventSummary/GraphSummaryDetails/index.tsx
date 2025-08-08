@@ -10,7 +10,7 @@ import {
 } from './styles';
 import { colors, fontSizes } from '@abqm-ds/tokens';
 import { BarChartLineIcon } from '@abqm-ds/icons';
-import type { GraphStatistics } from '../../../pages/EventSummary/types.api';
+import type { GraphStatistics } from '../../../services/EventSummary/types.api';
 
 import {
   Area,
