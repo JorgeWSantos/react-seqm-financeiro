@@ -9,6 +9,7 @@ import {
   HeaderNavigatorDesktop,
   ShareOptions,
   StyledTableSEQMTextTd,
+  TableWithLoader,
   Text,
   type DataDropdown,
   type FooterWithButtonsPropsType,
@@ -28,7 +29,6 @@ import {
   Scrollable,
   StyledHeadingMobile,
 } from './styles';
-import TableWithLoader from '@src/components/TableWithLoader';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePage } from '@src/contexts/page/usePage';
 import {
