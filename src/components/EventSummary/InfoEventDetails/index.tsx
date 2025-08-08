@@ -1,9 +1,9 @@
 import { EventSummaryDefaultIcon } from '@abqm-ds/icons';
 import { ImageContainer, InfoEvent, InfoEventDetailed, Information } from './styles';
-import type { InfoEventSummaryData } from '../../../services/EventSummary/types.api';
 import { fontWeights } from '@abqm-ds/tokens';
+import type { InfoEventData } from '@src/services/General/types.info-event.api';
 
-const InfoEventDetails = ({ data }: { data: InfoEventSummaryData | null }) => {
+const InfoEventDetails = ({ data }: { data: InfoEventData | null }) => {
   return (
     <InfoEvent>
       <ImageContainer>
