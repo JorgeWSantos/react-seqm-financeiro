@@ -13,6 +13,7 @@ export type TeamClassificatory = {
   cds_competidor: string;
   cds_criador: string;
   cds_proprietario: string;
+  cds_registro_animal: string | null;
   conquistas: string[];
   cor_medalha: string;
   criador_hf: string | null;

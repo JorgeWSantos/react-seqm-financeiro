@@ -296,10 +296,8 @@ const Classificatory = () => {
             allAroundYoung={e.all_around_jovem}
             rankingGeneralAward={e.ranking_geral_awards}
             medal={e.cor_medalha}
-            registerAnimal={'P000000'}
+            registerAnimal={e.cds_registro_animal}
             isHallOfFameAnimal={e.hall_da_fama}
-            // isHallOfFameAnimal={e.hall_da_fama || (i === 0 ? '2017' : null)}
-            // isHallOfFameAnimal={'2014'}
           />
         ));
       },
@@ -484,7 +482,13 @@ const Classificatory = () => {
           data={tableData}
           cards={printCards}
           info={printInfo}
-          totalForPage={7}
+          totalForPage={
+            listToShow[0].equipe.length === 1
+              ? 15
+              : listToShow[0].equipe.length > 2
+              ? 7
+              : 9
+          }
         />
       )}
       {showShareOptions && !isTabletOrMobile && <ShareOptions url={shareUrl} />}
