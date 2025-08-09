@@ -314,6 +314,10 @@ function EventSummary() {
 
   const printCards = [
     {
+      title: 'DATA DO EVENTO',
+      value: eventInfoData?.data_inicio || '',
+    },
+    {
       title: 'INSCRIÇÕES',
       value: eventSummaryNumbers.inscricoes,
     },
