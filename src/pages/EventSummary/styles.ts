@@ -27,11 +27,6 @@ export const DivLeft = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   gap: 1rem;
-  padding-top: 0.5rem;
-
-  @media (max-width: ${breakpointsPx.lg}) {
-    gap: 1.5rem;
-  }
 `;
 
 export const DivRight = styled.div`
