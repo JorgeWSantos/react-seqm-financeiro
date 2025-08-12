@@ -12,8 +12,8 @@ const InfoCardsGroup = ({
   qtde_inscriptions: string;
   qtde_competitors: string;
   qtde_animals: string;
-  premiation_value: string;
-  dt_prove: string;
+  premiation_value: string | null;
+  dt_prove: string | null;
 }) => {
   return (
     <ItemCardGroup>
@@ -23,20 +23,24 @@ const InfoCardsGroup = ({
 
       <InfoCard title="animais" subTitle={qtde_animals} />
 
-      <InfoCard
-        title="premiação"
-        subTitle={formatToBRL({
-          value: premiation_value,
-          fallback: '-',
-        })}
-        reverse
-      />
+      {premiation_value && (
+        <InfoCard
+          title="premiação"
+          subTitle={formatToBRL({
+            value: premiation_value,
+            fallback: '-',
+          })}
+          reverse
+        />
+      )}
 
-      <InfoCard
-        title="data da prova"
-        subTitle={convertToBrazilDate(dt_prove || '') || '-'}
-        reverse
-      />
+      {dt_prove && (
+        <InfoCard
+          title="data da prova"
+          subTitle={convertToBrazilDate(dt_prove || '') || '-'}
+          reverse
+        />
+      )}
     </ItemCardGroup>
   );
 };
