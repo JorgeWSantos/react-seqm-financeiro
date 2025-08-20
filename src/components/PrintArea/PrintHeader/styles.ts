@@ -29,6 +29,7 @@ export const DetailsWrapper = styled.div`
   padding-left: ${space[2]};
   padding-bottom: ${space[2]};
   min-height: 60pt !important;
+  gap: ${space[4]};
 
   p {
     margin-top: -${space[2]};
@@ -59,6 +60,11 @@ export const DetailsInfo = styled.div`
 `;
 
 export const EventName = styled.p`
+  display: flex;
+  text-align: left;
+
+  line-height: 16px;
   font-size: 13pt;
   font-weight: bold;
+  padding-top: ${space[2]};
 `;

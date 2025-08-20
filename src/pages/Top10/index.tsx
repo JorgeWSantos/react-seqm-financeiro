@@ -26,17 +26,20 @@ import {
   Scrollable,
   EventHeader,
 } from './styles';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePage } from '@src/contexts/page/usePage';
 import { PrinterIcon, SearchIcon, ShareIcon } from '@abqm-ds/icons';
 import { colors, fonts } from '@abqm-ds/tokens';
 import { useTop10 } from '@src/services/Top10/useTop10';
-import type { Top10Data, EventDetailsTop10 } from '../../services/Top10/types.api';
+import type { Top10Data } from '../../services/Top10/types.api';
 import { useParams } from 'react-router';
-import Layout from '@src/Layout';
 
 import MedalTop10 from '@src/assets/images/medal-top10.svg';
+import PrintArea from '@src/components/PrintArea';
+import type { PrintHeaderProps } from '@src/components/PrintArea/PrintHeader';
+import { useInfoEvent } from '@src/services/General/useInfoEvent';
+import type { InfoEventData } from '@src/services/General/types.info-event.api';
 
 function Top10() {
   const params = useParams();
@@ -59,11 +62,14 @@ function Top10() {
   const [listToShow, setListToShow] = useState<Top10Data[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
 
+  const printAreaRef = useRef<{ print: () => void }>(null);
+  const { getInfoEvent } = useInfoEvent();
+
   const [showShareOptions, setShowShareOptions] = useState(false);
   const shareUrl = window.location.href;
 
-  const [eventInfoData, setEventInfoData] = useState<EventDetailsTop10 | null>(
-    {} as EventDetailsTop10
+  const [eventInfoData, setEventInfoData] = useState<InfoEventData | null>(
+    {} as InfoEventData
   );
 
   const handleGetResultsTop10 = useCallback(async () => {
@@ -78,9 +84,27 @@ function Top10() {
     setAllList(data.top10);
     setListToShow(data.top10);
 
-    setEventInfoData(data.detalhe_evento);
     setIsLoading(false);
   }, [getTop10, prove_event_id]);
+
+  const handleGetEventInfo = useCallback(async () => {
+    if (!event_id) {
+      return;
+    }
+
+    const data = await getInfoEvent({
+      event_id: Number(event_id),
+    });
+
+    setEventInfoData(data);
+  }, [getInfoEvent, event_id]);
+
+  const onTriggerPrintPDF = useCallback(async () => {
+    await handleGetEventInfo();
+    setTimeout(() => {
+      printAreaRef.current?.print();
+    }, 1000);
+  }, [handleGetEventInfo]);
 
   // Effect to set the page title and path
   useEffect(() => {
@@ -115,7 +139,8 @@ function Top10() {
 
   useEffect(() => {
     handleGetResultsTop10();
-  }, [handleGetResultsTop10]);
+    handleGetEventInfo();
+  }, [handleGetResultsTop10, handleGetEventInfo]);
 
   const columns: Array<TableColumnSEQM> = [
     {
@@ -186,13 +211,23 @@ function Top10() {
     tn: { value: item.cds_pontuacao },
   }));
 
+  const printInfo: PrintHeaderProps = {
+    eventName: eventInfoData?.cds_evento || '',
+    responsibleName: eventInfoData?.organizador || '',
+    city: eventInfoData?.local || '',
+    state: eventInfoData?.estado || '',
+    startDate: eventInfoData?.data_inicio || '',
+    endDate: eventInfoData?.data_fim || '',
+    modalityName: getNameProveById(Number(prove_id)) || '',
+  };
+
   const buttonsHeader = [
     {
       icon: (
         <PrinterIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />
       ),
       label: 'imprimir',
-      onClick: () => {},
+      onClick: onTriggerPrintPDF,
     },
     {
       icon: (
@@ -209,117 +244,130 @@ function Top10() {
   ];
 
   return (
-    <Layout>
-      <ContainerMain>
-        {!isTabletOrMobile ? (
-          <ContentDektop
-            header={
-              <Header text={pageTitle} subTitle={subTitle} buttons={buttonsHeader} />
-            }
-            headerNavigator={
-              <HeaderNavigatorDesktop
-                title={eventInfoData?.cds_evento || ''}
-                hasBackButton
-                onGoBack={() =>
-                  navigate('/modalidade/' + prove_id + '/evento/' + event_id)
-                }
-              >
-                <TextInput
-                  placeholder="Buscar"
-                  onChange={(v) => setSearchValue(v.target.value)}
-                  icon={<SearchIcon fill={colors.white75} />}
-                />
-              </HeaderNavigatorDesktop>
-            }
-            contentBoxStyles={{
-              padding: '1.5rem',
-              gap: '0.25rem',
-              overflow: 'visible',
-            }}
-            count={data.length}
-          >
-            <Scrollable>
-              {data.length > 0 ? (
-                <TableSEQM data={data} columns={columns} />
-              ) : (
-                <>
-                  {isLoading ? (
-                    <LoadingContainer>
-                      <ActivityIndicator width={20} height={20} />
-                    </LoadingContainer>
-                  ) : (
-                    <NotFoundContainer>
-                      <Text
-                        fontSize="smm"
-                        fontWeight="semiBold"
-                        color={colors.emeraldGreen75}
-                      >
-                        Nenhum resultado encontrado
-                      </Text>
-                    </NotFoundContainer>
-                  )}
-                </>
-              )}
-            </Scrollable>
-          </ContentDektop>
-        ) : (
-          <ContentMobile
-            style={{
-              maxWidth: '100vw',
-              overflow: 'visible',
-            }}
-            headerMobileNavigator={
-              <HeaderMobileNavigator
-                hasBackButton
-                onGoBack={() => navigate('/')}
-                headingText={getNameProveById(Number(prove_id))}
-                hasSearch
-                onChangeSearch={(v) => setSearchValue(v.target.value)}
+    <ContainerMain>
+      {!isTabletOrMobile ? (
+        <ContentDektop
+          header={<Header text={pageTitle} subTitle={subTitle} buttons={buttonsHeader} />}
+          headerNavigator={
+            <HeaderNavigatorDesktop
+              title={eventInfoData?.cds_evento || ''}
+              hasBackButton
+              onGoBack={() => navigate('/modalidade/' + prove_id + '/evento/' + event_id)}
+            >
+              <TextInput
+                placeholder="Buscar"
+                onChange={(v) => setSearchValue(v.target.value)}
+                icon={<SearchIcon fill={colors.white75} />}
+                debounceDelay={1000}
               />
-            }
-          >
-            <EventHeader>
-              <img src={MedalTop10} width={70} height={70} alt="Medalha Top 10" />
+            </HeaderNavigatorDesktop>
+          }
+          contentBoxStyles={{
+            padding: '1.5rem',
+            gap: '0.25rem',
+            overflow: 'visible',
+          }}
+          count={data.length}
+        >
+          <Scrollable>
+            {data.length > 0 ? (
+              <TableSEQM data={data} columns={columns} />
+            ) : (
+              <>
+                {isLoading ? (
+                  <LoadingContainer>
+                    <ActivityIndicator width={20} height={20} />
+                  </LoadingContainer>
+                ) : (
+                  <NotFoundContainer>
+                    <Text
+                      fontSize="smm"
+                      fontWeight="semiBold"
+                      color={colors.emeraldGreen75}
+                    >
+                      Nenhum resultado encontrado
+                    </Text>
+                  </NotFoundContainer>
+                )}
+              </>
+            )}
+          </Scrollable>
+        </ContentDektop>
+      ) : (
+        <ContentMobile
+          style={{
+            maxWidth: '100vw',
+            overflow: 'visible',
+          }}
+          headerMobileNavigator={
+            <HeaderMobileNavigator
+              hasBackButton
+              onGoBack={() => navigate('/')}
+              headingText={getNameProveById(Number(prove_id))}
+              hasSearch
+              onChangeSearch={(v) => setSearchValue(v.target.value)}
+            />
+          }
+        >
+          <EventHeader>
+            <img src={MedalTop10} width={70} height={70} alt="Medalha Top 10" />
 
-              <Text
-                fontSize="xl"
-                fontWeight="regular"
-                color={colors.green900}
-                lineHeight="initial"
-                // fontFamily={fonts.secondary}
-                style={{ fontFamily: fonts.secondary, letterSpacing: '-2px' }}
-              >
-                {eventInfoData?.cds_evento || 'Classificação'}
-              </Text>
-            </EventHeader>
-            <Scrollable>
-              {data.length > 0 ? (
-                <TableSEQM data={data} columns={columns} width={'70rem'} />
-              ) : (
-                <>
-                  {isLoading ? (
-                    <LoadingContainer>
-                      <ActivityIndicator width={20} height={20} />
-                    </LoadingContainer>
-                  ) : (
-                    <NotFoundContainer>
-                      <Text
-                        fontSize="smm"
-                        fontWeight="semiBold"
-                        color={colors.emeraldGreen75}
-                      >
-                        Nenhum resultado encontrado
-                      </Text>
-                    </NotFoundContainer>
-                  )}
-                </>
-              )}
-            </Scrollable>
-          </ContentMobile>
-        )}
-        {showShareOptions && !isTabletOrMobile && <ShareOptions url={shareUrl} />}
-      </ContainerMain>
-    </Layout>
+            <Text
+              fontSize="xl"
+              fontWeight="regular"
+              color={colors.green900}
+              lineHeight="initial"
+              // fontFamily={fonts.secondary}
+              style={{ fontFamily: fonts.secondary, letterSpacing: '-2px' }}
+            >
+              {eventInfoData?.cds_evento || 'Classificação'}
+            </Text>
+          </EventHeader>
+          <Scrollable>
+            {data.length > 0 ? (
+              <TableSEQM data={data} columns={columns} width={'70rem'} />
+            ) : (
+              <>
+                {isLoading ? (
+                  <LoadingContainer>
+                    <ActivityIndicator width={20} height={20} />
+                  </LoadingContainer>
+                ) : (
+                  <NotFoundContainer>
+                    <Text
+                      fontSize="smm"
+                      fontWeight="semiBold"
+                      color={colors.emeraldGreen75}
+                    >
+                      Nenhum resultado encontrado
+                    </Text>
+                  </NotFoundContainer>
+                )}
+              </>
+            )}
+          </Scrollable>
+        </ContentMobile>
+      )}
+
+      {data?.length > 0 && (
+        <PrintArea
+          ref={printAreaRef}
+          title={'RESULTADO TOP 10'}
+          columns={columns}
+          data={data}
+          cards={[]}
+          info={printInfo}
+          totalForPage={
+            listToShow[0].equipe.length === 1
+              ? 18
+              : listToShow[0].equipe.length > 2
+              ? 7
+              : 9
+          }
+        />
+      )}
+      {showShareOptions && !isTabletOrMobile && <ShareOptions url={shareUrl} />}
+    </ContainerMain>
   );
 }
 

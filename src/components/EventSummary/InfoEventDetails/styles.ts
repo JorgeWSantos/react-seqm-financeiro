@@ -17,6 +17,10 @@ export const InfoEvent = styled.div`
   @media (max-width: 1400px) {
     padding: 0.25rem;
   }
+
+  @media (max-width: 768px) {
+    gap: 0.5rem;
+  }
 `;
 
 export const ImageContainer = styled.div`
