@@ -12,11 +12,19 @@ import {
   type TableColumnSEQM,
   CompetitorTableData,
   type TableRowSEQM,
+  TableWithLoader,
 } from '@abqm-ds/react';
 
 import { useDeviceType } from '@abqm-ds/react';
 
-import { ContainerMain, Scrollable, TabAndCards } from './styles';
+import {
+  ContainerMain,
+  Scrollable,
+  TabAndCards,
+  TitleAndCards,
+  StyledTextEvent,
+  StyledTextModality,
+} from './styles';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -32,7 +40,6 @@ import type {
 } from '../../services/Classificatory/types.event-details.api';
 import type { PrintHeaderProps } from '@src/components/PrintArea/PrintHeader';
 import PrintArea from '@src/components/PrintArea';
-import TableWithLoader from '@src/components/EventSummary/TableWithLoader';
 import { convertToBrazilDate } from '@src/utils/formatDate';
 import TabOption from '@src/components/Classificatory/TabOption';
 import type { InfoEventData } from '@src/services/General/types.info-event.api';
@@ -399,7 +406,48 @@ const Classificatory = () => {
             />
           }
         >
+          <TitleAndCards>
+            <StyledTextModality
+              fontSize="xl"
+              fontWeight="semiBold"
+              lineHeight="tight"
+              color={colors.white85}
+            >
+              {classificatoryEventInfoData?.cds_modalidade || ''}
+            </StyledTextModality>
+            <StyledTextEvent
+              fontSize="xl"
+              fontWeight="regular"
+              lineHeight="tight"
+              color={colors.green900}
+            >
+              {classificatoryEventInfoData?.cds_evento || ''}
+            </StyledTextEvent>
+
+            <InfoCardsGroup
+              qtde_animals={resumeInscriptionsData?.nnr_qtde_animais?.toString() || '-'}
+              qtde_competitors={
+                resumeInscriptionsData?.nnr_qtde_competidores?.toString() || '-'
+              }
+              qtde_inscriptions={
+                resumeInscriptionsData?.nnr_qtde_inscricoes?.toString() || '-'
+              }
+              premiation_value={null}
+              dt_prove={null}
+            />
+          </TitleAndCards>
+
           <Scrollable>
+            <div className="empty">
+              {tabsToShow.map((tab, index) => (
+                <TabOption
+                  key={index}
+                  title={tab.tipo_etapa}
+                  active={activeTab === tab.tipo_etapa}
+                  onClick={() => setActiveTab(tab.tipo_etapa)}
+                />
+              ))}
+            </div>
             <TableWithLoader
               data={tableData}
               columns={tableColumns}

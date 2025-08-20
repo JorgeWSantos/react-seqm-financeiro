@@ -1,5 +1,7 @@
-import { colors } from '@abqm-ds/tokens';
+import { colors, fonts } from '@abqm-ds/tokens';
 import styled from 'styled-components';
+
+import { Text } from '@abqm-ds/react';
 
 export const ContainerMain = styled.div`
   height: 100%;
@@ -38,4 +40,22 @@ export const TabAndCards = styled.div`
     display: flex;
     margin-top: 1rem;
   }
+`;
+
+export const TitleAndCards = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+`;
+
+export const StyledTextModality = styled(Text)`
+  letter-spacing: -0.6px;
+  text-transform: uppercase;
+`;
+
+export const StyledTextEvent = styled(Text)`
+  letter-spacing: -2px;
+  text-transform: uppercase;
+  font-family: ${fonts.secondary};
 `;

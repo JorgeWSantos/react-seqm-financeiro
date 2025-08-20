@@ -30,4 +30,8 @@ export const Container = styled.div<ContainerProps>`
   &:hover {
     filter: brightness(1.1);
   }
+
+  @media (max-width: 992px) {
+    max-width: 100px;
+  }
 `;

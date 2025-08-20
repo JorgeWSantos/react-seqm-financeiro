@@ -406,16 +406,16 @@ function ModalityDetail() {
           <DivTopMobile>
             <DivInfoCard>
               <InfoCard
-                title={allList
+                title="Oficiais"
+                subTitle={allList
                   .filter((item) => item.bid_oficial === true)
                   .length.toString()}
-                subTitle="Oficiais"
               />
               <InfoCard
-                title={allList
+                title="Oficializadas"
+                subTitle={allList
                   .filter((item) => item.bid_oficial === false)
                   .length.toString()}
-                subTitle="Oficializadas"
               />
             </DivInfoCard>
 
