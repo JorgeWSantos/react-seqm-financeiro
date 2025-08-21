@@ -420,8 +420,6 @@ function EventSummary() {
     },
   ];
 
-  console.log('isTabletOrMobile', isTabletOrMobile);
-
   if (isTabletOrMobile) {
     return (
       <ContainerMain>
