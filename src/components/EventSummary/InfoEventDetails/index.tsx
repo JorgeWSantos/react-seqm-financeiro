@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { EventSummaryDefaultIcon } from '@abqm-ds/icons';
 import { ImageContainer, InfoEvent, InfoEventDetailed, Information } from './styles';
 import { fontWeights } from '@abqm-ds/tokens';
