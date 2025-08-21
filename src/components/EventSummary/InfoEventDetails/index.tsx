@@ -1,17 +1,20 @@
+import { useState } from 'react';
 import { EventSummaryDefaultIcon } from '@abqm-ds/icons';
 import { ImageContainer, InfoEvent, InfoEventDetailed, Information } from './styles';
 import { fontWeights } from '@abqm-ds/tokens';
 import type { InfoEventData } from '@src/services/General/types.info-event.api';
 
 const InfoEventDetails = ({ data }: { data: InfoEventData | null }) => {
+  const [imgError, setImgError] = useState(false);
   return (
     <InfoEvent>
       <ImageContainer>
-        {data?.logotipo ? (
+        {data?.logotipo && !imgError ? (
           <img
             src={data.logotipo}
             alt="Logotipo do evento"
             style={{ minHeight: '100%', minWidth: '100%' }}
+            onError={() => setImgError(true)}
           />
         ) : (
           <EventSummaryDefaultIcon style={{ minHeight: '100%', minWidth: '100%' }} />

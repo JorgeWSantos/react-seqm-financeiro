@@ -17,11 +17,7 @@ function Layout({ children }: { children?: React.ReactNode }) {
   const pageTitle = 'Resultados';
 
   const redirectToLogin = () => {
-    console.log('import.meta.env.VITE_URL_LOGIN', import.meta.env.VITE_URL_LOGIN);
-
     const url = import.meta.env.VITE_URL_LOGIN + '?path=/resultados';
-
-    console.log('url', url);
 
     window.location.href = url;
   };
