@@ -20,8 +20,6 @@ export function useTop10() {
           }
         );
 
-        console.log('Response from Top10:', response);
-
         const { data, message, success } = response.data;
 
         if (!success) {
