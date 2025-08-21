@@ -24,6 +24,7 @@ import {
   TitleAndCards,
   StyledTextEvent,
   StyledTextModality,
+  ContainerMobileMain,
 } from './styles';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
@@ -388,7 +389,7 @@ const Classificatory = () => {
 
   if (isTabletOrMobile) {
     return (
-      <ContainerMain>
+      <ContainerMobileMain>
         <ContentMobile
           style={{
             maxWidth: '100vw',
@@ -456,7 +457,7 @@ const Classificatory = () => {
         </ContentMobile>
 
         {showShareOptions && !isTabletOrMobile && <ShareOptions url={shareUrl} />}
-      </ContainerMain>
+      </ContainerMobileMain>
     );
   }
 
