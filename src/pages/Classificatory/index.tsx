@@ -110,8 +110,6 @@ const Classificatory = () => {
         } as Tab);
       });
 
-      console.log('Tabs:', _tabs);
-
       setActiveTab(_tabs[0]?.tipo_etapa || '');
       setTabsToShow(_tabs);
     }
