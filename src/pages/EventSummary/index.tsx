@@ -186,23 +186,23 @@ function EventSummary() {
     const resumes = eventSummaryData.numeros_evento || [];
 
     const resumeData = {
-      inscricoes: resumes?.[0].inscricoes ?? '0',
-      competidores: resumes?.[0].competidores ?? '0',
-      animais: resumes?.[0].animais ?? '0',
-      premiacao: resumes?.[0].premiacao ?? 'sem premiação',
-    };
-
-    const generalResume = {
       inscricoes: resumes?.[1].inscricoes ?? '0',
       competidores: resumes?.[1].competidores ?? '0',
       animais: resumes?.[1].animais ?? '0',
       premiacao: resumes?.[1].premiacao ?? 'sem premiação',
     };
 
+    const generalResumeData = {
+      inscricoes: resumes?.[0].inscricoes ?? '0',
+      competidores: resumes?.[0].competidores ?? '0',
+      animais: resumes?.[0].animais ?? '0',
+      premiacao: resumes?.[0].premiacao ?? 'sem premiação',
+    };
+
     if (switchResumeChecked) {
       setEventSummaryNumbers(resumeData);
     } else {
-      setEventSummaryNumbers(generalResume);
+      setEventSummaryNumbers(generalResumeData);
     }
   }, [eventSummaryData, switchResumeChecked]);
 
