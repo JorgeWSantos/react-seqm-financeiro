@@ -3,6 +3,10 @@ import { breakpointsPx, colors, radii, space } from '@abqm-ds/tokens';
 import styled from 'styled-components';
 
 export const ContainerMain = styled.div`
+  position: relative;
+`;
+
+export const ContainerMainMobile = styled.div`
   height: 100%;
 `;
 

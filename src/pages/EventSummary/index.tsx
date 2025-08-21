@@ -22,6 +22,7 @@ import { useDeviceType } from '@abqm-ds/react';
 import {
   ButtonTop10,
   ContainerMain,
+  ContainerMainMobile,
   DivDropDownSearch,
   DivLeft,
   DivRight,
@@ -422,7 +423,7 @@ function EventSummary() {
 
   if (isTabletOrMobile) {
     return (
-      <ContainerMain>
+      <ContainerMainMobile>
         <ContentMobile
           style={{
             maxWidth: '100dvw',
@@ -477,7 +478,7 @@ function EventSummary() {
         {showShareOptions && !isTabletOrMobile && <ShareOptions url={shareUrl} />}
 
         <FooterWithButtons footerButtonsMobile={buttonsMobileFooter} />
-      </ContainerMain>
+      </ContainerMainMobile>
     );
   }
 
@@ -501,6 +502,7 @@ function EventSummary() {
         contentBoxStyles={{
           padding: '1.5rem',
           gap: '0.25rem',
+          position: 'relative',
         }}
       >
         <Scrollable>

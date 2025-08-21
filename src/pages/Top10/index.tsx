@@ -4,6 +4,7 @@ import {
   CompetitorTableData,
   ContentDektop,
   ContentMobile,
+  FooterWithButtons,
   getNameProveById,
   Header,
   HeaderMobileNavigator,
@@ -13,6 +14,7 @@ import {
   TableSEQM,
   Text,
   TextInput,
+  type FooterWithButtonsPropsType,
   type TableColumnSEQM,
   type TableRowSEQM,
 } from '@abqm-ds/react';
@@ -40,6 +42,7 @@ import PrintArea from '@src/components/PrintArea';
 import type { PrintHeaderProps } from '@src/components/PrintArea/PrintHeader';
 import { useInfoEvent } from '@src/services/General/useInfoEvent';
 import type { InfoEventData } from '@src/services/General/types.info-event.api';
+import { ContainerMainMobile } from '../EventSummary/styles';
 
 function Top10() {
   const params = useParams();
@@ -250,57 +253,25 @@ function Top10() {
     },
   ];
 
-  return (
-    <ContainerMain>
-      {!isTabletOrMobile ? (
-        <ContentDektop
-          header={<Header text={pageTitle} subTitle={subTitle} buttons={buttonsHeader} />}
-          headerNavigator={
-            <HeaderNavigatorDesktop
-              title={eventInfoData?.cds_evento || ''}
-              hasBackButton
-              onGoBack={() => navigate('/modalidade/' + prove_id + '/evento/' + event_id)}
-            >
-              <TextInput
-                placeholder="Buscar"
-                onChange={(v) => setSearchValue(v.target.value)}
-                icon={<SearchIcon fill={colors.white75} />}
-                debounceDelay={1000}
-              />
-            </HeaderNavigatorDesktop>
-          }
-          contentBoxStyles={{
-            padding: '1.5rem',
-            gap: '0.25rem',
-            overflow: 'visible',
-          }}
-          count={data.length}
-        >
-          <Scrollable>
-            {data.length > 0 ? (
-              <TableSEQM data={data} columns={columns} />
-            ) : (
-              <>
-                {isLoading ? (
-                  <LoadingContainer>
-                    <ActivityIndicator width={20} height={20} />
-                  </LoadingContainer>
-                ) : (
-                  <NotFoundContainer>
-                    <Text
-                      fontSize="smm"
-                      fontWeight="semiBold"
-                      color={colors.emeraldGreen75}
-                    >
-                      Nenhum resultado encontrado
-                    </Text>
-                  </NotFoundContainer>
-                )}
-              </>
-            )}
-          </Scrollable>
-        </ContentDektop>
-      ) : (
+  const buttonsMobileFooter: FooterWithButtonsPropsType = [
+    {
+      icon: (
+        <ShareIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />
+      ),
+      label: 'compartilhar',
+      onClick: () => setShowShareOptions((prev) => !prev),
+      isActive: showShareOptions,
+      showOptionsToShare: {
+        show: showShareOptions,
+        children: <ShareOptions url={shareUrl} variantArrow="bottom" />,
+      },
+      variant: 'outline-white-25',
+    },
+  ];
+
+  if (isTabletOrMobile) {
+    return (
+      <ContainerMainMobile>
         <ContentMobile
           style={{
             maxWidth: '100vw',
@@ -315,6 +286,7 @@ function Top10() {
               onChangeSearch={(v) => setSearchValue(v.target.value)}
             />
           }
+          hasFooterButtons
         >
           <EventHeader>
             <img src={MedalTop10} width={70} height={70} alt="Medalha Top 10" />
@@ -354,7 +326,61 @@ function Top10() {
             )}
           </Scrollable>
         </ContentMobile>
-      )}
+
+        <FooterWithButtons footerButtonsMobile={buttonsMobileFooter} />
+      </ContainerMainMobile>
+    );
+  }
+
+  return (
+    <ContainerMain>
+      <ContentDektop
+        header={<Header text={pageTitle} subTitle={subTitle} buttons={buttonsHeader} />}
+        headerNavigator={
+          <HeaderNavigatorDesktop
+            title={eventInfoData?.cds_evento || ''}
+            hasBackButton
+            onGoBack={() => navigate('/modalidade/' + prove_id + '/evento/' + event_id)}
+          >
+            <TextInput
+              placeholder="Buscar"
+              onChange={(v) => setSearchValue(v.target.value)}
+              icon={<SearchIcon fill={colors.white75} />}
+              debounceDelay={1000}
+            />
+          </HeaderNavigatorDesktop>
+        }
+        contentBoxStyles={{
+          padding: '1.5rem',
+          gap: '0.25rem',
+          overflow: 'visible',
+        }}
+        count={data.length}
+      >
+        <Scrollable>
+          {data.length > 0 ? (
+            <TableSEQM data={data} columns={columns} />
+          ) : (
+            <>
+              {isLoading ? (
+                <LoadingContainer>
+                  <ActivityIndicator width={20} height={20} />
+                </LoadingContainer>
+              ) : (
+                <NotFoundContainer>
+                  <Text
+                    fontSize="smm"
+                    fontWeight="semiBold"
+                    color={colors.emeraldGreen75}
+                  >
+                    Nenhum resultado encontrado
+                  </Text>
+                </NotFoundContainer>
+              )}
+            </>
+          )}
+        </Scrollable>
+      </ContentDektop>
 
       {data?.length > 0 && (
         <PrintArea
@@ -373,7 +399,8 @@ function Top10() {
           }
         />
       )}
-      {showShareOptions && !isTabletOrMobile && <ShareOptions url={shareUrl} />}
+
+      {showShareOptions && <ShareOptions url={shareUrl} />}
     </ContainerMain>
   );
 }
