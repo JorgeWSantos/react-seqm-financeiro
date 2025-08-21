@@ -147,37 +147,44 @@ function Top10() {
       key: 'abqm',
       label: 'ABQM',
       width: '6%',
+      minWidth: '4rem',
       align: 'center',
+      sortable: true,
     },
-    { key: 'competitor', label: 'COMPETIDOR', width: '30%' },
+    { key: 'competitor', label: 'COMPETIDOR', width: '30%', sortable: true },
     {
       key: 'animal',
       label: 'ANIMAL',
       width: '24%',
       align: 'left',
+      sortable: true,
     },
     {
       key: 'owner',
       label: 'PROPRIETÁRIO',
       width: '30%',
       align: 'left',
+      sortable: true,
     },
     {
       key: 'tn',
       label: 'T/N',
       align: 'center',
       width: '10%',
+      sortable: true,
     },
   ];
 
-  const data: Array<TableRowSEQM> = listToShow.map((item, index) => ({
-    abqm: { value: `${index + 1}°` },
+  const data: Array<TableRowSEQM> = listToShow.map((item) => ({
+    abqm: { value: `${item.nnr_classificacao_abqm}°` },
     competitor: {
+      value: item.equipe[0]?.cds_competidor || '', // to sort
       render: () => {
         return item.equipe.map((e) => <CompetitorTableData value={e.cds_competidor} />);
       },
     },
     animal: {
+      value: item.equipe[0]?.cds_animal || '', // to sort
       render: () => {
         return (
           <>
@@ -198,10 +205,10 @@ function Top10() {
       },
     },
     owner: {
+      value: item.equipe[0]?.cds_proprietario || '', // to sort
       render: () => {
         return item.equipe.map((e) => (
           <OwnerTableData
-            // isHallOfFameOwner={e.proprietario_hf || (i === 0 ? '2017' : null)}
             isHallOfFameOwner={e.proprietario_hf}
             value={e.cds_proprietario}
           />
