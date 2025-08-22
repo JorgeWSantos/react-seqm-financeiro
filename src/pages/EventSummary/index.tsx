@@ -27,6 +27,7 @@ import {
   DivLeft,
   DivRight,
   DivTopRight,
+  LinkToRedirect,
   Scrollable,
   StyledHeadingMobile,
 } from './styles';
@@ -222,15 +223,15 @@ function EventSummary() {
       classificatory_id: number;
     }) => {
       return (
-        <Link
-          style={{
-            height: '100%',
-            width: '100%',
-          }}
-          to={`/modalidade/${prove_id}/evento/${event_id}/prova-evento/${prove_event_id}/classificatoria/${classificatory_id}`}
+        <LinkToRedirect
+          onClick={() =>
+            navigate(
+              `/modalidade/${prove_id}/evento/${event_id}/prova-evento/${prove_event_id}/classificatoria/${classificatory_id}`
+            )
+          }
         >
           {children}
-        </Link>
+        </LinkToRedirect>
       );
     },
     []

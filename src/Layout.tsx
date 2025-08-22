@@ -8,8 +8,9 @@ import {
 } from '@abqm-ds/react';
 import { useAuth } from './contexts/auth/useAuth.ts';
 import { useMenu } from './contexts/menu/useMenu.ts';
+import { Outlet } from 'react-router-dom';
 
-function Layout({ children }: { children?: React.ReactNode }) {
+function Layout() {
   const { isTabletOrMobile } = useDeviceType();
   const { user, logout, token } = useAuth();
   const { menu } = useMenu();
@@ -24,33 +25,36 @@ function Layout({ children }: { children?: React.ReactNode }) {
 
   return (
     <GlobalContainer>
-      {/* Desktop */}
-      <ContainerDesktop style={{ display: isTabletOrMobile ? 'none' : 'grid' }}>
-        <SideBarDesktop
-          user={user || null}
-          menu={menu}
-          onLogout={logout}
-          onLogin={redirectToLogin}
-          token={token || ''}
-        />
-        {children}
-      </ContainerDesktop>
-      {/* Mobile */}
-      <ContainerMobile style={{ display: isTabletOrMobile ? 'flex' : 'none' }}>
-        <HeaderMobile
-          title="SEQM"
-          page={pageTitle}
-          data={menu}
-          token={token || ''}
-          userDropdown={{
-            userName: user?.nome_pessoa || '',
-            srcImage: user?.foto || '',
-            onLogin: redirectToLogin,
-            onLogout: logout,
-          }}
-        />
-        {children}
-      </ContainerMobile>
+      {!isTabletOrMobile && (
+        <ContainerDesktop style={{ display: isTabletOrMobile ? 'none' : 'grid' }}>
+          <SideBarDesktop
+            user={user || null}
+            menu={menu || []}
+            onLogout={logout}
+            onLogin={redirectToLogin}
+            token={token || ''}
+          />
+          <Outlet />
+        </ContainerDesktop>
+      )}
+
+      {isTabletOrMobile && (
+        <ContainerMobile style={{ display: isTabletOrMobile ? 'flex' : 'none' }}>
+          <HeaderMobile
+            title="SEQM"
+            page={pageTitle}
+            data={menu || []}
+            token={token || ''}
+            userDropdown={{
+              userName: user?.nome_pessoa || '',
+              srcImage: user?.foto || '',
+              onLogin: redirectToLogin,
+              onLogout: logout,
+            }}
+          />
+          <Outlet />
+        </ContainerMobile>
+      )}
     </GlobalContainer>
   );
 }
