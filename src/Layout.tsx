@@ -9,8 +9,9 @@ import {
 import { useAuth } from './contexts/auth/useAuth.ts';
 import { useMenu } from './contexts/menu/useMenu.ts';
 import { Outlet } from 'react-router-dom';
+import { ErrorElement } from './ErrorElements.tsx';
 
-function Layout() {
+function Layout({ withError }: { withError?: boolean }) {
   const { isTabletOrMobile } = useDeviceType();
   const { user, logout, token } = useAuth();
   const { menu } = useMenu();
@@ -34,7 +35,7 @@ function Layout() {
             onLogin={redirectToLogin}
             token={token || ''}
           />
-          <Outlet />
+          {withError ? <ErrorElement /> : <Outlet />}
         </ContainerDesktop>
       )}
 
@@ -52,7 +53,7 @@ function Layout() {
               onLogout: logout,
             }}
           />
-          <Outlet />
+          {withError ? <ErrorElement /> : <Outlet />}
         </ContainerMobile>
       )}
     </GlobalContainer>

@@ -7,13 +7,12 @@ import Top10 from '@src/pages/Top10';
 import Classificatory from '@src/pages/Classificatory';
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from '@src/Layout';
-import { ErrorElement } from '@src/ErrorElements';
 
 export const router = createBrowserRouter([
   {
     path: '/',
     element: <Layout />, // ou null, se não tiver layout global
-    errorElement: <ErrorElement />, // error global
+    errorElement: <Layout withError />, // error global
     children: [
       {
         index: true,
