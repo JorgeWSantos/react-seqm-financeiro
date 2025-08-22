@@ -24,6 +24,7 @@ import {
   ContainerMain,
   DivInfoCard,
   DivTopMobile,
+  LinkToRedirect,
   LoadingContainer,
   NotFoundContainer,
   Scrollable,
@@ -39,7 +40,7 @@ import type {
   ResultModality,
 } from '../../services/ModalityDetails/types.api';
 import type { ModalDetailsFilter } from './types';
-import { Link, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import { ModalFilter } from '@components/ModalityDetails/ModalFilter';
 
 function ModalityDetail() {
@@ -232,9 +233,15 @@ function ModalityDetail() {
       prove_id: string | number;
       event_id: number;
     }) => {
-      return <Link to={`/modalidade/${prove_id}/evento/${event_id}`}>{children}</Link>;
+      return (
+        <LinkToRedirect
+          onClick={() => navigate(`/modalidade/${prove_id}/evento/${event_id}`)}
+        >
+          {children}
+        </LinkToRedirect>
+      );
     },
-    []
+    [navigate]
   );
 
   const columns: Array<TableColumnSEQM> = [
