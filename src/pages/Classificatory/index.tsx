@@ -284,7 +284,13 @@ const Classificatory = () => {
       value: item.equipe[0]?.cds_competidor || '', // to sort
       render: () => {
         return item.equipe.map((e, i) => (
-          <CompetitorTableData key={new Date().getTime() + i} value={e.cds_competidor} />
+          <CompetitorTableData
+            key={new Date().getTime() + i}
+            value={e.cds_competidor}
+            onClick={() => {
+              navigate(`/competitor/${e.nid_competidor}`);
+            }}
+          />
         ));
       },
     },

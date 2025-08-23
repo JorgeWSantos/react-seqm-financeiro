@@ -1,12 +1,13 @@
 // src/services/api.ts
 import axios from 'axios';
 import { getToken } from './auth';
+import { urlApiGeneral, urlApiResults } from '@src/config/env';
 
 // ---
 // ABQM.API
 // TODO: ALTERAR PARA UMA NOVA API
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_GERAL,
+  baseURL: urlApiGeneral,
 });
 
 api.interceptors.request.use((config) => {
@@ -20,7 +21,7 @@ api.interceptors.request.use((config) => {
 });
 
 const apiResultados = axios.create({
-  baseURL: import.meta.env.VITE_API_RESULTADOS,
+  baseURL: urlApiResults,
 });
 
 export { api, apiResultados };
