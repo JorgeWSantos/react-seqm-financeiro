@@ -1,3 +1,5 @@
+import React from 'react';
+
 import {
   Dropdown,
   getModalityIcon,
@@ -5,10 +7,8 @@ import {
   RoundedModalityButton,
 } from '@abqm-ds/react';
 import type { DataDropdown } from '@abqm-ds/react';
-import React from 'react';
 
 interface ModalityDropdownProps {
-  prove_id: string | undefined;
   provesDropdown: DataDropdown[];
   proveSelected: DataDropdown | null;
   setProveSelected: (value: DataDropdown) => void;
@@ -16,23 +16,25 @@ interface ModalityDropdownProps {
 }
 
 const ModalityDropdown: React.FC<ModalityDropdownProps> = ({
-  prove_id,
   provesDropdown,
   proveSelected,
   setProveSelected,
   handleGetSummary,
 }) => {
-  const IconComponent = getModalityIcon(Number(prove_id));
+  const IconComponent = getModalityIcon(Number(proveSelected?.id));
   const iconElement =
     typeof IconComponent === 'function' ? <IconComponent /> : <React.Fragment />;
 
+  // useEffect(() => {
+  //   console.log('ModalityDropdown:proveSelected', proveSelected);
+  // }, [proveSelected]);
   return (
     <>
       <RoundedModalityButton
         style={{ width: 44, height: 44 }}
         icon={iconElement}
         svgFullWidth
-        text={getNameProveById(Number(prove_id))}
+        text={getNameProveById(Number(proveSelected?.id))}
         variant="secondary"
       />
       <Dropdown
