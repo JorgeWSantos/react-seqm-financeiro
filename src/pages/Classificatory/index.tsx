@@ -250,7 +250,7 @@ const Classificatory = () => {
     {
       key: 'competitor',
       label: 'COMPETIDOR',
-      width: '30%',
+      width: '35%',
       align: 'left',
       sortable: true,
     },
@@ -259,17 +259,19 @@ const Classificatory = () => {
       label: 'ANIMAL',
       width: '27%',
       align: 'left',
+      sortable: true,
     },
     {
       key: 'owner',
       label: 'PROPRIETÁRIO',
       width: '36%',
       align: 'left',
+      sortable: true,
     },
     {
       key: 'tn',
       label: 'T/N',
-      width: '9%',
+      width: '8%',
       align: 'left',
       sortable: true,
     },
@@ -531,7 +533,7 @@ const Classificatory = () => {
           info={printInfo}
           totalForPage={
             listToShow[0].equipe.length === 1
-              ? 15
+              ? 17
               : listToShow[0].equipe.length > 2
               ? 7
               : 9
