@@ -11,15 +11,13 @@ import type { DataDropdown } from '@abqm-ds/react';
 interface ModalityDropdownProps {
   provesDropdown: DataDropdown[];
   proveSelected: DataDropdown | null;
-  setProveSelected: (value: DataDropdown) => void;
-  handleGetSummary: (params: { prove_id_selected: string }) => void;
+  onChange: (value: DataDropdown) => void;
 }
 
 const ModalityDropdown: React.FC<ModalityDropdownProps> = ({
   provesDropdown,
   proveSelected,
-  setProveSelected,
-  handleGetSummary,
+  onChange,
 }) => {
   const IconComponent = getModalityIcon(Number(proveSelected?.id));
   const iconElement =
@@ -40,10 +38,7 @@ const ModalityDropdown: React.FC<ModalityDropdownProps> = ({
       <Dropdown
         variant="tertiary"
         data={provesDropdown}
-        setValue={(value) => {
-          setProveSelected(value);
-          handleGetSummary({ prove_id_selected: value.id });
-        }}
+        setValue={onChange}
         value={proveSelected}
         maxHeight="26rem"
       />
