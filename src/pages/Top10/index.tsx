@@ -43,6 +43,7 @@ import type { PrintHeaderProps } from '@src/components/PrintArea/PrintHeader';
 import { useInfoEvent } from '@src/services/General/useInfoEvent';
 import type { InfoEventData } from '@src/services/General/types.info-event.api';
 import { ContainerMainMobile } from '../EventSummary/styles';
+import { urlConsultaAnimal, urlRanking } from '@src/config/env';
 
 function Top10() {
   const params = useParams();
@@ -183,7 +184,15 @@ function Top10() {
     competitor: {
       value: item.equipe[0]?.cds_competidor || '', // to sort
       render: () => {
-        return item.equipe.map((e) => <CompetitorTableData value={e.cds_competidor} />);
+        return item.equipe.map((e) => (
+          <CompetitorTableData
+            value={e.cds_competidor}
+            onClick={() => {
+              window.location.href =
+                urlRanking + `/competidor/detalhe/${e.nid_competidor}`;
+            }}
+          />
+        ));
       },
     },
     animal: {
@@ -197,8 +206,10 @@ function Top10() {
                 nameAnimal={e.cds_animal}
                 imgAnimal={e.img_animal}
                 isHallOfFameAnimal={e.hall_da_fama}
-                // isHallOfFameAnimal={'2014'}
-                // isHallOfFameAnimal={e.hall_da_fama || (i === 0 ? '2017' : null)}
+                onClick={() => {
+                  window.location.href =
+                    urlConsultaAnimal + `/perfil-do-animal/campanha/${e.nid_animal}`;
+                }}
                 medal={e.cor_medalha}
                 registerAnimal={'P000000'}
               />
@@ -214,6 +225,10 @@ function Top10() {
           <OwnerTableData
             isHallOfFameOwner={e.proprietario_hf}
             value={e.cds_proprietario}
+            onClick={() => {
+              window.location.href =
+                urlRanking + `/proprietario/detalhe/${e.nid_proprietario}`;
+            }}
           />
         ));
       },

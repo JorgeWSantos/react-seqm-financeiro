@@ -47,7 +47,7 @@ import type { InfoEventData } from '@src/services/General/types.info-event.api';
 import { useInfoEvent } from '@src/services/General/useInfoEvent';
 import { InfoCardsGroup } from './InfoCards';
 import type { Tab } from './types';
-import { urlRanking } from '@src/config/env';
+import { urlConsultaAnimal, urlRanking } from '@src/config/env';
 
 const Classificatory = () => {
   const params = useParams();
@@ -313,6 +313,10 @@ const Classificatory = () => {
             medal={e.cor_medalha}
             registerAnimal={e.cds_registro_animal}
             isHallOfFameAnimal={e.hall_da_fama}
+            onClick={() => {
+              window.location.href =
+                urlConsultaAnimal + `/perfil-do-animal/campanha/${e.nid_animal}`;
+            }}
           />
         ));
       },
