@@ -47,6 +47,7 @@ import type { InfoEventData } from '@src/services/General/types.info-event.api';
 import { useInfoEvent } from '@src/services/General/useInfoEvent';
 import { InfoCardsGroup } from './InfoCards';
 import type { Tab } from './types';
+import { urlRanking } from '@src/config/env';
 
 const Classificatory = () => {
   const params = useParams();
@@ -168,7 +169,6 @@ const Classificatory = () => {
   }, [handleGetEventInfo]);
 
   // Effect to set the page title and path
-
   useEffect(() => {
     setPage({
       page_title: pageTitle,
@@ -288,7 +288,8 @@ const Classificatory = () => {
             key={new Date().getTime() + i}
             value={e.cds_competidor}
             onClick={() => {
-              navigate(`/competitor/${e.nid_competidor}`);
+              window.location.href =
+                urlRanking + `/competidor/detalhe/${e.nid_competidor}`;
             }}
           />
         ));
@@ -322,9 +323,12 @@ const Classificatory = () => {
         return item.equipe.map((e, i) => (
           <OwnerTableData
             key={new Date().getTime() + i}
-            // isHallOfFameOwner={e.proprietario_hf || (i === 0 ? '2017' : null)}
             isHallOfFameOwner={e.proprietario_hf}
             value={e.cds_proprietario}
+            onClick={() => {
+              window.location.href =
+                urlRanking + `/proprietario/detalhe/${e.nid_proprietario}`;
+            }}
           />
         ));
       },
