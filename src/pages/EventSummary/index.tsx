@@ -534,8 +534,11 @@ function EventSummary() {
                 <ModalityDropdown
                   provesDropdown={allProves}
                   proveSelected={proveSelected}
-                  setProveSelected={setProveSelected}
-                  handleGetSummary={handleGetSummary}
+                  onChange={(value) => {
+                    setProveSelected(value);
+                    handleGetSummary({ prove_id_selected: value.id });
+                    navigate(`/modalidade/${value.id}/evento/${event_id}`);
+                  }}
                 />
               </DivDropDownSearch>
 
