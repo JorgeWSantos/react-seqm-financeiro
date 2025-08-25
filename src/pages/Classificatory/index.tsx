@@ -13,6 +13,7 @@ import {
   CompetitorTableData,
   type TableRowSEQM,
   TableWithLoader,
+  StyledTableSEQMTextTd,
 } from '@abqm-ds/react';
 
 import { useDeviceType } from '@abqm-ds/react';
@@ -25,6 +26,9 @@ import {
   StyledTextEvent,
   StyledTextModality,
   ContainerMobileMain,
+  StyledTdSpanClassD,
+  StyledTdTextClassD,
+  StyledDivClassD,
 } from './styles';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
@@ -227,26 +231,58 @@ const Classificatory = () => {
     (item) => item.cds_classificacao_nucleo !== ''
   );
 
+  // const hasAQHA = listToShow.findIndex((item) => item.bid_aqha);
+  const hasClassD = listToShow.findIndex((item) => item.cds_classificacao_d !== '');
+  // const hasABQMParticipation = listToShow.findIndex(
+  //   (item) => item.bid_nucleo_participa_abqm
+  // );
+
+  console.log('hasClassD', hasClassD);
+
+  const lastSortable = (item: ClassificatoryData) => {
+    if (item.cds_media_final === 'SAT') {
+      return 99999;
+    }
+    if (item.cds_media_final === 'N/C') {
+      return 9999;
+    }
+
+    return 999;
+  };
+
   const tableColumns: Array<TableColumnSEQM> = [
-    ...(hasNucleoColumn !== -1
+    ...((hasNucleoColumn !== -1
       ? [
           {
             key: 'nucleo',
             label: 'NÚCLEO',
-            width: '6%',
-            minWidth: '3rem',
-            align: 'center' as const,
+            width: '8%',
+            minWidth: '4.5rem',
+            align: 'center',
+            sortable: true,
           },
         ]
-      : []),
+      : []) as Array<TableColumnSEQM>),
     {
       key: 'abqm',
       label: 'ABQM',
       width: '6%',
-      minWidth: '2.5rem',
+      minWidth: '3.5rem',
       align: 'center',
       sortable: true,
     },
+    ...((hasClassD !== -1
+      ? [
+          {
+            key: 'classd',
+            label: 'CLASS',
+            width: '6%',
+            minWidth: '3.5rem',
+            align: 'center',
+            sortable: true,
+          },
+        ]
+      : []) as Array<TableColumnSEQM>),
     {
       key: 'competitor',
       label: 'COMPETIDOR',
@@ -278,8 +314,40 @@ const Classificatory = () => {
   ];
 
   const tableData: Array<TableRowSEQM> = listToShow.map((item) => ({
-    nucleo: { value: item.cds_classificacao_nucleo || ' ' },
+    nucleo: {
+      value: `${
+        item.cds_classificacao_nucleo + (item.cds_classificacao_nucleo ? '°' : '')
+      }`,
+    },
     abqm: { value: `${item.cds_classificacao + (item.cds_classificacao ? '°' : '')}` },
+    classd: {
+      // value: `${item.cds_classificacao_d ? item.cds_classificacao_d : ''}`,
+      valueToSort: item.cds_classificacao_d
+        ? `${
+            item.cds_classificacao_d.split('-')[0][0].trim() +
+            item.cds_classificacao_d.split('-')[1].trim()
+          }`
+        : lastSortable(item),
+      render: () => (
+        <>
+          {item.cds_classificacao_d && (
+            <StyledDivClassD>
+              <StyledTableSEQMTextTd>
+                {item.cds_classificacao_d.split('-')[1]}°
+              </StyledTableSEQMTextTd>
+              <StyledTdTextClassD>
+                {item.cds_classificacao_d.split('-')[0][1]}
+              </StyledTdTextClassD>
+              <StyledTdSpanClassD>
+                {/* {item.cds_classificacao_d.split('-')[0][0]} */}
+                {item.cds_classificacao_d.split('-')[0][0] +
+                  item.cds_classificacao_d.split('-')[1]}
+              </StyledTdSpanClassD>
+            </StyledDivClassD>
+          )}
+        </>
+      ),
+    },
     competitor: {
       value: item.equipe[0]?.cds_competidor || '', // to sort
       render: () => {
