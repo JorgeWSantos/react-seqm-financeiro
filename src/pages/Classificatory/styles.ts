@@ -64,3 +64,18 @@ export const StyledTextEvent = styled(Text)`
   text-transform: uppercase;
   font-family: ${fonts.secondary};
 `;
+
+
+export const StyledDivClassD = styled.div`
+  display: flex;
+`;
+
+export const StyledTdTextClassD = styled.span`
+  font-size: 0.6rem;
+`;
+
+export const StyledTdSpanClassD = styled.span`
+  font-size: 0.5rem;
+  margin-bottom: -4px !important;
+  align-self: flex-end;
+`;

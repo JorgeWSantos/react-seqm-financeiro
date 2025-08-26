@@ -105,7 +105,7 @@ function EventSummary() {
   });
 
   const [listToShow, setListToShow] = useState<ResultModalityByProve[]>([]);
-  const [provesDropdown, setProvesDropdown] = useState<DataDropdown[]>([]);
+  const [allProves, setAllProves] = useState<DataDropdown[]>([]);
   const [proveSelected, setProveSelected] = useState<DataDropdown | null>(null);
   const [switchResumeChecked, setSwitchResumeChecked] = useState(false);
 
@@ -121,6 +121,8 @@ function EventSummary() {
         event_id: Number(event_id),
       });
 
+      console.log('handleGetSummary', data);
+
       setEventSummaryData(data);
       setListToShow(data.resultado_modalidade_prova);
 
@@ -133,10 +135,14 @@ function EventSummary() {
 
       const provesFormatted = formatToDropdown(data.provas);
 
-      setProvesDropdown(provesFormatted);
-      setProveSelected(
-        provesFormatted.filter((item) => item.id === prove_id_selected)[0]
-      );
+      setAllProves(provesFormatted);
+
+      const proveToBeFirst =
+        prove_id_selected !== 'nao-pontuados'
+          ? prove_id_selected
+          : provesFormatted[0]?.id;
+
+      setProveSelected(provesFormatted.filter((item) => item.id === proveToBeFirst)[0]);
     },
     [getEventSummary, event_id]
   );
@@ -188,17 +194,17 @@ function EventSummary() {
     const resumes = eventSummaryData.numeros_evento || [];
 
     const resumeData = {
-      inscricoes: resumes?.[1].inscricoes ?? '0',
-      competidores: resumes?.[1].competidores ?? '0',
-      animais: resumes?.[1].animais ?? '0',
-      premiacao: resumes?.[1].premiacao ?? 'sem premiação',
+      inscricoes: resumes?.[1]?.inscricoes ?? '0',
+      competidores: resumes?.[1]?.competidores ?? '0',
+      animais: resumes?.[1]?.animais ?? '0',
+      premiacao: resumes?.[1]?.premiacao ?? 'sem premiação',
     };
 
     const generalResumeData = {
-      inscricoes: resumes?.[0].inscricoes ?? '0',
-      competidores: resumes?.[0].competidores ?? '0',
-      animais: resumes?.[0].animais ?? '0',
-      premiacao: resumes?.[0].premiacao ?? 'sem premiação',
+      inscricoes: resumes?.[0]?.inscricoes ?? '0',
+      competidores: resumes?.[0]?.competidores ?? '0',
+      animais: resumes?.[0]?.animais ?? '0',
+      premiacao: resumes?.[0]?.premiacao ?? 'sem premiação',
     };
 
     if (switchResumeChecked) {
@@ -234,7 +240,7 @@ function EventSummary() {
         </LinkToRedirect>
       );
     },
-    []
+    [navigate]
   );
 
   const tableColumns: Array<TableColumnSEQM> = [
@@ -437,7 +443,7 @@ function EventSummary() {
             >
               <Dropdown
                 variant="secondary"
-                data={provesDropdown}
+                data={allProves}
                 setValue={(value) => {
                   setProveSelected(value);
                   handleGetSummary({ prove_id_selected: value.id });
@@ -526,11 +532,13 @@ function EventSummary() {
             <DivTopRight>
               <DivDropDownSearch>
                 <ModalityDropdown
-                  prove_id={prove_id}
-                  provesDropdown={provesDropdown}
+                  provesDropdown={allProves}
                   proveSelected={proveSelected}
-                  setProveSelected={setProveSelected}
-                  handleGetSummary={handleGetSummary}
+                  onChange={(value) => {
+                    setProveSelected(value);
+                    handleGetSummary({ prove_id_selected: value.id });
+                    navigate(`/modalidade/${value.id}/evento/${event_id}`);
+                  }}
                 />
               </DivDropDownSearch>
 

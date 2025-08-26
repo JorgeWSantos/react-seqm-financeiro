@@ -13,6 +13,7 @@ import {
   CompetitorTableData,
   type TableRowSEQM,
   TableWithLoader,
+  StyledTableSEQMTextTd,
 } from '@abqm-ds/react';
 
 import { useDeviceType } from '@abqm-ds/react';
@@ -25,6 +26,9 @@ import {
   StyledTextEvent,
   StyledTextModality,
   ContainerMobileMain,
+  StyledTdSpanClassD,
+  StyledTdTextClassD,
+  StyledDivClassD,
 } from './styles';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
@@ -47,6 +51,7 @@ import type { InfoEventData } from '@src/services/General/types.info-event.api';
 import { useInfoEvent } from '@src/services/General/useInfoEvent';
 import { InfoCardsGroup } from './InfoCards';
 import type { Tab } from './types';
+import { urlConsultaAnimal, urlRanking } from '@src/config/env';
 
 const Classificatory = () => {
   const params = useParams();
@@ -168,7 +173,6 @@ const Classificatory = () => {
   }, [handleGetEventInfo]);
 
   // Effect to set the page title and path
-
   useEffect(() => {
     setPage({
       page_title: pageTitle,
@@ -227,30 +231,62 @@ const Classificatory = () => {
     (item) => item.cds_classificacao_nucleo !== ''
   );
 
+  // const hasAQHA = listToShow.findIndex((item) => item.bid_aqha);
+  const hasClassD = listToShow.findIndex((item) => item.cds_classificacao_d !== '');
+  // const hasABQMParticipation = listToShow.findIndex(
+  //   (item) => item.bid_nucleo_participa_abqm
+  // );
+
+  console.log('hasClassD', hasClassD);
+
+  const lastSortable = (item: ClassificatoryData) => {
+    if (item.cds_media_final === 'SAT') {
+      return 99999;
+    }
+    if (item.cds_media_final === 'N/C') {
+      return 9999;
+    }
+
+    return 999;
+  };
+
   const tableColumns: Array<TableColumnSEQM> = [
-    ...(hasNucleoColumn !== -1
+    ...((hasNucleoColumn !== -1
       ? [
           {
             key: 'nucleo',
             label: 'NÚCLEO',
-            width: '6%',
-            minWidth: '3rem',
-            align: 'center' as const,
+            width: '8%',
+            minWidth: '4.5rem',
+            align: 'center',
+            sortable: true,
           },
         ]
-      : []),
+      : []) as Array<TableColumnSEQM>),
     {
       key: 'abqm',
       label: 'ABQM',
       width: '6%',
-      minWidth: '2.5rem',
+      minWidth: '3.5rem',
       align: 'center',
       sortable: true,
     },
+    ...((hasClassD !== -1
+      ? [
+          {
+            key: 'classd',
+            label: 'CLASS',
+            width: '6%',
+            minWidth: '3.5rem',
+            align: 'center',
+            sortable: true,
+          },
+        ]
+      : []) as Array<TableColumnSEQM>),
     {
       key: 'competitor',
       label: 'COMPETIDOR',
-      width: '30%',
+      width: '35%',
       align: 'left',
       sortable: true,
     },
@@ -259,30 +295,71 @@ const Classificatory = () => {
       label: 'ANIMAL',
       width: '27%',
       align: 'left',
+      sortable: true,
     },
     {
       key: 'owner',
       label: 'PROPRIETÁRIO',
       width: '36%',
       align: 'left',
+      sortable: true,
     },
     {
       key: 'tn',
       label: 'T/N',
-      width: '9%',
+      width: '8%',
       align: 'left',
       sortable: true,
     },
   ];
 
   const tableData: Array<TableRowSEQM> = listToShow.map((item) => ({
-    nucleo: { value: item.cds_classificacao_nucleo || ' ' },
+    nucleo: {
+      value: `${
+        item.cds_classificacao_nucleo + (item.cds_classificacao_nucleo ? '°' : '')
+      }`,
+    },
     abqm: { value: `${item.cds_classificacao + (item.cds_classificacao ? '°' : '')}` },
+    classd: {
+      // value: `${item.cds_classificacao_d ? item.cds_classificacao_d : ''}`,
+      valueToSort: item.cds_classificacao_d
+        ? `${
+            item.cds_classificacao_d.split('-')[0][0].trim() +
+            item.cds_classificacao_d.split('-')[1].trim()
+          }`
+        : lastSortable(item),
+      render: () => (
+        <>
+          {item.cds_classificacao_d && (
+            <StyledDivClassD>
+              <StyledTableSEQMTextTd>
+                {item.cds_classificacao_d.split('-')[1]}°
+              </StyledTableSEQMTextTd>
+              <StyledTdTextClassD>
+                {item.cds_classificacao_d.split('-')[0][1]}
+              </StyledTdTextClassD>
+              <StyledTdSpanClassD>
+                {/* {item.cds_classificacao_d.split('-')[0][0]} */}
+                {item.cds_classificacao_d.split('-')[0][0] +
+                  item.cds_classificacao_d.split('-')[1]}
+              </StyledTdSpanClassD>
+            </StyledDivClassD>
+          )}
+        </>
+      ),
+    },
     competitor: {
       value: item.equipe[0]?.cds_competidor || '', // to sort
       render: () => {
         return item.equipe.map((e, i) => (
-          <CompetitorTableData key={new Date().getTime() + i} value={e.cds_competidor} />
+          <CompetitorTableData
+            key={new Date().getTime() + i}
+            value={e.cds_competidor}
+            onClick={() => {
+              window.location.href =
+                urlRanking + `/competidor/detalhe/${e.nid_competidor}`;
+            }}
+          />
         ));
       },
     },
@@ -304,6 +381,10 @@ const Classificatory = () => {
             medal={e.cor_medalha}
             registerAnimal={e.cds_registro_animal}
             isHallOfFameAnimal={e.hall_da_fama}
+            onClick={() => {
+              window.location.href =
+                urlConsultaAnimal + `/perfil-do-animal/campanha/${e.nid_animal}`;
+            }}
           />
         ));
       },
@@ -314,9 +395,12 @@ const Classificatory = () => {
         return item.equipe.map((e, i) => (
           <OwnerTableData
             key={new Date().getTime() + i}
-            // isHallOfFameOwner={e.proprietario_hf || (i === 0 ? '2017' : null)}
             isHallOfFameOwner={e.proprietario_hf}
             value={e.cds_proprietario}
+            onClick={() => {
+              window.location.href =
+                urlRanking + `/proprietario/detalhe/${e.nid_proprietario}`;
+            }}
           />
         ));
       },
@@ -531,7 +615,7 @@ const Classificatory = () => {
           info={printInfo}
           totalForPage={
             listToShow[0].equipe.length === 1
-              ? 15
+              ? 17
               : listToShow[0].equipe.length > 2
               ? 7
               : 9
