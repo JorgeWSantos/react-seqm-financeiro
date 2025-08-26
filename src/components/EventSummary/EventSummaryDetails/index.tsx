@@ -70,7 +70,9 @@ const EventSummaryDetails = ({
         <CardSummary title={data.competidores} subTitle={'competidores'} />
         <CardSummary title={data.animais} subTitle={'animais'} />
         <CardSummary
-          title={data.premiacao ?? 'sem premiação'}
+          title={
+            data.premiacao !== 'sem premiação' ? 'R$ ' + data.premiacao : 'sem premiação'
+          }
           subTitle={data.premiacao !== 'sem premiação' ? 'em premiação' : ''}
         />
       </BottomEventSummary>
