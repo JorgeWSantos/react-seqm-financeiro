@@ -48,10 +48,15 @@ export type ClassificatoryInscriptionsResumeData = {
   nnr_qtde_inscricoes_passadas_aqha: number;
 };
 
+export type ClassificatoryJudgmentCardData = {
+  cds_url_cartao_julgamento_classificatoria: string;
+  cds_url_cartao_julgamento_final: string;
+};
+
 export type ClassificatoryEventDetailsResponseData = {
   detalhe_evento: ClassificatoryEventData | null;
   resumo_inscricoes: ClassificatoryInscriptionsResumeData | null;
-  cartao_julgamento: string;
+  cartao_julgamento: ClassificatoryJudgmentCardData | null;
 };
 
 export type ClassificatoryEventDetailsResponse = ApiResponse<{

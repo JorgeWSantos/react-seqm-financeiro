@@ -34,15 +34,22 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePage } from '@src/contexts/page/usePage';
-import { PrinterIcon, SearchIcon, ShareIcon, StarIcon } from '@abqm-ds/icons';
+import {
+  FileTextIcon,
+  PrinterIcon,
+  SearchIcon,
+  ShareIcon,
+  StarIcon,
+} from '@abqm-ds/icons';
 import { colors } from '@abqm-ds/tokens';
 import { useClassificatory } from '@src/services/Classificatory/useClassificatory';
-import type { ClassificatoryData } from '../../services/Classificatory/types.classificatory.api';
+import type { ClassificatoryData } from '@src/services/Classificatory/types.classificatory.api';
 import { useParams } from 'react-router';
 import type {
   ClassificatoryEventData,
   ClassificatoryInscriptionsResumeData,
-} from '../../services/Classificatory/types.event-details.api';
+  ClassificatoryJudgmentCardData,
+} from '@src/services/Classificatory/types.event-details.api';
 import type { PrintHeaderProps } from '@src/components/PrintArea/PrintHeader';
 import PrintArea from '@src/components/PrintArea';
 import { convertToBrazilDate } from '@src/utils/formatDate';
@@ -90,7 +97,8 @@ const Classificatory = () => {
       {} as ClassificatoryInscriptionsResumeData
     );
 
-  // const [judmentCard, setJudgmentCard] = useState<string>('');
+  const [judgmentCards, setJudgmentCards] =
+    useState<ClassificatoryJudgmentCardData | null>(null);
 
   const [showShareOptions, setShowShareOptions] = useState(false);
   const shareUrl = window.location.href;
@@ -131,10 +139,11 @@ const Classificatory = () => {
       return;
     }
 
-    const { detalhe_evento, resumo_inscricoes } = await getEventDetails({
-      prove_event_id: Number(prove_event_id),
-      prove_event_classificatory_id: Number(id_classificatory),
-    });
+    const { detalhe_evento, resumo_inscricoes, cartao_julgamento } =
+      await getEventDetails({
+        prove_event_id: Number(prove_event_id),
+        prove_event_classificatory_id: Number(id_classificatory),
+      });
 
     if (detalhe_evento) {
       setClassificatoryEventInfoData(detalhe_evento);
@@ -144,9 +153,18 @@ const Classificatory = () => {
       setResumeInscriptionsData(resumo_inscricoes);
     }
 
-    // if (cartao_julgamento) {
-    //   setJudgmentCard(cartao_julgamento);
-    // }
+    if (
+      cartao_julgamento !== null &&
+      (cartao_julgamento.cds_url_cartao_julgamento_classificatoria !== '' ||
+        cartao_julgamento.cds_url_cartao_julgamento_final !== '')
+    ) {
+      setJudgmentCards({
+        cds_url_cartao_julgamento_classificatoria:
+          cartao_julgamento.cds_url_cartao_julgamento_classificatoria,
+        cds_url_cartao_julgamento_final:
+          cartao_julgamento.cds_url_cartao_julgamento_final,
+      });
+    }
   }, [getEventDetails, prove_event_id, id_classificatory]);
 
   const handleGetEventInfo = useCallback(async () => {
@@ -226,6 +244,8 @@ const Classificatory = () => {
     handleGetResultsClassificatory();
     handleGetEventDetails();
   }, [handleGetResultsClassificatory, handleGetEventDetails]);
+
+  console.log('judgmentCards', judgmentCards);
 
   const hasNucleoColumn = listToShow.findIndex(
     (item) => item.cds_classificacao_nucleo !== ''
@@ -450,6 +470,31 @@ const Classificatory = () => {
         );
       },
     },
+    ...(judgmentCards !== null &&
+    (judgmentCards.cds_url_cartao_julgamento_classificatoria !== '' ||
+      judgmentCards.cds_url_cartao_julgamento_final !== '')
+      ? [
+          {
+            icon: (
+              <FileTextIcon
+                fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50}
+              />
+            ),
+            label: 'cartão de julgamento',
+            onClick: () => {
+              if (
+                activeTab === 'Classificatória' &&
+                judgmentCards.cds_url_cartao_julgamento_classificatoria !== ''
+              ) {
+                window.open(judgmentCards.cds_url_cartao_julgamento_classificatoria);
+                return;
+              }
+
+              window.open(judgmentCards.cds_url_cartao_julgamento_final);
+            },
+          },
+        ]
+      : []),
     {
       icon: (
         <PrinterIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />
@@ -578,7 +623,9 @@ const Classificatory = () => {
                 key={index}
                 title={tab.tipo_etapa}
                 active={activeTab === tab.tipo_etapa}
-                onClick={() => setActiveTab(tab.tipo_etapa)}
+                onClick={() => {
+                  setActiveTab(tab.tipo_etapa);
+                }}
               />
             ))}
           </div>
