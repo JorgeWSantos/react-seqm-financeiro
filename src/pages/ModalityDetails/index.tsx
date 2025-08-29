@@ -340,7 +340,7 @@ function ModalityDetail() {
               text={pageTitle}
               buttons={[
                 {
-                  icon: <FilterIcon fill={colors.emeraldGreen50} />,
+                  icon: <FilterIcon fill={colors.emeraldGreen75} />,
                   label: 'filtro',
                   onClick: openModal,
                   isActive: !deepEqual(filter, initialFilter),

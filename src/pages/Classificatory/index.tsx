@@ -64,8 +64,8 @@ const Classificatory = () => {
   const params = useParams();
   const { prove_id, prove_event_id, event_id, id_classificatory } = params;
 
-  const pageTitle = 'Resultados »';
-  const subTitle = getNameProveById(Number(prove_id));
+  const pageTitle = 'Resultados';
+  const subTitle = '';
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -460,7 +460,7 @@ const Classificatory = () => {
 
   const buttonsHeader = [
     {
-      icon: <StarIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />,
+      icon: <StarIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen75} />,
       label: 'participações',
       onClick: () => {
         window.open(
@@ -477,7 +477,7 @@ const Classificatory = () => {
           {
             icon: (
               <FileTextIcon
-                fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50}
+                fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen75}
               />
             ),
             label: 'cartão de julgamento',
@@ -497,14 +497,14 @@ const Classificatory = () => {
       : []),
     {
       icon: (
-        <PrinterIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />
+        <PrinterIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen75} />
       ),
       label: 'imprimir',
       onClick: onTriggerPrintPDF,
     },
     {
       icon: (
-        <ShareIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />
+        <ShareIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen75} />
       ),
       label: 'compartilhar',
       onClick: () => setShowShareOptions((prev) => !prev),
@@ -596,7 +596,7 @@ const Classificatory = () => {
         header={<Header text={pageTitle} subTitle={subTitle} buttons={buttonsHeader} />}
         headerNavigator={
           <HeaderNavigatorDesktop
-            title={classificatoryEventInfoData?.cds_modalidade || ''}
+            title={classificatoryEventInfoData?.cds_modalidade?.toUpperCase() || ''}
             subtitle={classificatoryEventInfoData?.cds_evento || ''}
             hasBackButton
             onGoBack={handleOnGoBack}
