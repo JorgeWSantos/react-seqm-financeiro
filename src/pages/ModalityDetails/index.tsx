@@ -32,7 +32,7 @@ import {
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePage } from '@src/contexts/page/usePage';
-import { FilterIcon, SearchIcon } from '@abqm-ds/icons';
+import { FilterCircleIcon, FilterIcon, SearchIcon } from '@abqm-ds/icons';
 import { colors } from '@abqm-ds/tokens';
 import { useModalityDetails } from '@src/services/ModalityDetails/useModalityDetails';
 import type {
@@ -407,7 +407,23 @@ function ModalityDetail() {
               headingText={getNameProveById(Number(prove_id))}
               hasSearch
               onChangeSearch={(v) => setSearchValue(v.target.value)}
-            />
+            >
+              <RoundedButton
+                style={{
+                  minWidth: '2rem',
+                  height: '2rem',
+                  backgroundColor: colors.white25,
+                }}
+                isActive={!deepEqual(filter, initialFilter)}
+              >
+                <FilterCircleIcon
+                  width={'1rem'}
+                  height={'1rem'}
+                  color={colors.white50}
+                  onClick={openModal}
+                />
+              </RoundedButton>
+            </HeaderMobileNavigator>
           }
         >
           <DivTopMobile>
@@ -425,14 +441,6 @@ function ModalityDetail() {
                   .length.toString()}
               />
             </DivInfoCard>
-
-            <RoundedButton
-              width={'2rem'}
-              height={'2rem'}
-              isActive={!deepEqual(filter, initialFilter)}
-            >
-              <FilterIcon width={'1rem'} height={'1rem'} onClick={openModal} />
-            </RoundedButton>
           </DivTopMobile>
 
           <Scrollable>

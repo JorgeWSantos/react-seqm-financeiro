@@ -1,5 +1,5 @@
 import { formatToBRL, InfoCard } from '@abqm-ds/react';
-import { ItemCardGroup } from './styles';
+import { GroupCards, ItemCardGroup } from './styles';
 import { convertToBrazilDate } from '@src/utils/formatDate';
 
 const InfoCardsGroup = ({
@@ -17,30 +17,32 @@ const InfoCardsGroup = ({
 }) => {
   return (
     <ItemCardGroup>
-      <InfoCard title="inscrições" subTitle={qtde_inscriptions} />
+      <GroupCards>
+        <InfoCard title="inscrições" subTitle={qtde_inscriptions} />
+        <InfoCard title="competidores" subTitle={qtde_competitors} />
+        <InfoCard title="animais" subTitle={qtde_animals} />
+      </GroupCards>
 
-      <InfoCard title="competidores" subTitle={qtde_competitors} />
+      <GroupCards>
+        {premiation_value && (
+          <InfoCard
+            title="premiação"
+            subTitle={formatToBRL({
+              value: premiation_value,
+              fallback: '-',
+            })}
+            reverse
+          />
+        )}
 
-      <InfoCard title="animais" subTitle={qtde_animals} />
-
-      {premiation_value && (
-        <InfoCard
-          title="premiação"
-          subTitle={formatToBRL({
-            value: premiation_value,
-            fallback: '-',
-          })}
-          reverse
-        />
-      )}
-
-      {dt_prove && (
-        <InfoCard
-          title="data da prova"
-          subTitle={convertToBrazilDate(dt_prove || '') || '-'}
-          reverse
-        />
-      )}
+        {dt_prove && (
+          <InfoCard
+            title="data da prova"
+            subTitle={convertToBrazilDate(dt_prove || '') || '-'}
+            reverse
+          />
+        )}
+      </GroupCards>
     </ItemCardGroup>
   );
 };

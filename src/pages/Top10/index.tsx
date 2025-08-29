@@ -353,7 +353,10 @@ function Top10() {
         header={<Header text={pageTitle} subTitle={subTitle} buttons={buttonsHeader} />}
         headerNavigator={
           <HeaderNavigatorDesktop
-            title={getNameProveById(Number(prove_id)).toUpperCase() + '  •  TOP 10'}
+            title={
+              getNameProveById(Number(prove_id)).toUpperCase() +
+              '\u00A0\u00A0•\u00A0\u00A0TOP 10'
+            }
             subtitle={eventInfoData?.cds_evento || ''}
             hasBackButton
             onGoBack={() => navigate('/modalidade/' + prove_id + '/evento/' + event_id)}

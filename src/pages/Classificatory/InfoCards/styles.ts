@@ -7,3 +7,9 @@ export const ItemCardGroup = styled.div`
   flex-wrap: wrap;
   gap: 0.5rem;
 `;
+
+export const GroupCards = styled.div`
+  display: flex;
+  gap: 0.125rem;
+  flex-wrap: wrap;
+`;
