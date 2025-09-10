@@ -64,8 +64,8 @@ const Classificatory = () => {
   const params = useParams();
   const { prove_id, prove_event_id, event_id, id_classificatory } = params;
 
-  const pageTitle = 'Resultados »';
-  const subTitle = getNameProveById(Number(prove_id));
+  const pageTitle = 'Resultados';
+  const subTitle = '';
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -286,8 +286,7 @@ const Classificatory = () => {
     {
       key: 'abqm',
       label: 'ABQM',
-      width: '6%',
-      minWidth: '3.5rem',
+      minWidth: '4.5rem',
       align: 'center',
       sortable: true,
     },
@@ -296,24 +295,30 @@ const Classificatory = () => {
           {
             key: 'classd',
             label: 'CLASS',
-            width: '6%',
-            minWidth: '3.5rem',
+            minWidth: '4rem',
             align: 'center',
             sortable: true,
           },
         ]
       : []) as Array<TableColumnSEQM>),
     {
+      key: 'spacer',
+      label: '',
+      minWidth: '0.5rem',
+      align: 'left',
+    },
+    {
       key: 'competitor',
       label: 'COMPETIDOR',
-      width: '35%',
+      width: '28%',
       align: 'left',
       sortable: true,
     },
     {
       key: 'animal',
       label: 'ANIMAL',
-      width: '27%',
+      minWidth: '210px',
+      width: '15%',
       align: 'left',
       sortable: true,
     },
@@ -327,9 +332,14 @@ const Classificatory = () => {
     {
       key: 'tn',
       label: 'T/N',
-      width: '8%',
       align: 'left',
       sortable: true,
+    },
+    {
+      key: 'spacer2',
+      label: '',
+      minWidth: '0.25rem',
+      align: 'left',
     },
   ];
 
@@ -341,7 +351,6 @@ const Classificatory = () => {
     },
     abqm: { value: `${item.cds_classificacao + (item.cds_classificacao ? '°' : '')}` },
     classd: {
-      // value: `${item.cds_classificacao_d ? item.cds_classificacao_d : ''}`,
       valueToSort: item.cds_classificacao_d
         ? `${
             item.cds_classificacao_d.split('-')[0][0].trim() +
@@ -367,6 +376,9 @@ const Classificatory = () => {
           )}
         </>
       ),
+    },
+    spacer: {
+      value: '',
     },
     competitor: {
       value: item.equipe[0]?.cds_competidor || '', // to sort
@@ -426,6 +438,9 @@ const Classificatory = () => {
       },
     },
     tn: { value: item.cds_media_final },
+    spacer2: {
+      value: '',
+    },
   }));
 
   const printCards = [
@@ -460,7 +475,7 @@ const Classificatory = () => {
 
   const buttonsHeader = [
     {
-      icon: <StarIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />,
+      icon: <StarIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen75} />,
       label: 'participações',
       onClick: () => {
         window.open(
@@ -477,7 +492,7 @@ const Classificatory = () => {
           {
             icon: (
               <FileTextIcon
-                fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50}
+                fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen75}
               />
             ),
             label: 'cartão de julgamento',
@@ -497,14 +512,14 @@ const Classificatory = () => {
       : []),
     {
       icon: (
-        <PrinterIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />
+        <PrinterIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen75} />
       ),
       label: 'imprimir',
       onClick: onTriggerPrintPDF,
     },
     {
       icon: (
-        <ShareIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />
+        <ShareIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen75} />
       ),
       label: 'compartilhar',
       onClick: () => setShowShareOptions((prev) => !prev),
@@ -596,7 +611,7 @@ const Classificatory = () => {
         header={<Header text={pageTitle} subTitle={subTitle} buttons={buttonsHeader} />}
         headerNavigator={
           <HeaderNavigatorDesktop
-            title={classificatoryEventInfoData?.cds_modalidade || ''}
+            title={classificatoryEventInfoData?.cds_modalidade?.toUpperCase() || ''}
             subtitle={classificatoryEventInfoData?.cds_evento || ''}
             hasBackButton
             onGoBack={handleOnGoBack}

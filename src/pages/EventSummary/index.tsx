@@ -355,7 +355,7 @@ function EventSummary() {
 
   const buttonsHeader = [
     {
-      icon: <StarIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />,
+      icon: <StarIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen75} />,
       label: 'participações',
       onClick: () => {
         window.open(
@@ -367,14 +367,14 @@ function EventSummary() {
     },
     {
       icon: (
-        <PrinterIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />
+        <PrinterIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen75} />
       ),
       label: 'imprimir',
       onClick: onTriggerPrintPDF,
     },
     {
       icon: (
-        <ShareIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />
+        <ShareIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen75} />
       ),
       label: 'compartilhar',
       onClick: () => setShowShareOptions((prev) => !prev),

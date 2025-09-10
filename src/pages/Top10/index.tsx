@@ -51,8 +51,8 @@ function Top10() {
   const prove_event_id = params.prove_event_id;
   const event_id = params.event_id;
 
-  const pageTitle = 'Resultados »';
-  const subTitle = getNameProveById(Number(prove_id)) + ' » TOP 10';
+  const pageTitle = 'Resultados';
+  const subTitle = '';
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -249,14 +249,14 @@ function Top10() {
   const buttonsHeader = [
     {
       icon: (
-        <PrinterIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />
+        <PrinterIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen75} />
       ),
       label: 'imprimir',
       onClick: onTriggerPrintPDF,
     },
     {
       icon: (
-        <ShareIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />
+        <ShareIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen75} />
       ),
       label: 'compartilhar',
       onClick: () => setShowShareOptions((prev) => !prev),
@@ -353,7 +353,11 @@ function Top10() {
         header={<Header text={pageTitle} subTitle={subTitle} buttons={buttonsHeader} />}
         headerNavigator={
           <HeaderNavigatorDesktop
-            title={eventInfoData?.cds_evento || ''}
+            title={
+              getNameProveById(Number(prove_id)).toUpperCase() +
+              '\u00A0\u00A0•\u00A0\u00A0TOP 10'
+            }
+            subtitle={eventInfoData?.cds_evento || ''}
             hasBackButton
             onGoBack={() => navigate('/modalidade/' + prove_id + '/evento/' + event_id)}
           >
