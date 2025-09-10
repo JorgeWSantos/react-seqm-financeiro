@@ -84,7 +84,7 @@ export function useClassificatory() {
           });
 
           return {
-            cartao_julgamento: '',
+            cartao_julgamento: null,
             detalhe_evento: null,
             resumo_inscricoes: null,
           };
@@ -100,7 +100,7 @@ export function useClassificatory() {
         console.warn(error);
 
         return {
-          cartao_julgamento: '',
+          cartao_julgamento: null,
           detalhe_evento: null,
           resumo_inscricoes: null,
         };
