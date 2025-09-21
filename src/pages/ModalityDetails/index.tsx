@@ -307,7 +307,7 @@ function ModalityDetail() {
         redirectToEvent({
           children: (
             <StyledTableSEQMTextTd>
-              {item.cds_empresa.toUpperCase()}
+              {item.bid_oficial === true ? 'ABQM' : item.cds_empresa.toUpperCase()}
             </StyledTableSEQMTextTd>
           ),
           prove_id: item.nid_prova ?? 0,
