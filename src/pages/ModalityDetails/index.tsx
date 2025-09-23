@@ -348,52 +348,49 @@ function ModalityDetail() {
               ]}
             />
           }
-          headerNavigator={
-            <HeaderNavigatorDesktop
-              title={
-                prove_id === 'nao-pontuados'
-                  ? 'Eventos Não Pontuados'
-                  : getNameProveById(Number(prove_id))
-              }
-              hasBackButton
-              onGoBack={() => navigate('/')}
-            >
-              <TextInput
-                placeholder="Buscar"
-                onChange={(v) => setSearchValue(v.target.value)}
-                icon={<SearchIcon fill={colors.white75} />}
-              />
-            </HeaderNavigatorDesktop>
-          }
           contentBoxStyles={{
             padding: '1.5rem',
             gap: '0.25rem',
           }}
           count={data.length}
         >
-          <Scrollable>
-            {data.length > 0 ? (
-              <TableSEQM data={data} columns={columns} />
-            ) : (
-              <>
-                {isLoading ? (
-                  <LoadingContainer>
-                    <ActivityIndicator width={20} height={20} />
-                  </LoadingContainer>
-                ) : (
-                  <NotFoundContainer>
-                    <Text
-                      fontSize="smm"
-                      fontWeight="semiBold"
-                      color={colors.emeraldGreen75}
-                    >
-                      Nenhum resultado encontrado
-                    </Text>
-                  </NotFoundContainer>
-                )}
-              </>
-            )}
-          </Scrollable>
+          <HeaderNavigatorDesktop
+            title={
+              prove_id === 'nao-pontuados'
+                ? 'Eventos Não Pontuados'
+                : getNameProveById(Number(prove_id))
+            }
+            hasBackButton
+            onGoBack={() => navigate('/')}
+          >
+            <TextInput
+              placeholder="Buscar"
+              onChange={(v) => setSearchValue(v.target.value)}
+              icon={<SearchIcon fill={colors.white75} />}
+            />
+          </HeaderNavigatorDesktop>
+
+          {data.length > 0 ? (
+            <TableSEQM data={data} columns={columns} />
+          ) : (
+            <>
+              {isLoading ? (
+                <LoadingContainer>
+                  <ActivityIndicator width={20} height={20} />
+                </LoadingContainer>
+              ) : (
+                <NotFoundContainer>
+                  <Text
+                    fontSize="smm"
+                    fontWeight="semiBold"
+                    color={colors.emeraldGreen75}
+                  >
+                    Nenhum resultado encontrado
+                  </Text>
+                </NotFoundContainer>
+              )}
+            </>
+          )}
         </ContentDektop>
       ) : (
         <ContentMobile

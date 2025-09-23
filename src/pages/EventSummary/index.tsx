@@ -36,6 +36,7 @@ import { usePage } from '@src/contexts/page/usePage';
 import {
   CheckIcon,
   DashIcon,
+  FileTextIcon,
   PrinterIcon,
   ShareIcon,
   StarIcon,
@@ -365,6 +366,14 @@ function EventSummary() {
         );
       },
     },
+    // TODO: criar a tela de resumo em pdf
+    {
+      icon: (
+        <FileTextIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen75} />
+      ),
+      label: 'resumo do evento',
+      onClick: onTriggerPrintPDF,
+    },
     {
       icon: (
         <PrinterIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen75} />
@@ -499,19 +508,17 @@ function EventSummary() {
             buttons={buttonsHeader}
           />
         }
-        headerNavigator={
-          <HeaderNavigatorDesktop
-            title={eventInfoData?.cds_evento || ''}
-            hasBackButton
-            onGoBack={() => navigate('/modalidade/' + prove_id)}
-          />
-        }
         contentBoxStyles={{
           padding: '1.5rem',
           gap: '0.25rem',
           position: 'relative',
         }}
       >
+        <HeaderNavigatorDesktop
+          title={eventInfoData?.cds_evento || ''}
+          hasBackButton
+          onGoBack={() => navigate('/modalidade/' + prove_id)}
+        />
         <Scrollable>
           <DivLeft>
             <InfoEventDetails data={eventInfoData} />

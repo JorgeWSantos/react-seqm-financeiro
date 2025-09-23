@@ -13,13 +13,13 @@ export const ContainerMainMobile = styled.div`
 export const LinkToRedirect = styled.span`
   cursor: pointer;
   text-decoration: none;
-`
+`;
 
 export const Scrollable = styled.div`
   width: 100%;
   height: 100%;
-  overflow-y: auto;
-  overflow-x: auto;
+  /* overflow-y: auto;
+  overflow-x: auto; */
   display: flex;
   gap: 1.5rem;
 

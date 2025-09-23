@@ -609,21 +609,6 @@ const Classificatory = () => {
     <ContainerMain>
       <ContentDektop
         header={<Header text={pageTitle} subTitle={subTitle} buttons={buttonsHeader} />}
-        headerNavigator={
-          <HeaderNavigatorDesktop
-            title={classificatoryEventInfoData?.cds_modalidade?.toUpperCase() || ''}
-            subtitle={classificatoryEventInfoData?.cds_evento || ''}
-            hasBackButton
-            onGoBack={handleOnGoBack}
-          >
-            <TextInput
-              placeholder="Buscar"
-              onChange={(v) => setSearchValue(v.target.value)}
-              icon={<SearchIcon fill={colors.white75} />}
-              debounceDelay={1000}
-            />
-          </HeaderNavigatorDesktop>
-        }
         contentBoxStyles={{
           padding: '1.5rem',
           gap: '0.25rem',
@@ -631,6 +616,20 @@ const Classificatory = () => {
         }}
         count={tableData.length}
       >
+        <HeaderNavigatorDesktop
+          title={classificatoryEventInfoData?.cds_modalidade?.toUpperCase() || ''}
+          subtitle={classificatoryEventInfoData?.cds_evento || ''}
+          hasBackButton
+          onGoBack={handleOnGoBack}
+        >
+          <TextInput
+            placeholder="Buscar"
+            onChange={(v) => setSearchValue(v.target.value)}
+            icon={<SearchIcon fill={colors.white75} />}
+            debounceDelay={1000}
+          />
+        </HeaderNavigatorDesktop>
+
         <TabAndCards>
           <div className="empty">
             {tabsToShow.map((tab, index) => (
@@ -658,13 +657,7 @@ const Classificatory = () => {
           />
         </TabAndCards>
 
-        <Scrollable>
-          <TableWithLoader
-            data={tableData}
-            columns={tableColumns}
-            isLoading={isLoading}
-          />
-        </Scrollable>
+        <TableWithLoader data={tableData} columns={tableColumns} isLoading={isLoading} />
       </ContentDektop>
 
       {tableData?.length > 0 && (
