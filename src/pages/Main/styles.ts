@@ -14,3 +14,10 @@ export const ContainerMobileMain = styled.div`
   flex-direction: column;
   gap: 1.5rem;
 `;
+
+export const TitleAndButton = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: -24px;
+`;
