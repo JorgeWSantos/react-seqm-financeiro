@@ -3,10 +3,8 @@ import {
   BottomEventSummary,
   EventSummaryContainer,
   StyledCard,
-  StyledTextTopRightES,
   TopEventSummary,
   TopLeftEventSummary,
-  TopRightEventSummary,
 } from './styles';
 import { colors } from '@abqm-ds/tokens';
 import { FileEarmarkCheckIcon } from '@abqm-ds/icons';
@@ -46,10 +44,6 @@ const EventResumeDetails = ({ data }: { data: NumberEvents }) => {
             Números da modalidade neste evento
           </Text>
         </TopLeftEventSummary>
-
-        <TopRightEventSummary>
-          <StyledTextTopRightES>Resumo geral</StyledTextTopRightES>
-        </TopRightEventSummary>
       </TopEventSummary>
 
       <BottomEventSummary>

@@ -93,6 +93,10 @@ export const Information = styled.div`
     }
   }
 
+  @media (max-width: ${breakpointsPx.xl}) {
+    flex-direction: row;
+  }
+
   @media (max-width: ${breakpointsPx.lg}) {
     .title {
       display: none;

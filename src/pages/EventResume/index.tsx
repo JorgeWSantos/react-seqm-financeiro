@@ -459,6 +459,9 @@ function EventResume() {
 
             <ContainerDetails>
               <ProvesDetails data={{ ...eventSummaryNumbers, name_prove: 'Apartação' }} />
+              <ProvesDetails data={{ ...eventSummaryNumbers, name_prove: 'Apartação' }} />
+              <ProvesDetails data={{ ...eventSummaryNumbers, name_prove: 'Apartação' }} />
+              <ProvesDetails data={{ ...eventSummaryNumbers, name_prove: 'Apartação' }} />
               <ProvesDetails
                 data={{ ...eventSummaryNumbers, name_prove: 'Três Tambores' }}
               />

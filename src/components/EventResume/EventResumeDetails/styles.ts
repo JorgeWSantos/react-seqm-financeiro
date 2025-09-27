@@ -1,5 +1,4 @@
-import { Text } from '@abqm-ds/react';
-import { breakpointsPx, colors, fontSizes, space } from '@abqm-ds/tokens';
+import { breakpointsPx, colors, space } from '@abqm-ds/tokens';
 import styled from 'styled-components';
 
 export const EventSummaryContainer = styled.div`
@@ -10,6 +9,11 @@ export const EventSummaryContainer = styled.div`
   background-color: ${colors.emeraldGreen25};
   border-radius: 0.375rem;
   overflow: hidden; // garante que filhos respeitem o border-radius
+
+  @media (max-width: ${breakpointsPx.xl}) {
+    width: 27rem;
+    align-self: center;
+  }
 
   @media (max-width: ${breakpointsPx.lg}) {
     min-height: 5.875rem;
@@ -48,16 +52,6 @@ export const TopRightEventSummary = styled.div`
   align-items: center;
 
   gap: ${space[2]};
-`;
-
-export const StyledTextTopRightES = styled(Text).attrs({
-  fontSize: 'xs',
-  lineHeight: 'short',
-  color: colors.white75,
-})`
-  @media (max-width: ${breakpointsPx.lg}) {
-    font-size: ${fontSizes.xxs};
-  }
 `;
 
 export const BottomEventSummary = styled.div`

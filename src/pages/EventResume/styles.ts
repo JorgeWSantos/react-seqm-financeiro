@@ -23,6 +23,11 @@ export const Scrollable = styled.div`
   display: flex;
   gap: 1.5rem;
 
+  @media (max-width: ${breakpointsPx.xl}) {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
   @media (max-width: ${breakpointsPx.lg}) {
     flex-direction: column;
     gap: 1rem;
@@ -56,6 +61,10 @@ export const DivTopRight = styled.div`
 
   border-bottom: ${radii.px} solid ${colors.white25};
   position: relative;
+
+  @media (max-width: ${breakpointsPx.xl}) {
+    height: unset;
+  }
 `;
 
 export const ContainerDetails = styled.div`
