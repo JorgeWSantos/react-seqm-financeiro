@@ -1,5 +1,4 @@
 import {
-  ActivityIndicator,
   ContentDektop,
   ContentMobile,
   deepEqual,
@@ -10,9 +9,8 @@ import {
   InfoCard,
   RoundedButton,
   StyledTableSEQMTextTd,
-  TableSEQM,
   TableSEQMColumnOficial,
-  Text,
+  TableWithLoader,
   TextInput,
   type TableColumnSEQM,
   type TableRowSEQM,
@@ -25,10 +23,9 @@ import {
   DivInfoCard,
   DivTopMobile,
   LinkToRedirect,
-  LoadingContainer,
-  NotFoundContainer,
-  Scrollable,
+  RemoveScrollableMobile,
 } from './styles';
+
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePage } from '@src/contexts/page/usePage';
@@ -244,7 +241,7 @@ function ModalityDetail() {
     [navigate]
   );
 
-  const columns: Array<TableColumnSEQM> = [
+  const tableColumns: Array<TableColumnSEQM> = [
     {
       key: 'event',
       label: 'EVENTO',
@@ -275,7 +272,7 @@ function ModalityDetail() {
     },
   ];
 
-  const data: Array<TableRowSEQM> = listToShow.map((item) => ({
+  const tableData: Array<TableRowSEQM> = listToShow.map((item) => ({
     event: {
       render: () => {
         if (item.bid_oficial) {
@@ -331,140 +328,120 @@ function ModalityDetail() {
     isoficial: { value: item.bid_oficial === true },
   }));
 
-  return (
-    <ContainerMain>
-      {!isTabletOrMobile ? (
-        <ContentDektop
-          header={
-            <Header
-              text={pageTitle}
-              buttons={[
-                {
-                  icon: <FilterIcon fill={colors.emeraldGreen75} />,
-                  label: 'filtro',
-                  onClick: openModal,
-                  isActive: !deepEqual(filter, initialFilter),
-                },
-              ]}
-            />
-          }
-          contentBoxStyles={{
-            padding: '1.5rem',
-            gap: '0.25rem',
-          }}
-          count={data.length}
-        >
-          <HeaderNavigatorDesktop
-            title={
-              prove_id === 'nao-pontuados'
-                ? 'Eventos Não Pontuados'
-                : getNameProveById(Number(prove_id))
-            }
+  if (isTabletOrMobile) {
+    return (
+      <ContentMobile
+        style={{
+          maxWidth: '100dvw',
+        }}
+        contentMobileBoxStyles={{ padding: '0', paddingTop: '1.5rem' }}
+        headerMobileNavigator={
+          <HeaderMobileNavigator
             hasBackButton
             onGoBack={() => navigate('/')}
+            headingText={getNameProveById(Number(prove_id))}
+            hasSearch
+            onChangeSearch={(v) => setSearchValue(v.target.value)}
           >
-            <TextInput
-              placeholder="Buscar"
-              onChange={(v) => setSearchValue(v.target.value)}
-              icon={<SearchIcon fill={colors.white75} />}
-            />
-          </HeaderNavigatorDesktop>
-
-          {data.length > 0 ? (
-            <TableSEQM data={data} columns={columns} />
-          ) : (
-            <>
-              {isLoading ? (
-                <LoadingContainer>
-                  <ActivityIndicator width={20} height={20} />
-                </LoadingContainer>
-              ) : (
-                <NotFoundContainer>
-                  <Text
-                    fontSize="smm"
-                    fontWeight="semiBold"
-                    color={colors.emeraldGreen75}
-                  >
-                    Nenhum resultado encontrado
-                  </Text>
-                </NotFoundContainer>
-              )}
-            </>
-          )}
-        </ContentDektop>
-      ) : (
-        <ContentMobile
-          style={{
-            maxWidth: '100dvw',
-          }}
-          headerMobileNavigator={
-            <HeaderMobileNavigator
-              hasBackButton
-              onGoBack={() => navigate('/')}
-              headingText={getNameProveById(Number(prove_id))}
-              hasSearch
-              onChangeSearch={(v) => setSearchValue(v.target.value)}
+            <RoundedButton
+              style={{
+                minWidth: '2rem',
+                height: '2rem',
+                backgroundColor: colors.white25,
+              }}
+              isActive={!deepEqual(filter, initialFilter)}
             >
-              <RoundedButton
-                style={{
-                  minWidth: '2rem',
-                  height: '2rem',
-                  backgroundColor: colors.white25,
-                }}
-                isActive={!deepEqual(filter, initialFilter)}
-              >
-                <FilterCircleIcon
-                  width={'1rem'}
-                  height={'1rem'}
-                  color={colors.white50}
-                  onClick={openModal}
-                />
-              </RoundedButton>
-            </HeaderMobileNavigator>
-          }
-        >
-          <DivTopMobile>
-            <DivInfoCard>
-              <InfoCard
-                title="Oficiais"
-                subTitle={allList
-                  .filter((item) => item.bid_oficial === true)
-                  .length.toString()}
+              <FilterCircleIcon
+                width={'1rem'}
+                height={'1rem'}
+                color={colors.white50}
+                onClick={openModal}
               />
-              <InfoCard
-                title="Oficializadas"
-                subTitle={allList
-                  .filter((item) => item.bid_oficial === false)
-                  .length.toString()}
-              />
-            </DivInfoCard>
-          </DivTopMobile>
+            </RoundedButton>
+          </HeaderMobileNavigator>
+        }
+      >
+        <DivTopMobile>
+          <DivInfoCard>
+            <InfoCard
+              title="Oficiais"
+              subTitle={allList
+                .filter((item) => item.bid_oficial === true)
+                .length.toString()}
+            />
+            <InfoCard
+              title="Oficializadas"
+              subTitle={allList
+                .filter((item) => item.bid_oficial === false)
+                .length.toString()}
+            />
+          </DivInfoCard>
+        </DivTopMobile>
 
-          <Scrollable>
-            {data.length > 0 ? (
-              <TableSEQM data={data} columns={columns} width={'100rem'} />
-            ) : (
-              <>
-                {isLoading ? (
-                  <LoadingContainer>
-                    <ActivityIndicator width={20} height={20} />
-                  </LoadingContainer>
-                ) : (
-                  <NotFoundContainer>
-                    <Text
-                      fontSize="smm"
-                      fontWeight="semiBold"
-                      color={colors.emeraldGreen75}
-                    >
-                      Nenhum resultado encontrado
-                    </Text>
-                  </NotFoundContainer>
-                )}
-              </>
-            )}
-          </Scrollable>
-        </ContentMobile>
-      )}
+        <RemoveScrollableMobile>
+          <TableWithLoader
+            data={tableData}
+            columns={tableColumns}
+            isLoading={isLoading}
+          />
+        </RemoveScrollableMobile>
+
+        <ModalFilter
+          handleCloseModal={closeModal}
+          item={{}}
+          isModalOpen={modalOpen}
+          filter={filter}
+          setFilter={setFilter}
+          years={years}
+          months={months}
+          optionsOficial={optionsOficial}
+          handleApplyFilter={handleApplyFilter}
+          handleClearFilter={handleClearFilter}
+        />
+      </ContentMobile>
+    );
+  }
+
+  return (
+    <ContainerMain>
+      <ContentDektop
+        header={
+          <Header
+            text={pageTitle}
+            buttons={[
+              {
+                icon: <FilterIcon fill={colors.emeraldGreen75} />,
+                label: 'filtro',
+                onClick: openModal,
+                isActive: !deepEqual(filter, initialFilter),
+              },
+            ]}
+          />
+        }
+        contentBoxStyles={{
+          padding: '1.5rem',
+          gap: '0.25rem',
+        }}
+        count={tableData.length}
+      >
+        <HeaderNavigatorDesktop
+          title={
+            prove_id === 'nao-pontuados'
+              ? 'Eventos Não Pontuados'
+              : getNameProveById(Number(prove_id))
+          }
+          hasBackButton
+          onGoBack={() => navigate('/')}
+        >
+          <TextInput
+            placeholder="Buscar"
+            onChange={(v) => setSearchValue(v.target.value)}
+            icon={<SearchIcon fill={colors.white75} />}
+          />
+        </HeaderNavigatorDesktop>
+
+        <TableWithLoader data={tableData} columns={tableColumns} isLoading={isLoading} />
+      </ContentDektop>
 
       <ModalFilter
         handleCloseModal={closeModal}
