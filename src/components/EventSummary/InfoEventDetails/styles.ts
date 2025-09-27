@@ -37,10 +37,6 @@ export const ImageContainer = styled.div`
   background-color: ${colors.white85};
 
   @media (max-width: ${breakpointsPx.lg}) {
-    min-width: 65px;
-    max-width: 65px;
-    min-height: 65px;
-    max-height: 65px;
     border: ${radii.px} solid ${colors.emeraldGreen25};
     background-color: transparent;
   }

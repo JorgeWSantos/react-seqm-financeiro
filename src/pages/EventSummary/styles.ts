@@ -110,3 +110,31 @@ export const StyledHeadingMobile = styled(Heading).attrs({
   color: ${colors.green900};
   letter-spacing: -0.15rem;
 `;
+
+
+// ------------- MOBILE
+
+export const ContainerHeaderMobile = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 1.5rem 0.5rem 0 0.5rem;
+`;
+
+export const ContainerTopMobile = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 1rem;
+  padding: 0 0.5rem;
+`;
+
+export const ContainerBottomMobile = styled.div`
+  width: 100%;
+  height: 100%;
+`;
+

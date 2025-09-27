@@ -21,8 +21,11 @@ import { useDeviceType } from '@abqm-ds/react';
 
 import {
   ButtonTop10,
+  ContainerBottomMobile,
+  ContainerHeaderMobile,
   ContainerMain,
   ContainerMainMobile,
+  ContainerTopMobile,
   DivDropDownSearch,
   DivLeft,
   DivRight,
@@ -443,7 +446,9 @@ function EventSummary() {
         <ContentMobile
           style={{
             maxWidth: '100dvw',
+            padding: '0',
           }}
+          contentMobileBoxStyles={{ padding: '0' }}
           headerMobileNavigator={
             <HeaderMobileNavigator
               title={eventInfoData?.cds_evento || ''}
@@ -465,9 +470,11 @@ function EventSummary() {
           }
           hasFooterButtons
         >
-          <StyledHeadingMobile>{eventInfoData?.cds_evento}</StyledHeadingMobile>
+          <ContainerHeaderMobile>
+            <StyledHeadingMobile>{eventInfoData?.cds_evento}</StyledHeadingMobile>
+          </ContainerHeaderMobile>
 
-          <DivLeft>
+          <ContainerTopMobile>
             <InfoEventDetails data={eventInfoData} />
 
             <EventSummaryDetails
@@ -480,15 +487,15 @@ function EventSummary() {
               data={eventSummaryData.tipo_estatistica_prova}
               isTabletOrMobile={isTabletOrMobile}
             />
-          </DivLeft>
+          </ContainerTopMobile>
 
-          <DivRight>
+          <ContainerBottomMobile>
             <TableWithLoader
               data={tableData}
               columns={tableColumns}
               isLoading={isLoading}
             />
-          </DivRight>
+          </ContainerBottomMobile>
         </ContentMobile>
 
         {showShareOptions && !isTabletOrMobile && <ShareOptions url={shareUrl} />}
