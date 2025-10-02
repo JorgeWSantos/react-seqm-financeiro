@@ -1,16 +1,17 @@
-import { ContentDektop, ContentMobile, Header } from '@abqm-ds/react';
+import { ContentDektop, ContentMobile, Header, Text } from '@abqm-ds/react';
 
 import { useDeviceType } from '@abqm-ds/react';
 
 import NotPointedEvents from '@src/components/Main/NotPointedEvents';
 import MoreSearchedModalities from '@src/components/Main/MoreSearchedModalities';
 import OtherSearchModalities from '@src/components/Main/OtherSearchModalities';
-import { ContainerDesktopMain, ContainerMobileMain } from './styles';
+import { ContainerDesktopMain, ContainerMobileMain, TitleAndButton } from './styles';
 import { useCallback, useEffect } from 'react';
 import { useMainService } from '@src/services/Main/useMainService';
 import { usePage } from '@src/contexts/page/usePage';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import { colors } from '@abqm-ds/tokens';
 
 function Main() {
   const pageTitle = 'Resultados';
@@ -78,11 +79,17 @@ function Main() {
       ) : (
         <ContentMobile>
           <ContainerMobileMain>
+            <TitleAndButton>
+              <Text fontSize="xl" fontWeight="semiBold" color={colors.emeraldGreen75}>
+                MAIS BUSCADAS
+              </Text>
+              <NotPointedEvents onClick={onClickModality} />
+            </TitleAndButton>
             <MoreSearchedModalities
               onClick={onClickModality}
-              title="MAIS BUSCADAS"
+              title=""
               data={allModalities.top_modalidades}
-            />
+            ></MoreSearchedModalities>
             <OtherSearchModalities
               onClick={onClickModality}
               title="DEMAIS MODALIDADES"

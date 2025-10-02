@@ -351,24 +351,6 @@ function Top10() {
     <ContainerMain>
       <ContentDektop
         header={<Header text={pageTitle} subTitle={subTitle} buttons={buttonsHeader} />}
-        headerNavigator={
-          <HeaderNavigatorDesktop
-            title={
-              getNameProveById(Number(prove_id)).toUpperCase() +
-              '\u00A0\u00A0•\u00A0\u00A0TOP 10'
-            }
-            subtitle={eventInfoData?.cds_evento || ''}
-            hasBackButton
-            onGoBack={() => navigate('/modalidade/' + prove_id + '/evento/' + event_id)}
-          >
-            <TextInput
-              placeholder="Buscar"
-              onChange={(v) => setSearchValue(v.target.value)}
-              icon={<SearchIcon fill={colors.white75} />}
-              debounceDelay={1000}
-            />
-          </HeaderNavigatorDesktop>
-        }
         contentBoxStyles={{
           padding: '1.5rem',
           gap: '0.25rem',
@@ -376,29 +358,39 @@ function Top10() {
         }}
         count={data.length}
       >
-        <Scrollable>
-          {data.length > 0 ? (
-            <TableSEQM data={data} columns={columns} />
-          ) : (
-            <>
-              {isLoading ? (
-                <LoadingContainer>
-                  <ActivityIndicator width={20} height={20} />
-                </LoadingContainer>
-              ) : (
-                <NotFoundContainer>
-                  <Text
-                    fontSize="smm"
-                    fontWeight="semiBold"
-                    color={colors.emeraldGreen75}
-                  >
-                    Nenhum resultado encontrado
-                  </Text>
-                </NotFoundContainer>
-              )}
-            </>
-          )}
-        </Scrollable>
+        <HeaderNavigatorDesktop
+          title={
+            getNameProveById(Number(prove_id)).toUpperCase() +
+            '\u00A0\u00A0•\u00A0\u00A0TOP 10'
+          }
+          subtitle={eventInfoData?.cds_evento || ''}
+          hasBackButton
+          onGoBack={() => navigate('/modalidade/' + prove_id + '/evento/' + event_id)}
+        >
+          <TextInput
+            placeholder="Buscar"
+            onChange={(v) => setSearchValue(v.target.value)}
+            icon={<SearchIcon fill={colors.white75} />}
+            debounceDelay={1000}
+          />
+        </HeaderNavigatorDesktop>
+        {data.length > 0 ? (
+          <TableSEQM data={data} columns={columns} />
+        ) : (
+          <>
+            {isLoading ? (
+              <LoadingContainer>
+                <ActivityIndicator width={20} height={20} />
+              </LoadingContainer>
+            ) : (
+              <NotFoundContainer>
+                <Text fontSize="smm" fontWeight="semiBold" color={colors.emeraldGreen75}>
+                  Nenhum resultado encontrado
+                </Text>
+              </NotFoundContainer>
+            )}
+          </>
+        )}
       </ContentDektop>
 
       {data?.length > 0 && (

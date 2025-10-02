@@ -47,6 +47,10 @@ export const InfoEventDetailed = styled.div`
   flex-direction: column;
   justify-content: center;
 
+  @media (max-width: 1400px) {
+    gap: 0.25rem;
+  }
+
   @media (max-width: ${breakpointsPx.lg}) {
     gap: 0.1rem;
   }
@@ -66,17 +70,27 @@ export const Information = styled.div`
   }
 
   .subtitle {
-    color: ${colors.emeraldGreen75};
+    color: ${colors.emeraldGreen92};
     font-size: ${fontSizes.xxs};
     font-weight: ${fontWeights.regular};
     line-height: ${lineHeights.shorter};
   }
 
+  .organizer {
+    color: ${colors.emeraldGreen75};
+  }
+
   @media (max-width: 1400px) {
     flex-direction: column;
+
+
     .subtitle {
       margin: 0 !important;
     }
+  }
+
+  @media (max-width: ${breakpointsPx.xl}) {
+    flex-direction: row;
   }
 
   @media (max-width: ${breakpointsPx.lg}) {

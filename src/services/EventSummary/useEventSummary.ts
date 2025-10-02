@@ -12,7 +12,7 @@ export function useEventSummary() {
       prove_id,
       event_id,
     }: {
-      prove_id: number;
+      prove_id?: number;
       event_id: number;
     }): Promise<EventSummaryResponseData> => {
       try {

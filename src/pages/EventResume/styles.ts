@@ -23,6 +23,11 @@ export const Scrollable = styled.div`
   display: flex;
   gap: 1.5rem;
 
+  @media (max-width: ${breakpointsPx.xl}) {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
   @media (max-width: ${breakpointsPx.lg}) {
     flex-direction: column;
     gap: 1rem;
@@ -39,21 +44,38 @@ export const DivLeft = styled.div`
 `;
 
 export const DivRight = styled.div`
+  display: flex;
+  flex-direction: column;
   width: 100%;
   height: 100%;
-  padding-top: 0.5rem;
+  gap: 1rem;
 `;
 
 export const DivTopRight = styled.div`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: ${space[1]} ${space[1]};
-  margin: 0 auto;
+  width: 100%;
+  justify-content: flex-end;
+  align-items: flex-end;
+  height: 3.75rem;
+  padding: 0.125rem 0;
 
   border-bottom: ${radii.px} solid ${colors.white25};
-  border-radius: 8px;
   position: relative;
+
+  @media (max-width: ${breakpointsPx.xl}) {
+    height: unset;
+  }
+`;
+
+export const ContainerDetails = styled.div`
+  display: flex;
+  width: 26.625rem;
+  padding: 0.5rem 0;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
+  gap: 1rem;
 `;
 
 export const DivDropDownSearch = styled.div`
@@ -110,31 +132,3 @@ export const StyledHeadingMobile = styled(Heading).attrs({
   color: ${colors.green900};
   letter-spacing: -0.15rem;
 `;
-
-
-// ------------- MOBILE
-
-export const ContainerHeaderMobile = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  padding: 1.5rem 0.5rem 0 0.5rem;
-`;
-
-export const ContainerTopMobile = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  gap: 1rem;
-  padding: 0 0.5rem;
-`;
-
-export const ContainerBottomMobile = styled.div`
-  width: 100%;
-  height: 100%;
-`;
-

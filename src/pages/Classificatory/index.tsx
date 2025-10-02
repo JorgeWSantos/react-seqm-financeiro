@@ -29,12 +29,14 @@ import {
   StyledTdSpanClassD,
   StyledTdTextClassD,
   StyledDivClassD,
+  DivCompetitor,
 } from './styles';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePage } from '@src/contexts/page/usePage';
 import {
+  AbqmOficialColoredIconSEQM,
   FileTextIcon,
   PrinterIcon,
   SearchIcon,
@@ -59,6 +61,7 @@ import { useInfoEvent } from '@src/services/General/useInfoEvent';
 import { InfoCardsGroup } from './InfoCards';
 import type { Tab } from './types';
 import { urlConsultaAnimal, urlRanking } from '@src/config/env';
+import { getClassDValueToSort } from './helper';
 
 const Classificatory = () => {
   const params = useParams();
@@ -276,7 +279,6 @@ const Classificatory = () => {
           {
             key: 'nucleo',
             label: 'NÚCLEO',
-            width: '8%',
             minWidth: '4.5rem',
             align: 'center',
             sortable: true,
@@ -286,7 +288,7 @@ const Classificatory = () => {
     {
       key: 'abqm',
       label: 'ABQM',
-      minWidth: '4.5rem',
+      minWidth: '4.2rem',
       align: 'center',
       sortable: true,
     },
@@ -295,7 +297,7 @@ const Classificatory = () => {
           {
             key: 'classd',
             label: 'CLASS',
-            minWidth: '4rem',
+            width: '4rem',
             align: 'center',
             sortable: true,
           },
@@ -304,30 +306,32 @@ const Classificatory = () => {
     {
       key: 'spacer',
       label: '',
-      minWidth: '0.5rem',
+      width: '0.5rem',
       align: 'left',
     },
     {
       key: 'competitor',
       label: 'COMPETIDOR',
-      width: '28%',
       align: 'left',
       sortable: true,
     },
     {
       key: 'animal',
       label: 'ANIMAL',
-      minWidth: '210px',
-      width: '15%',
       align: 'left',
       sortable: true,
     },
     {
       key: 'owner',
       label: 'PROPRIETÁRIO',
-      width: '36%',
       align: 'left',
       sortable: true,
+    },
+    {
+      key: 'auto',
+      label: '',
+      width: '100%',
+      align: 'left',
     },
     {
       key: 'tn',
@@ -335,28 +339,24 @@ const Classificatory = () => {
       align: 'left',
       sortable: true,
     },
-    {
-      key: 'spacer2',
-      label: '',
-      minWidth: '0.25rem',
-      align: 'left',
-    },
   ];
 
   const tableData: Array<TableRowSEQM> = listToShow.map((item) => ({
     nucleo: {
+      valueToSort: item.cds_classificacao_nucleo
+        ? Number(item.cds_classificacao_nucleo)
+        : lastSortable(item),
       value: `${
         item.cds_classificacao_nucleo + (item.cds_classificacao_nucleo ? '°' : '')
       }`,
     },
     abqm: { value: `${item.cds_classificacao + (item.cds_classificacao ? '°' : '')}` },
     classd: {
-      valueToSort: item.cds_classificacao_d
-        ? `${
-            item.cds_classificacao_d.split('-')[0][0].trim() +
-            item.cds_classificacao_d.split('-')[1].trim()
-          }`
+      valueToSort: getClassDValueToSort(item.cds_classificacao_d),
+      value: item.cds_classificacao_d
+        ? `${item.cds_classificacao_d}`
         : lastSortable(item),
+      // render: () => render1(item),
       render: () => (
         <>
           {item.cds_classificacao_d && (
@@ -369,8 +369,8 @@ const Classificatory = () => {
               </StyledTdTextClassD>
               <StyledTdSpanClassD>
                 {/* {item.cds_classificacao_d.split('-')[0][0]} */}
-                {item.cds_classificacao_d.split('-')[0][0] +
-                  item.cds_classificacao_d.split('-')[1]}
+                {item.cds_classificacao_d.split('-')[0][0]}
+                {/* + item.cds_classificacao_d.split('-')[1]} */}
               </StyledTdSpanClassD>
             </StyledDivClassD>
           )}
@@ -384,14 +384,19 @@ const Classificatory = () => {
       value: item.equipe[0]?.cds_competidor || '', // to sort
       render: () => {
         return item.equipe.map((e, i) => (
-          <CompetitorTableData
-            key={new Date().getTime() + i}
-            value={e.cds_competidor}
-            onClick={() => {
-              window.location.href =
-                urlRanking + `/competidor/detalhe/${e.nid_competidor}`;
-            }}
-          />
+          <DivCompetitor>
+            {hasNucleoColumn !== -1 && item.bid_nucleo_participa_abqm === true && (
+              <AbqmOficialColoredIconSEQM width={11} height={11} />
+            )}
+            <CompetitorTableData
+              key={new Date().getTime() + i}
+              value={e.cds_competidor}
+              onClick={() => {
+                window.location.href =
+                  urlRanking + `/competidor/detalhe/${e.nid_competidor}`;
+              }}
+            />
+          </DivCompetitor>
         ));
       },
     },
@@ -437,9 +442,12 @@ const Classificatory = () => {
         ));
       },
     },
-    tn: { value: item.cds_media_final },
-    spacer2: {
+    auto: {
       value: '',
+    },
+    tn: { value: item.cds_media_final },
+    isoficial: {
+      value: hasNucleoColumn !== -1 && item.bid_nucleo_participa_abqm === true,
     },
   }));
 
@@ -595,7 +603,6 @@ const Classificatory = () => {
               data={tableData}
               columns={tableColumns}
               isLoading={isLoading}
-              minWidthTable="62rem"
             />
           </Scrollable>
         </ContentMobile>
@@ -609,21 +616,6 @@ const Classificatory = () => {
     <ContainerMain>
       <ContentDektop
         header={<Header text={pageTitle} subTitle={subTitle} buttons={buttonsHeader} />}
-        headerNavigator={
-          <HeaderNavigatorDesktop
-            title={classificatoryEventInfoData?.cds_modalidade?.toUpperCase() || ''}
-            subtitle={classificatoryEventInfoData?.cds_evento || ''}
-            hasBackButton
-            onGoBack={handleOnGoBack}
-          >
-            <TextInput
-              placeholder="Buscar"
-              onChange={(v) => setSearchValue(v.target.value)}
-              icon={<SearchIcon fill={colors.white75} />}
-              debounceDelay={1000}
-            />
-          </HeaderNavigatorDesktop>
-        }
         contentBoxStyles={{
           padding: '1.5rem',
           gap: '0.25rem',
@@ -631,6 +623,20 @@ const Classificatory = () => {
         }}
         count={tableData.length}
       >
+        <HeaderNavigatorDesktop
+          title={classificatoryEventInfoData?.cds_modalidade?.toUpperCase() || ''}
+          subtitle={classificatoryEventInfoData?.cds_evento || ''}
+          hasBackButton
+          onGoBack={handleOnGoBack}
+        >
+          <TextInput
+            placeholder="Buscar"
+            onChange={(v) => setSearchValue(v.target.value)}
+            icon={<SearchIcon fill={colors.white75} />}
+            debounceDelay={1000}
+          />
+        </HeaderNavigatorDesktop>
+
         <TabAndCards>
           <div className="empty">
             {tabsToShow.map((tab, index) => (
@@ -658,13 +664,12 @@ const Classificatory = () => {
           />
         </TabAndCards>
 
-        <Scrollable>
-          <TableWithLoader
-            data={tableData}
-            columns={tableColumns}
-            isLoading={isLoading}
-          />
-        </Scrollable>
+        <TableWithLoader
+          data={tableData}
+          columns={tableColumns}
+          isLoading={isLoading}
+          minWidthTable="100%"
+        />
       </ContentDektop>
 
       {tableData?.length > 0 && (
