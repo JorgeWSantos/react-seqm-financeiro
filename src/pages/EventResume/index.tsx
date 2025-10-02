@@ -20,13 +20,9 @@ import {
 import { useDeviceType } from '@abqm-ds/react';
 
 import {
-  ButtonTop10,
-  ContainerBottomMobile,
-  ContainerHeaderMobile,
+  ContainerDetails,
   ContainerMain,
   ContainerMainMobile,
-  ContainerTopMobile,
-  DivDropDownSearch,
   DivLeft,
   DivRight,
   DivTopRight,
@@ -36,35 +32,24 @@ import {
 } from './styles';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePage } from '@src/contexts/page/usePage';
-import {
-  CheckIcon,
-  DashIcon,
-  FileTextIcon,
-  PrinterIcon,
-  ShareIcon,
-  StarIcon,
-  TrophyIcon,
-} from '@abqm-ds/icons';
+import { CheckIcon, DashIcon, ShareIcon, StarIcon, TrophyIcon } from '@abqm-ds/icons';
 import { colors } from '@abqm-ds/tokens';
-import { Link, useParams } from 'react-router';
-import InfoEventDetails from '@components/EventSummary/InfoEventDetails';
-import EventSummaryDetails from '@components/EventSummary/EventSummaryDetails';
-import GraphSummaryDetails from '@components/EventSummary/GraphSummaryDetails';
+import { useParams } from 'react-router';
+import InfoEventDetails from '@components/EventResume/InfoEventDetails';
+import GraphSummaryDetails from '@components/EventResume/GraphSummaryDetails';
 import { useEventSummary } from '@src/services/EventSummary/useEventSummary';
 import type {
   EventSummaryResponseData,
   ProvesEventSummary,
   ResultModalityByProve,
 } from '@services/EventSummary/types.api';
-import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
-import PrintArea from '@src/components/PrintArea';
-import type { PrintHeaderProps } from '@src/components/PrintArea/PrintHeader';
-import ModalityDropdown from '@components/EventSummary/ModalityDropdown';
+import { useCallback, useEffect, useState, type ReactNode } from 'react';
 import { useInfoEvent } from '@src/services/General/useInfoEvent';
 import type { InfoEventData } from '@src/services/General/types.info-event.api';
-// import { FooterWithButtons, type FooterWithButtonsPropsType } from './FooterWithButtons';
+import EventResumeDetails from '@src/components/EventResume/EventResumeDetails';
+import ProvesDetails from '@src/components/EventResume/ProvesDetails';
 
-function EventSummary() {
+function EventResume() {
   const pageTitle = 'Resultados »';
 
   const [showShareOptions, setShowShareOptions] = useState(false);
@@ -84,9 +69,6 @@ function EventSummary() {
   const { getInfoEvent } = useInfoEvent();
 
   const [isLoading, setIsLoading] = useState(true);
-
-  // Ref para acessar o método print do PrintArea
-  const printAreaRef = useRef<{ print: () => void }>(null);
 
   const [eventSummaryData, setEventSummaryData] = useState<EventSummaryResponseData>(
     {} as EventSummaryResponseData
@@ -111,7 +93,6 @@ function EventSummary() {
   const [listToShow, setListToShow] = useState<ResultModalityByProve[]>([]);
   const [allProves, setAllProves] = useState<DataDropdown[]>([]);
   const [proveSelected, setProveSelected] = useState<DataDropdown | null>(null);
-  const [switchResumeChecked, setSwitchResumeChecked] = useState(false);
 
   const handleGetSummary = useCallback(
     async ({ prove_id_selected }: { prove_id_selected: string }) => {
@@ -121,11 +102,8 @@ function EventSummary() {
       }
 
       const data = await getEventSummary({
-        prove_id: prove_id_selected === 'nao-pontuados' ? 0 : Number(prove_id_selected),
         event_id: Number(event_id),
       });
-
-      console.log('handleGetSummary', data);
 
       setEventSummaryData(data);
       setListToShow(data.resultado_modalidade_prova);
@@ -163,13 +141,6 @@ function EventSummary() {
     setEventInfoData(data);
   }, [getInfoEvent, event_id]);
 
-  const onTriggerPrintPDF = useCallback(async () => {
-    await handleGetEventInfo();
-    setTimeout(() => {
-      printAreaRef.current?.print();
-    }, 1000);
-  }, [handleGetEventInfo]);
-
   // Effect to set the page title and path
   useEffect(() => {
     setPage({
@@ -197,12 +168,14 @@ function EventSummary() {
     }
     const resumes = eventSummaryData.numeros_evento || [];
 
-    const resumeData = {
-      inscricoes: resumes?.[1]?.inscricoes ?? '0',
-      competidores: resumes?.[1]?.competidores ?? '0',
-      animais: resumes?.[1]?.animais ?? '0',
-      premiacao: resumes?.[1]?.premiacao ?? 'sem premiação',
-    };
+    // console.log('resumes', resumes);
+
+    // const resumeData = {
+    //   inscricoes: resumes?.[1]?.inscricoes ?? '0',
+    //   competidores: resumes?.[1]?.competidores ?? '0',
+    //   animais: resumes?.[1]?.animais ?? '0',
+    //   premiacao: resumes?.[1]?.premiacao ?? 'sem premiação',
+    // };
 
     const generalResumeData = {
       inscricoes: resumes?.[0]?.inscricoes ?? '0',
@@ -211,12 +184,8 @@ function EventSummary() {
       premiacao: resumes?.[0]?.premiacao ?? 'sem premiação',
     };
 
-    if (switchResumeChecked) {
-      setEventSummaryNumbers(resumeData);
-    } else {
-      setEventSummaryNumbers(generalResumeData);
-    }
-  }, [eventSummaryData, switchResumeChecked]);
+    setEventSummaryNumbers(generalResumeData);
+  }, [eventSummaryData]);
 
   const redirectToClassificatory = useCallback(
     ({
@@ -324,39 +293,6 @@ function EventSummary() {
     inscriptions: { value: item.participantes.toString() },
   }));
 
-  const printCards = [
-    {
-      title: 'DATA DO EVENTO',
-      value: eventInfoData?.data_inicio || '',
-    },
-    {
-      title: 'INSCRIÇÕES',
-      value: eventSummaryNumbers.inscricoes,
-    },
-    {
-      title: 'COMPETIDORES',
-      value: eventSummaryNumbers.competidores,
-    },
-    {
-      title: 'ANIMAIS',
-      value: eventSummaryNumbers.animais,
-    },
-    {
-      title: eventSummaryNumbers.premiacao === 'sem premiação' ? '' : 'PREMIAÇÃO',
-      value: eventSummaryNumbers.premiacao,
-    },
-  ];
-
-  const printInfo: PrintHeaderProps = {
-    eventName: eventInfoData?.cds_evento || '',
-    responsibleName: eventInfoData?.organizador || '',
-    city: eventInfoData?.local || '',
-    state: eventInfoData?.estado || '',
-    startDate: eventInfoData?.data_inicio || '',
-    endDate: eventInfoData?.data_fim || '',
-    modalityName: getNameProveById(Number(prove_id)) || '',
-  };
-
   const buttonsHeader = [
     {
       icon: <StarIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen75} />,
@@ -368,21 +304,6 @@ function EventSummary() {
             eventInfoData?.nid_agrupa_evento
         );
       },
-    },
-    // TODO: criar a tela de resumo em pdf
-    {
-      icon: (
-        <FileTextIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen75} />
-      ),
-      label: 'resumo do evento',
-      onClick: onTriggerPrintPDF,
-    },
-    {
-      icon: (
-        <PrinterIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen75} />
-      ),
-      label: 'imprimir',
-      onClick: onTriggerPrintPDF,
     },
     {
       icon: (
@@ -411,7 +332,6 @@ function EventSummary() {
       },
       variant: 'outline-white-25',
     },
-
     {
       icon: <StarIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />,
       label: 'participações',
@@ -424,7 +344,6 @@ function EventSummary() {
       },
       variant: 'outline-white-25',
     },
-
     {
       icon: (
         <ShareIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />
@@ -446,9 +365,7 @@ function EventSummary() {
         <ContentMobile
           style={{
             maxWidth: '100dvw',
-            padding: '0',
           }}
-          contentMobileBoxStyles={{ padding: '0' }}
           headerMobileNavigator={
             <HeaderMobileNavigator
               title={eventInfoData?.cds_evento || ''}
@@ -470,32 +387,26 @@ function EventSummary() {
           }
           hasFooterButtons
         >
-          <ContainerHeaderMobile>
-            <StyledHeadingMobile>{eventInfoData?.cds_evento}</StyledHeadingMobile>
-          </ContainerHeaderMobile>
+          <StyledHeadingMobile>{eventInfoData?.cds_evento}</StyledHeadingMobile>
 
-          <ContainerTopMobile>
+          <DivLeft>
             <InfoEventDetails data={eventInfoData} />
 
-            <EventSummaryDetails
-              data={eventSummaryNumbers}
-              switchChecked={switchResumeChecked}
-              setSwitchChecked={setSwitchResumeChecked}
-            />
+            <EventResumeDetails data={eventSummaryNumbers} />
 
             <GraphSummaryDetails
               data={eventSummaryData.tipo_estatistica_prova}
               isTabletOrMobile={isTabletOrMobile}
             />
-          </ContainerTopMobile>
+          </DivLeft>
 
-          <ContainerBottomMobile>
+          <DivRight>
             <TableWithLoader
               data={tableData}
               columns={tableColumns}
               isLoading={isLoading}
             />
-          </ContainerBottomMobile>
+          </DivRight>
         </ContentMobile>
 
         {showShareOptions && !isTabletOrMobile && <ShareOptions url={shareUrl} />}
@@ -522,7 +433,8 @@ function EventSummary() {
         }}
       >
         <HeaderNavigatorDesktop
-          title={eventInfoData?.cds_evento || ''}
+          title={'RESUMO GERAL DO EVENTO'}
+          subtitle={eventInfoData?.cds_evento || ''}
           hasBackButton
           onGoBack={() => navigate('/modalidade/' + prove_id)}
         />
@@ -530,74 +442,37 @@ function EventSummary() {
           <DivLeft>
             <InfoEventDetails data={eventInfoData} />
 
-            <EventSummaryDetails
-              data={eventSummaryNumbers}
-              switchChecked={switchResumeChecked}
-              setSwitchChecked={setSwitchResumeChecked}
-            />
+            <EventResumeDetails data={eventSummaryNumbers} />
 
-            <GraphSummaryDetails
+            {/* <GraphSummaryDetails
               data={eventSummaryData.tipo_estatistica_prova}
               isTabletOrMobile={isTabletOrMobile}
-            />
+            /> */}
           </DivLeft>
 
           <DivRight>
             <DivTopRight>
-              <DivDropDownSearch>
-                <ModalityDropdown
-                  provesDropdown={allProves}
-                  proveSelected={proveSelected}
-                  onChange={(value) => {
-                    setProveSelected(value);
-                    handleGetSummary({ prove_id_selected: value.id });
-                    navigate(`/modalidade/${value.id}/evento/${event_id}`);
-                  }}
-                />
-              </DivDropDownSearch>
-
-              <Link
-                to={`/modalidade/${listToShow[0]?.nid_prova}/evento/${listToShow[0]?.nid_evento}/prova-evento/${listToShow[0]?.nid_prova_evento}/top10`}
-              >
-                <ButtonTop10>
-                  <TrophyIcon fill={colors.white75} />
-                  <Text
-                    fontSize="ssm"
-                    fontWeight="semiBold"
-                    lineHeight="tight"
-                    color={colors.white75}
-                    style={{ marginTop: '2px' }}
-                  >
-                    TOP 10
-                  </Text>
-                </ButtonTop10>
-              </Link>
+              <Text color={colors.white} fontSize="ssm">
+                modalidades
+              </Text>
             </DivTopRight>
 
-            <TableWithLoader
-              data={tableData}
-              columns={tableColumns}
-              isLoading={isLoading}
-            />
+            <ContainerDetails>
+              <ProvesDetails data={{ ...eventSummaryNumbers, name_prove: 'Apartação' }} />
+              <ProvesDetails data={{ ...eventSummaryNumbers, name_prove: 'Apartação' }} />
+              <ProvesDetails data={{ ...eventSummaryNumbers, name_prove: 'Apartação' }} />
+              <ProvesDetails data={{ ...eventSummaryNumbers, name_prove: 'Apartação' }} />
+              <ProvesDetails
+                data={{ ...eventSummaryNumbers, name_prove: 'Três Tambores' }}
+              />
+            </ContainerDetails>
           </DivRight>
         </Scrollable>
       </ContentDektop>
-
-      {tableData?.length > 0 && (
-        <PrintArea
-          ref={printAreaRef}
-          title={switchResumeChecked ? 'RESUMO GERAL' : 'RESUMO DA MODALIDADE'}
-          columns={tableColumns}
-          data={tableData}
-          cards={printCards}
-          info={printInfo}
-          totalForPage={7}
-        />
-      )}
 
       {showShareOptions && !isTabletOrMobile && <ShareOptions url={shareUrl} />}
     </ContainerMain>
   );
 }
 
-export default EventSummary;
+export default EventResume;

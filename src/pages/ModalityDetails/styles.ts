@@ -10,21 +10,9 @@ export const LinkToRedirect = styled.span`
   text-decoration: none;
 `
 
-export const Scrollable = styled.div`
-  width: 100%;
-  height: 100%;
-  overflow-y: auto;
-  overflow-x: auto;
-`;
-
-export const LoadingContainer = styled.div`
-  width: 100%;
-  height: 100%;
-`;
-
-export const NotFoundContainer = styled.div`
-  width: 100%;
-  padding: 1rem 0;
+export const RemoveScrollableMobile = styled.div`
+  overflow-x: unset;
+  overflow-y: unset;
 `;
 
 export const DivTopMobile = styled.div`
@@ -32,6 +20,7 @@ export const DivTopMobile = styled.div`
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid ${colors.white25};
+  margin: 0 0.5rem;
   padding-bottom: 0.375rem;
 `;
 

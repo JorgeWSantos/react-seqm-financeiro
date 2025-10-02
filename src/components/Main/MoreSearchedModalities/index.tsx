@@ -7,6 +7,7 @@ import { getModalityIcon } from '@abqm-ds/react';
 interface MoreSearchedModalitiesProps {
   title: string;
   data: ResultModalities[];
+  children?: React.ReactNode;
   onClick: ({
     id_prova,
     cds_tipo_prova,
@@ -19,10 +20,12 @@ interface MoreSearchedModalitiesProps {
 const MoreSearchedModalities = ({
   title,
   data,
+  children,
   onClick,
 }: MoreSearchedModalitiesProps) => {
   return (
     <Container>
+      {children}
       <HeadingModalities>{title}</HeadingModalities>
       <ContentModalities>
         {data.map((item) => {
