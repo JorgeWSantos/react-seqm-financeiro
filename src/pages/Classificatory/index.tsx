@@ -59,6 +59,7 @@ import { useInfoEvent } from '@src/services/General/useInfoEvent';
 import { InfoCardsGroup } from './InfoCards';
 import type { Tab } from './types';
 import { urlConsultaAnimal, urlRanking } from '@src/config/env';
+import { getClassDValueToSort } from './helper';
 
 const Classificatory = () => {
   const params = useParams();
@@ -351,12 +352,11 @@ const Classificatory = () => {
     },
     abqm: { value: `${item.cds_classificacao + (item.cds_classificacao ? '°' : '')}` },
     classd: {
-      valueToSort: item.cds_classificacao_d
-        ? `${
-            item.cds_classificacao_d.split('-')[0][0].trim() +
-            item.cds_classificacao_d.split('-')[1].trim()
-          }`
+      valueToSort: getClassDValueToSort(item.cds_classificacao_d),
+      value: item.cds_classificacao_d
+        ? `${item.cds_classificacao_d}`
         : lastSortable(item),
+      // render: () => render1(item),
       render: () => (
         <>
           {item.cds_classificacao_d && (
@@ -369,8 +369,8 @@ const Classificatory = () => {
               </StyledTdTextClassD>
               <StyledTdSpanClassD>
                 {/* {item.cds_classificacao_d.split('-')[0][0]} */}
-                {item.cds_classificacao_d.split('-')[0][0] +
-                  item.cds_classificacao_d.split('-')[1]}
+                {item.cds_classificacao_d.split('-')[0][0]}
+                {/* + item.cds_classificacao_d.split('-')[1]} */}
               </StyledTdSpanClassD>
             </StyledDivClassD>
           )}
