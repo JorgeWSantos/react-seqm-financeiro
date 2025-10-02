@@ -29,12 +29,14 @@ import {
   StyledTdSpanClassD,
   StyledTdTextClassD,
   StyledDivClassD,
+  DivCompetitor,
 } from './styles';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePage } from '@src/contexts/page/usePage';
 import {
+  AbqmOficialColoredIconSEQM,
   FileTextIcon,
   PrinterIcon,
   SearchIcon,
@@ -277,7 +279,7 @@ const Classificatory = () => {
           {
             key: 'nucleo',
             label: 'NÚCLEO',
-            width: '4.5rem',
+            minWidth: '4.5rem',
             align: 'center',
             sortable: true,
           },
@@ -286,7 +288,7 @@ const Classificatory = () => {
     {
       key: 'abqm',
       label: 'ABQM',
-      width: '4.5rem',
+      minWidth: '4.2rem',
       align: 'center',
       sortable: true,
     },
@@ -341,6 +343,9 @@ const Classificatory = () => {
 
   const tableData: Array<TableRowSEQM> = listToShow.map((item) => ({
     nucleo: {
+      valueToSort: item.cds_classificacao_nucleo
+        ? Number(item.cds_classificacao_nucleo)
+        : lastSortable(item),
       value: `${
         item.cds_classificacao_nucleo + (item.cds_classificacao_nucleo ? '°' : '')
       }`,
@@ -379,14 +384,19 @@ const Classificatory = () => {
       value: item.equipe[0]?.cds_competidor || '', // to sort
       render: () => {
         return item.equipe.map((e, i) => (
-          <CompetitorTableData
-            key={new Date().getTime() + i}
-            value={e.cds_competidor}
-            onClick={() => {
-              window.location.href =
-                urlRanking + `/competidor/detalhe/${e.nid_competidor}`;
-            }}
-          />
+          <DivCompetitor>
+            {hasNucleoColumn !== -1 && item.bid_nucleo_participa_abqm === true && (
+              <AbqmOficialColoredIconSEQM width={11} height={11} />
+            )}
+            <CompetitorTableData
+              key={new Date().getTime() + i}
+              value={e.cds_competidor}
+              onClick={() => {
+                window.location.href =
+                  urlRanking + `/competidor/detalhe/${e.nid_competidor}`;
+              }}
+            />
+          </DivCompetitor>
         ));
       },
     },
@@ -436,6 +446,9 @@ const Classificatory = () => {
       value: '',
     },
     tn: { value: item.cds_media_final },
+    isoficial: {
+      value: hasNucleoColumn !== -1 && item.bid_nucleo_participa_abqm === true,
+    },
   }));
 
   const printCards = [

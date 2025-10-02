@@ -65,6 +65,7 @@ export const StyledTextEvent = styled(Text)`
   font-family: ${fonts.secondary};
 `;
 
+// -------------------------
 
 export const StyledDivClassD = styled.div`
   display: flex;
@@ -79,3 +80,9 @@ export const StyledTdSpanClassD = styled.span`
   margin-bottom: -4px !important;
   align-self: flex-end;
 `;
+
+export const DivCompetitor = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+`
