@@ -277,8 +277,7 @@ const Classificatory = () => {
           {
             key: 'nucleo',
             label: 'NÚCLEO',
-            width: '8%',
-            minWidth: '4.5rem',
+            width: '4.5rem',
             align: 'center',
             sortable: true,
           },
@@ -287,7 +286,7 @@ const Classificatory = () => {
     {
       key: 'abqm',
       label: 'ABQM',
-      minWidth: '4.5rem',
+      width: '4.5rem',
       align: 'center',
       sortable: true,
     },
@@ -296,7 +295,7 @@ const Classificatory = () => {
           {
             key: 'classd',
             label: 'CLASS',
-            minWidth: '4rem',
+            width: '4rem',
             align: 'center',
             sortable: true,
           },
@@ -305,42 +304,38 @@ const Classificatory = () => {
     {
       key: 'spacer',
       label: '',
-      minWidth: '0.5rem',
+      width: '0.5rem',
       align: 'left',
     },
     {
       key: 'competitor',
       label: 'COMPETIDOR',
-      width: '28%',
       align: 'left',
       sortable: true,
     },
     {
       key: 'animal',
       label: 'ANIMAL',
-      minWidth: '210px',
-      width: '15%',
       align: 'left',
       sortable: true,
     },
     {
       key: 'owner',
       label: 'PROPRIETÁRIO',
-      width: '36%',
       align: 'left',
       sortable: true,
+    },
+    {
+      key: 'auto',
+      label: '',
+      width: '100%',
+      align: 'left',
     },
     {
       key: 'tn',
       label: 'T/N',
       align: 'left',
       sortable: true,
-    },
-    {
-      key: 'spacer2',
-      label: '',
-      minWidth: '0.25rem',
-      align: 'left',
     },
   ];
 
@@ -437,10 +432,10 @@ const Classificatory = () => {
         ));
       },
     },
-    tn: { value: item.cds_media_final },
-    spacer2: {
+    auto: {
       value: '',
     },
+    tn: { value: item.cds_media_final },
   }));
 
   const printCards = [
@@ -595,7 +590,6 @@ const Classificatory = () => {
               data={tableData}
               columns={tableColumns}
               isLoading={isLoading}
-              minWidthTable="62rem"
             />
           </Scrollable>
         </ContentMobile>
@@ -657,7 +651,12 @@ const Classificatory = () => {
           />
         </TabAndCards>
 
-        <TableWithLoader data={tableData} columns={tableColumns} isLoading={isLoading} />
+        <TableWithLoader
+          data={tableData}
+          columns={tableColumns}
+          isLoading={isLoading}
+          minWidthTable="100%"
+        />
       </ContentDektop>
 
       {tableData?.length > 0 && (
