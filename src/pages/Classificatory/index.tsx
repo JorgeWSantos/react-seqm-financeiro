@@ -14,6 +14,7 @@ import {
   type TableRowSEQM,
   TableWithLoader,
   StyledTableSEQMTextTd,
+  TabsCardsBar,
 } from '@abqm-ds/react';
 
 import { useDeviceType } from '@abqm-ds/react';
@@ -183,8 +184,8 @@ const Classificatory = () => {
   }, [getInfoEvent, event_id]);
 
   const handleOnGoBack = useCallback(() => {
-    navigate('/modalidade/' + prove_id + '/evento/' + event_id);
-  }, [event_id, navigate, prove_id]);
+    navigate(-1);
+  }, [navigate]);
 
   const onTriggerPrintPDF = useCallback(async () => {
     await handleGetEventInfo();
@@ -248,8 +249,6 @@ const Classificatory = () => {
     handleGetEventDetails();
   }, [handleGetResultsClassificatory, handleGetEventDetails]);
 
-  console.log('judgmentCards', judgmentCards);
-
   const hasNucleoColumn = listToShow.findIndex(
     (item) => item.cds_classificacao_nucleo !== ''
   );
@@ -259,8 +258,6 @@ const Classificatory = () => {
   // const hasABQMParticipation = listToShow.findIndex(
   //   (item) => item.bid_nucleo_participa_abqm
   // );
-
-  console.log('hasClassD', hasClassD);
 
   const lastSortable = (item: ClassificatoryData) => {
     if (item.cds_media_final === 'SAT') {

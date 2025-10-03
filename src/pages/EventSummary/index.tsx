@@ -453,7 +453,7 @@ function EventSummary() {
             <HeaderMobileNavigator
               title={eventInfoData?.cds_evento || ''}
               hasBackButton
-              onGoBack={() => navigate('/modalidade/' + prove_id)}
+              onGoBack={() => navigate(-1)}
             >
               <Dropdown
                 variant="secondary"
@@ -511,7 +511,11 @@ function EventSummary() {
         header={
           <Header
             text={pageTitle}
-            subTitle={getNameProveById(Number(prove_id))}
+            subTitle={
+              prove_id === 'nao-pontuados'
+                ? 'Não Pontuados'
+                : getNameProveById(Number(prove_id))
+            }
             buttons={buttonsHeader}
           />
         }
@@ -524,7 +528,7 @@ function EventSummary() {
         <HeaderNavigatorDesktop
           title={eventInfoData?.cds_evento || ''}
           hasBackButton
-          onGoBack={() => navigate('/modalidade/' + prove_id)}
+          onGoBack={() => navigate(-1)}
         />
         <Scrollable>
           <DivLeft>
@@ -551,7 +555,10 @@ function EventSummary() {
                   onChange={(value) => {
                     setProveSelected(value);
                     handleGetSummary({ prove_id_selected: value.id });
-                    navigate(`/modalidade/${value.id}/evento/${event_id}`);
+
+                    if (prove_id !== 'nao-pontuados') {
+                      navigate(`/modalidade/${value.id}/evento/${event_id}`);
+                    }
                   }}
                 />
               </DivDropDownSearch>
