@@ -22,7 +22,6 @@ import { useDeviceType } from '@abqm-ds/react';
 import {
   ContainerMain,
   Scrollable,
-  TabAndCards,
   TitleAndCards,
   StyledTextEvent,
   StyledTextModality,
@@ -32,6 +31,7 @@ import {
   StyledDivClassD,
   DivCompetitor,
 } from './styles';
+
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -634,20 +634,20 @@ const Classificatory = () => {
           />
         </HeaderNavigatorDesktop>
 
-        <TabAndCards>
-          <div className="empty">
-            {tabsToShow.map((tab, index) => (
-              <TabOption
-                key={index}
-                title={tab.tipo_etapa}
-                active={activeTab === tab.tipo_etapa}
-                onClick={() => {
-                  setActiveTab(tab.tipo_etapa);
-                }}
-              />
-            ))}
-          </div>
-
+        <TabsCardsBar
+          activeTab={activeTab}
+          onTabChange={(tab) => {
+            setActiveTab(tab);
+          }}
+          tabs={
+            tabsToShow.length === 0
+              ? []
+              : tabsToShow.map((tab) => ({
+                  label: tab.tipo_etapa,
+                  value: tab.tipo_etapa,
+                }))
+          }
+        >
           <InfoCardsGroup
             qtde_animals={resumeInscriptionsData?.nnr_qtde_animais?.toString() || '-'}
             qtde_competitors={
@@ -659,7 +659,7 @@ const Classificatory = () => {
             premiation_value={resumeInscriptionsData?.nvl_premiacao?.toString() || '-'}
             dt_prove={classificatoryEventInfoData?.dtm_data_prova?.toString() || ''}
           />
-        </TabAndCards>
+        </TabsCardsBar>
 
         <TableWithLoader
           data={tableData}
