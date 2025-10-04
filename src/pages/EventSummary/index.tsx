@@ -21,7 +21,6 @@ import { useDeviceType } from '@abqm-ds/react';
 
 import {
   ButtonTop10,
-  ContainerBottomMobile,
   ContainerHeaderMobile,
   ContainerMain,
   ContainerMainMobile,
@@ -31,6 +30,7 @@ import {
   DivRight,
   DivTopRight,
   LinkToRedirect,
+  RemoveScrollableMobile,
   Scrollable,
   StyledHeadingMobile,
 } from './styles';
@@ -489,13 +489,13 @@ function EventSummary() {
             />
           </ContainerTopMobile>
 
-          <ContainerBottomMobile>
+          <RemoveScrollableMobile>
             <TableWithLoader
               data={tableData}
               columns={tableColumns}
               isLoading={isLoading}
             />
-          </ContainerBottomMobile>
+          </RemoveScrollableMobile>
         </ContentMobile>
 
         {showShareOptions && !isTabletOrMobile && <ShareOptions url={shareUrl} />}
