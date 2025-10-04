@@ -621,20 +621,46 @@ const Classificatory = () => {
               premiation_value={null}
               dt_prove={null}
             />
+
+            <TabsCardsBar
+              activeTab={activeTab}
+              onTabChange={(tab) => {
+                setActiveTab(tab);
+              }}
+              tabs={
+                tabsToShow.length === 0
+                  ? []
+                  : tabsToShow.map((tab) => ({
+                      label: tab.tipo_etapa,
+                      value: tab.tipo_etapa,
+                    }))
+              }
+              hideAutoWidthElement={hasNucleoColumn !== -1 && hasABQMParticipation !== -1}
+            >
+              <ContentTabs>
+                {hasNucleoColumn !== -1 && hasABQMParticipation !== -1 && (
+                  <ContentSwitchTabs>
+                    <Switch
+                      checked={switchCore.checked}
+                      onChange={() =>
+                        setSwitchCore({ ...switchCore, checked: !switchCore.checked })
+                      }
+                      label={switchCore.label}
+                    />
+                    <Switch
+                      checked={switchAQHA.checked}
+                      onChange={() =>
+                        setSwitchAQHA({ ...switchAQHA, checked: !switchAQHA.checked })
+                      }
+                      label={switchAQHA.label}
+                    />
+                  </ContentSwitchTabs>
+                )}
+              </ContentTabs>
+            </TabsCardsBar>
           </TitleAndCards>
 
           <RemoveScrollableMobile>
-            <div className="empty">
-              {tabsToShow.map((tab, index) => (
-                <TabOption
-                  key={index}
-                  title={tab.tipo_etapa}
-                  active={activeTab === tab.tipo_etapa}
-                  onClick={() => setActiveTab(tab.tipo_etapa)}
-                />
-              ))}
-            </div>
-
             <TableWithLoader
               data={tableData}
               columns={tableColumns}

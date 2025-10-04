@@ -29,16 +29,17 @@ export const ContentTabs = styled.div`
   align-items: flex-end;
   gap: 0.5rem;
   width: 100%;
+  height: 100%;
   padding-left: 1rem;
   justify-content: space-between;
 `;
 
 export const ContentSwitchTabs = styled.div`
-display: flex;
-align-items: center;
-gap: 0.5rem;
-padding-bottom: 0.125rem;
-`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-bottom: 0.125rem;
+`;
 
 export const TitleAndCards = styled.div`
   display: flex;
