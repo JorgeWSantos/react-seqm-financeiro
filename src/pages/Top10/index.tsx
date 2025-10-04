@@ -1,5 +1,4 @@
 import {
-  ActivityIndicator,
   AnimalTableData,
   CompetitorTableData,
   ContentDektop,
@@ -11,7 +10,7 @@ import {
   HeaderNavigatorDesktop,
   OwnerTableData,
   ShareOptions,
-  TableSEQM,
+  TableWithLoader,
   Text,
   TextInput,
   type FooterWithButtonsPropsType,
@@ -21,13 +20,7 @@ import {
 
 import { useDeviceType } from '@abqm-ds/react';
 
-import {
-  ContainerMain,
-  LoadingContainer,
-  NotFoundContainer,
-  Scrollable,
-  EventHeader,
-} from './styles';
+import { ContainerMain, EventHeader, RemoveScrollableMobile } from './styles';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePage } from '@src/contexts/page/usePage';
@@ -146,7 +139,7 @@ function Top10() {
     handleGetEventInfo();
   }, [handleGetResultsTop10, handleGetEventInfo]);
 
-  const columns: Array<TableColumnSEQM> = [
+  const tableColumns: Array<TableColumnSEQM> = [
     {
       key: 'abqm',
       label: 'ABQM',
@@ -179,7 +172,7 @@ function Top10() {
     },
   ];
 
-  const data: Array<TableRowSEQM> = listToShow.map((item) => ({
+  const tableData: Array<TableRowSEQM> = listToShow.map((item) => ({
     abqm: { value: `${item.nnr_classificacao_abqm}°` },
     competitor: {
       value: item.equipe[0]?.cds_competidor || '', // to sort
@@ -290,7 +283,13 @@ function Top10() {
         <ContentMobile
           style={{
             maxWidth: '100vw',
-            overflow: 'visible',
+            overflowY: 'auto',
+            overflowX: 'hidden',
+            padding: '0',
+          }}
+          contentMobileBoxStyles={{
+            gap: '0.5rem',
+            padding: '1.5rem 0rem 0rem 0rem',
           }}
           headerMobileNavigator={
             <HeaderMobileNavigator
@@ -317,29 +316,14 @@ function Top10() {
               {eventInfoData?.cds_evento || 'Classificação'}
             </Text>
           </EventHeader>
-          <Scrollable>
-            {data.length > 0 ? (
-              <TableSEQM data={data} columns={columns} width={'70rem'} />
-            ) : (
-              <>
-                {isLoading ? (
-                  <LoadingContainer>
-                    <ActivityIndicator width={20} height={20} />
-                  </LoadingContainer>
-                ) : (
-                  <NotFoundContainer>
-                    <Text
-                      fontSize="smm"
-                      fontWeight="semiBold"
-                      color={colors.emeraldGreen75}
-                    >
-                      Nenhum resultado encontrado
-                    </Text>
-                  </NotFoundContainer>
-                )}
-              </>
-            )}
-          </Scrollable>
+
+          <RemoveScrollableMobile>
+            <TableWithLoader
+              data={tableData}
+              columns={tableColumns}
+              isLoading={isLoading}
+            />
+          </RemoveScrollableMobile>
         </ContentMobile>
 
         <FooterWithButtons footerButtonsMobile={buttonsMobileFooter} />
@@ -354,9 +338,8 @@ function Top10() {
         contentBoxStyles={{
           padding: '1.5rem',
           gap: '0.25rem',
-          overflow: 'visible',
         }}
-        count={data.length}
+        count={tableData.length}
       >
         <HeaderNavigatorDesktop
           title={
@@ -374,31 +357,22 @@ function Top10() {
             debounceDelay={1000}
           />
         </HeaderNavigatorDesktop>
-        {data.length > 0 ? (
-          <TableSEQM data={data} columns={columns} />
-        ) : (
-          <>
-            {isLoading ? (
-              <LoadingContainer>
-                <ActivityIndicator width={20} height={20} />
-              </LoadingContainer>
-            ) : (
-              <NotFoundContainer>
-                <Text fontSize="smm" fontWeight="semiBold" color={colors.emeraldGreen75}>
-                  Nenhum resultado encontrado
-                </Text>
-              </NotFoundContainer>
-            )}
-          </>
-        )}
+
+        <TableWithLoader
+          // data={tableData}
+          data={[...tableData, ...tableData, ...tableData]} // Mobile: to simulate more data
+          columns={tableColumns}
+          isLoading={isLoading}
+          minWidthTable="100%"
+        />
       </ContentDektop>
 
-      {data?.length > 0 && (
+      {tableData?.length > 0 && (
         <PrintArea
           ref={printAreaRef}
           title={'RESULTADO TOP 10'}
-          columns={columns}
-          data={data}
+          columns={tableColumns}
+          data={tableData}
           cards={[]}
           info={printInfo}
           totalForPage={
