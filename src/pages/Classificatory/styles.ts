@@ -34,18 +34,21 @@ export const DivInfoCard = styled.div`
   gap: 0.125rem;
 `;
 
-export const TabAndCards = styled.div`
+export const ContentTabs = styled.div`
   display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
   width: 100%;
+  padding-left: 1rem;
   justify-content: space-between;
-  flex-direction: row;
-  margin-top: 0.5rem;
-
-  .empty {
-    display: flex;
-    margin-top: 1rem;
-  }
 `;
+
+export const ContentSwitchTabs = styled.div`
+display: flex;
+align-items: center;
+gap: 0.5rem;
+padding-bottom: 0.125rem;
+`
 
 export const TitleAndCards = styled.div`
   display: flex;

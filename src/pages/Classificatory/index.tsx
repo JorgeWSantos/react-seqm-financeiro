@@ -15,6 +15,7 @@ import {
   TableWithLoader,
   StyledTableSEQMTextTd,
   TabsCardsBar,
+  Switch,
 } from '@abqm-ds/react';
 
 import { useDeviceType } from '@abqm-ds/react';
@@ -30,6 +31,8 @@ import {
   StyledTdTextClassD,
   StyledDivClassD,
   DivCompetitor,
+  ContentTabs,
+  ContentSwitchTabs,
 } from './styles';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -85,6 +88,22 @@ const Classificatory = () => {
   const [searchValue, setSearchValue] = useState<string>('');
   const [tabsToShow, setTabsToShow] = useState<Tab[]>([]);
   const [activeTab, setActiveTab] = useState<string>('');
+
+  const [switchCore, setSwitchCore] = useState({
+    checked: false,
+    onChange: (v: any) => {
+      console.log(v);
+    },
+    label: 'Núcleos',
+  });
+
+  const [switchAQHA, setSwitchAQHA] = useState({
+    checked: false,
+    onChange: (v: any) => {
+      console.log(v);
+    },
+    label: 'AQHA',
+  });
 
   // Ref para acessar o método print do PrintArea
   const printAreaRef = useRef<{ print: () => void }>(null);
@@ -211,7 +230,11 @@ const Classificatory = () => {
           .lista_classificacao || [];
     }
 
-    if (searchValue.trim() === '') {
+    console.log('!switchCore.checked', !switchCore.checked);
+    console.log('!switchAQHA.checked', !switchAQHA.checked);
+    console.log('searchValue.trim() === ""', searchValue.trim() === '');
+
+    if (searchValue.trim() === '' && !switchCore.checked && !switchAQHA.checked) {
       setListToShow(allList);
       return;
     }
@@ -222,6 +245,10 @@ const Classificatory = () => {
       // Filtro por classificação
       const matchClassificacao = item.cds_classificacao.toLowerCase().includes(search);
       const matchTN = item.cds_media.toLowerCase().includes(search);
+      const matchCore = switchCore.checked ? item.cds_classificacao_nucleo !== '' : true;
+      const matchAQHA = switchAQHA.checked
+        ? item.bid_nucleo_participa_abqm === true
+        : true;
 
       // Filtro por nome do animal dentro de equipe
       const matchAnimal = item.equipe?.some((e) =>
@@ -237,12 +264,16 @@ const Classificatory = () => {
       );
 
       return (
-        matchClassificacao || matchAnimal || matchCompetitor || matchOwner || matchTN
+        matchCore &&
+        matchAQHA &&
+        (matchClassificacao || matchAnimal || matchCompetitor || matchOwner || matchTN)
       );
     });
 
+    console.log('filteredList', filteredList);
+
     setListToShow(filteredList);
-  }, [activeTab, searchValue, tabsToShow]);
+  }, [activeTab, searchValue, tabsToShow, switchAQHA, switchCore]);
 
   useEffect(() => {
     handleGetResultsClassificatory();
@@ -255,9 +286,9 @@ const Classificatory = () => {
 
   // const hasAQHA = listToShow.findIndex((item) => item.bid_aqha);
   const hasClassD = listToShow.findIndex((item) => item.cds_classificacao_d !== '');
-  // const hasABQMParticipation = listToShow.findIndex(
-  //   (item) => item.bid_nucleo_participa_abqm
-  // );
+  const hasABQMParticipation = listToShow.findIndex(
+    (item) => item.bid_nucleo_participa_abqm === true
+  );
 
   const lastSortable = (item: ClassificatoryData) => {
     if (item.cds_media_final === 'SAT') {
@@ -647,18 +678,40 @@ const Classificatory = () => {
                   value: tab.tipo_etapa,
                 }))
           }
+          hideAutoWidthElement={hasNucleoColumn !== -1 && hasABQMParticipation !== -1}
         >
-          <InfoCardsGroup
-            qtde_animals={resumeInscriptionsData?.nnr_qtde_animais?.toString() || '-'}
-            qtde_competitors={
-              resumeInscriptionsData?.nnr_qtde_competidores?.toString() || '-'
-            }
-            qtde_inscriptions={
-              resumeInscriptionsData?.nnr_qtde_inscricoes?.toString() || '-'
-            }
-            premiation_value={resumeInscriptionsData?.nvl_premiacao?.toString() || '-'}
-            dt_prove={classificatoryEventInfoData?.dtm_data_prova?.toString() || ''}
-          />
+          <ContentTabs>
+            {hasNucleoColumn !== -1 && hasABQMParticipation !== -1 && (
+              <ContentSwitchTabs>
+                <Switch
+                  checked={switchCore.checked}
+                  onChange={() =>
+                    setSwitchCore({ ...switchCore, checked: !switchCore.checked })
+                  }
+                  label={switchCore.label}
+                />
+                <Switch
+                  checked={switchAQHA.checked}
+                  onChange={() =>
+                    setSwitchAQHA({ ...switchAQHA, checked: !switchAQHA.checked })
+                  }
+                  label={switchAQHA.label}
+                />
+              </ContentSwitchTabs>
+            )}
+
+            <InfoCardsGroup
+              qtde_animals={resumeInscriptionsData?.nnr_qtde_animais?.toString() || '-'}
+              qtde_competitors={
+                resumeInscriptionsData?.nnr_qtde_competidores?.toString() || '-'
+              }
+              qtde_inscriptions={
+                resumeInscriptionsData?.nnr_qtde_inscricoes?.toString() || '-'
+              }
+              premiation_value={resumeInscriptionsData?.nvl_premiacao?.toString() || '-'}
+              dt_prove={classificatoryEventInfoData?.dtm_data_prova?.toString() || ''}
+            />
+          </ContentTabs>
         </TabsCardsBar>
 
         <TableWithLoader
