@@ -22,7 +22,6 @@ import { useDeviceType } from '@abqm-ds/react';
 
 import {
   ContainerMain,
-  Scrollable,
   TitleAndCards,
   StyledTextEvent,
   StyledTextModality,
@@ -33,6 +32,7 @@ import {
   DivCompetitor,
   ContentTabs,
   ContentSwitchTabs,
+  RemoveScrollableMobile,
 } from './styles';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -573,7 +573,13 @@ const Classificatory = () => {
         <ContentMobile
           style={{
             maxWidth: '100vw',
-            overflow: 'visible',
+            overflowY: 'auto',
+            overflowX: 'hidden',
+            padding: '0',
+          }}
+          contentMobileBoxStyles={{
+            gap: '0.5rem',
+            padding: '1.5rem 0rem 0rem 0rem',
           }}
           headerMobileNavigator={
             <HeaderMobileNavigator
@@ -594,6 +600,7 @@ const Classificatory = () => {
             >
               {classificatoryEventInfoData?.cds_modalidade || ''}
             </StyledTextModality>
+
             <StyledTextEvent
               fontSize="xl"
               fontWeight="regular"
@@ -616,7 +623,7 @@ const Classificatory = () => {
             />
           </TitleAndCards>
 
-          <Scrollable>
+          <RemoveScrollableMobile>
             <div className="empty">
               {tabsToShow.map((tab, index) => (
                 <TabOption
@@ -627,12 +634,13 @@ const Classificatory = () => {
                 />
               ))}
             </div>
+
             <TableWithLoader
               data={tableData}
               columns={tableColumns}
               isLoading={isLoading}
             />
-          </Scrollable>
+          </RemoveScrollableMobile>
         </ContentMobile>
 
         {showShareOptions && !isTabletOrMobile && <ShareOptions url={shareUrl} />}

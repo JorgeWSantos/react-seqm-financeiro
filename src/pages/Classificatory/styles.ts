@@ -1,4 +1,4 @@
-import { colors, fonts } from '@abqm-ds/tokens';
+import { fonts } from '@abqm-ds/tokens';
 import styled from 'styled-components';
 
 import { Text } from '@abqm-ds/react';
@@ -12,19 +12,9 @@ export const ContainerMobileMain = styled.div`
   height: 100%;
 `;
 
-export const Scrollable = styled.div`
-  width: 100%;
-  height: 100%;
-  overflow-y: auto;
-  overflow-x: auto;
-`;
-
-export const DivTopMobile = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid ${colors.white25};
-  padding-bottom: 0.375rem;
+export const RemoveScrollableMobile = styled.div`
+  overflow-x: unset;
+  overflow-y: unset;
 `;
 
 export const DivInfoCard = styled.div`
@@ -55,6 +45,7 @@ export const TitleAndCards = styled.div`
   flex-direction: column;
   align-items: flex-start;
   gap: 0.5rem;
+  padding: 0 0.5rem;
 `;
 
 export const StyledTextModality = styled(Text)`
