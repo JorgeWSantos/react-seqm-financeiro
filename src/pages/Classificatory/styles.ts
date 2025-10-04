@@ -1,4 +1,4 @@
-import { colors, fonts } from '@abqm-ds/tokens';
+import { fonts } from '@abqm-ds/tokens';
 import styled from 'styled-components';
 
 import { Text } from '@abqm-ds/react';
@@ -12,19 +12,9 @@ export const ContainerMobileMain = styled.div`
   height: 100%;
 `;
 
-export const Scrollable = styled.div`
-  width: 100%;
-  height: 100%;
-  overflow-y: auto;
-  overflow-x: auto;
-`;
-
-export const DivTopMobile = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid ${colors.white25};
-  padding-bottom: 0.375rem;
+export const RemoveScrollableMobile = styled.div`
+  overflow-x: unset;
+  overflow-y: unset;
 `;
 
 export const DivInfoCard = styled.div`
@@ -34,17 +24,21 @@ export const DivInfoCard = styled.div`
   gap: 0.125rem;
 `;
 
-export const TabAndCards = styled.div`
+export const ContentTabs = styled.div`
   display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
   width: 100%;
+  height: 100%;
+  padding-left: 1rem;
   justify-content: space-between;
-  flex-direction: row;
-  margin-top: 0.5rem;
+`;
 
-  .empty {
-    display: flex;
-    margin-top: 1rem;
-  }
+export const ContentSwitchTabs = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-bottom: 0.125rem;
 `;
 
 export const TitleAndCards = styled.div`
@@ -52,6 +46,7 @@ export const TitleAndCards = styled.div`
   flex-direction: column;
   align-items: flex-start;
   gap: 0.5rem;
+  padding: 0 0.5rem;
 `;
 
 export const StyledTextModality = styled(Text)`

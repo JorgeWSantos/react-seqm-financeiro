@@ -133,8 +133,9 @@ export const ContainerTopMobile = styled.div`
   padding: 0 0.5rem;
 `;
 
-export const ContainerBottomMobile = styled.div`
-  width: 100%;
-  height: 100%;
+export const RemoveScrollableMobile = styled.div`
+  overflow-x: unset;
+  overflow-y: unset;
 `;
+
 

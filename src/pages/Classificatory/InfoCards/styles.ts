@@ -2,6 +2,8 @@ import styled from "styled-components";
 
 export const ItemCardGroup = styled.div`
   display: flex;
+  width: max-content;
+  flex-direction: row;
   align-content: flex-start;
   align-items: flex-end;
   flex-wrap: wrap;
