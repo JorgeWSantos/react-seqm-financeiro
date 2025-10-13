@@ -7,6 +7,7 @@ import {
   Header,
   HeaderMobileNavigator,
   HeaderNavigatorDesktop,
+  InfoEventDetails,
   ShareOptions,
   StyledTableSEQMTextTd,
   TableWithLoader,
@@ -47,7 +48,7 @@ import {
 } from '@abqm-ds/icons';
 import { colors } from '@abqm-ds/tokens';
 import { Link, useParams } from 'react-router';
-import InfoEventDetails from '@components/EventSummary/InfoEventDetails';
+// import InfoEventDetails from '@components/EventSummary/InfoEventDetails';
 import EventSummaryDetails from '@components/EventSummary/EventSummaryDetails';
 import GraphSummaryDetails from '@components/EventSummary/GraphSummaryDetails';
 import { useEventSummary } from '@src/services/EventSummary/useEventSummary';
