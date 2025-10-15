@@ -8,7 +8,7 @@ import {
   TopEventSummary,
 } from './styles';
 
-import type { NumberEvents } from '../../../services/EventSummary/types.api';
+import type { NumberEvents } from '../../../services/EventResume/types.api';
 
 interface CardSummaryProps {
   title?: string;
