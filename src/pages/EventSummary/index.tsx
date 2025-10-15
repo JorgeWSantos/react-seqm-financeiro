@@ -7,6 +7,7 @@ import {
   Header,
   HeaderMobileNavigator,
   HeaderNavigatorDesktop,
+  InfoEventDetails,
   ShareOptions,
   StyledTableSEQMTextTd,
   TableWithLoader,
@@ -38,16 +39,16 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { usePage } from '@src/contexts/page/usePage';
 import {
   CheckIcon,
-  DashIcon,
   FileTextIcon,
   PrinterIcon,
   ShareIcon,
   StarIcon,
   TrophyIcon,
+  XIcon,
 } from '@abqm-ds/icons';
 import { colors } from '@abqm-ds/tokens';
 import { Link, useParams } from 'react-router';
-import InfoEventDetails from '@components/EventSummary/InfoEventDetails';
+// import InfoEventDetails from '@components/EventSummary/InfoEventDetails';
 import EventSummaryDetails from '@components/EventSummary/EventSummaryDetails';
 import GraphSummaryDetails from '@components/EventSummary/GraphSummaryDetails';
 import { useEventSummary } from '@src/services/EventSummary/useEventSummary';
@@ -169,6 +170,11 @@ function EventSummary() {
       printAreaRef.current?.print();
     }, 1000);
   }, [handleGetEventInfo]);
+
+  const goToEventResume = useCallback(() => {
+    if (!prove_id || !event_id) return;
+    navigate(`/modalidade/${prove_id}/evento/${event_id}/resumo`);
+  }, [navigate, prove_id, event_id]);
 
   // Effect to set the page title and path
   useEffect(() => {
@@ -298,7 +304,11 @@ function EventSummary() {
     organizator: {
       render: () => (
         <div style={{ display: 'flex', justifyContent: 'center' }}>
-          {item.cds_status_organizador ? <CheckIcon /> : <DashIcon />}
+          {item.cds_status_organizador ? (
+            <CheckIcon fill={colors.green300} />
+          ) : (
+            <XIcon fill={colors.red600} />
+          )}
         </div>
       ),
     },
@@ -310,14 +320,22 @@ function EventSummary() {
             justifyContent: 'center',
           }}
         >
-          {item.cds_status_juiz ? <CheckIcon /> : <DashIcon />}
+          {item.cds_status_juiz ? (
+            <CheckIcon fill={colors.green300} />
+          ) : (
+            <XIcon fill={colors.red600} />
+          )}
         </div>
       ),
     },
     ABQM: {
       render: () => (
         <div style={{ display: 'flex', justifyContent: 'center' }}>
-          {item.cds_status_abqm ? <CheckIcon /> : <DashIcon />}
+          {item.cds_status_abqm ? (
+            <CheckIcon fill={colors.green300} />
+          ) : (
+            <XIcon fill={colors.red600} />
+          )}
         </div>
       ),
     },
@@ -375,7 +393,7 @@ function EventSummary() {
         <FileTextIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen75} />
       ),
       label: 'resumo do evento',
-      onClick: onTriggerPrintPDF,
+      onClick: goToEventResume,
     },
     {
       icon: (
