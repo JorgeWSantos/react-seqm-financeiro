@@ -3,36 +3,53 @@ import {
   BottomEventSummary,
   CustomTooltipContainer,
   GraphSummaryContainer,
-  TopEventSummary,
-  TopLeftEventSummary,
-  TopRightEventSummary,
-  TopRightOptions,
 } from './styles';
 import { colors, fontSizes } from '@abqm-ds/tokens';
-import { BarChartLineIcon } from '@abqm-ds/icons';
-import type { GraphStatistics } from '../../../services/EventSummary/types.api';
+import type { EventResumeResponseData } from '@services/EventResume/types.api';
 
 import {
-  Area,
-  AreaChart,
+  BarChart,
+  Bar,
   CartesianGrid,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
+  Legend,
+  Cell,
+  Label,
+  ReferenceLine,
 } from 'recharts';
-import { useEffect, useState } from 'react';
 
 // Tooltip customizado para exibir o valor de pv
 const CustomTooltip = ({ active, payload, label }: any) => {
+  const barColors = ['#198cac', '#3fad6d', '#FBC02D', '	#FB8C00', '#e05250'];
+
   if (active && payload && payload.length) {
+    let idx = 0;
+    if (payload[0] && payload[0].payload && payload[0].payload.name) {
+      idx = payload[0].payload.idx ?? 0;
+    }
     return (
       <CustomTooltipContainer>
         <Text fontSize="xs" color={colors.white85}>
-          <strong>Ano:</strong> {label}
+          <strong>Modalidades com mais inscrições</strong>
         </Text>
         <Text fontSize="xs" color={colors.white85}>
-          <strong>Inscrições:</strong> {payload[0].value}
+          <strong>
+            <span
+              style={{
+                display: 'inline-block',
+                width: 10,
+                height: 10,
+                backgroundColor: barColors[idx % barColors.length],
+                marginRight: 8,
+                border: `1px solid #b3b2b2`,
+              }}
+            />
+            {label}:{' '}
+          </strong>{' '}
+          {payload[0].value}
         </Text>
       </CustomTooltipContainer>
     );
@@ -40,144 +57,123 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return null;
 };
 
+// Espera receber os dados completos do resumo do evento
 const GraphSummaryDetails = ({
   data,
   isTabletOrMobile,
 }: {
-  data: GraphStatistics[];
+  data: EventResumeResponseData;
   isTabletOrMobile: boolean;
 }) => {
-  const [chartData, setChartData] = useState<any[]>([]);
-  const [isOficial, setIsOficial] = useState<'local' | 'nacional'>('local'); // Assuming 'local' is the default value for isOficial
+  const barColors = ['#198cac', '#3fad6d', '#FBC02D', '	#FB8C00', '#e05250'];
 
-  const maxInscricoesRaw = data?.reduce((max, item) => Math.max(max, item.inscricoes), 0);
-  const minInscricoesRaw = data?.reduce(
-    (min, item) => Math.min(min, item.inscricoes),
-    data?.length ? data[0].inscricoes : 0
-  );
+  // Faz join entre numeros_evento e provas para pegar nome e inscrições
+  const provas = data?.provas || [];
+  const numeros = data?.numeros_evento || [];
 
-  // Função para arredondar para cima para o múltiplo de 1000 mais próximo
-  function roundUpToThousand(num: number) {
-    return Math.ceil(num / 1000) * 1000;
-  }
+  // Monta array com nome da modalidade e inscrições
+  const joined = provas
+    .map((p) => {
+      const n = numeros.find((num) => num.prova === String(p.nid_prova));
+      return n
+        ? {
+            name: p.cds_tipo_prova,
+            inscricoes: Number(n.inscricoes || 0),
+          }
+        : null;
+    })
+    .filter(Boolean);
 
-  // Função para arredondar para baixo para o múltiplo de 1000 mais próximo
-  function roundDownToThousand(num: number) {
-    return Math.floor(num / 1000) * 1000;
-  }
-
-  const maxInscricoes = roundUpToThousand(maxInscricoesRaw || 0);
-  const minInscricoes = roundDownToThousand(minInscricoesRaw || 0);
-
-  // Gera os ticks de minInscricoes até maxInscricoes em passos de 10%
-  const ticks = [];
-  for (let percent = 0; percent <= 100; percent += 10) {
-    const tickValue = Math.round(
-      minInscricoes + ((maxInscricoes - minInscricoes) * percent) / 100
-    );
-    ticks.push(tickValue);
-  }
-
-  useEffect(() => {
-    const dataToShow: any[] = [];
-
-    data?.filter((item) => {
-      if (item.ccd_tipo === isOficial) {
-        dataToShow.push({
-          name: item.ano,
-          pv: item.inscricoes,
-        });
-      }
-    });
-
-    setChartData(dataToShow);
-  }, [data, isOficial]);
+  // Ordena pelas maiores inscrições e pega as 5 maiores
+  // Adiciona o idx para cada item para facilitar o uso no tooltip
+  const chartData = joined
+    .sort((a, b) => b!.inscricoes - a!.inscricoes)
+    .slice(0, 5)
+    .map((item, idx) => ({ ...item, idx })) as {
+    name: string;
+    inscricoes: number;
+    idx: number;
+  }[];
 
   return (
     <GraphSummaryContainer>
-      <TopEventSummary>
-        <TopLeftEventSummary>
-          <BarChartLineIcon fill={colors.white75} />
-          <Text fontSize="ssm" lineHeight="tight" color={colors.white85}>
-            Estatísticas de inscrições da modalidade
-          </Text>
-        </TopLeftEventSummary>
-
-        <TopRightEventSummary>
-          <TopRightOptions
-            $isSelected={isOficial === 'local'}
-            onClick={() => setIsOficial('local')}
-          >
-            <Text
-              fontSize="xs"
-              lineHeight="short"
-              color={isOficial === 'local' ? colors.white85 : colors.white50}
-            >
-              Oficiais
-            </Text>
-          </TopRightOptions>
-          <TopRightOptions
-            $isSelected={isOficial === 'nacional'}
-            onClick={() => setIsOficial('nacional')}
-          >
-            <Text
-              fontSize="xs"
-              lineHeight="short"
-              color={isOficial === 'nacional' ? colors.white85 : colors.white50}
-            >
-              Oficializadas
-            </Text>
-          </TopRightOptions>
-        </TopRightEventSummary>
-      </TopEventSummary>
-
       <BottomEventSummary>
-        <ResponsiveContainer width="100%" height={isTabletOrMobile ? 200 : 220}>
-          <AreaChart
-            data={chartData}
-            syncId="anyId"
-            margin={{
-              top: 10,
-              right: 30,
-              left: 0,
-              bottom: 0,
-            }}
-          >
-            <CartesianGrid stroke={colors.emeraldGreen30} strokeDasharray="3 3" />
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={chartData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+            <CartesianGrid stroke="#a9a9b280" vertical={false} />
             <XAxis
-              dataKey="name"
-              tick={{
-                fill: colors.white85,
-                fontSize: isTabletOrMobile ? '5pt' : fontSizes.x,
-              }}
-              axisLine={{ stroke: colors.emeraldGreen30 }}
-              tickLine={{ stroke: colors.emeraldGreen30 }}
+              type="number"
+              dataKey="idx"
+              domain={[-0.5, chartData.length - 0.5]} // centraliza as barras
+              tick={false}
+            >
+              <Label
+                value="Modalidades com mais inscrições"
+                offset={8}
+                position="insideBottom"
+                style={{ fill: colors.emeraldGreen75, fontSize: 12 }}
+              />
+            </XAxis>
+            <ReferenceLine
+              x={(chartData.length - 1) / 2} // meio exato
+              stroke="#A9A9B280"
+              strokeWidth={0.5}
             />
+
             <YAxis
-              domain={[minInscricoes, maxInscricoes]}
-              ticks={[...ticks]}
-              interval={0}
               tick={{
-                fill: colors.white85,
+                fill: colors.emeraldGreen75,
                 fontSize: isTabletOrMobile ? '5pt' : fontSizes.x,
               }}
-              axisLine={{ stroke: colors.emeraldGreen30 }}
-              tickLine={{ stroke: colors.emeraldGreen30 }}
             />
-            <Tooltip content={<CustomTooltip />} />
-            <Area
-              type="monotone"
-              dataKey="pv"
-              stroke={colors.white50}
-              fill={colors.white25}
-              dot={{
-                r: 2,
-                stroke: colors.white50,
-                fill: colors.white50,
-                strokeWidth: 1,
-              }}
+            <Tooltip cursor={false} content={<CustomTooltip />} />
+            <Legend
+              align="right"
+              verticalAlign="top"
+              layout="vertical"
+              iconType="square"
+              content={() => (
+                <div style={{ display: 'flex', flexDirection: 'column', marginLeft: 16 }}>
+                  {chartData.map((entry, idx) => (
+                    <div
+                      key={entry.name}
+                      style={{ display: 'flex', alignItems: 'center' }}
+                    >
+                      <span
+                        style={{
+                          display: 'inline-block',
+                          width: 14,
+                          height: 10,
+                          backgroundColor: barColors[idx % barColors.length],
+                          marginRight: 8,
+                          border: `0.5px solid #A9A9B280`,
+                        }}
+                      />
+                      <span
+                        style={{
+                          color: colors.emeraldGreen75,
+                          fontSize: isTabletOrMobile ? '8pt' : '8pt',
+                        }}
+                      >
+                        {entry.name}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
             />
-          </AreaChart>
+
+            <Bar
+              dataKey="inscricoes"
+              barSize={60}
+              isAnimationActive={false}
+              activeBar={false}
+            >
+              {chartData.map((_, idx) => (
+                <Cell key={`cell-${idx}`} fill={barColors[idx % barColors.length]} />
+              ))}
+            </Bar>
+          </BarChart>
         </ResponsiveContainer>
       </BottomEventSummary>
     </GraphSummaryContainer>
