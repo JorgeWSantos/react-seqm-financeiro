@@ -7,6 +7,7 @@ import {
   Header,
   HeaderMobileNavigator,
   HeaderNavigatorDesktop,
+  InfoEventDetails,
   ShareOptions,
   StyledTableSEQMTextTd,
   TableWithLoader,
@@ -21,7 +22,6 @@ import { useDeviceType } from '@abqm-ds/react';
 
 import {
   ButtonTop10,
-  ContainerBottomMobile,
   ContainerHeaderMobile,
   ContainerMain,
   ContainerMainMobile,
@@ -31,6 +31,7 @@ import {
   DivRight,
   DivTopRight,
   LinkToRedirect,
+  RemoveScrollableMobile,
   Scrollable,
   StyledHeadingMobile,
 } from './styles';
@@ -47,7 +48,7 @@ import {
 } from '@abqm-ds/icons';
 import { colors } from '@abqm-ds/tokens';
 import { Link, useParams } from 'react-router';
-import InfoEventDetails from '@components/EventSummary/InfoEventDetails';
+// import InfoEventDetails from '@components/EventSummary/InfoEventDetails';
 import EventSummaryDetails from '@components/EventSummary/EventSummaryDetails';
 import GraphSummaryDetails from '@components/EventSummary/GraphSummaryDetails';
 import { useEventSummary } from '@src/services/EventSummary/useEventSummary';
@@ -470,7 +471,7 @@ function EventSummary() {
             <HeaderMobileNavigator
               title={eventInfoData?.cds_evento || ''}
               hasBackButton
-              onGoBack={() => navigate('/modalidade/' + prove_id)}
+              onGoBack={() => navigate(-1)}
             >
               <Dropdown
                 variant="secondary"
@@ -506,13 +507,13 @@ function EventSummary() {
             />
           </ContainerTopMobile>
 
-          <ContainerBottomMobile>
+          <RemoveScrollableMobile>
             <TableWithLoader
               data={tableData}
               columns={tableColumns}
               isLoading={isLoading}
             />
-          </ContainerBottomMobile>
+          </RemoveScrollableMobile>
         </ContentMobile>
 
         {showShareOptions && !isTabletOrMobile && <ShareOptions url={shareUrl} />}
@@ -528,7 +529,11 @@ function EventSummary() {
         header={
           <Header
             text={pageTitle}
-            subTitle={getNameProveById(Number(prove_id))}
+            subTitle={
+              prove_id === 'nao-pontuados'
+                ? 'Não Pontuados'
+                : getNameProveById(Number(prove_id))
+            }
             buttons={buttonsHeader}
           />
         }
@@ -541,7 +546,7 @@ function EventSummary() {
         <HeaderNavigatorDesktop
           title={eventInfoData?.cds_evento || ''}
           hasBackButton
-          onGoBack={() => navigate('/modalidade/' + prove_id)}
+          onGoBack={() => navigate(-1)}
         />
         <Scrollable>
           <DivLeft>
@@ -568,7 +573,10 @@ function EventSummary() {
                   onChange={(value) => {
                     setProveSelected(value);
                     handleGetSummary({ prove_id_selected: value.id });
-                    navigate(`/modalidade/${value.id}/evento/${event_id}`);
+
+                    if (prove_id !== 'nao-pontuados') {
+                      navigate(`/modalidade/${value.id}/evento/${event_id}`);
+                    }
                   }}
                 />
               </DivDropDownSearch>
