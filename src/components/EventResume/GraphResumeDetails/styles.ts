@@ -1,24 +1,29 @@
 import { breakpointsPx, colors, fontWeights, radii, space } from '@abqm-ds/tokens';
 import styled from 'styled-components';
 
-export const GraphSummaryContainer = styled.div`
+export const GraphResumeContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
 
   box-shadow: 0 0.25rem 1.5rem 0 rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  padding: ${space[8]} ${space[6]}${space[6]}${space[6]};
+  padding: ${space[8]} ${space[6]} ${space[6]} ${space[6]};
   border-radius: ${radii.xs};
   border: 0.5px solid ${colors.white25};
   background: ${colors.white50};
+
+  @media (min-width: ${breakpointsPx.md}) and (max-width: ${breakpointsPx.lg}) {
+    width: 90%;
+    align-self: center;
+  }
 
   @media (max-width: ${breakpointsPx.xl}) {
     padding: ${space[2]};
   }
 `;
 
-export const BottomEventSummary = styled.div`
+export const BottomEventResume = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;

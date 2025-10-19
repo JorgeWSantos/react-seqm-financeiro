@@ -1,5 +1,5 @@
 import { Text } from '@abqm-ds/react';
-import { colors, fontWeights, space } from '@abqm-ds/tokens';
+import { colors, fontWeights, space, breakpointsPx } from '@abqm-ds/tokens';
 import styled from 'styled-components';
 
 export const EventSummaryContainer = styled.div`
@@ -9,6 +9,11 @@ export const EventSummaryContainer = styled.div`
   background-color: ${colors.emeraldGreen25};
   border-radius: 0.375rem;
   overflow: hidden; // garante que filhos respeitem o border-radius
+
+  @media (min-width: ${breakpointsPx.md}) and (max-width: ${breakpointsPx.lg}) {
+    width: 90%;
+    align-self: center;
+  }
 `;
 
 export const TopEventSummary = styled.div`

@@ -1,8 +1,8 @@
 import { Text } from '@abqm-ds/react';
 import {
-  BottomEventSummary,
+  BottomEventResume,
   CustomTooltipContainer,
-  GraphSummaryContainer,
+  GraphResumeContainer,
 } from './styles';
 import { colors, fontSizes } from '@abqm-ds/tokens';
 import type { EventResumeResponseData } from '@services/EventResume/types.api';
@@ -58,7 +58,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 };
 
 // Espera receber os dados completos do resumo do evento
-const GraphSummaryDetails = ({
+const GraphResumeDetails = ({
   data,
   isTabletOrMobile,
 }: {
@@ -96,8 +96,8 @@ const GraphSummaryDetails = ({
   }[];
 
   return (
-    <GraphSummaryContainer>
-      <BottomEventSummary>
+    <GraphResumeContainer>
+      <BottomEventResume>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={chartData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
             <CartesianGrid stroke="#a9a9b280" vertical={false} />
@@ -175,9 +175,9 @@ const GraphSummaryDetails = ({
             </Bar>
           </BarChart>
         </ResponsiveContainer>
-      </BottomEventSummary>
-    </GraphSummaryContainer>
+      </BottomEventResume>
+    </GraphResumeContainer>
   );
 };
 
-export default GraphSummaryDetails;
+export default GraphResumeDetails;
