@@ -32,6 +32,7 @@ export const ContentTabs = styled.div`
   height: 100%;
   padding-left: 1rem;
   justify-content: space-between;
+  padding-bottom: 0.3125rem;
 `;
 
 export const ContentSwitchTabs = styled.div`
