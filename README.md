@@ -5,7 +5,7 @@
 
 ---
 
-# Projeto ABQM - Resultados
+# Projeto ABQM - Resultados.
 
 Este projeto é parte do ecossistema ABQM e utiliza os pacotes da biblioteca `@abqm-ds` para construção da interface (tokens, ícones e componentes React).
 
