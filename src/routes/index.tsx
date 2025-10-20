@@ -8,6 +8,7 @@ import Top10 from '@src/pages/Top10';
 import Classificatory from '@src/pages/Classificatory';
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from '@src/Layout';
+import Healthz from '@src/pages/Healthz';
 
 export const router = createBrowserRouter([
   {
@@ -38,6 +39,10 @@ export const router = createBrowserRouter([
       {
         path: 'modalidade/:prove_id/evento/:event_id/prova-evento/:prove_event_id/classificatoria/:id_classificatory',
         element: <Classificatory />,
+      },
+      {
+        path: 'healthz',
+        element: <Healthz />,
       },
     ],
   },

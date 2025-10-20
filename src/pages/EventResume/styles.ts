@@ -40,7 +40,7 @@ export const DivLeft = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  gap: 1rem;
+  gap: 1.5rem;
 `;
 
 export const DivRight = styled.div`
@@ -65,6 +65,13 @@ export const DivTopRight = styled.div`
 
   @media (max-width: ${breakpointsPx.xl}) {
     height: unset;
+  }
+
+  @media (min-width: ${breakpointsPx.md}) and (max-width: ${breakpointsPx.lg}) {
+    width: 90%;
+    height: 2rem;
+    min-height: 2rem;
+    align-self: center;
   }
 `;
 

@@ -456,6 +456,14 @@ function EventSummary() {
       },
       variant: 'outline-white-25',
     },
+    {
+      icon: (
+        <FileTextIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen50} />
+      ),
+      label: 'resumo',
+      onClick: goToEventResume,
+      variant: 'outline-white-25',
+    },
   ];
 
   if (isTabletOrMobile) {

@@ -36,7 +36,7 @@ import { useInfoEvent } from '@src/services/General/useInfoEvent';
 import type { InfoEventData } from '@src/services/General/types.info-event.api';
 import EventResumeDetails from '@src/components/EventResume/EventResumeDetails';
 import ProvesDetails from '@src/components/EventResume/ProvesDetails';
-import GraphSummaryDetails from '@src/components/EventResume/GraphSummaryDetails';
+import GraphResumeDetails from '@src/components/EventResume/GraphResumeDetails';
 
 function EventResume() {
   const pageTitle = 'Resultados »';
@@ -252,7 +252,7 @@ function EventResume() {
 
             <EventResumeDetails data={eventResumeNumbers} />
 
-            <GraphSummaryDetails
+            <GraphResumeDetails
               data={eventResumeData}
               isTabletOrMobile={isTabletOrMobile}
             />
@@ -304,7 +304,7 @@ function EventResume() {
 
             <EventResumeDetails data={eventResumeNumbers} />
 
-            <GraphSummaryDetails
+            <GraphResumeDetails
               data={eventResumeData}
               isTabletOrMobile={isTabletOrMobile}
             />
