@@ -19,9 +19,9 @@
     "upgrade:ui": "npx npm-check-updates -u @abqm-ds/icons @abqm-ds/react @abqm-ds/tokens && npm install"
   },
   "dependencies": {
-    "@abqm-ds/icons": "^2.0.18",
-    "@abqm-ds/react": "^2.0.30",
-    "@abqm-ds/tokens": "^2.0.17",
+    "@abqm-ds/icons": "^4.0.0",
+    "@abqm-ds/react": "^4.0.0",
+    "@abqm-ds/tokens": "^4.0.0",
     "@tanstack/react-query": "5.77.2",
     "axios": "1.9.0",
     "react": "19.1.0",
