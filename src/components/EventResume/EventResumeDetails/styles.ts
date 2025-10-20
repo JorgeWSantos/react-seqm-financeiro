@@ -10,9 +10,9 @@ export const EventSummaryContainer = styled.div`
   border-radius: 0.375rem;
   overflow: hidden; // garante que filhos respeitem o border-radius
 
-  @media (max-width: ${breakpointsPx.xl}) {
-    width: 100%;
-    align-self: flex-start;
+  @media (min-width: ${breakpointsPx.md}) and (max-width: ${breakpointsPx.lg}) {
+    width: 90%;
+    align-self: center;
   }
 
   @media (max-width: ${breakpointsPx.lg}) {
