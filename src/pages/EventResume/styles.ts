@@ -57,6 +57,7 @@ export const DivTopRight = styled.div`
   justify-content: flex-end;
   align-items: flex-end;
   height: 3.75rem;
+  min-height: 3.75rem;
   padding: 0.125rem 0;
 
   border-bottom: ${radii.px} solid ${colors.white25};
@@ -76,6 +77,11 @@ export const ContainerDetails = styled.div`
   align-items: center;
   align-self: center;
   gap: 1rem;
+
+  @media (max-width: ${breakpointsPx.xl}) {
+    width: 100%;
+    align-self: flex-start;
+  }
 `;
 
 export const DivDropDownSearch = styled.div`

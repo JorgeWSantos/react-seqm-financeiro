@@ -17,7 +17,6 @@ export function useEventResumeService() {
           '/v1/ResumoEvento',
           {
             params: {
-              // nid_prova: prove_id,
               nid_evento: event_id,
             },
           }
@@ -25,9 +24,7 @@ export function useEventResumeService() {
 
         //'TODO: Corrigir o tipo de numeros_evento
 
-        console.log('Response getEventResume: ', response);
         const { data, message, success } = response.data;
-        console.log('Data getEventResume: ', data);
 
         if (!success) {
           Toast.show({
