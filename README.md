@@ -1,4 +1,11 @@
-# Projeto ABQM - Calendários
+## ✅ Requisitos
+
+- Node.js `>=22`
+- NPM `>=8`
+
+---
+
+# Projeto ABQM - Resultados
 
 Este projeto é parte do ecossistema ABQM e utiliza os pacotes da biblioteca `@abqm-ds` para construção da interface (tokens, ícones e componentes React).
 
@@ -25,7 +32,7 @@ Este projeto é parte do ecossistema ABQM e utiliza os pacotes da biblioteca `@a
    cd resultados
    ```
 
-   2.0 Instalar versão 22.14.0 do node
+2 Instalar versão 22.14.0 do node
 
 2.1 Instale as dependências:
 
@@ -35,14 +42,15 @@ npm install
 
 3.0 Atualizar o pacote abqm
 
-````bash
-   npm run upgrade:ui
-   ```
+```bash
+npm run upgrade:ui
+```
 
 3.1 Rode o projeto:
+
 ```bash
 npm run dev
-````
+```
 
 ---
 
@@ -77,12 +85,31 @@ Todos os scripts podem ser executados com `npm run <nome-do-script>`.
 
 ---
 
-## ✅ Requisitos
+## 🛠 Executar o projeto
 
-- Node.js `>=22`
-- NPM `>=8`
+Para executar o projeto apontando para o arquivo .env
 
----
+```bash
+npm run dev
+```
+
+Para executar o projeto apontando para o arquivo .env.dev
+
+```bash
+npm run dev:dev
+```
+
+Para executar o projeto apontando para o arquivo .env.qas
+
+```bash
+npm run dev:qas
+```
+
+Para executar o projeto apontando para o arquivo .env.prod
+
+```bash
+npm run dev:prod
+```
 
 ## 📄 Licença
 

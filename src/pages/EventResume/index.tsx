@@ -1,7 +1,6 @@
 import {
   ContentDektop,
   ContentMobile,
-  Dropdown,
   FooterWithButtons,
   getNameProveById,
   Header,
@@ -9,7 +8,7 @@ import {
   HeaderNavigatorDesktop,
   ShareOptions,
   Text,
-  type DataDropdown,
+  InfoEventDetails,
   type FooterWithButtonsPropsType,
 } from '@abqm-ds/react';
 
@@ -30,13 +29,8 @@ import { usePage } from '@src/contexts/page/usePage';
 import { ShareIcon, StarIcon } from '@abqm-ds/icons';
 import { colors } from '@abqm-ds/tokens';
 import { useParams } from 'react-router';
-import InfoEventDetails from '@components/EventResume/InfoEventDetails';
-// import GraphSummaryDetails from '@components/EventResume/GraphSummaryDetails';
 import { useEventResumeService } from '@src/services/EventResume/useEventResumeService';
-import type {
-  EventResumeResponseData,
-  ProvesEventResume,
-} from '@services/EventResume/types.api';
+import type { EventResumeResponseData } from '@services/EventResume/types.api';
 import { useCallback, useEffect, useState } from 'react';
 import { useInfoEvent } from '@src/services/General/useInfoEvent';
 import type { InfoEventData } from '@src/services/General/types.info-event.api';
@@ -58,11 +52,11 @@ function EventResume() {
   const event_id = params.event_id;
 
   const { setPage } = usePage();
-  const { isTabletOrMobile, isMobile } = useDeviceType();
+  const { isTabletOrMobile } = useDeviceType();
   const { getEventResume } = useEventResumeService();
   const { getInfoEvent } = useInfoEvent();
 
-  const [eventSummaryData, setEventSummaryData] = useState<EventResumeResponseData>(
+  const [eventResumeData, seteventResumeData] = useState<EventResumeResponseData>(
     {} as EventResumeResponseData
   );
 
@@ -70,12 +64,12 @@ function EventResume() {
     {} as InfoEventData
   );
 
-  const resumoGeral = Array.isArray(eventSummaryData.numeros_evento)
-    ? eventSummaryData.numeros_evento.find((item) => item.prova === 'Todas')
+  const resumoGeral = Array.isArray(eventResumeData.numeros_evento)
+    ? eventResumeData.numeros_evento.find((item) => item.prova === 'Todas')
     : undefined;
 
   // Valores padrão caso não exista
-  const eventSummaryNumbers = {
+  const eventResumeNumbers = {
     inscricoes: resumoGeral?.inscricoes ?? '0',
     competidores: resumoGeral?.competidores ?? '0',
     animais: resumoGeral?.animais ?? '0',
@@ -88,63 +82,27 @@ function EventResume() {
         : 'sem premiação',
   };
 
-  const numerosEventoMap = Array.isArray(eventSummaryData.numeros_evento)
-    ? Object.fromEntries(eventSummaryData.numeros_evento.map((num) => [num.prova, num]))
+  const numerosEventoMap = Array.isArray(eventResumeData.numeros_evento)
+    ? Object.fromEntries(eventResumeData.numeros_evento.map((num) => [num.prova, num]))
     : {};
 
   // Debug: Verifique se os ids das provas batem com os ids dos resumos
-  if (eventSummaryData.provas && eventSummaryData.numeros_evento) {
+  if (eventResumeData.provas && eventResumeData.numeros_evento) {
     // Mostra os ids das provas e dos resumos
     // Remova depois de depurar!
-
-    console.log(
-      'nid_prova das provas:',
-      eventSummaryData.provas.map((p) => p.nid_prova)
-    );
-
-    console.log(
-      'prova dos numeros_evento:',
-      eventSummaryData.numeros_evento.map((n) => n.prova)
-    );
   }
 
-  const [allProves, setAllProves] = useState<DataDropdown[]>([]);
-  const [proveSelected, setProveSelected] = useState<DataDropdown | null>(null);
+  const handleGetSummary = useCallback(async () => {
+    if (!event_id) {
+      return;
+    }
 
-  const handleGetSummary = useCallback(
-    async ({ prove_id_selected }: { prove_id_selected: string }) => {
-      if (!event_id) {
-        return;
-      }
+    const data = await getEventResume({
+      event_id: Number(event_id),
+    });
 
-      const data = await getEventResume({
-        event_id: Number(event_id),
-      });
-
-      setEventSummaryData(data);
-
-      const formatToDropdown = (items: ProvesEventResume[] = []) =>
-        items.map((item) => ({
-          id: item.nid_prova.toString(),
-          label: item.cds_tipo_prova,
-          value: item.cds_tipo_prova,
-        }));
-
-      const provesFormatted = formatToDropdown(data.provas || []);
-
-      setAllProves(provesFormatted);
-
-      const proveToBeFirst =
-        prove_id_selected && prove_id_selected !== 'nao-pontuados'
-          ? prove_id_selected
-          : provesFormatted[0]?.id;
-
-      setProveSelected(
-        provesFormatted.find((item) => item.id === proveToBeFirst) || null
-      );
-    },
-    [getEventResume, event_id]
-  );
+    seteventResumeData(data);
+  }, [getEventResume, event_id]);
 
   const handleGetEventInfo = useCallback(async () => {
     if (!event_id) {
@@ -158,6 +116,36 @@ function EventResume() {
     setEventInfoData(data);
   }, [getInfoEvent, event_id]);
 
+  const renderProves = (provas?: any[]) => {
+    if (!Array.isArray(provas) || provas.length === 0) {
+      return <p>Nenhuma modalidade encontrada.</p>;
+    }
+
+    return (
+      <>
+        {provas.map((prove) => {
+          const resumo = numerosEventoMap[String(prove.nid_prova)];
+
+          return (
+            <ProvesDetails
+              key={prove.nid_prova}
+              data={{
+                name_prove: prove.cds_tipo_prova,
+                inscricoes: resumo?.inscricoes ?? '0',
+                competidores: resumo?.competidores ?? '0',
+                animais: resumo?.animais ?? '0',
+                premiacao:
+                  resumo?.premiacao !== undefined && resumo?.premiacao !== null
+                    ? `R$ ${resumo.premiacao}`
+                    : 'sem premiação',
+              }}
+            />
+          );
+        })}
+      </>
+    );
+  };
+
   // Effect to set the page title and path
   useEffect(() => {
     setPage({
@@ -168,7 +156,7 @@ function EventResume() {
 
   useEffect(() => {
     const loadData = async () => {
-      await handleGetSummary({ prove_id_selected: prove_id || '' });
+      await handleGetSummary();
       await handleGetEventInfo();
     };
 
@@ -253,19 +241,7 @@ function EventResume() {
               title={eventInfoData?.cds_evento || ''}
               hasBackButton
               onGoBack={() => navigate('/modalidade/' + prove_id)}
-            >
-              <Dropdown
-                variant="secondary"
-                data={allProves}
-                setValue={(value) => {
-                  setProveSelected(value);
-                  handleGetSummary({ prove_id_selected: value.id });
-                }}
-                value={proveSelected}
-                maxHeight="26rem"
-                maxWidth={isMobile ? '100%' : '20rem'}
-              />
-            </HeaderMobileNavigator>
+            />
           }
           hasFooterButtons
         >
@@ -274,13 +250,23 @@ function EventResume() {
           <DivLeft>
             <InfoEventDetails data={eventInfoData} />
 
-            <EventResumeDetails data={eventSummaryNumbers} />
+            <EventResumeDetails data={eventResumeNumbers} />
 
-            {/* <GraphSummaryDetails
-              data={eventSummaryData.tipo_estatistica_prova || []}
+            <GraphSummaryDetails
+              data={eventResumeData}
               isTabletOrMobile={isTabletOrMobile}
-            /> */}
+            />
           </DivLeft>
+
+          <DivRight>
+            <DivTopRight>
+              <Text color={colors.white} fontSize="ssm">
+                modalidades
+              </Text>
+            </DivTopRight>
+
+            <ContainerDetails>{renderProves(eventResumeData.provas)}</ContainerDetails>
+          </DivRight>
         </ContentMobile>
 
         {showShareOptions && !isTabletOrMobile && <ShareOptions url={shareUrl} />}
@@ -316,10 +302,10 @@ function EventResume() {
           <DivLeft>
             <InfoEventDetails data={eventInfoData} />
 
-            <EventResumeDetails data={eventSummaryNumbers} />
+            <EventResumeDetails data={eventResumeNumbers} />
 
             <GraphSummaryDetails
-              data={eventSummaryData}
+              data={eventResumeData}
               isTabletOrMobile={isTabletOrMobile}
             />
           </DivLeft>
@@ -331,32 +317,7 @@ function EventResume() {
               </Text>
             </DivTopRight>
 
-            <ContainerDetails>
-              {Array.isArray(eventSummaryData.provas) &&
-              eventSummaryData.provas.length > 0 ? (
-                eventSummaryData.provas.map((prove) => {
-                  const resumo = numerosEventoMap[String(prove.nid_prova)];
-
-                  return (
-                    <ProvesDetails
-                      key={prove.nid_prova}
-                      data={{
-                        name_prove: prove.cds_tipo_prova,
-                        inscricoes: resumo?.inscricoes ?? '0',
-                        competidores: resumo?.competidores ?? '0',
-                        animais: resumo?.animais ?? '0',
-                        premiacao:
-                          resumo?.premiacao !== undefined && resumo?.premiacao !== null
-                            ? `R$ ${resumo.premiacao}`
-                            : 'sem premiação',
-                      }}
-                    />
-                  );
-                })
-              ) : (
-                <p>Nenhuma modalidade encontrada.</p>
-              )}
-            </ContainerDetails>
+            <ContainerDetails>{renderProves(eventResumeData.provas)}</ContainerDetails>
           </DivRight>
         </Scrollable>
       </ContentDektop>

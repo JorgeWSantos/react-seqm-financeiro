@@ -1,4 +1,4 @@
-import { breakpointsPx, colors, space } from '@abqm-ds/tokens';
+import { breakpointsPx, colors, fontWeights, radii, space } from '@abqm-ds/tokens';
 import styled from 'styled-components';
 
 export const GraphSummaryContainer = styled.div`
@@ -6,12 +6,16 @@ export const GraphSummaryContainer = styled.div`
   flex-direction: column;
   width: 100%;
 
-  box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0.25rem 1.5rem 0 rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  padding: 2rem 1.5rem 1.5rem 1.5rem;
-  border-radius: 4px;
+  padding: ${space[8]} ${space[6]}${space[6]}${space[6]};
+  border-radius: ${radii.xs};
   border: 0.5px solid ${colors.white25};
   background: ${colors.white50};
+
+  @media (max-width: ${breakpointsPx.xl}) {
+    padding: ${space[2]};
+  }
 `;
 
 export const BottomEventSummary = styled.div`
@@ -19,12 +23,12 @@ export const BottomEventSummary = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 280px;
-  gap: 1px;
+  height: 17.5rem;
+  gap: 0.063rem;
   box-sizing: border-box;
   background: transparent;
   @media (max-width: ${breakpointsPx.lg}) {
-    height: 220px;
+    height: 13.75rem;
   }
 `;
 
@@ -34,11 +38,11 @@ export const CustomTooltipContainer = styled.div`
   background: ${colors.emeraldGreen75};
   color: ${colors.white};
   padding: ${space[2]} ${space[3]};
-  border-radius: 4px;
-  gap: 4px;
-  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.25);
+  border-radius: ${radii.xs};
+  gap: ${space[1]};
+  box-shadow: 0 0.125rem 0.5rem 0 rgba(0, 0, 0, 0.25);
   border: none;
-  font-weight: 600;
+  font-weight: ${fontWeights.semiBold};
   z-index: 10;
   position: relative;
 `;
