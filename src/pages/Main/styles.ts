@@ -6,13 +6,18 @@ export const ContainerDesktopMain = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  padding: 0rem 2.5rem;
+  padding: 0rem;
 `;
 
 export const ContainerMobileMain = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  min-height: 100%;
-  /* padding: 2rem 1rem 0 1rem; */
+`;
+
+export const TitleAndButton = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: -24px;
 `;

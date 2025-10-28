@@ -1,14 +1,15 @@
 {
   "name": "react-seqm-resultados",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "dev:host": "vite --host",
+    "dev:dev": "vite --mode qas",
     "dev:qas": "vite --mode qas",
     "dev:prod": "vite --mode production",
-    "build": "tsc -b && vite build",
+    "build:dev": "tsc -b && vite build --mode dev",
     "build:qas": "tsc -b && vite build --mode qas",
     "build:prod": "tsc -b && vite build --mode production",
     "lint": "eslint .",
@@ -18,30 +19,37 @@
     "upgrade:ui": "npx npm-check-updates -u @abqm-ds/icons @abqm-ds/react @abqm-ds/tokens && npm install"
   },
   "dependencies": {
-    "@abqm-ds/icons": "^1.0.1",
-    "@abqm-ds/react": "^1.0.4",
-    "@abqm-ds/tokens": "^1.0.3",
-    "@tanstack/react-query": "^5.77.2",
-    "axios": "^1.9.0",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "react-router-dom": "^7.6.1",
-    "styled-components": "^6.1.18"
+    "@abqm-ds/icons": "^4.0.0",
+    "@abqm-ds/react": "^4.0.0",
+    "@abqm-ds/tokens": "^4.0.0",
+    "@tanstack/react-query": "5.77.2",
+    "axios": "1.9.0",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "react-router-dom": "7.6.1",
+    "react-share": "^5.2.2",
+    "react-to-print": "^3.1.1",
+    "react-tooltip": "^5.29.1",
+    "recharts": "^3.1.0",
+    "styled-components": "6.1.18"
   },
   "devDependencies": {
-    "@eslint/js": "^9.25.0",
-    "@types/node": "^22.15.21",
-    "@types/react": "^19.1.2",
-    "@types/react-dom": "^19.1.2",
-    "@vitejs/plugin-react": "^4.4.1",
-    "eslint": "^9.25.0",
+    "@eslint/js": "^9.32.0",
+    "@types/node": "22.15.21",
+    "@types/react": "19.1.8",
+    "@types/react-dom": "19.1.6",
+    "@vitejs/plugin-react": "4.4.1",
+    "eslint": "^9.32.0",
     "eslint-plugin-react-hooks": "^5.2.0",
-    "eslint-plugin-react-refresh": "^0.4.19",
+    "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.0.0",
     "npm-check-updates": "^18.0.1",
-    "typescript": "~5.8.3",
-    "typescript-eslint": "^8.30.1",
-    "vite": "^6.3.5",
-    "vite-tsconfig-paths": "^5.1.4"
+    "typescript": "5.8.3",
+    "typescript-eslint": "^8.39.0",
+    "vite": "6.3.5",
+    "vite-tsconfig-paths": "5.1.4"
+  },
+  "engines": {
+    "node": "22.14.0"
   }
 }

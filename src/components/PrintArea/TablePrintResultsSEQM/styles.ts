@@ -1,0 +1,117 @@
+import { Text } from '@abqm-ds/react';
+import {
+  breakpointsPx,
+  colors,
+  fonts,
+  fontSizes,
+  fontWeights,
+  lineHeights,
+  space,
+} from '@abqm-ds/tokens';
+import type { CSSProperties } from 'react';
+import styled from 'styled-components';
+
+export const StyledTablePrintResultsSEQM = styled.table<{
+  $width?: CSSProperties['width'];
+  $height?: CSSProperties['height'];
+}>`
+  border-collapse: collapse;
+  width: ${({ $width }) => $width || '100%'};
+  height: ${({ $height }) => $height || 'unset'};
+  display: flex;
+  flex-direction: column;
+
+  tbody tr:nth-child(odd) {
+    background-color: ${colors.white25};
+  }
+
+  tbody tr:nth-child(even) {
+    background-color: ${colors.grayFigma6};
+  }
+
+  font-family: ${fonts.default};
+  color: ${colors.emeraldGreen75};
+`;
+
+export const StyledHeadTablePrintResultsSEQM = styled.thead`
+  tr {
+    display: flex;
+  }
+
+  tr th {
+    padding: 0 ${space[2]};
+  }
+`;
+
+export const StyledTablePrintResultsSEQMTextTh = styled(Text).attrs({
+  fontWeight: 'bold',
+  lineHeight: 'tight',
+})`
+  font-size: 6pt;
+`;
+
+export const StyledBodyTablePrintResultsSEQM = styled.tbody`
+  tr {
+    /* max-height: 2rem; */
+    display: flex;
+    flex-direction: row;
+  }
+
+  tr td {
+    padding: ${space[2]} ${space[2]};
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* margin-top: -10pt; */
+
+    gap: 0.25rem;
+  }
+
+  span, p {
+    white-space: normal !important;
+    font-size: 8pt !important;
+  }
+
+  /* svg {
+    margin-bottom: -10pt;
+  } */
+
+  // removerá estilios do componente AnimalTableData
+  .animal-table-data-container {
+    .tooltip-anchor-divimage {
+      display: none !important;
+    }
+  }
+
+  // removerá estilios do componente OwnerTableData
+  .owner-table-data-container {
+    .owner-name {
+      color: ${colors.emeraldGreen75} !important;
+    }
+
+    .hall-fama-owner-icon {
+      display: none;
+    }
+
+    .hall-fama-owner-subtext {
+      margin-top: 3pt;
+      font-size: 6pt !important;
+      color: ${colors.emeraldGreen75} !important;
+    }
+  }
+`;
+
+export const StyledTablePrintResultsSEQMTextTd = styled(Text).attrs({
+  fontWeight: 'regular',
+  lineHeight: 'tight',
+}) <{ $bold?: boolean }>`
+  font-size: 9pt !important;
+  font-weight: ${({ $bold }) => ($bold ? fontWeights.semiBold : fontWeights.regular)};
+  color: ${colors.grayFigma2};
+
+  @media (max-width: ${breakpointsPx.lg}) {
+    font-size: ${fontSizes.ssm};
+    line-height: ${lineHeights.short};
+  }
+`;

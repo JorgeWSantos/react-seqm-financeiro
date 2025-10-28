@@ -1,11 +1,49 @@
 // src/routes/AppRoutes.tsx
-import { Routes, Route } from 'react-router-dom';
-import Main from '@pages/Main';
+// import Layout from '../index';
+import Main from '@pages/Main/index.tsx';
+import EventSummary from '@src/pages/EventSummary';
+import EventResume from '@src/pages/EventResume';
+import ModalityDetail from '@src/pages/ModalityDetails';
+import Top10 from '@src/pages/Top10';
+import Classificatory from '@src/pages/Classificatory';
+import { createBrowserRouter } from 'react-router-dom';
+import Layout from '@src/Layout';
+import Healthz from '@src/pages/Healthz';
 
-export function AppRoutes() {
-  return (
-    <Routes>
-      <Route path="/" element={<Main />} />
-    </Routes>
-  );
-}
+export const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Layout />, // ou null, se não tiver layout global
+    errorElement: <Layout withError />, // error global
+    children: [
+      {
+        index: true,
+        element: <Main />,
+      },
+      {
+        path: 'modalidade/:prove_id',
+        element: <ModalityDetail />,
+      },
+      {
+        path: 'modalidade/:prove_id/evento/:event_id',
+        element: <EventSummary />,
+      },
+      {
+        path: 'modalidade/:prove_id/evento/:event_id/resumo',
+        element: <EventResume />,
+      },
+      {
+        path: 'modalidade/:prove_id/evento/:event_id/prova-evento/:prove_event_id/top10',
+        element: <Top10 />,
+      },
+      {
+        path: 'modalidade/:prove_id/evento/:event_id/prova-evento/:prove_event_id/classificatoria/:id_classificatory',
+        element: <Classificatory />,
+      },
+      {
+        path: 'healthz',
+        element: <Healthz />,
+      },
+    ],
+  },
+]);
