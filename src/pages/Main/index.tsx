@@ -59,6 +59,7 @@ function Main() {
         <ContentDektop
           header={<Header text={pageTitle} />}
           contentBoxStyles={{ padding: '1rem 2.5rem', gap: '0', overflow: 'auto' }}
+          footerType="medium"
         >
           <>
             <NotPointedEvents onClick={onClickModality} />

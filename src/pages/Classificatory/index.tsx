@@ -682,6 +682,7 @@ const Classificatory = () => {
           gap: '0.25rem',
           paddingBottom: 0,
         }}
+        footerType="medium"
         count={tableData.length}
       >
         <HeaderNavigatorDesktop

@@ -339,6 +339,7 @@ function Top10() {
           padding: '1.5rem',
           gap: '0.25rem',
         }}
+        footerType="medium"
         count={tableData.length}
       >
         <HeaderNavigatorDesktop

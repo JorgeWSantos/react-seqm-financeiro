@@ -550,6 +550,7 @@ function EventSummary() {
           gap: '0.25rem',
           position: 'relative',
         }}
+        footerType="medium"
       >
         <HeaderNavigatorDesktop
           title={eventInfoData?.cds_evento || ''}
