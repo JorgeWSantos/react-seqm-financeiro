@@ -22,6 +22,7 @@ export type TeamTop10 = {
   ranking_geral_awards: string | null;
   registro_de_merito: string;
   super_horse: string | null;
+  cds_filiacao: string;
 };
 
 export type Top10Data = {
@@ -38,7 +39,6 @@ export type Top10Data = {
   nid_equipe: number;
   equipe: TeamTop10[];
 };
-
 
 export type EventDetailsTop10 = {
   nid_prova_evento: number;

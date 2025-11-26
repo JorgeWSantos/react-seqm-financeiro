@@ -25,7 +25,7 @@ function Layout({ withError }: { withError?: boolean }) {
   };
 
   return (
-    <GlobalContainer>
+    <GlobalContainer footerType="medium">
       {!isTabletOrMobile && (
         <ContainerDesktop style={{ display: isTabletOrMobile ? 'none' : 'grid' }}>
           <SideBarDesktop

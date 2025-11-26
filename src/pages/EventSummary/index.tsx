@@ -42,6 +42,7 @@ import {
   FileTextIcon,
   PrinterIcon,
   ShareIcon,
+  SpinnerRingResizeIcon,
   StarIcon,
   TrophyIcon,
   XIcon,
@@ -88,6 +89,7 @@ function EventSummary() {
 
   // Ref para acessar o método print do PrintArea
   const printAreaRef = useRef<{ print: () => void }>(null);
+  const [isPrinting, setIsPrinting] = useState(false);
 
   const [eventSummaryData, setEventSummaryData] = useState<EventSummaryResponseData>(
     {} as EventSummaryResponseData
@@ -165,9 +167,11 @@ function EventSummary() {
   }, [getInfoEvent, event_id]);
 
   const onTriggerPrintPDF = useCallback(async () => {
+    setIsPrinting(true);
     await handleGetEventInfo();
     setTimeout(() => {
       printAreaRef.current?.print();
+      setIsPrinting(false);
     }, 1000);
   }, [handleGetEventInfo]);
 
@@ -396,7 +400,11 @@ function EventSummary() {
       onClick: goToEventResume,
     },
     {
-      icon: (
+      icon: isPrinting ? (
+        <SpinnerRingResizeIcon
+          fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen75}
+        />
+      ) : (
         <PrinterIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen75} />
       ),
       label: 'imprimir',
@@ -550,6 +558,7 @@ function EventSummary() {
           gap: '0.25rem',
           position: 'relative',
         }}
+        footerType="medium"
       >
         <HeaderNavigatorDesktop
           title={eventInfoData?.cds_evento || ''}
