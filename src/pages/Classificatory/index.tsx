@@ -324,7 +324,7 @@ const Classificatory = () => {
           {
             key: 'classd',
             label: 'CLASS',
-            width: '4rem',
+            minWidth: '4rem',
             align: 'center',
             sortable: true,
           },
@@ -339,18 +339,21 @@ const Classificatory = () => {
     {
       key: 'competitor',
       label: 'COMPETIDOR',
+      minWidth: '12rem',
       align: 'left',
       sortable: true,
     },
     {
       key: 'animal',
       label: 'ANIMAL',
+      minWidth: '10rem',
       align: 'left',
       sortable: true,
     },
     {
       key: 'owner',
       label: 'PROPRIETÁRIO',
+      minWidth: '12rem',
       align: 'left',
       sortable: true,
     },
