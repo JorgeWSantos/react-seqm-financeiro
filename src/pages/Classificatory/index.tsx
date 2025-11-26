@@ -16,7 +16,6 @@ import {
   StyledTableSEQMTextTd,
   TabsCardsBar,
   Switch,
-  LoadingOverlay,
 } from '@abqm-ds/react';
 
 import { useDeviceType } from '@abqm-ds/react';
@@ -47,6 +46,7 @@ import {
   SearchIcon,
   ShareIcon,
   StarIcon,
+  SpinnerRingResizeIcon,
 } from '@abqm-ds/icons';
 import { colors } from '@abqm-ds/tokens';
 import { useClassificatory } from '@src/services/Classificatory/useClassificatory';
@@ -357,7 +357,7 @@ const Classificatory = () => {
     {
       key: 'owner',
       label: 'PROPRIETÁRIO',
-      minWidth: '12rem',
+      minWidth: '11rem',
       align: 'left',
       sortable: true,
     },
@@ -553,7 +553,11 @@ const Classificatory = () => {
         ]
       : []),
     {
-      icon: (
+      icon: isPrinting ? (
+        <SpinnerRingResizeIcon
+          fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen75}
+        />
+      ) : (
         <PrinterIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen75} />
       ),
       label: 'imprimir',
@@ -763,7 +767,6 @@ const Classificatory = () => {
         />
       </ContentDektop>
 
-      {isPrinting && <LoadingOverlay />}
       {tableData?.length > 0 && (
         <PrintArea
           ref={printAreaRef}

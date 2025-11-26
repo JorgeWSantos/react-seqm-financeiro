@@ -17,7 +17,6 @@ import {
   type FooterWithButtonsPropsType,
   type TableColumnSEQM,
   type TableRowSEQM,
-  LoadingOverlay,
 } from '@abqm-ds/react';
 
 import { useDeviceType } from '@abqm-ds/react';
@@ -26,7 +25,12 @@ import { ContainerMain, EventHeader, RemoveScrollableMobile } from './styles';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePage } from '@src/contexts/page/usePage';
-import { PrinterIcon, SearchIcon, ShareIcon } from '@abqm-ds/icons';
+import {
+  PrinterIcon,
+  SearchIcon,
+  ShareIcon,
+  SpinnerRingResizeIcon,
+} from '@abqm-ds/icons';
 import { colors, fonts } from '@abqm-ds/tokens';
 import { useTop10 } from '@src/services/Top10/useTop10';
 import type { Top10Data } from '../../services/Top10/types.api';
@@ -283,7 +287,11 @@ function Top10() {
 
   const buttonsHeader = [
     {
-      icon: (
+      icon: isPrinting ? (
+        <SpinnerRingResizeIcon
+          fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen75}
+        />
+      ) : (
         <PrinterIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen75} />
       ),
       label: 'imprimir',
@@ -410,7 +418,6 @@ function Top10() {
         />
       </ContentDektop>
 
-      {isPrinting && <LoadingOverlay />}
       {tableData?.length > 0 && (
         <PrintArea
           ref={printAreaRef}

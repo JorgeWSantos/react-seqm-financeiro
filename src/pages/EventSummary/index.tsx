@@ -8,7 +8,6 @@ import {
   HeaderMobileNavigator,
   HeaderNavigatorDesktop,
   InfoEventDetails,
-  LoadingOverlay,
   ShareOptions,
   StyledTableSEQMTextTd,
   TableWithLoader,
@@ -43,6 +42,7 @@ import {
   FileTextIcon,
   PrinterIcon,
   ShareIcon,
+  SpinnerRingResizeIcon,
   StarIcon,
   TrophyIcon,
   XIcon,
@@ -400,7 +400,11 @@ function EventSummary() {
       onClick: goToEventResume,
     },
     {
-      icon: (
+      icon: isPrinting ? (
+        <SpinnerRingResizeIcon
+          fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen75}
+        />
+      ) : (
         <PrinterIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen75} />
       ),
       label: 'imprimir',
@@ -621,7 +625,6 @@ function EventSummary() {
         </Scrollable>
       </ContentDektop>
 
-      {isPrinting && <LoadingOverlay />}
       {tableData?.length > 0 && (
         <PrintArea
           ref={printAreaRef}
