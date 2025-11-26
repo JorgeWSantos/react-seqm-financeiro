@@ -17,6 +17,7 @@ import {
   type FooterWithButtonsPropsType,
   type TableColumnSEQM,
   type TableRowSEQM,
+  LoadingOverlay,
 } from '@abqm-ds/react';
 
 import { useDeviceType } from '@abqm-ds/react';
@@ -61,6 +62,7 @@ function Top10() {
   const [searchValue, setSearchValue] = useState<string>('');
 
   const printAreaRef = useRef<{ print: () => void }>(null);
+  const [isPrinting, setIsPrinting] = useState(false);
   const { getInfoEvent } = useInfoEvent();
 
   const [showShareOptions, setShowShareOptions] = useState(false);
@@ -98,9 +100,11 @@ function Top10() {
   }, [getInfoEvent, event_id]);
 
   const onTriggerPrintPDF = useCallback(async () => {
+    setIsPrinting(true);
     await handleGetEventInfo();
     setTimeout(() => {
       printAreaRef.current?.print();
+      setIsPrinting(false);
     }, 1000);
   }, [handleGetEventInfo]);
 
@@ -406,6 +410,7 @@ function Top10() {
         />
       </ContentDektop>
 
+      {isPrinting && <LoadingOverlay />}
       {tableData?.length > 0 && (
         <PrintArea
           ref={printAreaRef}

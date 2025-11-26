@@ -16,6 +16,7 @@ import {
   StyledTableSEQMTextTd,
   TabsCardsBar,
   Switch,
+  LoadingOverlay,
 } from '@abqm-ds/react';
 
 import { useDeviceType } from '@abqm-ds/react';
@@ -106,6 +107,7 @@ const Classificatory = () => {
 
   // Ref para acessar o método print do PrintArea
   const printAreaRef = useRef<{ print: () => void }>(null);
+  const [isPrinting, setIsPrinting] = useState(false);
 
   const [classificatoryEventInfoData, setClassificatoryEventInfoData] =
     useState<ClassificatoryEventData | null>({} as ClassificatoryEventData);
@@ -206,9 +208,11 @@ const Classificatory = () => {
   }, [navigate]);
 
   const onTriggerPrintPDF = useCallback(async () => {
+    setIsPrinting(true);
     await handleGetEventInfo();
     setTimeout(() => {
       printAreaRef.current?.print();
+      setIsPrinting(false);
     }, 1000);
   }, [handleGetEventInfo]);
 
@@ -759,6 +763,7 @@ const Classificatory = () => {
         />
       </ContentDektop>
 
+      {isPrinting && <LoadingOverlay />}
       {tableData?.length > 0 && (
         <PrintArea
           ref={printAreaRef}

@@ -8,6 +8,7 @@ import {
   HeaderMobileNavigator,
   HeaderNavigatorDesktop,
   InfoEventDetails,
+  LoadingOverlay,
   ShareOptions,
   StyledTableSEQMTextTd,
   TableWithLoader,
@@ -88,6 +89,7 @@ function EventSummary() {
 
   // Ref para acessar o método print do PrintArea
   const printAreaRef = useRef<{ print: () => void }>(null);
+  const [isPrinting, setIsPrinting] = useState(false);
 
   const [eventSummaryData, setEventSummaryData] = useState<EventSummaryResponseData>(
     {} as EventSummaryResponseData
@@ -165,9 +167,11 @@ function EventSummary() {
   }, [getInfoEvent, event_id]);
 
   const onTriggerPrintPDF = useCallback(async () => {
+    setIsPrinting(true);
     await handleGetEventInfo();
     setTimeout(() => {
       printAreaRef.current?.print();
+      setIsPrinting(false);
     }, 1000);
   }, [handleGetEventInfo]);
 
@@ -617,6 +621,7 @@ function EventSummary() {
         </Scrollable>
       </ContentDektop>
 
+      {isPrinting && <LoadingOverlay />}
       {tableData?.length > 0 && (
         <PrintArea
           ref={printAreaRef}
