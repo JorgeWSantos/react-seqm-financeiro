@@ -1,5 +1,6 @@
 import {
   AnimalTableData,
+  ElementTableData,
   CompetitorTableData,
   ContentDektop,
   ContentMobile,
@@ -143,23 +144,22 @@ function Top10() {
     {
       key: 'abqm',
       label: 'ABQM',
-      width: '6%',
-      minWidth: '4rem',
+      minWidth: '2rem',
       align: 'center',
       sortable: true,
     },
-    { key: 'competitor', label: 'COMPETIDOR', width: '30%', sortable: true },
     {
-      key: 'animal',
-      label: 'ANIMAL',
-      width: '24%',
+      key: 'category',
+      label: 'CATEGORIA',
+      minWidth: '6.75rem',
       align: 'left',
       sortable: true,
     },
+    { key: 'competitor', label: 'COMPETIDOR', minWidth: '7.5rem', sortable: true },
     {
-      key: 'owner',
-      label: 'PROPRIETÁRIO',
-      width: '30%',
+      key: 'animal',
+      label: 'ANIMAL',
+      minWidth: '8.25rem',
       align: 'left',
       sortable: true,
     },
@@ -167,13 +167,42 @@ function Top10() {
       key: 'tn',
       label: 'T/N',
       align: 'center',
-      width: '10%',
+      minWidth: '2.8rem',
       sortable: true,
+    },
+    {
+      key: 'filiation',
+      label: 'FILIAÇÃO',
+      minWidth: '7.5rem',
+      align: 'left',
+      sortable: true,
+    },
+    {
+      key: 'owner',
+      label: 'PROPRIETÁRIO',
+      minWidth: '7.5rem',
+      align: 'left',
+      sortable: true,
+    },
+    {
+      key: 'classification',
+      label: 'CLASS./FINAL',
+      minWidth: '6rem',
+      align: 'center',
+      sortable: false,
     },
   ];
 
   const tableData: Array<TableRowSEQM> = listToShow.map((item) => ({
     abqm: { value: `${item.nnr_classificacao_abqm}°` },
+
+    category: {
+      value: `${item.cds_tipo_prova} - ${item.cds_modalidade}`,
+      render: () => (
+        <ElementTableData value={`${item.cds_tipo_prova} - ${item.cds_modalidade}`} />
+      ),
+    },
+
     competitor: {
       value: item.equipe[0]?.cds_competidor || '', // to sort
       render: () => {
@@ -188,6 +217,7 @@ function Top10() {
         ));
       },
     },
+
     animal: {
       value: item.equipe[0]?.cds_animal || '', // to sort
       render: () => {
@@ -211,6 +241,14 @@ function Top10() {
         );
       },
     },
+
+    tn: { value: item.cds_pontuacao },
+
+    filiation: {
+      value: item.equipe[0].cds_filiacao,
+      render: () => <ElementTableData value={item.equipe[0].cds_filiacao} />,
+    },
+
     owner: {
       value: item.equipe[0]?.cds_proprietario || '', // to sort
       render: () => {
@@ -226,7 +264,7 @@ function Top10() {
         ));
       },
     },
-    tn: { value: item.cds_pontuacao },
+    classification: { value: item.ccd_tipo_classificatoria },
   }));
 
   const printInfo: PrintHeaderProps = {
