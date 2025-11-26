@@ -1,5 +1,6 @@
 import {
   AnimalTableData,
+  ElementTableData,
   CompetitorTableData,
   ContentDektop,
   ContentMobile,
@@ -24,7 +25,12 @@ import { ContainerMain, EventHeader, RemoveScrollableMobile } from './styles';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePage } from '@src/contexts/page/usePage';
-import { PrinterIcon, SearchIcon, ShareIcon } from '@abqm-ds/icons';
+import {
+  PrinterIcon,
+  SearchIcon,
+  ShareIcon,
+  SpinnerRingResizeIcon,
+} from '@abqm-ds/icons';
 import { colors, fonts } from '@abqm-ds/tokens';
 import { useTop10 } from '@src/services/Top10/useTop10';
 import type { Top10Data } from '../../services/Top10/types.api';
@@ -60,6 +66,7 @@ function Top10() {
   const [searchValue, setSearchValue] = useState<string>('');
 
   const printAreaRef = useRef<{ print: () => void }>(null);
+  const [isPrinting, setIsPrinting] = useState(false);
   const { getInfoEvent } = useInfoEvent();
 
   const [showShareOptions, setShowShareOptions] = useState(false);
@@ -97,9 +104,11 @@ function Top10() {
   }, [getInfoEvent, event_id]);
 
   const onTriggerPrintPDF = useCallback(async () => {
+    setIsPrinting(true);
     await handleGetEventInfo();
     setTimeout(() => {
       printAreaRef.current?.print();
+      setIsPrinting(false);
     }, 1000);
   }, [handleGetEventInfo]);
 
@@ -143,23 +152,22 @@ function Top10() {
     {
       key: 'abqm',
       label: 'ABQM',
-      width: '6%',
-      minWidth: '4rem',
+      minWidth: '2rem',
       align: 'center',
       sortable: true,
     },
-    { key: 'competitor', label: 'COMPETIDOR', width: '30%', sortable: true },
     {
-      key: 'animal',
-      label: 'ANIMAL',
-      width: '24%',
+      key: 'category',
+      label: 'CATEGORIA',
+      minWidth: '6.75rem',
       align: 'left',
       sortable: true,
     },
+    { key: 'competitor', label: 'COMPETIDOR', minWidth: '7.5rem', sortable: true },
     {
-      key: 'owner',
-      label: 'PROPRIETÁRIO',
-      width: '30%',
+      key: 'animal',
+      label: 'ANIMAL',
+      minWidth: '8.25rem',
       align: 'left',
       sortable: true,
     },
@@ -167,13 +175,42 @@ function Top10() {
       key: 'tn',
       label: 'T/N',
       align: 'center',
-      width: '10%',
+      minWidth: '2.8rem',
       sortable: true,
+    },
+    {
+      key: 'filiation',
+      label: 'FILIAÇÃO',
+      minWidth: '7.5rem',
+      align: 'left',
+      sortable: true,
+    },
+    {
+      key: 'owner',
+      label: 'PROPRIETÁRIO',
+      minWidth: '7.5rem',
+      align: 'left',
+      sortable: true,
+    },
+    {
+      key: 'classification',
+      label: 'CLASS./FINAL',
+      minWidth: '6rem',
+      align: 'center',
+      sortable: false,
     },
   ];
 
   const tableData: Array<TableRowSEQM> = listToShow.map((item) => ({
     abqm: { value: `${item.nnr_classificacao_abqm}°` },
+
+    category: {
+      value: `${item.cds_tipo_prova} - ${item.cds_modalidade}`,
+      render: () => (
+        <ElementTableData value={`${item.cds_tipo_prova} - ${item.cds_modalidade}`} />
+      ),
+    },
+
     competitor: {
       value: item.equipe[0]?.cds_competidor || '', // to sort
       render: () => {
@@ -188,6 +225,7 @@ function Top10() {
         ));
       },
     },
+
     animal: {
       value: item.equipe[0]?.cds_animal || '', // to sort
       render: () => {
@@ -211,6 +249,14 @@ function Top10() {
         );
       },
     },
+
+    tn: { value: item.cds_pontuacao },
+
+    filiation: {
+      value: item.equipe[0].cds_filiacao,
+      render: () => <ElementTableData value={item.equipe[0].cds_filiacao} />,
+    },
+
     owner: {
       value: item.equipe[0]?.cds_proprietario || '', // to sort
       render: () => {
@@ -226,7 +272,7 @@ function Top10() {
         ));
       },
     },
-    tn: { value: item.cds_pontuacao },
+    classification: { value: item.ccd_tipo_classificatoria },
   }));
 
   const printInfo: PrintHeaderProps = {
@@ -241,7 +287,11 @@ function Top10() {
 
   const buttonsHeader = [
     {
-      icon: (
+      icon: isPrinting ? (
+        <SpinnerRingResizeIcon
+          fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen75}
+        />
+      ) : (
         <PrinterIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen75} />
       ),
       label: 'imprimir',
@@ -339,6 +389,7 @@ function Top10() {
           padding: '1.5rem',
           gap: '0.25rem',
         }}
+        footerType="medium"
         count={tableData.length}
       >
         <HeaderNavigatorDesktop

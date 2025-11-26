@@ -46,6 +46,7 @@ import {
   SearchIcon,
   ShareIcon,
   StarIcon,
+  SpinnerRingResizeIcon,
 } from '@abqm-ds/icons';
 import { colors } from '@abqm-ds/tokens';
 import { useClassificatory } from '@src/services/Classificatory/useClassificatory';
@@ -106,6 +107,7 @@ const Classificatory = () => {
 
   // Ref para acessar o método print do PrintArea
   const printAreaRef = useRef<{ print: () => void }>(null);
+  const [isPrinting, setIsPrinting] = useState(false);
 
   const [classificatoryEventInfoData, setClassificatoryEventInfoData] =
     useState<ClassificatoryEventData | null>({} as ClassificatoryEventData);
@@ -206,9 +208,11 @@ const Classificatory = () => {
   }, [navigate]);
 
   const onTriggerPrintPDF = useCallback(async () => {
+    setIsPrinting(true);
     await handleGetEventInfo();
     setTimeout(() => {
       printAreaRef.current?.print();
+      setIsPrinting(false);
     }, 1000);
   }, [handleGetEventInfo]);
 
@@ -324,7 +328,7 @@ const Classificatory = () => {
           {
             key: 'classd',
             label: 'CLASS',
-            width: '4rem',
+            minWidth: '4rem',
             align: 'center',
             sortable: true,
           },
@@ -339,18 +343,21 @@ const Classificatory = () => {
     {
       key: 'competitor',
       label: 'COMPETIDOR',
+      minWidth: '12rem',
       align: 'left',
       sortable: true,
     },
     {
       key: 'animal',
       label: 'ANIMAL',
+      minWidth: '10rem',
       align: 'left',
       sortable: true,
     },
     {
       key: 'owner',
       label: 'PROPRIETÁRIO',
+      minWidth: '11rem',
       align: 'left',
       sortable: true,
     },
@@ -546,7 +553,11 @@ const Classificatory = () => {
         ]
       : []),
     {
-      icon: (
+      icon: isPrinting ? (
+        <SpinnerRingResizeIcon
+          fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen75}
+        />
+      ) : (
         <PrinterIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen75} />
       ),
       label: 'imprimir',
@@ -682,6 +693,7 @@ const Classificatory = () => {
           gap: '0.25rem',
           paddingBottom: 0,
         }}
+        footerType="medium"
         count={tableData.length}
       >
         <HeaderNavigatorDesktop
