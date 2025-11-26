@@ -291,6 +291,7 @@ function EventResume() {
           gap: '0.25rem',
           position: 'relative',
         }}
+        footerType="medium"
       >
         <HeaderNavigatorDesktop
           title={'RESUMO GERAL DO EVENTO'}
