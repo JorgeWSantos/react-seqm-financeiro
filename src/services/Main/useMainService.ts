@@ -1,19 +1,36 @@
 import { Toast } from '@abqm-ds/react';
 import { useCallback } from 'react';
-import { apiResultados } from '../api';
-import type {
-  ResultModalitiesResponse,
-  ResultModalitiesResponseData,
-} from '@src/services/Main/types.api';
+import type { GroupingResponseData } from '@src/services/Main/types.api';
+
+import mockjson from './mock-list.json';
+import mockdatesjson from './mock-dateslist.json';
+import type { AllDatesResponseData } from './types.alldates';
 
 export function useMainService() {
-  const getResultados = useCallback(async (): Promise<ResultModalitiesResponseData> => {
+  const getGrouping = useCallback(async ({
+    nnr_ano
+  }: { nnr_ano: string }): Promise<GroupingResponseData[]> => {
     try {
-      const response = await apiResultados.get<ResultModalitiesResponse>(
-        '/v1/ResultadosQtdePorModalidade'
-      );
+      console.log('nnr_ano', nnr_ano);
+      // const nid_empresa = 1;
+      // const token = ''; // normalmente já está setado no axios instance
+
+      // const response = await apiResultados.get<GroupingResponse>(
+      //   '/v1/ResultadosQtdePorModalidade'
+      // );
+
+      const response = {
+        data: {
+          data: { list: mockjson },
+          message: 'Success',
+          success: true
+        },
+      }
+
 
       const { data, message, success } = response.data;
+
+      // data.list = mockjson;
 
       if (!success) {
         Toast.show({
@@ -21,17 +38,10 @@ export function useMainService() {
           type: 'error',
           timeout: 3000,
         });
-        return {
-          top_modalidades: [],
-          modalidades: [],
-        };
+        return [];
       }
 
-      return {
-        top_modalidades:
-          data.list_resultados_qtde_por_modalidade[0].top_modalidades || [],
-        modalidades: data.list_resultados_qtde_por_modalidade[0].modalidades || [],
-      };
+      return data.list;
     } catch (error) {
       Toast.show({
         message: 'Ops, ocorreu um erro ao carregar os resultados!',
@@ -39,28 +49,18 @@ export function useMainService() {
         timeout: 30000,
       });
       console.warn(error);
-      return {
-        top_modalidades: [],
-        modalidades: [],
-      };
+      return [];
     }
   }, []);
 
-  const saveMoreSearched = useCallback(async ({ id_prova }: { id_prova: number }) => {
-    try {
-      await apiResultados.put(`/v1/AcessoModalidade/${id_prova}`);
-    } catch (error) {
-      Toast.show({
-        message: 'Ops, ocorreu um erro!',
-        type: 'error',
-        timeout: 30000,
-      });
-      console.warn(error);
-    }
+  const getAllDates = useCallback(async (): Promise<AllDatesResponseData[]> => {
+    // Implement API call to fetch all dates
+    return mockdatesjson;
   }, []);
+
 
   return {
-    getResultados,
-    saveMoreSearched,
+    getGrouping,
+    getAllDates,
   };
 }
