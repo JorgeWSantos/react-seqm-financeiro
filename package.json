@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "dev:host": "vite --host",
-    "dev:dev": "vite --mode qas",
+    "dev:dev": "vite --mode dev",
     "dev:qas": "vite --mode qas",
     "dev:prod": "vite --mode production",
     "build:dev": "tsc -b && vite build --mode dev",
