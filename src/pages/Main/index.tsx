@@ -1,106 +1,74 @@
-import { ContentDektop, ContentMobile, Header, Text } from '@abqm-ds/react';
+import {
+  ContentDektop,
+  ContentMobile,
+  Header,
+  HeaderMobileNavigator,
+  HeaderNavigatorDesktop,
+} from '@abqm-ds/react';
 
 import { useDeviceType } from '@abqm-ds/react';
 
-import NotPointedEvents from '@src/components/Main/NotPointedEvents';
-import MoreSearchedModalities from '@src/components/Main/MoreSearchedModalities';
-import OtherSearchModalities from '@src/components/Main/OtherSearchModalities';
-import { ContainerDesktopMain, ContainerMobileMain, TitleAndButton } from './styles';
-import { useCallback, useEffect } from 'react';
-import { useMainService } from '@src/services/Main/useMainService';
-import { usePage } from '@src/contexts/page/usePage';
-import { useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { colors } from '@abqm-ds/tokens';
+import { ContainerMain, ContainerMobileMain } from './styles';
 
-function Main() {
-  const pageTitle = 'Resultados';
+const Main = () => {
+  const pageTitle = 'Financeiro';
+  const pageName = 'Eventos ABQM';
 
-  const navigate = useNavigate();
-  const { setPage, currentPage } = usePage();
   const { isTabletOrMobile } = useDeviceType();
-  const { getResultados, saveMoreSearched } = useMainService();
 
-  const onClickModality = useCallback(
-    async ({
-      id_prova,
-      cds_tipo_prova,
-    }: {
-      id_prova: string | number;
-      cds_tipo_prova: string;
-    }) => {
-      if (id_prova !== 'nao-pontuados') {
-        await saveMoreSearched({ id_prova: Number(id_prova) });
-      }
+  const handleOnGoBack = () => {
+    window.history.back();
+  };
 
-      const navigateTo = `/modalidade/${id_prova}`;
-
-      navigate(navigateTo, {
-        state: { _previousPage: currentPage, modality: { id_prova, cds_tipo_prova } },
-      });
-    },
-    [saveMoreSearched, navigate, currentPage]
-  );
-
-  const { data: allModalities = { top_modalidades: [], modalidades: [] } } = useQuery({
-    queryKey: [''],
-    queryFn: getResultados,
-    staleTime: 1000 * 60 * 3, // 3 minutos
-    gcTime: 1000 * 60 * 3,
-  });
-
-  useEffect(() => {
-    setPage({ page_title: pageTitle, path: location.pathname });
-  }, [setPage]);
+  if (isTabletOrMobile) {
+    return (
+      <ContainerMobileMain>
+        <ContentMobile
+          style={{
+            maxWidth: '100vw',
+            overflowY: 'auto',
+            overflowX: 'hidden',
+            padding: '0',
+          }}
+          contentMobileBoxStyles={{
+            gap: '0.5rem',
+            padding: '1.5rem 0rem 0rem 0rem',
+          }}
+          headerMobileNavigator={
+            <HeaderMobileNavigator
+              hasBackButton
+              onGoBack={handleOnGoBack}
+              headingText={pageName}
+              // hasSearch
+              // onChangeSearch={(v) => setSearchValue(v.target.value)}
+            />
+          }
+        >
+          teste
+        </ContentMobile>
+      </ContainerMobileMain>
+    );
+  }
 
   return (
-    <>
-      {!isTabletOrMobile ? (
-        <ContentDektop
-          header={<Header text={pageTitle} />}
-          contentBoxStyles={{ padding: '1rem 2.5rem', gap: '0', overflow: 'auto' }}
-          footerType="medium"
-        >
-          <>
-            <NotPointedEvents onClick={onClickModality} />
-            <ContainerDesktopMain>
-              <MoreSearchedModalities
-                title="MODALIDADES MAIS BUSCADAS"
-                data={allModalities.top_modalidades}
-                onClick={onClickModality}
-              />
-              <OtherSearchModalities
-                title="DEMAIS MODALIDADES"
-                data={allModalities.modalidades}
-                onClick={onClickModality}
-              />
-            </ContainerDesktopMain>
-          </>
-        </ContentDektop>
-      ) : (
-        <ContentMobile>
-          <ContainerMobileMain>
-            <TitleAndButton>
-              <Text fontSize="xl" fontWeight="semiBold" color={colors.emeraldGreen75}>
-                MAIS BUSCADAS
-              </Text>
-              <NotPointedEvents onClick={onClickModality} />
-            </TitleAndButton>
-            <MoreSearchedModalities
-              onClick={onClickModality}
-              title=""
-              data={allModalities.top_modalidades}
-            ></MoreSearchedModalities>
-            <OtherSearchModalities
-              onClick={onClickModality}
-              title="DEMAIS MODALIDADES"
-              data={allModalities.modalidades}
-            />
-          </ContainerMobileMain>
-        </ContentMobile>
-      )}
-    </>
+    <ContainerMain>
+      <ContentDektop
+        header={<Header text={pageTitle} />}
+        contentBoxStyles={{
+          padding: '1.5rem',
+          gap: '0.25rem',
+          paddingBottom: 0,
+        }}
+        footerType="medium"
+      >
+        <HeaderNavigatorDesktop
+          title={pageName}
+          hasBackButton
+          onGoBack={handleOnGoBack}
+        />
+      </ContentDektop>
+    </ContainerMain>
   );
-}
+};
 
 export default Main;

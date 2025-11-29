@@ -1,23 +1,10 @@
 import styled from 'styled-components';
 
-export const ContainerMain = styled.div``;
-
-export const ContainerDesktopMain = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  padding: 0rem;
+export const ContainerMain = styled.div`
+  height: 100%;
+  position: relative;
 `;
 
 export const ContainerMobileMain = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-`;
-
-export const TitleAndButton = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  margin-bottom: -24px;
+  height: 100%;
 `;
