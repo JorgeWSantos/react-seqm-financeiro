@@ -5,7 +5,7 @@
 
 ---
 
-# Projeto ABQM - Resultados
+# Projeto ABQM - Financeiro
 
 Este projeto é parte do ecossistema ABQM e utiliza os pacotes da biblioteca `@abqm-ds` para construção da interface (tokens, ícones e componentes React).
 
@@ -28,8 +28,8 @@ Este projeto é parte do ecossistema ABQM e utiliza os pacotes da biblioteca `@a
 1. Clone o repositório:
 
    ```bash
-   git clone <URL_RESULTADOS>
-   cd resultados
+   git clone <URL_FINANCEIRO>
+   cd financeiro
    ```
 
 2 Instalar versão 22.14.0 do node
