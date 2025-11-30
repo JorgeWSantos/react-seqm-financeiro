@@ -1,6 +1,6 @@
 // src/routes/AppRoutes.tsx
 // import Layout from '../index';
-import RegistrarionAndStalls from '@src/pages/RegistrarionAndStalls';
+import InscriptionsAndStalls from '@src/pages/InscriptionsAndStalls';
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from '@src/Layout';
 import Healthz from '@src/pages/Healthz';
@@ -18,7 +18,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'agrupamento/:nid_group_event/ano/:year',
-        element: <RegistrarionAndStalls />,
+        element: <InscriptionsAndStalls />,
       },
       {
         path: 'healthz',

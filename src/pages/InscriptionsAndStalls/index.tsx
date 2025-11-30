@@ -32,11 +32,11 @@ import { useParams } from 'react-router';
 import type { PrintHeaderProps } from '@src/components/PrintArea/PrintHeader';
 import PrintArea from '@src/components/PrintArea';
 import type { Tab } from './types';
-import { useInscriptionAndStalls } from '@src/services/RegistrarionAndStalls/useRegistrarionAndStalls';
-import type { InscriptionData } from '@src/services/RegistrarionAndStalls/types.inscription.api';
+import { useInscriptionAndStalls } from '@src/services/InscriptionsAndStalls/useInscriptionsAndStalls';
+import type { InscriptionData } from '@src/services/InscriptionsAndStalls/types.inscription.api';
 import { InfoCardsGroup } from './InfoCards';
 import { MobileInscriptionAndStalls } from './Mobile';
-import type { StallsData } from '@src/services/RegistrarionAndStalls/types.stalls.api';
+import type { StallsData } from '@src/services/InscriptionsAndStalls/types.stalls.api';
 
 const InscriptionAndStalls = () => {
   const params = useParams();
