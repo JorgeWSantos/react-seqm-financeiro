@@ -1,6 +1,6 @@
 // src/routes/AppRoutes.tsx
 // import Layout from '../index';
-import Classificatory from '@src/pages/Classificatory';
+import RegistrarionAndStalls from '@src/pages/RegistrarionAndStalls';
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from '@src/Layout';
 import Healthz from '@src/pages/Healthz';
@@ -17,8 +17,8 @@ export const router = createBrowserRouter([
         element: <Main />,
       },
       {
-        path: 'modalidade/:prove_id/evento/:event_id/prova-evento/:prove_event_id/classificatoria/:id_classificatory',
-        element: <Classificatory />,
+        path: 'agrupamento/:nid_group_event/ano/:year',
+        element: <RegistrarionAndStalls />,
       },
       {
         path: 'healthz',

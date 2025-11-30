@@ -17,12 +17,13 @@ import { useMainService } from '@src/services/Main/useMainService';
 import type { GroupingResponseData } from '@src/services/Main/types.api';
 import { CardList } from '@src/components/CardList';
 import type { AllDatesResponseData } from '@src/services/Main/types.alldates';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const Main = () => {
   const pageTitle = 'Financeiro';
   const pageName = 'EVENTOS ABQM';
 
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const paramsObject = Object.fromEntries([...searchParams]);
@@ -89,6 +90,7 @@ const Main = () => {
     );
 
     if (nidGroupingSelected !== null) {
+      navigate(`agrupamento/${nidGroupingSelected}/ano/${selectedDate?.nnr_ano}`);
       console.log('Selected Grouping ID:', nidGroupingSelected);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

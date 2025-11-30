@@ -1,7 +1,6 @@
-import { fonts } from '@abqm-ds/tokens';
+import { Text } from '@abqm-ds/react';
 import styled from 'styled-components';
 
-import { Text } from '@abqm-ds/react';
 
 export const ContainerMain = styled.div`
   height: 100%;
@@ -17,13 +16,6 @@ export const RemoveScrollableMobile = styled.div`
   overflow-y: unset;
 `;
 
-export const DivInfoCard = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 0.125rem;
-`;
-
 export const ContentTabs = styled.div`
   display: flex;
   align-items: flex-end;
@@ -35,13 +27,6 @@ export const ContentTabs = styled.div`
   padding-bottom: 0.3125rem;
 `;
 
-export const ContentSwitchTabs = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding-bottom: 0.125rem;
-`;
-
 export const TitleAndCards = styled.div`
   display: flex;
   flex-direction: column;
@@ -50,35 +35,13 @@ export const TitleAndCards = styled.div`
   padding: 0 0.5rem;
 `;
 
-export const StyledTextModality = styled(Text)`
-  letter-spacing: -0.6px;
-  text-transform: uppercase;
-`;
-
-export const StyledTextEvent = styled(Text)`
-  letter-spacing: -2px;
-  text-transform: uppercase;
-  font-family: ${fonts.secondary};
-`;
-
-// -------------------------
-
-export const StyledDivClassD = styled.div`
-  display: flex;
-`;
-
-export const StyledTdTextClassD = styled.span`
-  font-size: 0.6rem;
-`;
-
-export const StyledTdSpanClassD = styled.span`
-  font-size: 0.5rem;
-  margin-bottom: -4px !important;
-  align-self: flex-end;
-`;
-
 export const DivCompetitor = styled.div`
   display: flex;
   align-items: center;
   gap: 0.25rem;
 `
+export const StyledTextTable = styled(Text).attrs({
+  fontSize: 'xxs',
+})`
+  white-space: nowrap;
+`;

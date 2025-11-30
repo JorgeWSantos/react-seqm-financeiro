@@ -1,21 +1,17 @@
 import {
-  AnimalTableData,
   ContentDektop,
   ContentMobile,
-  getNameProveById,
   Header,
   HeaderMobileNavigator,
   HeaderNavigatorDesktop,
-  OwnerTableData,
   ShareOptions,
   TextInput,
   type TableColumnSEQM,
   CompetitorTableData,
   type TableRowSEQM,
   TableWithLoader,
-  StyledTableSEQMTextTd,
   TabsCardsBar,
-  Switch,
+  AnimalTableDataWithoutTooltip,
 } from '@abqm-ds/react';
 
 import { useDeviceType } from '@abqm-ds/react';
@@ -23,185 +19,92 @@ import { useDeviceType } from '@abqm-ds/react';
 import {
   ContainerMain,
   TitleAndCards,
-  StyledTextEvent,
-  StyledTextModality,
   ContainerMobileMain,
-  StyledTdSpanClassD,
-  StyledTdTextClassD,
-  StyledDivClassD,
   DivCompetitor,
   ContentTabs,
-  ContentSwitchTabs,
   RemoveScrollableMobile,
+  StyledTextTable,
 } from './styles';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { useNavigate, useLocation } from 'react-router-dom';
-import { usePage } from '@src/contexts/page/usePage';
+import { useNavigate } from 'react-router-dom';
 import {
-  AbqmOficialColoredIconSEQM,
-  FileTextIcon,
   PrinterIcon,
   SearchIcon,
   ShareIcon,
-  StarIcon,
   SpinnerRingResizeIcon,
 } from '@abqm-ds/icons';
 import { colors } from '@abqm-ds/tokens';
-import { useClassificatory } from '@src/services/Classificatory/useClassificatory';
-import type { ClassificatoryData } from '@src/services/Classificatory/types.classificatory.api';
+
 import { useParams } from 'react-router';
-import type {
-  ClassificatoryEventData,
-  ClassificatoryInscriptionsResumeData,
-  ClassificatoryJudgmentCardData,
-} from '@src/services/Classificatory/types.event-details.api';
+
 import type { PrintHeaderProps } from '@src/components/PrintArea/PrintHeader';
 import PrintArea from '@src/components/PrintArea';
-import { convertToBrazilDate } from '@src/utils/formatDate';
-import type { InfoEventData } from '@src/services/General/types.info-event.api';
-import { useInfoEvent } from '@src/services/General/useInfoEvent';
-import { InfoCardsGroup } from './InfoCards';
 import type { Tab } from './types';
-import { urlConsultaAnimal, urlRanking } from '@src/config/env';
-import { getClassDValueToSort } from './helper';
+import { useRegistrationAndStalls } from '@src/services/RegistrarionAndStalls/useRegistrarionAndStalls';
+import type { RegistrationAndStallsData } from '@src/services/RegistrarionAndStalls/types.registrationandstalls.api';
 
-const Classificatory = () => {
+const RegistrationAndStalls = () => {
   const params = useParams();
-  const { prove_id, prove_event_id, event_id, id_classificatory } = params;
+  const { year, nid_group_event } = params;
 
   const pageTitle = 'Resultados';
   const subTitle = '';
 
   const navigate = useNavigate();
-  const location = useLocation();
-
-  const { setPage } = usePage();
   const { isTabletOrMobile } = useDeviceType();
-  const { getClassificatory, getEventDetails } = useClassificatory();
-  const { getInfoEvent } = useInfoEvent();
+  const { getInscriptions, getStalls } = useRegistrationAndStalls();
 
   const [isLoading, setIsLoading] = useState(true);
-  // const [allList, setAllList] = useState<ClassificatoryData[]>([]);
-  const [listToShow, setListToShow] = useState<ClassificatoryData[]>([]);
+  const [listToShow, setListToShow] = useState<RegistrationAndStallsData[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
   const [tabsToShow, setTabsToShow] = useState<Tab[]>([]);
-  const [activeTab, setActiveTab] = useState<string>('');
-
-  const [switchCore, setSwitchCore] = useState({
-    checked: false,
-    onChange: (v: any) => {
-      console.log(v);
-    },
-    label: 'Núcleos',
-  });
-
-  const [switchAQHA, setSwitchAQHA] = useState({
-    checked: false,
-    onChange: (v: any) => {
-      console.log(v);
-    },
-    label: 'AQHA',
-  });
+  const [activeTab, setActiveTab] = useState<Tab['type']>('inscriptions');
 
   // Ref para acessar o método print do PrintArea
   const printAreaRef = useRef<{ print: () => void }>(null);
   const [isPrinting, setIsPrinting] = useState(false);
 
-  const [classificatoryEventInfoData, setClassificatoryEventInfoData] =
-    useState<ClassificatoryEventData | null>({} as ClassificatoryEventData);
-
-  const [eventInfoData, setEventInfoData] = useState<InfoEventData | null>(
-    {} as InfoEventData
-  );
-
-  const [resumeInscriptionsData, setResumeInscriptionsData] =
-    useState<ClassificatoryInscriptionsResumeData | null>(
-      {} as ClassificatoryInscriptionsResumeData
-    );
-
-  const [judgmentCards, setJudgmentCards] =
-    useState<ClassificatoryJudgmentCardData | null>(null);
-
   const [showShareOptions, setShowShareOptions] = useState(false);
   const shareUrl = window.location.href;
 
   //functions
-  const handleGetResultsClassificatory = useCallback(async () => {
-    if (!prove_event_id) {
+  const handleGetResultsRegistrationAndStalls = useCallback(async () => {
+    if (!nid_group_event || !year) {
       return;
     }
 
-    const data = await getClassificatory({
-      prove_event_id: Number(prove_event_id),
+    const data = await getInscriptions({
+      nid_group_event,
+      year,
+    });
+    const data2 = await getStalls({
+      nid_group_event,
+      year,
     });
 
     if (data.length > 0) {
       const _tabs: Tab[] = [];
 
-      data.map((item) => {
-        _tabs.push({
-          tipo_etapa: item.tipo_etapa,
-          cartao_julgamento: item.cartao_julgamento,
-          lista_classificacao: item.lista_classificacao,
-        } as Tab);
+      _tabs.push({
+        list: data || [],
+        type: 'inscriptions',
       });
 
-      setActiveTab(_tabs[0]?.tipo_etapa || '');
+      _tabs.push({
+        list: data2 || [],
+        type: 'stalls',
+      });
+
+      setActiveTab('inscriptions');
       setTabsToShow(_tabs);
     }
 
-    // setAllList(data[0]?.lista_classificacao || []);
-    setListToShow(data[0]?.lista_classificacao || []);
+    setListToShow(data);
 
     setIsLoading(false);
-  }, [getClassificatory, prove_event_id]);
-
-  const handleGetEventDetails = useCallback(async () => {
-    if (!prove_event_id || !id_classificatory) {
-      return;
-    }
-
-    const { detalhe_evento, resumo_inscricoes, cartao_julgamento } =
-      await getEventDetails({
-        prove_event_id: Number(prove_event_id),
-        prove_event_classificatory_id: Number(id_classificatory),
-      });
-
-    if (detalhe_evento) {
-      setClassificatoryEventInfoData(detalhe_evento);
-    }
-
-    if (resumo_inscricoes) {
-      setResumeInscriptionsData(resumo_inscricoes);
-    }
-
-    if (
-      cartao_julgamento !== null &&
-      (cartao_julgamento.cds_url_cartao_julgamento_classificatoria !== '' ||
-        cartao_julgamento.cds_url_cartao_julgamento_final !== '')
-    ) {
-      setJudgmentCards({
-        cds_url_cartao_julgamento_classificatoria:
-          cartao_julgamento.cds_url_cartao_julgamento_classificatoria,
-        cds_url_cartao_julgamento_final:
-          cartao_julgamento.cds_url_cartao_julgamento_final,
-      });
-    }
-  }, [getEventDetails, prove_event_id, id_classificatory]);
-
-  const handleGetEventInfo = useCallback(async () => {
-    if (!event_id) {
-      return;
-    }
-
-    const data = await getInfoEvent({
-      event_id: Number(event_id),
-    });
-
-    setEventInfoData(data);
-  }, [getInfoEvent, event_id]);
+  }, [getInscriptions, getStalls, nid_group_event, year]);
 
   const handleOnGoBack = useCallback(() => {
     navigate(-1);
@@ -209,35 +112,20 @@ const Classificatory = () => {
 
   const onTriggerPrintPDF = useCallback(async () => {
     setIsPrinting(true);
-    await handleGetEventInfo();
     setTimeout(() => {
       printAreaRef.current?.print();
       setIsPrinting(false);
     }, 1000);
-  }, [handleGetEventInfo]);
-
-  // Effect to set the page title and path
-  useEffect(() => {
-    setPage({
-      page_title: pageTitle,
-      path: location.pathname,
-    });
-  }, [setPage, location]);
+  }, []);
 
   useEffect(() => {
-    let allList: ClassificatoryData[] = [];
+    let allList: RegistrationAndStallsData[] = [];
 
     if (tabsToShow.length > 0) {
-      allList =
-        tabsToShow.filter((item) => item.tipo_etapa === activeTab)[0]
-          .lista_classificacao || [];
+      allList = tabsToShow.filter((item) => item.type === activeTab)[0].list || [];
     }
 
-    console.log('!switchCore.checked', !switchCore.checked);
-    console.log('!switchAQHA.checked', !switchAQHA.checked);
-    console.log('searchValue.trim() === ""', searchValue.trim() === '');
-
-    if (searchValue.trim() === '' && !switchCore.checked && !switchAQHA.checked) {
+    if (searchValue.trim() === '') {
       setListToShow(allList);
       return;
     }
@@ -246,312 +134,118 @@ const Classificatory = () => {
 
     const filteredList = allList.filter((item) => {
       // Filtro por classificação
-      const matchClassificacao = item.cds_classificacao.toLowerCase().includes(search);
-      const matchTN = item.cds_media.toLowerCase().includes(search);
-      const matchCore = switchCore.checked ? item.cds_classificacao_nucleo !== '' : true;
-      const matchAQHA = switchAQHA.checked
-        ? item.bid_nucleo_participa_abqm === true
-        : true;
+      const matchClassificacao = item.nnr_classificacao_abqm
+        .toString()
+        .toLowerCase()
+        .includes(search);
+      const matchTN = item.cds_pontuacao?.toLowerCase().includes(search);
 
       // Filtro por nome do animal dentro de equipe
-      const matchAnimal = item.equipe?.some((e) =>
-        e.cds_animal?.toLowerCase().includes(search)
-      );
+      const matchAnimal = item.cds_nome_animal.toLowerCase().includes(search);
       // Filtro por nome do competidor dentro de equipe
-      const matchCompetitor = item.equipe?.some((e) =>
-        e.cds_competidor?.toLowerCase().includes(search)
-      );
+      const matchCompetitor = item.cds_nome_competidor.toLowerCase().includes(search);
       // Filtro por nome do proprietario dentro de equipe
-      const matchOwner = item.equipe?.some((e) =>
-        e.cds_proprietario?.toLowerCase().includes(search)
-      );
 
-      return (
-        matchCore &&
-        matchAQHA &&
-        (matchClassificacao || matchAnimal || matchCompetitor || matchOwner || matchTN)
-      );
+      return matchClassificacao || matchAnimal || matchCompetitor || matchTN;
     });
 
     console.log('filteredList', filteredList);
 
     setListToShow(filteredList);
-  }, [activeTab, searchValue, tabsToShow, switchAQHA, switchCore]);
+  }, [activeTab, searchValue, tabsToShow]);
 
   useEffect(() => {
-    handleGetResultsClassificatory();
-    handleGetEventDetails();
-  }, [handleGetResultsClassificatory, handleGetEventDetails]);
-
-  const hasNucleoColumn = listToShow.findIndex(
-    (item) => item.cds_classificacao_nucleo !== ''
-  );
-
-  // const hasAQHA = listToShow.findIndex((item) => item.bid_aqha);
-  const hasClassD = listToShow.findIndex((item) => item.cds_classificacao_d !== '');
-  const hasABQMParticipation = listToShow.findIndex(
-    (item) => item.bid_nucleo_participa_abqm === true
-  );
-
-  const lastSortable = (item: ClassificatoryData) => {
-    if (item.cds_media_final === 'SAT') {
-      return 99999;
-    }
-    if (item.cds_media_final === 'N/C') {
-      return 9999;
-    }
-
-    return 999;
-  };
+    handleGetResultsRegistrationAndStalls();
+  }, [handleGetResultsRegistrationAndStalls]);
 
   const tableColumns: Array<TableColumnSEQM> = [
-    ...((hasNucleoColumn !== -1
-      ? [
-          {
-            key: 'nucleo',
-            label: 'NÚCLEO',
-            minWidth: '4.5rem',
-            align: 'center',
-            sortable: true,
-          },
-        ]
-      : []) as Array<TableColumnSEQM>),
     {
       key: 'abqm',
       label: 'ABQM',
-      minWidth: '4.2rem',
-      align: 'center',
-      sortable: true,
-    },
-    ...((hasClassD !== -1
-      ? [
-          {
-            key: 'classd',
-            label: 'CLASS',
-            minWidth: '4rem',
-            align: 'center',
-            sortable: true,
-          },
-        ]
-      : []) as Array<TableColumnSEQM>),
-    {
-      key: 'spacer',
-      label: '',
-      width: '0.5rem',
       align: 'left',
+      sortable: true,
     },
     {
       key: 'competitor',
       label: 'COMPETIDOR',
-      minWidth: '12rem',
       align: 'left',
+      minWidth: '200px',
       sortable: true,
     },
     {
       key: 'animal',
       label: 'ANIMAL',
-      minWidth: '10rem',
       align: 'left',
       sortable: true,
     },
     {
-      key: 'owner',
-      label: 'PROPRIETÁRIO',
-      minWidth: '11rem',
-      align: 'left',
-      sortable: true,
-    },
-    {
-      key: 'auto',
+      key: 'empty',
       label: '',
       width: '100%',
-      align: 'left',
-    },
-    {
-      key: 'tn',
-      label: 'T/N',
-      align: 'left',
-      sortable: true,
+      align: 'center',
     },
   ];
 
   const tableData: Array<TableRowSEQM> = listToShow.map((item) => ({
-    nucleo: {
-      valueToSort: item.cds_classificacao_nucleo
-        ? Number(item.cds_classificacao_nucleo)
-        : lastSortable(item),
-      value: `${
-        item.cds_classificacao_nucleo + (item.cds_classificacao_nucleo ? '°' : '')
-      }`,
-    },
-    abqm: { value: `${item.cds_classificacao + (item.cds_classificacao ? '°' : '')}` },
-    classd: {
-      valueToSort: getClassDValueToSort(item.cds_classificacao_d),
-      value: item.cds_classificacao_d
-        ? `${item.cds_classificacao_d}`
-        : lastSortable(item),
-      // render: () => render1(item),
+    abqm: {
+      valueToSort: `${item.cds_modalidade + (item.cds_modalidade ? '°' : '')}`,
       render: () => (
-        <>
-          {item.cds_classificacao_d && (
-            <StyledDivClassD>
-              <StyledTableSEQMTextTd>
-                {item.cds_classificacao_d.split('-')[1]}°
-              </StyledTableSEQMTextTd>
-              <StyledTdTextClassD>
-                {item.cds_classificacao_d.split('-')[0][1]}
-              </StyledTdTextClassD>
-              <StyledTdSpanClassD>
-                {/* {item.cds_classificacao_d.split('-')[0][0]} */}
-                {item.cds_classificacao_d.split('-')[0][0]}
-                {/* + item.cds_classificacao_d.split('-')[1]} */}
-              </StyledTdSpanClassD>
-            </StyledDivClassD>
-          )}
-        </>
+        <StyledTextTable>
+          {item.cds_modalidade + (item.cds_modalidade ? '°' : '')}
+        </StyledTextTable>
       ),
     },
-    spacer: {
-      value: '',
-    },
     competitor: {
-      value: item.equipe[0]?.cds_competidor || '', // to sort
+      value: item.cds_nome_competidor || '', // to sort
       render: () => {
-        return item.equipe.map((e, i) => (
+        return (
           <DivCompetitor>
-            {hasNucleoColumn !== -1 && item.bid_nucleo_participa_abqm === true && (
-              <AbqmOficialColoredIconSEQM width={11} height={11} />
-            )}
             <CompetitorTableData
-              key={new Date().getTime() + i}
-              value={e.cds_competidor}
-              onClick={() => {
-                window.location.href =
-                  urlRanking + `/competidor/detalhe/${e.nid_competidor}`;
-              }}
+              key={new Date().getTime()}
+              value={item.cds_nome_competidor}
             />
           </DivCompetitor>
-        ));
+        );
       },
     },
     animal: {
-      value: item.equipe[0]?.cds_animal || '', // to sort
+      value: item.cds_nome_animal || '', // to sort
       render: () => {
-        return item.equipe.map((e, i) => (
-          <AnimalTableData
-            key={new Date().getTime() + i}
-            idAnimal={e.nid_animal}
-            nameAnimal={e.cds_animal}
-            imgAnimal={e.img_animal}
-            registerOfMerity={e.registro_de_merito}
-            modalityAwards={e.modalidades_awards}
-            superHorseAward={e.super_horse}
-            allAroundAmateur={e.all_around_amador}
-            allAroundYoung={e.all_around_jovem}
-            rankingGeneralAward={e.ranking_geral_awards}
-            medal={e.cor_medalha}
-            registerAnimal={e.cds_registro_animal}
-            isHallOfFameAnimal={e.hall_da_fama}
-            onClick={() => {
-              window.location.href =
-                urlConsultaAnimal + `/perfil-do-animal/campanha/${e.nid_animal}`;
-            }}
+        return (
+          <AnimalTableDataWithoutTooltip
+            key={new Date().getTime()}
+            value={item.cds_nome_animal}
           />
-        ));
+        );
       },
     },
-    owner: {
-      value: item.equipe[0]?.cds_proprietario || '', // to sort
-      render: () => {
-        return item.equipe.map((e, i) => (
-          <OwnerTableData
-            key={new Date().getTime() + i}
-            isHallOfFameOwner={e.proprietario_hf}
-            value={e.cds_proprietario}
-            onClick={() => {
-              window.location.href =
-                urlRanking + `/proprietario/detalhe/${e.nid_proprietario}`;
-            }}
-          />
-        ));
-      },
-    },
-    auto: {
+    empty: {
       value: '',
-    },
-    tn: { value: item.cds_media_final },
-    isoficial: {
-      value: hasNucleoColumn !== -1 && item.bid_nucleo_participa_abqm === true,
     },
   }));
 
   const printCards = [
     {
       title: 'DATA DO EVENTO',
-      value:
-        convertToBrazilDate(classificatoryEventInfoData?.dtm_data_prova || '') || '0',
+      value: '0',
     },
     {
       title: 'INSCRIÇÕES',
-      value: resumeInscriptionsData?.nnr_qtde_inscricoes?.toString() || '0',
-    },
-    {
-      title: 'COMPETIDORES',
-      value: resumeInscriptionsData?.nnr_qtde_competidores?.toString() || '0',
-    },
-    {
-      title: 'ANIMAIS',
-      value: resumeInscriptionsData?.nnr_qtde_animais?.toString() || '0',
+      value: '0',
     },
   ];
 
   const printInfo: PrintHeaderProps = {
-    eventName: eventInfoData?.cds_evento || '',
-    responsibleName: eventInfoData?.organizador || '',
-    city: eventInfoData?.local || '',
-    state: eventInfoData?.estado || '',
-    startDate: eventInfoData?.data_inicio || '',
-    endDate: eventInfoData?.data_fim || '',
-    modalityName: getNameProveById(Number(prove_id)) || '',
+    eventName: '',
+    responsibleName: '',
+    city: '',
+    state: '',
+    startDate: '',
+    endDate: '',
+    modalityName: '',
   };
 
   const buttonsHeader = [
-    {
-      icon: <StarIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen75} />,
-      label: 'participações',
-      onClick: () => {
-        window.open(
-          import.meta.env.VITE_URL_PARTICIPACOES +
-            '/index/' +
-            classificatoryEventInfoData?.nid_agrupa_evento
-        );
-      },
-    },
-    ...(judgmentCards !== null &&
-    (judgmentCards.cds_url_cartao_julgamento_classificatoria !== '' ||
-      judgmentCards.cds_url_cartao_julgamento_final !== '')
-      ? [
-          {
-            icon: (
-              <FileTextIcon
-                fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen75}
-              />
-            ),
-            label: 'cartão de julgamento',
-            onClick: () => {
-              if (
-                activeTab === 'Classificatória' &&
-                judgmentCards.cds_url_cartao_julgamento_classificatoria !== ''
-              ) {
-                window.open(judgmentCards.cds_url_cartao_julgamento_classificatoria);
-                return;
-              }
-
-              window.open(judgmentCards.cds_url_cartao_julgamento_final);
-            },
-          },
-        ]
-      : []),
     {
       icon: isPrinting ? (
         <SpinnerRingResizeIcon
@@ -567,7 +261,7 @@ const Classificatory = () => {
       icon: (
         <ShareIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen75} />
       ),
-      label: 'compartilhar',
+      label: 'efetuar pagamento',
       onClick: () => setShowShareOptions((prev) => !prev),
       isActive: showShareOptions,
       showOptionsToShare: {
@@ -595,78 +289,29 @@ const Classificatory = () => {
             <HeaderMobileNavigator
               hasBackButton
               onGoBack={handleOnGoBack}
-              headingText={getNameProveById(Number(prove_id))}
+              headingText={'headingtext'}
               hasSearch
               onChangeSearch={(v) => setSearchValue(v.target.value)}
             />
           }
         >
           <TitleAndCards>
-            <StyledTextModality
-              fontSize="xl"
-              fontWeight="semiBold"
-              lineHeight="tight"
-              color={colors.white85}
-            >
-              {classificatoryEventInfoData?.cds_modalidade || ''}
-            </StyledTextModality>
-
-            <StyledTextEvent
-              fontSize="xl"
-              fontWeight="regular"
-              lineHeight="tight"
-              color={colors.green900}
-            >
-              {classificatoryEventInfoData?.cds_evento || ''}
-            </StyledTextEvent>
-
-            <InfoCardsGroup
-              qtde_animals={resumeInscriptionsData?.nnr_qtde_animais?.toString() || '-'}
-              qtde_competitors={
-                resumeInscriptionsData?.nnr_qtde_competidores?.toString() || '-'
-              }
-              qtde_inscriptions={
-                resumeInscriptionsData?.nnr_qtde_inscricoes?.toString() || '-'
-              }
-              premiation_value={null}
-              dt_prove={null}
-            />
-
             <TabsCardsBar
               activeTab={activeTab}
-              onTabChange={(tab) => {
-                setActiveTab(tab);
+              onTabChange={(tab: string) => {
+                setActiveTab(tab as Tab['type']);
               }}
               tabs={
                 tabsToShow.length === 0
                   ? []
                   : tabsToShow.map((tab) => ({
-                      label: tab.tipo_etapa,
-                      value: tab.tipo_etapa,
+                      label: tab.type,
+                      value: tab.type,
                     }))
               }
-              hideAutoWidthElement={hasNucleoColumn !== -1 && hasABQMParticipation !== -1}
+              // hideAutoWidthElement
             >
-              <ContentTabs>
-                {hasNucleoColumn !== -1 && hasABQMParticipation !== -1 && (
-                  <ContentSwitchTabs>
-                    <Switch
-                      checked={switchCore.checked}
-                      onChange={() =>
-                        setSwitchCore({ ...switchCore, checked: !switchCore.checked })
-                      }
-                      label={switchCore.label}
-                    />
-                    <Switch
-                      checked={switchAQHA.checked}
-                      onChange={() =>
-                        setSwitchAQHA({ ...switchAQHA, checked: !switchAQHA.checked })
-                      }
-                      label={switchAQHA.label}
-                    />
-                  </ContentSwitchTabs>
-                )}
-              </ContentTabs>
+              <ContentTabs>teste</ContentTabs>
             </TabsCardsBar>
           </TitleAndCards>
 
@@ -697,8 +342,8 @@ const Classificatory = () => {
         count={tableData.length}
       >
         <HeaderNavigatorDesktop
-          title={classificatoryEventInfoData?.cds_modalidade?.toUpperCase() || ''}
-          subtitle={classificatoryEventInfoData?.cds_evento || ''}
+          title={'title'}
+          subtitle={'ABQM'}
           hasBackButton
           onGoBack={handleOnGoBack}
         >
@@ -713,50 +358,19 @@ const Classificatory = () => {
         <TabsCardsBar
           activeTab={activeTab}
           onTabChange={(tab) => {
-            setActiveTab(tab);
+            setActiveTab(tab as Tab['type']);
           }}
           tabs={
             tabsToShow.length === 0
               ? []
               : tabsToShow.map((tab) => ({
-                  label: tab.tipo_etapa,
-                  value: tab.tipo_etapa,
+                  label: tab.type,
+                  value: tab.type,
                 }))
           }
-          hideAutoWidthElement={hasNucleoColumn !== -1 && hasABQMParticipation !== -1}
+          // hideAutoWidthElement
         >
-          <ContentTabs>
-            {hasNucleoColumn !== -1 && hasABQMParticipation !== -1 && (
-              <ContentSwitchTabs>
-                <Switch
-                  checked={switchCore.checked}
-                  onChange={() =>
-                    setSwitchCore({ ...switchCore, checked: !switchCore.checked })
-                  }
-                  label={switchCore.label}
-                />
-                <Switch
-                  checked={switchAQHA.checked}
-                  onChange={() =>
-                    setSwitchAQHA({ ...switchAQHA, checked: !switchAQHA.checked })
-                  }
-                  label={switchAQHA.label}
-                />
-              </ContentSwitchTabs>
-            )}
-
-            <InfoCardsGroup
-              qtde_animals={resumeInscriptionsData?.nnr_qtde_animais?.toString() || '-'}
-              qtde_competitors={
-                resumeInscriptionsData?.nnr_qtde_competidores?.toString() || '-'
-              }
-              qtde_inscriptions={
-                resumeInscriptionsData?.nnr_qtde_inscricoes?.toString() || '-'
-              }
-              premiation_value={resumeInscriptionsData?.nvl_premiacao?.toString() || '-'}
-              dt_prove={classificatoryEventInfoData?.dtm_data_prova?.toString() || ''}
-            />
-          </ContentTabs>
+          <ContentTabs>teste</ContentTabs>
         </TabsCardsBar>
 
         <TableWithLoader
@@ -775,13 +389,7 @@ const Classificatory = () => {
           data={tableData}
           cards={printCards}
           info={printInfo}
-          totalForPage={
-            listToShow[0].equipe.length === 1
-              ? 17
-              : listToShow[0].equipe.length > 2
-              ? 7
-              : 9
-          }
+          totalForPage={17}
         />
       )}
       {showShareOptions && !isTabletOrMobile && <ShareOptions url={shareUrl} />}
@@ -789,4 +397,4 @@ const Classificatory = () => {
   );
 };
 
-export default Classificatory;
+export default RegistrationAndStalls;

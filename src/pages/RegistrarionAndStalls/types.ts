@@ -1,7 +1,6 @@
-import type { ClassificatoryData } from "@src/services/Classificatory/types.classificatory.api";
+import type { RegistrationAndStallsData } from "@src/services/RegistrarionAndStalls/types.registrationandstalls.api";
 
 export interface Tab {
-  tipo_etapa: string;
-  cartao_julgamento: string;
-  lista_classificacao?: ClassificatoryData[];
+  list: RegistrationAndStallsData[] | [];
+  type: 'stalls' | 'inscriptions';
 }
