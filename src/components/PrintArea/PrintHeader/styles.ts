@@ -22,14 +22,14 @@ export const DetailsWrapper = styled.div`
   flex: 1;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: space-between;
+  justify-content: flex-start;
 
   width: 100%;
 
   padding-left: ${space[2]};
   padding-bottom: ${space[2]};
   min-height: 60pt !important;
-  gap: ${space[4]};
+  gap: ${space[2]};
 
   p {
     margin-top: -${space[2]};

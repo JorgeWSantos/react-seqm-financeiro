@@ -335,22 +335,34 @@ const InscriptionAndStalls = () => {
 
   const printCards = [
     {
-      title: 'DATA DO EVENTO',
-      value: '0',
+      title: 'INSCRIÇÕES',
+      value: (
+        tabsToShow.filter((tab) => tab.type === 'inscrições')[0]?.list.length || 0
+      ).toString(),
     },
     {
-      title: 'INSCRIÇÕES',
-      value: '0',
+      title: 'BAIAS',
+      value: (
+        tabsToShow.filter((tab) => tab.type === 'baias')[0]?.list.length || 0
+      ).toString(),
+    },
+    {
+      title: 'TOTAL INSCRIÇÕES',
+      value: formatToBRL({ value: sumTotalInscriptions, fallback: '-' }),
+    },
+    {
+      title: 'TOTAL BAIAS',
+      value: formatToBRL({ value: sumTotalStalls, fallback: '-' }),
+    },
+    {
+      title: 'TOTAL GERAL',
+      value: formatToBRL({ value: sumTotalInscriptions + sumTotalStalls, fallback: '-' }),
     },
   ];
 
   const printInfo: PrintHeaderProps = {
-    eventName: '',
-    responsibleName: '',
-    city: '',
-    state: '',
-    startDate: '',
-    endDate: '',
+    eventName: pageName,
+    responsibleName: 'ABQM - ASSOCIAÇÃO BRASILEIRA DE QUARTO DE MILHA',
     modalityName: '',
   };
 

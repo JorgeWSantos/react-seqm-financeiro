@@ -3,7 +3,6 @@ import {
   PrintAreaHeader,
   LogoWrapper,
   DetailsWrapper,
-  DetailsInfo,
   IconWrapper,
   EventName,
 } from './styles';
@@ -12,10 +11,6 @@ import { RanchSortingIconSEQM } from '@abqm-ds/icons';
 export type PrintHeaderProps = {
   eventName: string;
   responsibleName: string;
-  city: string;
-  state: string;
-  startDate: string;
-  endDate: string;
   modalityName: string;
 };
 
@@ -29,15 +24,7 @@ const PrintHeader = ({ data }: { data: PrintHeaderProps }) => {
       <DetailsWrapper>
         <EventName>{data.eventName}</EventName>
 
-        <DetailsInfo>
-          <p>{data.responsibleName}</p>
-          <p>
-            {data.city}, {data.state}
-          </p>
-          <p>
-            {data.startDate} - {data.endDate}
-          </p>
-        </DetailsInfo>
+        <p>{data.responsibleName}</p>
       </DetailsWrapper>
 
       <IconWrapper>
