@@ -30,14 +30,15 @@ const Main = () => {
 
   const { isTabletOrMobile } = useDeviceType();
   const { getGrouping, getAllDates } = useMainService();
+
   const [groupingData, setGroupingData] = useState<GroupingResponseData[]>([]);
   const [datesList, setDatesList] = useState<AllDatesResponseData[]>([]);
   const [selectedDate, setSelectedDate] = useState<AllDatesResponseData | null>(
     paramsObject.ano ? { nnr_ano: paramsObject.ano } : null
   );
   const [nidGroupingSelected, setNidGroupingSelected] = useState<number | null>(null);
-
-  const [, setSearchValue] = useState<string>('');
+  const [searchValue, setSearchValue] = useState<string>('');
+  const [listToShow, setListToShow] = useState<GroupingResponseData[]>([]);
 
   const handleOnGoBack = useCallback(() => {
     window.history.back();
@@ -96,6 +97,23 @@ const Main = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDate, nidGroupingSelected]);
 
+  useEffect(() => {
+    if (searchValue.trim() === '') {
+      setListToShow(groupingData);
+      return;
+    }
+
+    const filteredData = groupingData.filter((item) => {
+      const matchFilter = `${item.nid_agrupa_evento} - ${item.cds_agrupa_evento}`
+        .toLowerCase()
+        .includes(searchValue.toLowerCase());
+
+      return matchFilter;
+    });
+
+    setListToShow(filteredData);
+  }, [searchValue, groupingData]);
+
   if (isTabletOrMobile) {
     return <Mobile pageName={pageName} handleOnGoBack={handleOnGoBack} />;
   }
@@ -134,7 +152,7 @@ const Main = () => {
         </HeaderNavigatorDesktop>
 
         <ContainerListCards>
-          {groupingData.map((item, idx) => (
+          {listToShow.map((item, idx) => (
             <CardList
               key={item.nid_agrupa_evento}
               value={`${item.nid_agrupa_evento} - ${item.cds_agrupa_evento}`}
