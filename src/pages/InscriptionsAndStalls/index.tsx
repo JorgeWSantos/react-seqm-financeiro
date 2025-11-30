@@ -146,32 +146,44 @@ const InscriptionAndStalls = () => {
       // Type guard for InscriptionData
       if ('cds_nome_competidor' in item) {
         // Filtro por classificação
-        const matchClassificacao = item.nnr_classificacao_abqm
-          .toString()
+        const matchDate = item.dtm_data_prova.toLowerCase().includes(search);
+        const matchMoney = item.nrv_total_inscricao
+          ?.toString()
           .toLowerCase()
           .includes(search);
-        const matchTN = item.cds_pontuacao?.toLowerCase().includes(search);
+
+        const matchEvent = item.cds_evento.toLowerCase().includes(search);
+
+        const matchModality = item.cds_modalidade.toLowerCase().includes(search);
 
         // Filtro por nome do animal dentro de equipe
         const matchAnimal = item.cds_nome_animal.toLowerCase().includes(search);
         // Filtro por nome do competidor dentro de equipe
         const matchCompetitor = item.cds_nome_competidor.toLowerCase().includes(search);
 
-        return matchClassificacao || matchAnimal || matchCompetitor || matchTN;
+        return (
+          matchDate ||
+          matchAnimal ||
+          matchCompetitor ||
+          matchMoney ||
+          matchEvent ||
+          matchModality
+        );
       }
 
       if ('cds_situacao_baia' in item) {
         // Filtro por nome do animal dentro de baia
         const matchAnimal = item.cds_nome_animal.toLowerCase().includes(search);
+        const matchTypeStall = item.cds_tipo_baia.toLowerCase().includes(search);
+        const matchSituationStall = item.cds_situacao_baia.toLowerCase().includes(search);
+        const matchMoney = item.nnr_valor_baia?.toString().toLowerCase().includes(search);
 
-        return matchAnimal;
+        return matchAnimal || matchTypeStall || matchMoney || matchSituationStall;
       }
 
       // If not InscriptionData, skip filtering (or add StallsData logic if needed)
       return false;
     });
-
-    console.log('filteredList', filteredList);
 
     if (activeTab === 'inscrições') {
       setListToShow(filteredList as InscriptionData[]);
@@ -338,12 +350,12 @@ const InscriptionAndStalls = () => {
         label: 'SITUAÇÃO BAIAS',
         align: 'center',
         sortable: true,
-        minWidth: '200px',
+        minWidth: '120px',
       },
       {
         key: 'empty',
         label: '',
-        width: '100%',
+        width: '60%',
         align: 'center',
       },
       {
