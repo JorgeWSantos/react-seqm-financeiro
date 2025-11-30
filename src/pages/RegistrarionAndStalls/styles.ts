@@ -27,13 +27,6 @@ export const ContentTabs = styled.div`
   padding-bottom: 0.3125rem;
 `;
 
-export const TitleAndCards = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.5rem;
-  padding: 0 0.5rem;
-`;
 
 export const DivCompetitor = styled.div`
   display: flex;

@@ -1,8 +1,6 @@
 import {
   ContentDektop,
-  ContentMobile,
   Header,
-  HeaderMobileNavigator,
   HeaderNavigatorDesktop,
   ShareOptions,
   TextInput,
@@ -16,15 +14,7 @@ import {
 
 import { useDeviceType } from '@abqm-ds/react';
 
-import {
-  ContainerMain,
-  TitleAndCards,
-  ContainerMobileMain,
-  DivCompetitor,
-  ContentTabs,
-  RemoveScrollableMobile,
-  StyledTextTable,
-} from './styles';
+import { ContainerMain, DivCompetitor, ContentTabs, StyledTextTable } from './styles';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 
@@ -44,6 +34,8 @@ import PrintArea from '@src/components/PrintArea';
 import type { Tab } from './types';
 import { useRegistrationAndStalls } from '@src/services/RegistrarionAndStalls/useRegistrarionAndStalls';
 import type { RegistrationAndStallsData } from '@src/services/RegistrarionAndStalls/types.registrationandstalls.api';
+import { InfoCardsGroup } from './InfoCards';
+import { MobileRegistrationAndStalls } from './Mobile';
 
 const RegistrationAndStalls = () => {
   const params = useParams();
@@ -273,59 +265,19 @@ const RegistrationAndStalls = () => {
 
   if (isTabletOrMobile) {
     return (
-      <ContainerMobileMain>
-        <ContentMobile
-          style={{
-            maxWidth: '100vw',
-            overflowY: 'auto',
-            overflowX: 'hidden',
-            padding: '0',
-          }}
-          contentMobileBoxStyles={{
-            gap: '0.5rem',
-            padding: '1.5rem 0rem 0rem 0rem',
-          }}
-          headerMobileNavigator={
-            <HeaderMobileNavigator
-              hasBackButton
-              onGoBack={handleOnGoBack}
-              headingText={'headingtext'}
-              hasSearch
-              onChangeSearch={(v) => setSearchValue(v.target.value)}
-            />
-          }
-        >
-          <TitleAndCards>
-            <TabsCardsBar
-              activeTab={activeTab}
-              onTabChange={(tab: string) => {
-                setActiveTab(tab as Tab['type']);
-              }}
-              tabs={
-                tabsToShow.length === 0
-                  ? []
-                  : tabsToShow.map((tab) => ({
-                      label: tab.type,
-                      value: tab.type,
-                    }))
-              }
-              // hideAutoWidthElement
-            >
-              <ContentTabs>teste</ContentTabs>
-            </TabsCardsBar>
-          </TitleAndCards>
-
-          <RemoveScrollableMobile>
-            <TableWithLoader
-              data={tableData}
-              columns={tableColumns}
-              isLoading={isLoading}
-            />
-          </RemoveScrollableMobile>
-        </ContentMobile>
-
-        {showShareOptions && !isTabletOrMobile && <ShareOptions url={shareUrl} />}
-      </ContainerMobileMain>
+      <MobileRegistrationAndStalls
+        activeTab={activeTab}
+        handleOnGoBack={handleOnGoBack}
+        setSearchValue={setSearchValue}
+        tabsToShow={tabsToShow}
+        setActiveTab={setActiveTab}
+        tableData={tableData}
+        tableColumns={tableColumns}
+        isLoading={isLoading}
+        isTabletOrMobile={isTabletOrMobile}
+        showShareOptions={showShareOptions}
+        shareUrl={shareUrl}
+      />
     );
   }
 
@@ -370,7 +322,15 @@ const RegistrationAndStalls = () => {
           }
           // hideAutoWidthElement
         >
-          <ContentTabs>teste</ContentTabs>
+          <ContentTabs>
+            <InfoCardsGroup
+              qtde_inscriptions="0"
+              qtde_competitors="0"
+              qtde_animals="0"
+              premiation_value={null}
+              dt_prove={null}
+            />
+          </ContentTabs>
         </TabsCardsBar>
 
         <TableWithLoader
