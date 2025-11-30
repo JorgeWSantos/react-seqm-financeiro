@@ -1,5 +1,5 @@
 import { Text } from '@abqm-ds/react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 
 export const ContainerMain = styled.div`
@@ -35,6 +35,12 @@ export const DivCompetitor = styled.div`
 `
 export const StyledTextTable = styled(Text).attrs({
   fontSize: 'xxs',
-})`
+}) <{ $canBreak?: boolean }>`
   white-space: nowrap;
+
+  ${({ $canBreak }) =>
+    $canBreak &&
+    css`
+    white-space: normal;
+  `}
 `;

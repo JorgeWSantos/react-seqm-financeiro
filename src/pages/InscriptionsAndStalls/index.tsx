@@ -11,6 +11,7 @@ import {
   TabsCardsBar,
   AnimalTableDataWithoutTooltip,
   formatToBRL,
+  convertToBrazilDate,
 } from '@abqm-ds/react';
 
 import { useDeviceType } from '@abqm-ds/react';
@@ -20,9 +21,9 @@ import { ContainerMain, DivCompetitor, ContentTabs, StyledTextTable } from './st
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import {
+  CurrencyDollarIcon,
   PrinterIcon,
   SearchIcon,
-  ShareIcon,
   SpinnerRingResizeIcon,
 } from '@abqm-ds/icons';
 import { colors } from '@abqm-ds/tokens';
@@ -196,8 +197,29 @@ const InscriptionAndStalls = () => {
   ) {
     tableColumnsIncriptions = [
       {
-        key: 'abqm',
-        label: 'ABQM',
+        key: 'dt_prove',
+        label: 'DT. PROVA',
+        align: 'left',
+        minWidth: '90px',
+        sortable: true,
+      },
+      {
+        key: 'event',
+        label: 'EVENTO',
+        align: 'left',
+        minWidth: '180px',
+        sortable: true,
+      },
+      {
+        key: 'modality',
+        label: 'MODALIDADE',
+        align: 'left',
+        minWidth: '110px',
+        sortable: true,
+      },
+      {
+        key: 'animal',
+        label: 'ANIMAL',
         align: 'left',
         sortable: true,
       },
@@ -209,29 +231,61 @@ const InscriptionAndStalls = () => {
         sortable: true,
       },
       {
-        key: 'animal',
-        label: 'ANIMAL',
+        key: 'status',
+        label: 'STATUS',
         align: 'left',
         sortable: true,
       },
       {
-        key: 'empty',
-        label: '',
-        width: '100%',
+        key: 'aqha',
+        label: 'AQHA',
+        align: 'left',
+        sortable: true,
+      },
+      {
+        key: 'vlr_inscription',
+        label: 'VALOR INSCRIÇÃO',
+        minWidth: '130px',
         align: 'center',
+        sortable: true,
       },
     ];
 
     const listInscription = listToShow as InscriptionData[];
 
     tableDataInscriptions = listInscription.map((item) => ({
-      abqm: {
-        valueToSort: `${item.cds_modalidade + (item.cds_modalidade ? '°' : '')}`,
+      dt_prove: {
+        valueToSort: `${
+          item.dtm_data_prova ? convertToBrazilDate(item.dtm_data_prova) : ''
+        }`,
         render: () => (
           <StyledTextTable>
-            {item.cds_modalidade + (item.cds_modalidade ? '°' : '')}
+            {item.dtm_data_prova ? convertToBrazilDate(item.dtm_data_prova) : ''}
           </StyledTextTable>
         ),
+      },
+      event: {
+        valueToSort: `${item.cds_evento ?? ''}`,
+        render: () => (
+          <StyledTextTable $canBreak>{item.cds_evento ?? ''}</StyledTextTable>
+        ),
+      },
+      modality: {
+        valueToSort: `${item.cds_modalidade ?? ''}`,
+        render: () => (
+          <StyledTextTable $canBreak>{item.cds_modalidade ?? ''}</StyledTextTable>
+        ),
+      },
+      animal: {
+        value: item.cds_nome_animal || '', // to sort
+        render: () => {
+          return (
+            <AnimalTableDataWithoutTooltip
+              key={new Date().getTime()}
+              value={item.cds_nome_animal.replace('<br/>', '')}
+            />
+          );
+        },
       },
       competitor: {
         value: item.cds_nome_competidor || '', // to sort
@@ -240,25 +294,29 @@ const InscriptionAndStalls = () => {
             <DivCompetitor>
               <CompetitorTableData
                 key={new Date().getTime()}
-                value={item.cds_nome_competidor}
+                value={item.cds_nome_competidor.replace('<br/>', '')}
               />
             </DivCompetitor>
           );
         },
       },
-      animal: {
-        value: item.cds_nome_animal || '', // to sort
-        render: () => {
-          return (
-            <AnimalTableDataWithoutTooltip
-              key={new Date().getTime()}
-              value={item.cds_nome_animal}
-            />
-          );
-        },
+      status: {
+        valueToSort: `${item.situacao_inscricao ?? ''}`,
+        render: () => <StyledTextTable>{item.situacao_inscricao ?? ''}</StyledTextTable>,
       },
-      empty: {
-        value: '',
+      aqha: {
+        valueToSort: `${item.cds_aqha ?? ''}`,
+        render: () => <StyledTextTable>{item.cds_aqha ?? ''}</StyledTextTable>,
+      },
+      vlr_inscription: {
+        valueToSort: `${item.nrv_total_inscricao ?? ''}`,
+        render: () => (
+          <StyledTextTable>
+            {item.nrv_total_inscricao
+              ? formatToBRL({ value: item.nrv_total_inscricao })
+              : ''}
+          </StyledTextTable>
+        ),
       },
     }));
   } else {
@@ -380,7 +438,9 @@ const InscriptionAndStalls = () => {
     },
     {
       icon: (
-        <ShareIcon fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen75} />
+        <CurrencyDollarIcon
+          fill={isTabletOrMobile ? colors.white50 : colors.emeraldGreen75}
+        />
       ),
       label: 'efetuar pagamento',
       onClick: () => setShowShareOptions((prev) => !prev),
