@@ -1,13 +1,15 @@
 import { Toast } from '@abqm-ds/react';
 import { useCallback } from 'react';
 import type {
-  RegistrationAndStallsData,
-} from './types.registrationandstalls.api';
+  InscriptionData,
+} from './types.inscription.api';
+import type { StallsData } from './types.stalls.api';
 
 import mockinscription from './mock-inscriptions.json'
+import mockstalls from './mock-stalls.json'
 
 
-export function useRegistrationAndStalls() {
+export function useInscriptionAndStalls() {
   const getInscriptions = useCallback(
     async ({
       nid_group_event,
@@ -15,14 +17,14 @@ export function useRegistrationAndStalls() {
     }: {
       nid_group_event: string;
       year: string;
-    }): Promise<RegistrationAndStallsData[] | []> => {
+    }): Promise<InscriptionData[] | []> => {
       try {
         console.log('params', {
           nid_group_event,
           year,
         })
 
-        // const response = await apiResultados.get<RegistrationAndStallsResponse>(
+        // const response = await apiResultados.get<InscriptionAndStallsResponse>(
         //   '/v1/ListaClassificacaoEtapas',
         //   {
         //     params: {
@@ -78,14 +80,14 @@ export function useRegistrationAndStalls() {
     }: {
       nid_group_event: string;
       year: string;
-    }): Promise<RegistrationAndStallsData[] | []> => {
+    }): Promise<StallsData[] | []> => {
       try {
         console.log('params', {
           nid_group_event,
           year,
         })
 
-        // const response = await apiResultados.get<RegistrationAndStallsResponse>(
+        // const response = await apiResultados.get<InscriptionAndStallsResponse>(
         //   '/v1/ListaClassificacaoEtapas',
         //   {
         //     params: {
@@ -100,7 +102,7 @@ export function useRegistrationAndStalls() {
             success: true,
             message: 'Sucesso',
             data: {
-              list: mockinscription,
+              list: mockstalls,
             },
           },
         }

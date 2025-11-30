@@ -10,7 +10,7 @@ import type { Tab } from '../types';
 import { InfoCardsGroup } from '../InfoCards';
 import { ContentTabs } from '../styles';
 
-interface MobileRegistrationAndStallsProps {
+interface MobileInscriptionAndStallsProps {
   handleOnGoBack: () => void;
   setSearchValue: (value: string) => void;
   activeTab: string;
@@ -24,7 +24,7 @@ interface MobileRegistrationAndStallsProps {
   shareUrl: string;
 }
 
-const MobileRegistrationAndStalls = ({
+const MobileInscriptionAndStalls = ({
   handleOnGoBack,
   setSearchValue,
   activeTab,
@@ -36,7 +36,7 @@ const MobileRegistrationAndStalls = ({
   isTabletOrMobile,
   showShareOptions,
   shareUrl,
-}: MobileRegistrationAndStallsProps) => {
+}: MobileInscriptionAndStallsProps) => {
   return (
     <ContainerMobileMain>
       <ContentMobile
@@ -102,4 +102,4 @@ const MobileRegistrationAndStalls = ({
   );
 };
 
-export { MobileRegistrationAndStalls };
+export { MobileInscriptionAndStalls };

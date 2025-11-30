@@ -1,6 +1,6 @@
 import type { ApiResponse } from '@src/services/types.api';
 
-export type RegistrationAndStallsData = {
+export type InscriptionData = {
   id_equipe: number;
   cds_modalidade: string;
   dtm_data_prova: string;
@@ -16,6 +16,6 @@ export type RegistrationAndStallsData = {
   cds_aqha: string;
 };
 
-export type RegistrationAndStallsResponse = ApiResponse<{
-  list: Array<RegistrationAndStallsData> | [];
+export type InscriptionResponse = ApiResponse<{
+  list: Array<InscriptionData> | [];
 }>;

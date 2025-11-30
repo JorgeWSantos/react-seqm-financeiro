@@ -1,6 +1,7 @@
-import type { RegistrationAndStallsData } from "@src/services/RegistrarionAndStalls/types.registrationandstalls.api";
+import type { InscriptionData } from "@src/services/RegistrarionAndStalls/types.inscription.api";
+import type { StallsData } from "@src/services/RegistrarionAndStalls/types.stalls.api";
 
 export interface Tab {
-  list: RegistrationAndStallsData[] | [];
-  type: 'stalls' | 'inscriptions';
+  list: InscriptionData[] | StallsData[] | [];
+  type: 'baias' | 'inscrições';
 }

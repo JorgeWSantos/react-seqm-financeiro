@@ -39,9 +39,9 @@ const Main = () => {
 
   const [, setSearchValue] = useState<string>('');
 
-  const handleOnGoBack = () => {
+  const handleOnGoBack = useCallback(() => {
     window.history.back();
-  };
+  }, []);
 
   const getGroupingData = useCallback(
     async ({ nnr_ano }: { nnr_ano: string }) => {

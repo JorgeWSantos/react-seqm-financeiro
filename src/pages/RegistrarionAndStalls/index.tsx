@@ -10,6 +10,7 @@ import {
   TableWithLoader,
   TabsCardsBar,
   AnimalTableDataWithoutTooltip,
+  formatToBRL,
 } from '@abqm-ds/react';
 
 import { useDeviceType } from '@abqm-ds/react';
@@ -18,7 +19,6 @@ import { ContainerMain, DivCompetitor, ContentTabs, StyledTextTable } from './st
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { useNavigate } from 'react-router-dom';
 import {
   PrinterIcon,
   SearchIcon,
@@ -32,27 +32,27 @@ import { useParams } from 'react-router';
 import type { PrintHeaderProps } from '@src/components/PrintArea/PrintHeader';
 import PrintArea from '@src/components/PrintArea';
 import type { Tab } from './types';
-import { useRegistrationAndStalls } from '@src/services/RegistrarionAndStalls/useRegistrarionAndStalls';
-import type { RegistrationAndStallsData } from '@src/services/RegistrarionAndStalls/types.registrationandstalls.api';
+import { useInscriptionAndStalls } from '@src/services/RegistrarionAndStalls/useRegistrarionAndStalls';
+import type { InscriptionData } from '@src/services/RegistrarionAndStalls/types.inscription.api';
 import { InfoCardsGroup } from './InfoCards';
-import { MobileRegistrationAndStalls } from './Mobile';
+import { MobileInscriptionAndStalls } from './Mobile';
+import type { StallsData } from '@src/services/RegistrarionAndStalls/types.stalls.api';
 
-const RegistrationAndStalls = () => {
+const InscriptionAndStalls = () => {
   const params = useParams();
   const { year, nid_group_event } = params;
 
   const pageTitle = 'Resultados';
-  const subTitle = '';
 
-  const navigate = useNavigate();
   const { isTabletOrMobile } = useDeviceType();
-  const { getInscriptions, getStalls } = useRegistrationAndStalls();
+  const { getInscriptions, getStalls } = useInscriptionAndStalls();
 
+  const [pageName, setPageName] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
-  const [listToShow, setListToShow] = useState<RegistrationAndStallsData[]>([]);
+  const [listToShow, setListToShow] = useState<InscriptionData[] | StallsData[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
   const [tabsToShow, setTabsToShow] = useState<Tab[]>([]);
-  const [activeTab, setActiveTab] = useState<Tab['type']>('inscriptions');
+  const [activeTab, setActiveTab] = useState<Tab['type']>('inscrições');
 
   // Ref para acessar o método print do PrintArea
   const printAreaRef = useRef<{ print: () => void }>(null);
@@ -62,7 +62,7 @@ const RegistrationAndStalls = () => {
   const shareUrl = window.location.href;
 
   //functions
-  const handleGetResultsRegistrationAndStalls = useCallback(async () => {
+  const handleGetResultsInscriptionAndStalls = useCallback(async () => {
     if (!nid_group_event || !year) {
       return;
     }
@@ -71,25 +71,28 @@ const RegistrationAndStalls = () => {
       nid_group_event,
       year,
     });
+
     const data2 = await getStalls({
       nid_group_event,
       year,
     });
+
+    setPageName(data[0]?.cds_evento || '');
 
     if (data.length > 0) {
       const _tabs: Tab[] = [];
 
       _tabs.push({
         list: data || [],
-        type: 'inscriptions',
+        type: 'inscrições',
       });
 
       _tabs.push({
         list: data2 || [],
-        type: 'stalls',
+        type: 'baias',
       });
 
-      setActiveTab('inscriptions');
+      setActiveTab('inscrições');
       setTabsToShow(_tabs);
     }
 
@@ -99,8 +102,8 @@ const RegistrationAndStalls = () => {
   }, [getInscriptions, getStalls, nid_group_event, year]);
 
   const handleOnGoBack = useCallback(() => {
-    navigate(-1);
-  }, [navigate]);
+    window.history.back();
+  }, []);
 
   const onTriggerPrintPDF = useCallback(async () => {
     setIsPrinting(true);
@@ -111,7 +114,7 @@ const RegistrationAndStalls = () => {
   }, []);
 
   useEffect(() => {
-    let allList: RegistrationAndStallsData[] = [];
+    let allList: InscriptionData[] | StallsData[] = [];
 
     if (tabsToShow.length > 0) {
       allList = tabsToShow.filter((item) => item.type === activeTab)[0].list || [];
@@ -125,96 +128,189 @@ const RegistrationAndStalls = () => {
     const search = searchValue.toLowerCase();
 
     const filteredList = allList.filter((item) => {
-      // Filtro por classificação
-      const matchClassificacao = item.nnr_classificacao_abqm
-        .toString()
-        .toLowerCase()
-        .includes(search);
-      const matchTN = item.cds_pontuacao?.toLowerCase().includes(search);
+      // Type guard for InscriptionData
+      if ('nnr_classificacao_abqm' in item) {
+        // Filtro por classificação
+        const matchClassificacao = item.nnr_classificacao_abqm
+          .toString()
+          .toLowerCase()
+          .includes(search);
+        const matchTN = item.cds_pontuacao?.toLowerCase().includes(search);
 
-      // Filtro por nome do animal dentro de equipe
-      const matchAnimal = item.cds_nome_animal.toLowerCase().includes(search);
-      // Filtro por nome do competidor dentro de equipe
-      const matchCompetitor = item.cds_nome_competidor.toLowerCase().includes(search);
-      // Filtro por nome do proprietario dentro de equipe
+        // Filtro por nome do animal dentro de equipe
+        const matchAnimal = item.cds_nome_animal.toLowerCase().includes(search);
+        // Filtro por nome do competidor dentro de equipe
+        const matchCompetitor = item.cds_nome_competidor.toLowerCase().includes(search);
 
-      return matchClassificacao || matchAnimal || matchCompetitor || matchTN;
+        return matchClassificacao || matchAnimal || matchCompetitor || matchTN;
+      }
+
+      if ('cds_situacao_baia' in item) {
+        // Filtro por nome do animal dentro de baia
+        const matchAnimal = item.cds_nome_animal.toLowerCase().includes(search);
+
+        return matchAnimal;
+      }
+
+      // If not InscriptionData, skip filtering (or add StallsData logic if needed)
+      return false;
     });
 
     console.log('filteredList', filteredList);
 
-    setListToShow(filteredList);
+    if (activeTab === 'inscrições') {
+      setListToShow(filteredList as InscriptionData[]);
+    } else {
+      setListToShow(filteredList as StallsData[]);
+    }
   }, [activeTab, searchValue, tabsToShow]);
 
   useEffect(() => {
-    handleGetResultsRegistrationAndStalls();
-  }, [handleGetResultsRegistrationAndStalls]);
+    handleGetResultsInscriptionAndStalls();
+  }, [handleGetResultsInscriptionAndStalls]);
 
-  const tableColumns: Array<TableColumnSEQM> = [
-    {
-      key: 'abqm',
-      label: 'ABQM',
-      align: 'left',
-      sortable: true,
-    },
-    {
-      key: 'competitor',
-      label: 'COMPETIDOR',
-      align: 'left',
-      minWidth: '200px',
-      sortable: true,
-    },
-    {
-      key: 'animal',
-      label: 'ANIMAL',
-      align: 'left',
-      sortable: true,
-    },
-    {
-      key: 'empty',
-      label: '',
-      width: '100%',
-      align: 'center',
-    },
-  ];
+  let tableColumns: Array<TableColumnSEQM> = [];
+  let tableData: Array<TableRowSEQM> = [];
 
-  const tableData: Array<TableRowSEQM> = listToShow.map((item) => ({
-    abqm: {
-      valueToSort: `${item.cds_modalidade + (item.cds_modalidade ? '°' : '')}`,
-      render: () => (
-        <StyledTextTable>
-          {item.cds_modalidade + (item.cds_modalidade ? '°' : '')}
-        </StyledTextTable>
-      ),
-    },
-    competitor: {
-      value: item.cds_nome_competidor || '', // to sort
-      render: () => {
-        return (
-          <DivCompetitor>
-            <CompetitorTableData
+  if (activeTab === 'inscrições' && 'cds_nome_competidor' in listToShow[0]) {
+    tableColumns = [
+      {
+        key: 'abqm',
+        label: 'ABQM',
+        align: 'left',
+        sortable: true,
+      },
+      {
+        key: 'competitor',
+        label: 'COMPETIDOR',
+        align: 'left',
+        minWidth: '200px',
+        sortable: true,
+      },
+      {
+        key: 'animal',
+        label: 'ANIMAL',
+        align: 'left',
+        sortable: true,
+      },
+      {
+        key: 'empty',
+        label: '',
+        width: '100%',
+        align: 'center',
+      },
+    ];
+
+    const listInscription = listToShow as InscriptionData[];
+
+    tableData = listInscription.map((item) => ({
+      abqm: {
+        valueToSort: `${item.cds_modalidade + (item.cds_modalidade ? '°' : '')}`,
+        render: () => (
+          <StyledTextTable>
+            {item.cds_modalidade + (item.cds_modalidade ? '°' : '')}
+          </StyledTextTable>
+        ),
+      },
+      competitor: {
+        value: item.cds_nome_competidor || '', // to sort
+        render: () => {
+          return (
+            <DivCompetitor>
+              <CompetitorTableData
+                key={new Date().getTime()}
+                value={item.cds_nome_competidor}
+              />
+            </DivCompetitor>
+          );
+        },
+      },
+      animal: {
+        value: item.cds_nome_animal || '', // to sort
+        render: () => {
+          return (
+            <AnimalTableDataWithoutTooltip
               key={new Date().getTime()}
-              value={item.cds_nome_competidor}
+              value={item.cds_nome_animal}
             />
-          </DivCompetitor>
-        );
+          );
+        },
       },
-    },
-    animal: {
-      value: item.cds_nome_animal || '', // to sort
-      render: () => {
-        return (
-          <AnimalTableDataWithoutTooltip
-            key={new Date().getTime()}
-            value={item.cds_nome_animal}
-          />
-        );
+      empty: {
+        value: '',
       },
-    },
-    empty: {
-      value: '',
-    },
-  }));
+    }));
+  } else {
+    tableColumns = [
+      {
+        key: 'animal',
+        label: 'ANIMAL',
+        align: 'left',
+        sortable: true,
+      },
+      {
+        key: 'type_stall',
+        label: 'TIPO DE BAIA',
+        align: 'left',
+        sortable: true,
+      },
+      {
+        key: 'situation_stall',
+        label: 'SITUAÇÃO BAIAS',
+        align: 'center',
+        sortable: true,
+        minWidth: '200px',
+      },
+      {
+        key: 'empty',
+        label: '',
+        width: '100%',
+        align: 'center',
+      },
+      {
+        key: 'value_stall',
+        label: 'VALOR BAIAS',
+        align: 'center',
+        sortable: true,
+        minWidth: '120px',
+      },
+    ];
+
+    const listStalls = listToShow as StallsData[];
+
+    tableData = listStalls.map((item) => ({
+      animal: {
+        value: item.cds_nome_animal || '', // to sort
+        render: () => {
+          return (
+            <AnimalTableDataWithoutTooltip
+              key={new Date().getTime()}
+              value={item.cds_nome_animal}
+            />
+          );
+        },
+      },
+      type_stall: {
+        valueToSort: `${item.cds_tipo_baia ?? ''}`,
+        render: () => <StyledTextTable>{item.cds_tipo_baia ?? ''}</StyledTextTable>,
+      },
+      situation_stall: {
+        valueToSort: `${item.cds_situacao_baia ?? ''}`,
+        render: () => <StyledTextTable>{item.cds_situacao_baia ?? ''}</StyledTextTable>,
+      },
+      empty: {
+        value: '',
+      },
+      value_stall: {
+        valueToSort: `${item.nnr_valor_baia ?? ''}`,
+        render: () => (
+          <StyledTextTable>
+            {formatToBRL({ value: item.nnr_valor_baia, fallback: '-' })}
+          </StyledTextTable>
+        ),
+      },
+    }));
+  }
 
   const printCards = [
     {
@@ -265,7 +361,7 @@ const RegistrationAndStalls = () => {
 
   if (isTabletOrMobile) {
     return (
-      <MobileRegistrationAndStalls
+      <MobileInscriptionAndStalls
         activeTab={activeTab}
         handleOnGoBack={handleOnGoBack}
         setSearchValue={setSearchValue}
@@ -284,7 +380,7 @@ const RegistrationAndStalls = () => {
   return (
     <ContainerMain>
       <ContentDektop
-        header={<Header text={pageTitle} subTitle={subTitle} buttons={buttonsHeader} />}
+        header={<Header text={pageTitle} subTitle={''} buttons={buttonsHeader} />}
         contentBoxStyles={{
           padding: '1.5rem',
           gap: '0.25rem',
@@ -294,7 +390,7 @@ const RegistrationAndStalls = () => {
         count={tableData.length}
       >
         <HeaderNavigatorDesktop
-          title={'title'}
+          title={pageName}
           subtitle={'ABQM'}
           hasBackButton
           onGoBack={handleOnGoBack}
@@ -357,4 +453,4 @@ const RegistrationAndStalls = () => {
   );
 };
 
-export default RegistrationAndStalls;
+export default InscriptionAndStalls;
