@@ -24,7 +24,6 @@ import {
   CurrencyDollarIcon,
   PrinterIcon,
   SearchIcon,
-  ShareIcon,
   SpinnerRingResizeIcon,
 } from '@abqm-ds/icons';
 import { colors } from '@abqm-ds/tokens';
