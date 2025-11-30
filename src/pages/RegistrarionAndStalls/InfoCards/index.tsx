@@ -1,47 +1,51 @@
 import { formatToBRL, InfoCard } from '@abqm-ds/react';
 import { GroupCards, ItemCardGroup } from './styles';
-import { convertToBrazilDate } from '@src/utils/formatDate';
 
 const InfoCardsGroup = ({
-  qtde_inscriptions,
-  qtde_competitors,
-  qtde_animals,
-  premiation_value,
-  dt_prove,
+  qtd_inscriptions,
+  qtd_stalls,
+  sum_stalls,
+  sum_all,
+  sum_inscriptions,
 }: {
-  qtde_inscriptions: string;
-  qtde_competitors: string;
-  qtde_animals: string;
-  premiation_value: string | null;
-  dt_prove: string | null;
+  qtd_inscriptions: number;
+  qtd_stalls: number;
+  sum_stalls: number;
+  sum_all: number;
+  sum_inscriptions: number;
 }) => {
   return (
     <ItemCardGroup>
       <GroupCards>
-        <InfoCard title="inscrições" subTitle={qtde_inscriptions} />
-        <InfoCard title="competidores" subTitle={qtde_competitors} />
-        <InfoCard title="animais" subTitle={qtde_animals} />
+        <InfoCard title="inscrições" subTitle={qtd_inscriptions.toString()} />
+        <InfoCard title="baias" subTitle={qtd_stalls.toString()} />
       </GroupCards>
 
       <GroupCards>
-        {premiation_value && (
-          <InfoCard
-            title="premiação"
-            subTitle={formatToBRL({
-              value: premiation_value,
-              fallback: '-',
-            })}
-            reverse
-          />
-        )}
-
-        {dt_prove && (
-          <InfoCard
-            title="data da prova"
-            subTitle={convertToBrazilDate(dt_prove || '') || '-'}
-            reverse
-          />
-        )}
+        <InfoCard
+          title="inscrições"
+          subTitle={formatToBRL({
+            value: sum_inscriptions,
+            fallback: '-',
+          })}
+          reverse
+        />
+        <InfoCard
+          title="baias"
+          subTitle={formatToBRL({
+            value: sum_stalls,
+            fallback: '-',
+          })}
+          reverse
+        />
+        <InfoCard
+          title="total geral"
+          subTitle={formatToBRL({
+            value: sum_all,
+            fallback: '-',
+          })}
+          reverse
+        />
       </GroupCards>
     </ItemCardGroup>
   );

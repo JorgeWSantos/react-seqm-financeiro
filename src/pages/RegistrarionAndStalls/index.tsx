@@ -53,6 +53,8 @@ const InscriptionAndStalls = () => {
   const [searchValue, setSearchValue] = useState<string>('');
   const [tabsToShow, setTabsToShow] = useState<Tab[]>([]);
   const [activeTab, setActiveTab] = useState<Tab['type']>('inscrições');
+  const [sumTotalInscriptions, setSumTotalInscriptions] = useState<number>(0);
+  const [sumTotalStalls, setSumTotalStalls] = useState<number>(0);
 
   // Ref para acessar o método print do PrintArea
   const printAreaRef = useRef<{ print: () => void }>(null);
@@ -67,28 +69,39 @@ const InscriptionAndStalls = () => {
       return;
     }
 
-    const data = await getInscriptions({
+    const inscriptionsData = await getInscriptions({
       nid_group_event,
       year,
     });
 
-    const data2 = await getStalls({
+    let sumInscriptions = 0;
+    let sumStalls = 0;
+
+    inscriptionsData.map((item) => {
+      sumInscriptions += item.nrv_total_inscricao || 0;
+    });
+
+    const stallsData = await getStalls({
       nid_group_event,
       year,
     });
 
-    setPageName(data[0]?.cds_evento || '');
+    stallsData.map((item) => {
+      sumStalls += item.nnr_valor_baia || 0;
+    });
 
-    if (data.length > 0) {
+    setPageName(inscriptionsData[0]?.cds_evento || '');
+
+    if (inscriptionsData.length > 0) {
       const _tabs: Tab[] = [];
 
       _tabs.push({
-        list: data || [],
+        list: inscriptionsData || [],
         type: 'inscrições',
       });
 
       _tabs.push({
-        list: data2 || [],
+        list: stallsData || [],
         type: 'baias',
       });
 
@@ -96,8 +109,9 @@ const InscriptionAndStalls = () => {
       setTabsToShow(_tabs);
     }
 
-    setListToShow(data);
-
+    setSumTotalInscriptions(sumInscriptions);
+    setSumTotalStalls(sumStalls);
+    setListToShow(inscriptionsData);
     setIsLoading(false);
   }, [getInscriptions, getStalls, nid_group_event, year]);
 
@@ -129,7 +143,7 @@ const InscriptionAndStalls = () => {
 
     const filteredList = allList.filter((item) => {
       // Type guard for InscriptionData
-      if ('nnr_classificacao_abqm' in item) {
+      if ('cds_nome_competidor' in item) {
         // Filtro por classificação
         const matchClassificacao = item.nnr_classificacao_abqm
           .toString()
@@ -169,11 +183,18 @@ const InscriptionAndStalls = () => {
     handleGetResultsInscriptionAndStalls();
   }, [handleGetResultsInscriptionAndStalls]);
 
-  let tableColumns: Array<TableColumnSEQM> = [];
-  let tableData: Array<TableRowSEQM> = [];
+  let tableColumnsIncriptions: Array<TableColumnSEQM> = [];
+  let tableDataInscriptions: Array<TableRowSEQM> = [];
 
-  if (activeTab === 'inscrições' && 'cds_nome_competidor' in listToShow[0]) {
-    tableColumns = [
+  let tableColumnsStalls: Array<TableColumnSEQM> = [];
+  let tableDataStalls: Array<TableRowSEQM> = [];
+
+  if (
+    activeTab === 'inscrições' &&
+    listToShow.length > 0 &&
+    'cds_nome_competidor' in listToShow[0]
+  ) {
+    tableColumnsIncriptions = [
       {
         key: 'abqm',
         label: 'ABQM',
@@ -203,7 +224,7 @@ const InscriptionAndStalls = () => {
 
     const listInscription = listToShow as InscriptionData[];
 
-    tableData = listInscription.map((item) => ({
+    tableDataInscriptions = listInscription.map((item) => ({
       abqm: {
         valueToSort: `${item.cds_modalidade + (item.cds_modalidade ? '°' : '')}`,
         render: () => (
@@ -241,7 +262,7 @@ const InscriptionAndStalls = () => {
       },
     }));
   } else {
-    tableColumns = [
+    tableColumnsStalls = [
       {
         key: 'animal',
         label: 'ANIMAL',
@@ -278,7 +299,7 @@ const InscriptionAndStalls = () => {
 
     const listStalls = listToShow as StallsData[];
 
-    tableData = listStalls.map((item) => ({
+    tableDataStalls = listStalls.map((item) => ({
       animal: {
         value: item.cds_nome_animal || '', // to sort
         render: () => {
@@ -367,8 +388,8 @@ const InscriptionAndStalls = () => {
         setSearchValue={setSearchValue}
         tabsToShow={tabsToShow}
         setActiveTab={setActiveTab}
-        tableData={tableData}
-        tableColumns={tableColumns}
+        tableData={tableDataInscriptions || tableDataStalls}
+        tableColumns={tableColumnsIncriptions || tableColumnsStalls}
         isLoading={isLoading}
         isTabletOrMobile={isTabletOrMobile}
         showShareOptions={showShareOptions}
@@ -387,7 +408,7 @@ const InscriptionAndStalls = () => {
           paddingBottom: 0,
         }}
         footerType="medium"
-        count={tableData.length}
+        count={tableDataInscriptions.length || tableDataStalls.length}
       >
         <HeaderNavigatorDesktop
           title={pageName}
@@ -406,7 +427,12 @@ const InscriptionAndStalls = () => {
         <TabsCardsBar
           activeTab={activeTab}
           onTabChange={(tab) => {
+            setIsLoading(true);
             setActiveTab(tab as Tab['type']);
+
+            setTimeout(() => {
+              setIsLoading(false);
+            }, 500);
           }}
           tabs={
             tabsToShow.length === 0
@@ -420,34 +446,66 @@ const InscriptionAndStalls = () => {
         >
           <ContentTabs>
             <InfoCardsGroup
-              qtde_inscriptions="0"
-              qtde_competitors="0"
-              qtde_animals="0"
-              premiation_value={null}
-              dt_prove={null}
+              sum_inscriptions={sumTotalInscriptions}
+              sum_stalls={sumTotalStalls}
+              sum_all={sumTotalInscriptions + sumTotalStalls}
+              qtd_inscriptions={
+                tabsToShow.filter((tab) => tab.type === 'inscrições')[0]?.list.length || 0
+              }
+              qtd_stalls={
+                tabsToShow.filter((tab) => tab.type === 'baias')[0]?.list.length || 0
+              }
             />
           </ContentTabs>
         </TabsCardsBar>
 
-        <TableWithLoader
-          data={tableData}
-          columns={tableColumns}
-          isLoading={isLoading}
-          minWidthTable="100%"
-        />
+        {activeTab === 'inscrições' ? (
+          <TableWithLoader
+            data={tableDataInscriptions}
+            columns={tableColumnsIncriptions}
+            isLoading={isLoading}
+            minWidthTable="100%"
+          />
+        ) : (
+          <TableWithLoader
+            data={tableDataStalls}
+            columns={tableColumnsStalls}
+            isLoading={isLoading}
+            minWidthTable="100%"
+          />
+        )}
       </ContentDektop>
 
-      {tableData?.length > 0 && (
-        <PrintArea
-          ref={printAreaRef}
-          title={'RESULTADOS DO EVENTO'}
-          columns={tableColumns}
-          data={tableData}
-          cards={printCards}
-          info={printInfo}
-          totalForPage={17}
-        />
+      {activeTab === 'inscrições' ? (
+        <>
+          {tableDataInscriptions?.length > 0 && (
+            <PrintArea
+              ref={printAreaRef}
+              title={'INSCRIÇÕES'}
+              columns={tableColumnsIncriptions}
+              data={tableDataInscriptions}
+              cards={printCards}
+              info={printInfo}
+              totalForPage={17}
+            />
+          )}
+        </>
+      ) : (
+        <>
+          {tableDataStalls?.length > 0 && (
+            <PrintArea
+              ref={printAreaRef}
+              title={'RESERVAS DE BAIAS'}
+              columns={tableColumnsStalls}
+              data={tableDataStalls}
+              cards={printCards}
+              info={printInfo}
+              totalForPage={17}
+            />
+          )}
+        </>
       )}
+
       {showShareOptions && !isTabletOrMobile && <ShareOptions url={shareUrl} />}
     </ContainerMain>
   );
