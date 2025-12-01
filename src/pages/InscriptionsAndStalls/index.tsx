@@ -47,7 +47,7 @@ const InscriptionAndStalls = () => {
 
   const pageTitle = 'Resultados';
 
-  const { token } = useAuth();
+  const { token, user } = useAuth();
 
   const { isTabletOrMobile } = useDeviceType();
   const { getInscriptions, getStalls } = useInscriptionAndStalls();
@@ -69,56 +69,65 @@ const InscriptionAndStalls = () => {
   const shareUrl = window.location.href;
 
   //functions
-  const handleGetResultsInscriptionAndStalls = useCallback(async () => {
-    if (!nid_group_event || !year) {
-      return;
-    }
-
-    const inscriptionsData = await getInscriptions({
-      nid_group_event,
-      year,
-    });
-
-    let sumInscriptions = 0;
-    let sumStalls = 0;
-
-    inscriptionsData.map((item) => {
-      sumInscriptions += item.nrv_total_inscricao || 0;
-    });
-
-    const stallsData = await getStalls({
-      nid_group_event,
-      year,
-    });
-
-    stallsData.map((item) => {
-      sumStalls += item.nnr_valor_baia || 0;
-    });
-
-    setPageName(inscriptionsData[0]?.cds_evento || '');
-
-    if (inscriptionsData.length > 0) {
-      const _tabs: Tab[] = [];
-
-      _tabs.push({
-        list: inscriptionsData || [],
-        type: 'inscrições',
+  const handleGetResultsInscriptionAndStalls = useCallback(
+    async ({
+      nnr_ano,
+      id_pessoa,
+      nid_agrupa_evento,
+    }: {
+      nnr_ano: string;
+      id_pessoa: number;
+      nid_agrupa_evento: number;
+    }) => {
+      const inscriptionsData = await getInscriptions({
+        nid_agrupa_evento: nid_agrupa_evento,
+        nnr_ano: nnr_ano,
+        id_pessoa,
       });
 
-      _tabs.push({
-        list: stallsData || [],
-        type: 'baias',
+      let sumInscriptions = 0;
+      let sumStalls = 0;
+
+      inscriptionsData.map((item) => {
+        sumInscriptions += item.nrv_total_inscricao || 0;
       });
 
-      setActiveTab('inscrições');
-      setTabsToShow(_tabs);
-    }
+      const stallsData = await getStalls({
+        nid_agrupa_evento: nid_agrupa_evento,
+        nnr_ano: nnr_ano,
+        id_pessoa,
+      });
 
-    setSumTotalInscriptions(sumInscriptions);
-    setSumTotalStalls(sumStalls);
-    setListToShow(inscriptionsData);
-    setIsLoading(false);
-  }, [getInscriptions, getStalls, nid_group_event, year]);
+      stallsData.map((item) => {
+        sumStalls += item.nnr_valor_baia || 0;
+      });
+
+      setPageName(inscriptionsData[0]?.cds_evento || '');
+
+      if (inscriptionsData.length > 0) {
+        const _tabs: Tab[] = [];
+
+        _tabs.push({
+          list: inscriptionsData || [],
+          type: 'inscrições',
+        });
+
+        _tabs.push({
+          list: stallsData || [],
+          type: 'baias',
+        });
+
+        setActiveTab('inscrições');
+        setTabsToShow(_tabs);
+      }
+
+      setSumTotalInscriptions(sumInscriptions);
+      setSumTotalStalls(sumStalls);
+      setListToShow(inscriptionsData);
+      setIsLoading(false);
+    },
+    [getInscriptions, getStalls]
+  );
 
   const handleOnGoBack = useCallback(() => {
     window.history.back();
@@ -198,8 +207,14 @@ const InscriptionAndStalls = () => {
   }, [activeTab, searchValue, tabsToShow]);
 
   useEffect(() => {
-    handleGetResultsInscriptionAndStalls();
-  }, [handleGetResultsInscriptionAndStalls]);
+    if (user !== null && nid_group_event && year) {
+      handleGetResultsInscriptionAndStalls({
+        nnr_ano: year || '',
+        id_pessoa: user.id_pessoa,
+        nid_agrupa_evento: Number(nid_group_event),
+      });
+    }
+  }, [handleGetResultsInscriptionAndStalls, nid_group_event, user, year]);
 
   let tableColumnsIncriptions: Array<TableColumnSEQM> = [];
   let tableDataInscriptions: Array<TableRowSEQM> = [];

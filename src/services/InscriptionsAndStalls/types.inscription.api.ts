@@ -17,5 +17,5 @@ export type InscriptionData = {
 };
 
 export type InscriptionResponse = ApiResponse<{
-  list: Array<InscriptionData> | [];
+  list_inscricoes_solicitante: Array<InscriptionData> | [];
 }>;

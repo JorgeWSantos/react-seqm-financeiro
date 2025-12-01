@@ -8,5 +8,5 @@ export type StallsData = {
 };
 
 export type StallsResponse = ApiResponse<{
-  list: Array<StallsData> | [];
+  list_inscricoes_solicitante_baias: Array<StallsData> | [];
 }>;

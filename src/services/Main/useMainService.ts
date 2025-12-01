@@ -2,8 +2,6 @@ import { Toast } from '@abqm-ds/react';
 import { useCallback } from 'react';
 import type { GroupingResponse, GroupingResponseData } from '@src/services/Main/types.api';
 
-// import mockjson from './mock-list.json';
-// import mockdatesjson from './mock-dateslist.json';
 import type { AllDatesResponse, AllDatesResponseData } from './types.alldates';
 import { apiFinanceiro } from '../api';
 
@@ -27,8 +25,6 @@ export function useMainService() {
       );
 
       const { data, message, success } = response.data;
-
-      // data.list = mockjson;
 
       if (!success) {
         Toast.show({
@@ -68,7 +64,6 @@ export function useMainService() {
     }
 
     return data.list_anos.reverse();
-    // return mockdatesjson;
   }, []);
 
 
