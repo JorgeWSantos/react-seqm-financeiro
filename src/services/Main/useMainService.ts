@@ -1,66 +1,92 @@
 import { Toast } from '@abqm-ds/react';
 import { useCallback } from 'react';
-import { apiResultados } from '../api';
-import type {
-  ResultModalitiesResponse,
-  ResultModalitiesResponseData,
-} from '@src/services/Main/types.api';
+import type { GroupingResponse, GroupingResponseData } from '@src/services/Main/types.api';
+
+import type { AllDatesResponse, AllDatesResponseData } from './types.alldates';
+import { apiFinanceiro } from '../api';
+import type { AxiosError } from 'axios';
 
 export function useMainService() {
-  const getResultados = useCallback(async (): Promise<ResultModalitiesResponseData> => {
+  const getGrouping = useCallback(async ({
+    nnr_ano,
+    id_pessoa
+  }: { nnr_ano: string, id_pessoa: number }): Promise<GroupingResponseData[]> => {
     try {
-      const response = await apiResultados.get<ResultModalitiesResponse>(
-        '/v1/ResultadosQtdePorModalidade'
+      const response = await apiFinanceiro.get<GroupingResponse>(
+        '/v1/Agrupamento/ListAgrupamento',
+        {
+          params: {
+            nnr_ano,
+            nid_empresa: 1, // ABQM
+            nid_solicitante: id_pessoa
+          }
+        }
       );
 
       const { data, message, success } = response.data;
 
       if (!success) {
         Toast.show({
-          message: message || 'Ops, ocorreu um erro ao carregar as modalidades!',
+          message: message || 'Ops, ocorreu um erro ao carregar os agrupamentos!',
           type: 'error',
           timeout: 3000,
         });
-        return {
-          top_modalidades: [],
-          modalidades: [],
-        };
+        return [];
       }
 
-      return {
-        top_modalidades:
-          data.list_resultados_qtde_por_modalidade[0].top_modalidades || [],
-        modalidades: data.list_resultados_qtde_por_modalidade[0].modalidades || [],
-      };
-    } catch (error) {
-      Toast.show({
-        message: 'Ops, ocorreu um erro ao carregar os resultados!',
-        type: 'error',
-        timeout: 30000,
-      });
+      return data.list_agrupamento;
+    } catch (error: unknown) {
+
+      if ((error as AxiosError).status !== 404) {
+        Toast.show({
+          message: 'Ops, não foi possível carregar os agrupamentos!',
+          type: 'error',
+          timeout: 30000,
+        });
+      }
+
       console.warn(error);
-      return {
-        top_modalidades: [],
-        modalidades: [],
-      };
+      return [];
     }
   }, []);
 
-  const saveMoreSearched = useCallback(async ({ id_prova }: { id_prova: number }) => {
+  const getAllDates = useCallback(async (): Promise<AllDatesResponseData[]> => {
     try {
-      await apiResultados.put(`/v1/AcessoModalidade/${id_prova}`);
-    } catch (error) {
-      Toast.show({
-        message: 'Ops, ocorreu um erro!',
-        type: 'error',
-        timeout: 30000,
-      });
+      const response = await apiFinanceiro.get<AllDatesResponse>(
+        'v1/Ano/ListAnos'
+      );
+
+      const { data, message, success } = response.data;
+
+      if (!success) {
+        Toast.show({
+          message: message || 'Ops, ocorreu um erro ao carregar os anos!',
+          type: 'error',
+          timeout: 3000,
+        });
+        return [];
+      }
+
+      return data.list_anos.reverse();
+    } catch (error: unknown) {
+
+      if ((error as AxiosError).status !== 404) {
+        Toast.show({
+          message: 'Ops, não foi possível carregar os agrupamentos!',
+          type: 'error',
+          timeout: 30000,
+        });
+      }
+
       console.warn(error);
+      return [];
     }
+
   }, []);
+
 
   return {
-    getResultados,
-    saveMoreSearched,
+    getGrouping,
+    getAllDates,
   };
 }

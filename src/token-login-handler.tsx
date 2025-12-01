@@ -1,15 +1,25 @@
 import { useEffect } from 'react';
 import { useAuth } from '@contexts/auth/useAuth';
+import { getToken } from './services/auth';
 
-export function TokenLoginHandler() {
-  const { loginWithToken } = useAuth();
+export function TokenLoginHandler({ path }: { path: string }) {
+  const { loginWithToken, logout } = useAuth();
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const token = params.get('tk');
+    const tokenQuery = params.get('tk');
+    const tokenLocalStorage = getToken();
 
-    if (token) {
-      loginWithToken(token);
+    const tokenToUse = tokenQuery || tokenLocalStorage;
+
+    if (tokenToUse) {
+      loginWithToken(tokenToUse);
+    } else {
+      logout({ path });
+    }
+
+    // remove token from query
+    if (tokenQuery) {
       params.delete('tk');
 
       const newUrl =
@@ -19,7 +29,7 @@ export function TokenLoginHandler() {
 
       window.history.replaceState({}, '', newUrl);
     }
-  }, [loginWithToken]);
+  }, [loginWithToken, logout, path]);
 
   return null;
 }

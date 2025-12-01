@@ -1,23 +1,21 @@
 import styled from 'styled-components';
 
-export const ContainerMain = styled.div``;
-
-export const ContainerDesktopMain = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  padding: 0rem;
+export const ContainerMain = styled.div`
+  height: 100%;
+  position: relative;
 `;
 
-export const ContainerMobileMain = styled.div`
+export const ContainerHeaderDesktop = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-`;
-
-export const TitleAndButton = styled.div`
-  display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: flex-end;
-  margin-bottom: -24px;
+  width: 100%;
+  gap: 0.5rem;
+  min-width: 300px;
+`;
+
+export const ContainerListCards = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding-top: 0.5rem;
 `;
