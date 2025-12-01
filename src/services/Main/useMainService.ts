@@ -12,8 +12,6 @@ export function useMainService() {
     id_pessoa
   }: { nnr_ano: string, id_pessoa: number }): Promise<GroupingResponseData[]> => {
     try {
-      console.log('nnr_ano', nnr_ano);
-
       const response = await apiFinanceiro.get<GroupingResponse>(
         '/v1/Agrupamento/ListAgrupamento',
         {
@@ -37,9 +35,9 @@ export function useMainService() {
       }
 
       return data.list_agrupamento;
-    } catch (error: AxiosError | any) {
+    } catch (error: unknown) {
 
-      if (error.status !== 404) {
+      if ((error as AxiosError).status !== 404) {
         Toast.show({
           message: 'Ops, não foi possível carregar os agrupamentos!',
           type: 'error',
@@ -53,22 +51,37 @@ export function useMainService() {
   }, []);
 
   const getAllDates = useCallback(async (): Promise<AllDatesResponseData[]> => {
-    const response = await apiFinanceiro.get<AllDatesResponse>(
-      'v1/Ano/ListAnos'
-    );
+    try {
+      const response = await apiFinanceiro.get<AllDatesResponse>(
+        'v1/Ano/ListAnos'
+      );
 
-    const { data, message, success } = response.data;
+      const { data, message, success } = response.data;
 
-    if (!success) {
-      Toast.show({
-        message: message || 'Ops, ocorreu um erro ao carregar os anos!',
-        type: 'error',
-        timeout: 3000,
-      });
+      if (!success) {
+        Toast.show({
+          message: message || 'Ops, ocorreu um erro ao carregar os anos!',
+          type: 'error',
+          timeout: 3000,
+        });
+        return [];
+      }
+
+      return data.list_anos.reverse();
+    } catch (error: unknown) {
+
+      if ((error as AxiosError).status !== 404) {
+        Toast.show({
+          message: 'Ops, não foi possível carregar os agrupamentos!',
+          type: 'error',
+          timeout: 30000,
+        });
+      }
+
+      console.warn(error);
       return [];
     }
 
-    return data.list_anos.reverse();
   }, []);
 
 
