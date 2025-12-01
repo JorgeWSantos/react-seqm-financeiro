@@ -3,7 +3,10 @@ import {
   Dropdown,
   Header,
   HeaderNavigatorDesktop,
+  LoadingOverlay,
+  Text,
   TextInput,
+  type DataDropdown,
 } from '@abqm-ds/react';
 
 import { useDeviceType } from '@abqm-ds/react';
@@ -11,13 +14,14 @@ import { useDeviceType } from '@abqm-ds/react';
 import { ContainerHeaderDesktop, ContainerListCards, ContainerMain } from './styles';
 import { SearchIcon } from '@abqm-ds/icons';
 import { colors } from '@abqm-ds/tokens';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Mobile } from './Mobile';
 import { useMainService } from '@src/services/Main/useMainService';
 import type { GroupingResponseData } from '@src/services/Main/types.api';
 import { CardList } from '@src/components/CardList';
 import type { AllDatesResponseData } from '@src/services/Main/types.alldates';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useAuth } from '@src/contexts/auth/useAuth';
 
 const Main = () => {
   const pageTitle = 'Financeiro';
@@ -25,28 +29,45 @@ const Main = () => {
 
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
+  const { user } = useAuth();
 
   const paramsObject = Object.fromEntries([...searchParams]);
 
   const { isTabletOrMobile } = useDeviceType();
   const { getGrouping, getAllDates } = useMainService();
+
   const [groupingData, setGroupingData] = useState<GroupingResponseData[]>([]);
   const [datesList, setDatesList] = useState<AllDatesResponseData[]>([]);
-  const [selectedDate, setSelectedDate] = useState<AllDatesResponseData | null>(
-    paramsObject.ano ? { nnr_ano: paramsObject.ano } : null
-  );
-  const [nidGroupingSelected, setNidGroupingSelected] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const [, setSearchValue] = useState<string>('');
+  const initialYear = useMemo(() => {
+    return paramsObject.ano ? paramsObject.ano : new Date().getFullYear().toString();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const [selectedDate, setSelectedDate] = useState<DataDropdown>({
+    id: initialYear,
+    label: initialYear,
+    value: initialYear,
+  });
+
+  const [nidGroupingSelected, setNidGroupingSelected] = useState<number | null>(null);
+  const [searchValue, setSearchValue] = useState<string>('');
+  const [listToShow, setListToShow] = useState<GroupingResponseData[]>([]);
 
   const handleOnGoBack = useCallback(() => {
     window.history.back();
   }, []);
 
   const getGroupingData = useCallback(
-    async ({ nnr_ano }: { nnr_ano: string }) => {
-      const data = await getGrouping({ nnr_ano });
+    async ({ nnr_ano, id_pessoa }: { nnr_ano: string; id_pessoa: number }) => {
+      const data = await getGrouping({
+        nnr_ano: nnr_ano,
+        id_pessoa: id_pessoa,
+      });
+
       setGroupingData(data);
+      setIsLoading(false);
     },
     [getGrouping]
   );
@@ -55,8 +76,14 @@ const Main = () => {
     const data = await getAllDates();
     setDatesList(data);
 
-    if (selectedDate === null && data.length > 0) setSelectedDate(data[0]);
-  }, [getAllDates, selectedDate]);
+    const currentYear = initialYear || new Date().getFullYear().toString();
+
+    setSelectedDate({
+      id: currentYear,
+      label: currentYear,
+      value: currentYear,
+    });
+  }, [getAllDates, initialYear]);
 
   const handleSelectGrouping = useCallback(
     ({ nid_agrupa_evento }: { nid_agrupa_evento: number }) => {
@@ -65,36 +92,59 @@ const Main = () => {
     []
   );
 
-  useEffect(() => {
-    getDatesData();
-  }, [getDatesData]);
-
-  useEffect(() => {
-    if (selectedDate !== null) {
-      getGroupingData({
-        nnr_ano: selectedDate.nnr_ano,
-      });
-    }
-  }, [getGroupingData, selectedDate]);
-
-  //update url params AND redirect when nidGroupingSelected changes
-  useEffect(() => {
+  const updateUrlParams = useCallback(() => {
     setSearchParams(
       {
-        ano: selectedDate?.nnr_ano ?? '',
+        ano: selectedDate?.value ?? '',
         ...(nidGroupingSelected !== null
           ? { agrupamento: String(nidGroupingSelected) }
           : {}),
       },
       { replace: true }
     );
+  }, [nidGroupingSelected, selectedDate, setSearchParams]);
+
+  useEffect(() => {
+    getDatesData();
+  }, [getDatesData]);
+
+  useEffect(() => {
+    if (selectedDate !== null && user !== null) {
+      getGroupingData({
+        nnr_ano: selectedDate.value,
+        id_pessoa: user.id_pessoa,
+      });
+    }
+  }, [getGroupingData, selectedDate, user]);
+
+  // update url params AND redirect when nidGroupingSelected changes
+  useEffect(() => {
+    updateUrlParams();
 
     if (nidGroupingSelected !== null) {
-      navigate(`agrupamento/${nidGroupingSelected}/ano/${selectedDate?.nnr_ano}`);
+      navigate(`agrupamento/${nidGroupingSelected}/ano/${selectedDate?.value}`);
       console.log('Selected Grouping ID:', nidGroupingSelected);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedDate, nidGroupingSelected]);
+  }, [selectedDate, nidGroupingSelected, updateUrlParams]);
+
+  // filter
+  useEffect(() => {
+    if (searchValue.trim() === '') {
+      setListToShow(groupingData);
+      return;
+    }
+
+    const filteredData = groupingData.filter((item) => {
+      const matchFilter = `${item.nid_agrupa_evento} - ${item.cds_agrupa_evento}`
+        .toLowerCase()
+        .includes(searchValue.toLowerCase());
+
+      return matchFilter;
+    });
+
+    setListToShow(filteredData);
+  }, [searchValue, groupingData]);
 
   if (isTabletOrMobile) {
     return <Mobile pageName={pageName} handleOnGoBack={handleOnGoBack} />;
@@ -115,10 +165,15 @@ const Main = () => {
           <ContainerHeaderDesktop>
             <Dropdown
               data={datesList.map((date) => ({
-                label: date.nnr_ano,
-                value: date.nnr_ano,
-                id: date.nnr_ano,
+                label: date.ano,
+                value: date.ano,
+                id: date.ano,
               }))}
+              setValue={(data) => {
+                setSelectedDate(data);
+                updateUrlParams();
+              }}
+              value={selectedDate}
               maxWidth="100px"
             />
             <TextInput
@@ -134,7 +189,7 @@ const Main = () => {
         </HeaderNavigatorDesktop>
 
         <ContainerListCards>
-          {groupingData.map((item, idx) => (
+          {listToShow.map((item, idx) => (
             <CardList
               key={item.nid_agrupa_evento}
               value={`${item.nid_agrupa_evento} - ${item.cds_agrupa_evento}`}
@@ -144,6 +199,14 @@ const Main = () => {
               }}
             />
           ))}
+
+          {listToShow.length === 0 && !isLoading && (
+            <Text fontWeight="semiBold" color={colors.emeraldGreen75}>
+              Nenhum agrupamento encontrado.
+            </Text>
+          )}
+
+          {isLoading && <LoadingOverlay withoutBackground />}
         </ContainerListCards>
       </ContentDektop>
     </ContainerMain>

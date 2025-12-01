@@ -1,3 +1,5 @@
+import { urlLogin } from "@src/config/env";
+
 export const setToken = (token: string) => {
   return localStorage.setItem('@token', token);
 };
@@ -10,11 +12,13 @@ export const removeToken = () => {
   localStorage.removeItem('@token');
 };
 
-export const cleanUserAndToken = () => {
+export const cleanUserAndToken = ({ path }: { path?: string }) => {
   removeToken();
-  redirectToLoginPage();
+  redirectToLoginPage({ path });
 };
 
-export const redirectToLoginPage = () => {
-  // window.location.replace(process.env.REACT_APP_LOGIN_PAGE);
+export const redirectToLoginPage = ({ path = '' }: { path?: string }) => {
+  const url = urlLogin + `?path=/financeiro${path}`;
+
+  window.location.href = url;
 };

@@ -5,6 +5,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import Layout from '@src/Layout';
 import Healthz from '@src/pages/Healthz';
 import Main from '@src/pages/Main';
+import { PrivateRoute } from './PrivateRoute';
 
 export const router = createBrowserRouter([
   {
@@ -14,11 +15,19 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Main />,
+        element: (
+          <PrivateRoute path="">
+            <Main />
+          </PrivateRoute>
+        ),
       },
       {
         path: 'agrupamento/:nid_group_event/ano/:year',
-        element: <InscriptionsAndStalls />,
+        element: (
+          <PrivateRoute path="">
+            <InscriptionsAndStalls />
+          </PrivateRoute>
+        ),
       },
       {
         path: 'healthz',

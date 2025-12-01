@@ -5,4 +5,4 @@ export interface GroupingResponseData {
   cds_agrupa_evento: string;
 }
 
-export type GroupingResponse = ApiResponse<{ list: GroupingResponseData[] }>;
+export type GroupingResponse = ApiResponse<{ list_agrupamento: GroupingResponseData[] }>;

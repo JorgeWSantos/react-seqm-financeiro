@@ -2,47 +2,35 @@ import { Toast } from '@abqm-ds/react';
 import { useCallback } from 'react';
 import type {
   InscriptionData,
+  InscriptionResponse,
 } from './types.inscription.api';
-import type { StallsData } from './types.stalls.api';
+import type { StallsData, StallsResponse } from './types.stalls.api';
 
-import mockinscription from './mock-inscriptions.json'
-import mockstalls from './mock-stalls.json'
+import { apiFinanceiro } from '../api';
 
 
 export function useInscriptionAndStalls() {
   const getInscriptions = useCallback(
     async ({
-      nid_group_event,
-      year,
+      nnr_ano,
+      id_pessoa,
+      nid_agrupa_evento
     }: {
-      nid_group_event: string;
-      year: string;
+      nnr_ano: string;
+      id_pessoa: number;
+      nid_agrupa_evento: number;
     }): Promise<InscriptionData[] | []> => {
       try {
-        console.log('params', {
-          nid_group_event,
-          year,
-        })
-
-        // const response = await apiResultados.get<InscriptionAndStallsResponse>(
-        //   '/v1/ListaClassificacaoEtapas',
-        //   {
-        //     params: {
-        //       nid_agrupa_evento: nid_group_event,
-        //       ano: year,
-        //     },
-        //   }
-        // );
-
-        const response = {
-          data: {
-            success: true,
-            message: 'Sucesso',
-            data: {
-              list: mockinscription,
-            },
-          },
-        }
+        const response = await apiFinanceiro.get<InscriptionResponse>(
+          '/v1/InscricoesSolicitante/ListInscricoesSolicitante',
+          {
+            params: {
+              nnr_ano,
+              nid_agrupa_evento,
+              nid_solicitante: id_pessoa
+            }
+          }
+        );
 
         console.log('response', response);
 
@@ -59,7 +47,7 @@ export function useInscriptionAndStalls() {
           return [];
         }
 
-        return data.list;
+        return data.list_inscricoes_solicitante;
       } catch (error) {
         Toast.show({
           message: 'Ops, ocorreu um erro ao carregar os dados da classificação!',
@@ -73,41 +61,35 @@ export function useInscriptionAndStalls() {
     },
     []
   );
+
   const getStalls = useCallback(
     async ({
-      nid_group_event,
-      year,
+      nnr_ano,
+      id_pessoa,
+      nid_agrupa_evento
     }: {
-      nid_group_event: string;
-      year: string;
+      nnr_ano: string;
+      id_pessoa: number;
+      nid_agrupa_evento: number;
     }): Promise<StallsData[] | []> => {
       try {
-        console.log('params', {
-          nid_group_event,
-          year,
-        })
 
-        // const response = await apiResultados.get<InscriptionAndStallsResponse>(
-        //   '/v1/ListaClassificacaoEtapas',
-        //   {
-        //     params: {
-        //       nid_agrupa_evento: nid_group_event,
-        //       ano: year,
-        //     },
-        //   }
-        // );
+        console.log('Fetching stalls with params:', {
+          nnr_ano,
+          id_pessoa,
+          nid_agrupa_evento
+        });
 
-        const response = {
-          data: {
-            success: true,
-            message: 'Sucesso',
-            data: {
-              list: mockstalls,
-            },
-          },
-        }
-
-        console.log('response', response);
+        const response = await apiFinanceiro.get<StallsResponse>(
+          '/v1/InscricoesSolicitanteBaias/ListInscricoesSolicitanteBaias',
+          {
+            params: {
+              nnr_ano,
+              nid_agrupa_evento,
+              nid_solicitante: id_pessoa
+            }
+          }
+        );
 
         const { data, message, success } = response.data;
 
@@ -122,7 +104,7 @@ export function useInscriptionAndStalls() {
           return [];
         }
 
-        return data.list;
+        return data.list_inscricoes_solicitante_baias;
       } catch (error) {
         Toast.show({
           message: 'Ops, ocorreu um erro ao carregar os dados da classificação!',

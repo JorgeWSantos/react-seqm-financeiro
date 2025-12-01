@@ -14,7 +14,7 @@ export type PersonDataResponse = ApiResponse<{
   dados_pessoa: LoggedUser;
 }>;
 
-export function useGeneralService() {
+export function useGlobalService() {
   const getMenu = useCallback(async () => {
     try {
       const response = await api.get<MenuResponse>('/v1/Menu');
