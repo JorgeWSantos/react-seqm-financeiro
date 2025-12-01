@@ -9,7 +9,16 @@ import { PageProvider } from './contexts/page/pageProvider';
 import { RouterProvider } from 'react-router';
 import { router } from './routes';
 import { MenuProvider } from './contexts/menu/menuProvider';
-const queryClient = new QueryClient();
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      retry: false,
+    },
+  },
+});
 
 createRoot(document.getElementById('root')!).render(
   <>
