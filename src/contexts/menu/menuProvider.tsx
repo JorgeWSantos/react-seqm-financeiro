@@ -2,12 +2,12 @@ import { useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { MenuContext } from './menuContext';
 import {
-  useGeneralService,
+  useGlobalService,
   type MenuResponseObj,
-} from '@src/services/General/useGeneralService';
+} from '@src/services/Global/useGlobalService';
 
 export const MenuProvider = ({ children }: { children: React.ReactNode }) => {
-  const { getMenu } = useGeneralService();
+  const { getMenu } = useGlobalService();
 
   const onGetMenu = useCallback(async () => {
     const menu: MenuResponseObj = await getMenu();

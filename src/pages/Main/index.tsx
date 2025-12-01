@@ -3,6 +3,7 @@ import {
   Dropdown,
   Header,
   HeaderNavigatorDesktop,
+  Text,
   TextInput,
 } from '@abqm-ds/react';
 
@@ -52,8 +53,6 @@ const Main = () => {
         nnr_ano: nnr_ano,
         id_pessoa: id_pessoa,
       });
-
-      console.log('grouping data', data);
 
       setGroupingData(data);
     },
@@ -171,6 +170,12 @@ const Main = () => {
               }}
             />
           ))}
+
+          {listToShow.length === 0 && (
+            <Text fontWeight="semiBold" color={colors.emeraldGreen75}>
+              Nenhum agrupamento encontrado.
+            </Text>
+          )}
         </ContainerListCards>
       </ContentDektop>
     </ContainerMain>

@@ -4,7 +4,6 @@ import { GlobalStyle } from './styles/global';
 import { ErrorBoundary, ToastRoot } from '@abqm-ds/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider } from './contexts/auth/authProvider';
-import { TokenLoginHandler } from './token-login-handler';
 import { PageProvider } from './contexts/page/pageProvider';
 import { RouterProvider } from 'react-router';
 import { router } from './routes';
@@ -28,7 +27,6 @@ createRoot(document.getElementById('root')!).render(
         <PageProvider>
           <AuthProvider>
             <MenuProvider>
-              <TokenLoginHandler />
               <RouterProvider router={router} />
               <ToastRoot />
             </MenuProvider>

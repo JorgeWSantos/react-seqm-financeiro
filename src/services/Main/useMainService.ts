@@ -4,6 +4,7 @@ import type { GroupingResponse, GroupingResponseData } from '@src/services/Main/
 
 import type { AllDatesResponse, AllDatesResponseData } from './types.alldates';
 import { apiFinanceiro } from '../api';
+import type { AxiosError } from 'axios';
 
 export function useMainService() {
   const getGrouping = useCallback(async ({
@@ -28,7 +29,7 @@ export function useMainService() {
 
       if (!success) {
         Toast.show({
-          message: message || 'Ops, ocorreu um erro ao carregar as modalidades!',
+          message: message || 'Ops, ocorreu um erro ao carregar os agrupamentos!',
           type: 'error',
           timeout: 3000,
         });
@@ -36,12 +37,16 @@ export function useMainService() {
       }
 
       return data.list_agrupamento;
-    } catch (error) {
-      Toast.show({
-        message: 'Ops, ocorreu um erro ao carregar os resultados!',
-        type: 'error',
-        timeout: 30000,
-      });
+    } catch (error: AxiosError | any) {
+
+      if (error.status !== 404) {
+        Toast.show({
+          message: 'Ops, não foi possível carregar os agrupamentos!',
+          type: 'error',
+          timeout: 30000,
+        });
+      }
+
       console.warn(error);
       return [];
     }
