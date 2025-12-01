@@ -16,7 +16,7 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: (
-          <PrivateRoute path="/">
+          <PrivateRoute path="">
             <Main />
           </PrivateRoute>
         ),
@@ -24,7 +24,7 @@ export const router = createBrowserRouter([
       {
         path: 'agrupamento/:nid_group_event/ano/:year',
         element: (
-          <PrivateRoute path="agrupamento/:nid_group_event/ano/:year">
+          <PrivateRoute path="/agrupamento/:nid_group_event/ano/:year">
             <InscriptionsAndStalls />
           </PrivateRoute>
         ),

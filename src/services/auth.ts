@@ -17,8 +17,8 @@ export const cleanUserAndToken = ({ path }: { path?: string }) => {
   redirectToLoginPage({ path });
 };
 
-export const redirectToLoginPage = ({ path = '/financeiro' }: { path?: string }) => {
-  const url = urlLogin + `?path=${path}`;
+export const redirectToLoginPage = ({ path = '' }: { path?: string }) => {
+  const url = urlLogin + `?path=/financeiro${path}`;
 
   window.location.href = url;
 };

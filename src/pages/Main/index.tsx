@@ -3,8 +3,10 @@ import {
   Dropdown,
   Header,
   HeaderNavigatorDesktop,
+  LoadingOverlay,
   Text,
   TextInput,
+  type DataDropdown,
 } from '@abqm-ds/react';
 
 import { useDeviceType } from '@abqm-ds/react';
@@ -12,7 +14,7 @@ import { useDeviceType } from '@abqm-ds/react';
 import { ContainerHeaderDesktop, ContainerListCards, ContainerMain } from './styles';
 import { SearchIcon } from '@abqm-ds/icons';
 import { colors } from '@abqm-ds/tokens';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Mobile } from './Mobile';
 import { useMainService } from '@src/services/Main/useMainService';
 import type { GroupingResponseData } from '@src/services/Main/types.api';
@@ -36,9 +38,19 @@ const Main = () => {
 
   const [groupingData, setGroupingData] = useState<GroupingResponseData[]>([]);
   const [datesList, setDatesList] = useState<AllDatesResponseData[]>([]);
-  const [selectedDate, setSelectedDate] = useState<AllDatesResponseData | null>(
-    paramsObject.ano ? { ano: paramsObject.ano } : null
-  );
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const initialYear = useMemo(() => {
+    return paramsObject.ano ? paramsObject.ano : new Date().getFullYear().toString();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const [selectedDate, setSelectedDate] = useState<DataDropdown>({
+    id: initialYear,
+    label: initialYear,
+    value: initialYear,
+  });
+
   const [nidGroupingSelected, setNidGroupingSelected] = useState<number | null>(null);
   const [searchValue, setSearchValue] = useState<string>('');
   const [listToShow, setListToShow] = useState<GroupingResponseData[]>([]);
@@ -55,6 +67,7 @@ const Main = () => {
       });
 
       setGroupingData(data);
+      setIsLoading(false);
     },
     [getGrouping]
   );
@@ -63,8 +76,14 @@ const Main = () => {
     const data = await getAllDates();
     setDatesList(data);
 
-    if (selectedDate === null && data.length > 0) setSelectedDate(data[0]);
-  }, [getAllDates, selectedDate]);
+    const currentYear = initialYear || new Date().getFullYear().toString();
+
+    setSelectedDate({
+      id: currentYear,
+      label: currentYear,
+      value: currentYear,
+    });
+  }, [getAllDates, initialYear]);
 
   const handleSelectGrouping = useCallback(
     ({ nid_agrupa_evento }: { nid_agrupa_evento: number }) => {
@@ -73,6 +92,18 @@ const Main = () => {
     []
   );
 
+  const updateUrlParams = useCallback(() => {
+    setSearchParams(
+      {
+        ano: selectedDate?.value ?? '',
+        ...(nidGroupingSelected !== null
+          ? { agrupamento: String(nidGroupingSelected) }
+          : {}),
+      },
+      { replace: true }
+    );
+  }, [nidGroupingSelected, selectedDate, setSearchParams]);
+
   useEffect(() => {
     getDatesData();
   }, [getDatesData]);
@@ -80,31 +111,24 @@ const Main = () => {
   useEffect(() => {
     if (selectedDate !== null && user !== null) {
       getGroupingData({
-        nnr_ano: selectedDate.ano,
+        nnr_ano: selectedDate.value,
         id_pessoa: user.id_pessoa,
       });
     }
   }, [getGroupingData, selectedDate, user]);
 
-  //update url params AND redirect when nidGroupingSelected changes
+  // update url params AND redirect when nidGroupingSelected changes
   useEffect(() => {
-    setSearchParams(
-      {
-        ano: selectedDate?.ano ?? '',
-        ...(nidGroupingSelected !== null
-          ? { agrupamento: String(nidGroupingSelected) }
-          : {}),
-      },
-      { replace: true }
-    );
+    updateUrlParams();
 
     if (nidGroupingSelected !== null) {
-      navigate(`agrupamento/${nidGroupingSelected}/ano/${selectedDate?.ano}`);
+      navigate(`agrupamento/${nidGroupingSelected}/ano/${selectedDate?.value}`);
       console.log('Selected Grouping ID:', nidGroupingSelected);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedDate, nidGroupingSelected]);
+  }, [selectedDate, nidGroupingSelected, updateUrlParams]);
 
+  // filter
   useEffect(() => {
     if (searchValue.trim() === '') {
       setListToShow(groupingData);
@@ -145,6 +169,11 @@ const Main = () => {
                 value: date.ano,
                 id: date.ano,
               }))}
+              setValue={(data) => {
+                setSelectedDate(data);
+                updateUrlParams();
+              }}
+              value={selectedDate}
               maxWidth="100px"
             />
             <TextInput
@@ -171,11 +200,13 @@ const Main = () => {
             />
           ))}
 
-          {listToShow.length === 0 && (
+          {listToShow.length === 0 && !isLoading && (
             <Text fontWeight="semiBold" color={colors.emeraldGreen75}>
               Nenhum agrupamento encontrado.
             </Text>
           )}
+
+          {isLoading && <LoadingOverlay withoutBackground />}
         </ContainerListCards>
       </ContentDektop>
     </ContainerMain>
