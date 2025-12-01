@@ -38,12 +38,16 @@ import type { InscriptionData } from '@src/services/InscriptionsAndStalls/types.
 import { InfoCardsGroup } from './InfoCards';
 import { MobileInscriptionAndStalls } from './Mobile';
 import type { StallsData } from '@src/services/InscriptionsAndStalls/types.stalls.api';
+import { urlCentralQuartista } from '@src/config/env';
+import { useAuth } from '@src/contexts/auth/useAuth';
 
 const InscriptionAndStalls = () => {
   const params = useParams();
   const { year, nid_group_event } = params;
 
   const pageTitle = 'Resultados';
+
+  const { token } = useAuth();
 
   const { isTabletOrMobile } = useDeviceType();
   const { getInscriptions, getStalls } = useInscriptionAndStalls();
@@ -61,7 +65,7 @@ const InscriptionAndStalls = () => {
   const printAreaRef = useRef<{ print: () => void }>(null);
   const [isPrinting, setIsPrinting] = useState(false);
 
-  const [showShareOptions, setShowShareOptions] = useState(false);
+  const [showShareOptions] = useState(false);
   const shareUrl = window.location.href;
 
   //functions
@@ -128,6 +132,7 @@ const InscriptionAndStalls = () => {
     }, 1000);
   }, []);
 
+  //control flow of filtering the list
   useEffect(() => {
     let allList: InscriptionData[] | StallsData[] = [];
 
@@ -455,12 +460,9 @@ const InscriptionAndStalls = () => {
         />
       ),
       label: 'efetuar pagamento',
-      onClick: () => setShowShareOptions((prev) => !prev),
-      isActive: showShareOptions,
-      showOptionsToShare: {
-        show: showShareOptions,
-        children: <ShareOptions url={shareUrl} />,
-      },
+      onClick: () =>
+        window.open(urlCentralQuartista + '/pagamentos?token=' + token, '_blank'),
+      isActive: false,
     },
   ];
 

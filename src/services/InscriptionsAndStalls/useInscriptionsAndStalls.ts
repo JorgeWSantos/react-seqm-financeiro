@@ -24,7 +24,7 @@ export function useInscriptionAndStalls() {
           year,
         })
 
-        // const response = await apiResultados.get<InscriptionAndStallsResponse>(
+        // const response = await apiFinanceiro.get<InscriptionAndStallsResponse>(
         //   '/v1/ListaClassificacaoEtapas',
         //   {
         //     params: {
@@ -73,6 +73,7 @@ export function useInscriptionAndStalls() {
     },
     []
   );
+
   const getStalls = useCallback(
     async ({
       nid_group_event,
@@ -87,7 +88,7 @@ export function useInscriptionAndStalls() {
           year,
         })
 
-        // const response = await apiResultados.get<InscriptionAndStallsResponse>(
+        // const response = await apiFinanceiro.get<InscriptionAndStallsResponse>(
         //   '/v1/ListaClassificacaoEtapas',
         //   {
         //     params: {

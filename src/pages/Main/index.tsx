@@ -18,6 +18,7 @@ import type { GroupingResponseData } from '@src/services/Main/types.api';
 import { CardList } from '@src/components/CardList';
 import type { AllDatesResponseData } from '@src/services/Main/types.alldates';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useAuth } from '@src/contexts/auth/useAuth';
 
 const Main = () => {
   const pageTitle = 'Financeiro';
@@ -25,6 +26,7 @@ const Main = () => {
 
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
+  const { user } = useAuth();
 
   const paramsObject = Object.fromEntries([...searchParams]);
 
@@ -34,7 +36,7 @@ const Main = () => {
   const [groupingData, setGroupingData] = useState<GroupingResponseData[]>([]);
   const [datesList, setDatesList] = useState<AllDatesResponseData[]>([]);
   const [selectedDate, setSelectedDate] = useState<AllDatesResponseData | null>(
-    paramsObject.ano ? { nnr_ano: paramsObject.ano } : null
+    paramsObject.ano ? { ano: paramsObject.ano } : null
   );
   const [nidGroupingSelected, setNidGroupingSelected] = useState<number | null>(null);
   const [searchValue, setSearchValue] = useState<string>('');
@@ -45,8 +47,14 @@ const Main = () => {
   }, []);
 
   const getGroupingData = useCallback(
-    async ({ nnr_ano }: { nnr_ano: string }) => {
-      const data = await getGrouping({ nnr_ano });
+    async ({ nnr_ano, id_pessoa }: { nnr_ano: string; id_pessoa: number }) => {
+      const data = await getGrouping({
+        nnr_ano: nnr_ano,
+        id_pessoa: id_pessoa,
+      });
+
+      console.log('grouping data', data);
+
       setGroupingData(data);
     },
     [getGrouping]
@@ -71,18 +79,19 @@ const Main = () => {
   }, [getDatesData]);
 
   useEffect(() => {
-    if (selectedDate !== null) {
+    if (selectedDate !== null && user !== null) {
       getGroupingData({
-        nnr_ano: selectedDate.nnr_ano,
+        nnr_ano: selectedDate.ano,
+        id_pessoa: user.id_pessoa,
       });
     }
-  }, [getGroupingData, selectedDate]);
+  }, [getGroupingData, selectedDate, user]);
 
   //update url params AND redirect when nidGroupingSelected changes
   useEffect(() => {
     setSearchParams(
       {
-        ano: selectedDate?.nnr_ano ?? '',
+        ano: selectedDate?.ano ?? '',
         ...(nidGroupingSelected !== null
           ? { agrupamento: String(nidGroupingSelected) }
           : {}),
@@ -91,7 +100,7 @@ const Main = () => {
     );
 
     if (nidGroupingSelected !== null) {
-      navigate(`agrupamento/${nidGroupingSelected}/ano/${selectedDate?.nnr_ano}`);
+      navigate(`agrupamento/${nidGroupingSelected}/ano/${selectedDate?.ano}`);
       console.log('Selected Grouping ID:', nidGroupingSelected);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -133,9 +142,9 @@ const Main = () => {
           <ContainerHeaderDesktop>
             <Dropdown
               data={datesList.map((date) => ({
-                label: date.nnr_ano,
-                value: date.nnr_ano,
-                id: date.nnr_ano,
+                label: date.ano,
+                value: date.ano,
+                id: date.ano,
               }))}
               maxWidth="100px"
             />
