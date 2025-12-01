@@ -19,16 +19,16 @@ export function TokenLoginHandler({ path }: { path: string }) {
     }
 
     // remove token from query
-    // if (tokenQuery) {
-    //   params.delete('tk');
+    if (tokenQuery) {
+      params.delete('tk');
 
-    //   const newUrl =
-    //     window.location.pathname +
-    //     (params.toString() ? '?' + params.toString() : '') +
-    //     window.location.hash;
+      const newUrl =
+        window.location.pathname +
+        (params.toString() ? '?' + params.toString() : '') +
+        window.location.hash;
 
-    //   window.history.replaceState({}, '', newUrl);
-    // }
+      window.history.replaceState({}, '', newUrl);
+    }
   }, [loginWithToken, logout, path]);
 
   return null;
