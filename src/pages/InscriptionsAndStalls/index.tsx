@@ -200,14 +200,14 @@ const InscriptionAndStalls = () => {
         key: 'dt_prove',
         label: 'DT. PROVA',
         align: 'left',
-        minWidth: '90px',
+        minWidth: '87px',
         sortable: true,
       },
       {
         key: 'event',
         label: 'EVENTO',
         align: 'left',
-        minWidth: '180px',
+        minWidth: '120px',
         sortable: true,
       },
       {
@@ -221,31 +221,34 @@ const InscriptionAndStalls = () => {
         key: 'animal',
         label: 'ANIMAL',
         align: 'left',
+        minWidth: '100px',
         sortable: true,
       },
       {
         key: 'competitor',
         label: 'COMPETIDOR',
         align: 'left',
-        minWidth: '200px',
+        minWidth: '120px',
         sortable: true,
       },
       {
         key: 'status',
         label: 'STATUS',
         align: 'left',
+        minWidth: '50px',
         sortable: true,
       },
       {
         key: 'aqha',
         label: 'AQHA',
         align: 'left',
+        minWidth: '45px',
         sortable: true,
       },
       {
         key: 'vlr_inscription',
         label: 'VALOR INSCRIÇÃO',
-        minWidth: '130px',
+        minWidth: '127px',
         align: 'center',
         sortable: true,
       },
@@ -325,12 +328,14 @@ const InscriptionAndStalls = () => {
         key: 'animal',
         label: 'ANIMAL',
         align: 'left',
+        minWidth: '160px',
         sortable: true,
       },
       {
         key: 'type_stall',
         label: 'TIPO DE BAIA',
         align: 'left',
+        minWidth: '110px',
         sortable: true,
       },
       {
@@ -338,7 +343,7 @@ const InscriptionAndStalls = () => {
         label: 'SITUAÇÃO BAIAS',
         align: 'center',
         sortable: true,
-        minWidth: '200px',
+        minWidth: '120px',
       },
       {
         key: 'empty',
@@ -419,9 +424,9 @@ const InscriptionAndStalls = () => {
   ];
 
   const printInfo: PrintHeaderProps = {
+    title: 'FINANCEIRO',
     eventName: pageName,
     responsibleName: 'ABQM - ASSOCIAÇÃO BRASILEIRA DE QUARTO DE MILHA',
-    modalityName: '',
   };
 
   const buttonsHeader = [
@@ -567,7 +572,7 @@ const InscriptionAndStalls = () => {
           {tableDataStalls?.length > 0 && (
             <PrintArea
               ref={printAreaRef}
-              title={'RESERVAS DE BAIAS'}
+              title={'BAIAS'}
               columns={tableColumnsStalls}
               data={tableDataStalls}
               cards={printCards}

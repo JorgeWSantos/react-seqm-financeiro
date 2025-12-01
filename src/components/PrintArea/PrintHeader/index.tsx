@@ -1,17 +1,10 @@
 import SVG from '../logo-seqm.svg';
-import {
-  PrintAreaHeader,
-  LogoWrapper,
-  DetailsWrapper,
-  IconWrapper,
-  EventName,
-} from './styles';
-import { RanchSortingIconSEQM } from '@abqm-ds/icons';
+import { PrintAreaHeader, LogoWrapper, DetailsWrapper, EventName } from './styles';
 
 export type PrintHeaderProps = {
+  title: string;
   eventName: string;
   responsibleName: string;
-  modalityName: string;
 };
 
 const PrintHeader = ({ data }: { data: PrintHeaderProps }) => {
@@ -22,15 +15,11 @@ const PrintHeader = ({ data }: { data: PrintHeaderProps }) => {
       </LogoWrapper>
 
       <DetailsWrapper>
-        <EventName>{data.eventName}</EventName>
+        <EventName>{data.title}</EventName>
 
-        <p>{data.responsibleName}</p>
+        <p>{data.eventName}</p>
+        <p className="responsibleName">{data.responsibleName}</p>
       </DetailsWrapper>
-
-      <IconWrapper>
-        <RanchSortingIconSEQM width={'40pt'} height={'40pt'} fill="#424242" />
-        <p style={{ marginTop: '-6pt' }}>{data.modalityName}</p>
-      </IconWrapper>
     </PrintAreaHeader>
   );
 };

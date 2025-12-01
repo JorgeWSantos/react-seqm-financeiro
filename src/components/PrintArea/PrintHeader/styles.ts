@@ -1,4 +1,4 @@
-import { space } from '@abqm-ds/tokens';
+import { colors, fontSizes, space } from '@abqm-ds/tokens';
 import styled from 'styled-components';
 
 export const PrintAreaHeader = styled.div`
@@ -33,6 +33,11 @@ export const DetailsWrapper = styled.div`
 
   p {
     margin-top: -${space[2]};
+  }
+
+  .responsibleName {
+    font-size: ${fontSizes.ssm};
+    color: ${colors.black75};
   }
 `;
 
