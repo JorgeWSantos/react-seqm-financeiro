@@ -24,7 +24,7 @@ export const router = createBrowserRouter([
       {
         path: 'agrupamento/:nid_group_event/ano/:year',
         element: (
-          <PrivateRoute path="/agrupamento/:nid_group_event/ano/:year">
+          <PrivateRoute path="">
             <InscriptionsAndStalls />
           </PrivateRoute>
         ),
