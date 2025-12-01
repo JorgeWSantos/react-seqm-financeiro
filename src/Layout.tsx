@@ -31,7 +31,7 @@ function Layout({ withError }: { withError?: boolean }) {
           <SideBarDesktop
             user={user || null}
             menu={menu || []}
-            onLogout={logout}
+            onLogout={() => logout({})}
             onLogin={redirectToLogin}
             token={token || ''}
           />
@@ -50,7 +50,7 @@ function Layout({ withError }: { withError?: boolean }) {
               userName: user?.nome_pessoa || '',
               srcImage: user?.foto || '',
               onLogin: redirectToLogin,
-              onLogout: logout,
+              onLogout: () => logout({}),
             }}
           />
           {withError ? <ErrorElement /> : <Outlet />}

@@ -1,7 +1,7 @@
 // src/services/api.ts
 import axios from 'axios';
 import { getToken } from './auth';
-import { urlApiGeneral, urlApiResults } from '@src/config/env';
+import { urlApiGeneral, urlApiFinanceiro } from '@src/config/env';
 
 // ---
 // ABQM.API
@@ -20,8 +20,8 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-const apiResultados = axios.create({
-  baseURL: urlApiResults,
+const apiFinanceiro = axios.create({
+  baseURL: urlApiFinanceiro,
 });
 
-export { api, apiResultados };
+export { api, apiFinanceiro };
